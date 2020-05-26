@@ -13,7 +13,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - LevelButton
   - 
   - 
   - 
@@ -38,6 +38,12 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Map
+    uniqueID: 3916177699
+    locked: 0
+  - name: Level
+    uniqueID: 233478991
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
