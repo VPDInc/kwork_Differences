@@ -3,8 +3,6 @@ using System.Linq;
 
 using Sirenix.OdinInspector;
 
-using UnityEditor.Experimental.GraphView;
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -31,7 +29,7 @@ public class DiffImage : MonoBehaviour {
                 var image = hit.gameObject.GetComponent<Image>();
                 if (RectTransformUtility.ScreenPointToLocalPointInRectangle(imageRect, mousePos, null,
                     out var localPoint)) {
-                    var imageCoords = GetPixelSpaceCoordinate(localPoint, image, imageRect);
+                    var imageCoords = GetPixelSpaceCoordinateFromRectPoint(localPoint, image, imageRect);
                 }
             }
         }
@@ -50,7 +48,7 @@ public class DiffImage : MonoBehaviour {
         return results.FirstOrDefault();
     }
 
-    Vector2 GetPixelSpaceCoordinate(Vector2 pos, Image image, RectTransform imageRect) {
+    Vector2 GetPixelSpaceCoordinateFromRectPoint(Vector2 pos, Image image, RectTransform imageRect) {
         var locationRelativeToImageInScreenCoordinates = new Vector2();
         var pivotCancelledLocation =
             new Vector2(pos.x - imageRect.rect.x, pos.y - imageRect.rect.y);
@@ -75,13 +73,75 @@ public class DiffImage : MonoBehaviour {
         locationRelativeToImageInScreenCoordinates.Set(
             pivotCancelledLocation.x - imageRectInLocalScreenCoordinates.x,
             pivotCancelledLocation.y - imageRectInLocalScreenCoordinates.y);
+        
         locationRelativeToImage01.Set(
             locationRelativeToImageInScreenCoordinates.x / imageRectInLocalScreenCoordinates.width,
             locationRelativeToImageInScreenCoordinates.y / imageRectInLocalScreenCoordinates.height);
         
         var imageCoord = new Vector2(locationRelativeToImage01.x * image.sprite.texture.width, 
             locationRelativeToImage01.y * image.sprite.texture.height);
+        
         return imageCoord;
+    }
+    
+    // imageAspect = height / width
+    // rectAspect = height / width
+    // imageAspect > rectAspect ?
+        // YES
+            // imageWidth = (rectAspect/imageAspect) * rect.width
+            // excess = rect.width - imageWidth
+            // imageRectInScreen = rect.pivot.x * excess, 0, imageRect.height / imageAspect, rect.height
+        // NO
+            // imageHeight = (imageAspect/rectAspect) * rect.height
+            // ..
+            // ..
+    
+    // imageCoords
+    // locationRelativeToImage =  x / width, y / height
+    // inSpace =  var pivotCancelledLocation =
+    // new Vector2(pos.x - imageRect.rect.x, pos.y - imageRect.rect.y);
+    // 
+
+    Vector2 GetRectSpaceCoordinateFromPixel(Vector2 imageCoord, Image image, RectTransform imageRect) {
+        var locationRelativeToImage01 = new Vector2(imageCoord.x / image.sprite.texture.width, imageCoord.y / image.sprite.texture.height);
+        
+        var imageAspectRatio = image.sprite.rect.height / image.sprite.rect.width;
+        var rectAspectRatio = imageRect.rect.height / imageRect.rect.width;
+        var imageRectInLocalScreenCoordinates = new Rect();
+        if (imageAspectRatio > rectAspectRatio) {
+            // The image is constrained by its height.
+            var imageWidth = (rectAspectRatio / imageAspectRatio) * imageRect.rect.width;
+            var excessWidth = imageRect.rect.width - imageWidth;
+            imageRectInLocalScreenCoordinates.Set(imageRect.pivot.x * excessWidth, 0,
+                imageRect.rect.height / imageAspectRatio, imageRect.rect.height);
+        } else {
+            // The image is constrained by its width.
+            var imageHeight = (imageAspectRatio / rectAspectRatio) * imageRect.rect.height;
+            var excessHeight = imageRect.rect.height - imageHeight;
+            imageRectInLocalScreenCoordinates.Set(0, imageRect.pivot.y * excessHeight,
+                imageRect.rect.width, imageAspectRatio * imageRect.rect.width);
+        }
+        
+       
+        // locationRelativeToImage01.Set(
+            // locationRelativeToImageInScreenCoordinates.x / imageRectInLocalScreenCoordinates.width,
+            // locationRelativeToImageInScreenCoordinates.y / imageRectInLocalScreenCoordinates.height);
+        
+        // var locationRelativeToImageInScreenCoordinates = imageRectInLocalScreenCoordinates *  locationRelativeToImage01
+        var locationRelativeToImageInScreenCoordinates = new Vector2(imageRectInLocalScreenCoordinates.width * locationRelativeToImage01.x,
+            imageRectInLocalScreenCoordinates.height * locationRelativeToImage01.y);
+        // locationRelativeToImageInScreenCoordinates.Set(
+        // pivotCancelledLocation.x - imageRectInLocalScreenCoordinates.x,
+        // pivotCancelledLocation.y - imageRectInLocalScreenCoordinates.y);
+        var pivotCancelledLocation = new Vector2(imageRectInLocalScreenCoordinates.x + locationRelativeToImageInScreenCoordinates.x, 
+            imageRectInLocalScreenCoordinates.y + locationRelativeToImageInScreenCoordinates.y);
+        
+        // var pivotCancelledLocation = imageRectInLocalScreenCoordinates +  locationRelativeToImageInScreenCoordinates
+
+        // var pos = pivotCancelledLocation + imageRect.rect.xy
+        var pos = new Vector2(pivotCancelledLocation.x + imageRect.rect.x, pivotCancelledLocation.y + imageRect.rect.y);
+            
+        return pos;
     }
 
     Vector2 GetRectSpaceCoordinate(RectTransform imageRect, Vector2 localPoint) {
