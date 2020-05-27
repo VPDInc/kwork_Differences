@@ -6,7 +6,6 @@ using System.Linq;
 using Airion.Extensions;
 
 using Sirenix.OdinInspector;
-using Sirenix.Utilities;
 
 using UnityEditor;
 
@@ -24,7 +23,6 @@ public class DiffImage : MonoBehaviour {
 
     readonly List<DiffHandler> _handlers = new List<DiffHandler>();
 
-    
     void Awake() {
         FindResources();
     }
@@ -163,13 +161,14 @@ public class DiffImage : MonoBehaviour {
 
     [Button, ShowIf(nameof(IsPlaymode))]
     void CreateNew() {
+        Clear();
         _config.Image1.sprite = _image1;
         _config.Image2.sprite = _image2;
     }
     
     [Button, ShowIf(nameof(IsPlaymode))]
     void LoadJson() {
-        // Clear();
+        Clear();
         
         var path = EditorUtility.OpenFilePanel("Load file", "", "json");
         if (!File.Exists(path)) {
@@ -185,7 +184,12 @@ public class DiffImage : MonoBehaviour {
     }
 
     void LoadAndCreateImages(Data data) {
-        // Load image through web request
+        var sprite1 = Resources.Load<Sprite>("Images/" +data.Image1Path);
+        var sprite2 = Resources.Load<Sprite>("Images/" +data.Image2Path);
+
+        _config.Image1.sprite = sprite1;
+        _config.Image2.sprite = sprite2;
+        
         foreach (var point in data.Points) {
             CreateHandlerFromPoint(new Vector2(point.X, point.Y));
         }
@@ -232,8 +236,8 @@ public class DiffImage : MonoBehaviour {
 
         data.Points = points.ToArray();
 
-        // copy image to streaming assets
-        // set path
+        data.Image1Path = $"{_config.Image1.sprite.name}/{Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_config.Image1.sprite))}";
+        data.Image2Path = $"{_config.Image1.sprite.name}/{Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_config.Image2.sprite))}";
         
         var jsonString = JsonUtility.ToJson(data);
         var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
@@ -241,14 +245,14 @@ public class DiffImage : MonoBehaviour {
         AssetDatabase.Refresh();
     }
 
-    [System.Serializable]
+    [Serializable]
     struct Data {
         public string Image1Path;
         public string Image2Path;
         public Point[] Points;
     }
 
-    [System.Serializable]
+    [Serializable]
     struct Point {
         public float X;
         public float Y;
@@ -258,8 +262,6 @@ public class DiffImage : MonoBehaviour {
     void Err(string message) {
         Debug.LogError($"[{GetType()}] {message}");
     }
-    
-   
 }
 
 public static class Extension {
