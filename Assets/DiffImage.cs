@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 
 using Sirenix.OdinInspector;
+
+using UnityEditor;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -10,11 +14,13 @@ using UnityEngine.UI;
 public class DiffImage : MonoBehaviour {
     [SerializeField] Sprite _image1 = default;
     [SerializeField] Sprite _image2 = default;
-
-    Image _diff1;
-    Image _diff2;
-
+    
     bool IsPlaymode => Application.isPlaying;
+    EditorConfig _config;
+    int _currentHandlerId = 0;
+
+    readonly List<DiffHandler> _handlers = new List<DiffHandler>();
+
     
     void Awake() {
         FindResources();
@@ -27,14 +33,38 @@ public class DiffImage : MonoBehaviour {
                 var imageRect = hit.gameObject.GetComponent<RectTransform>();
                 var mousePos = Input.mousePosition;
                 var image = hit.gameObject.GetComponent<Image>();
-                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(imageRect, mousePos, null,
-                    out var localPoint)) {
+                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(imageRect, mousePos, null, out var localPoint)) {
                     var imageCoords = GetPixelSpaceCoordinateFromRectPoint(localPoint, image, imageRect);
+                    var imageWidth = image.sprite.texture.width;
+                    var imageHeight = image.sprite.texture.height;
+                    var isInWidthBounds = 0 <= imageCoords.x && imageCoords.x <= imageWidth;
+                    var isInHeightBounds = 0 <= imageCoords.y && imageCoords.y <= imageHeight;
+                    
+                    if (isInHeightBounds && isInWidthBounds) {
+                        CreateHandler(localPoint, imageCoords, image, _currentHandlerId);
+
+                        var secondImage = image == _config.Image1 ? _config.Image2 : _config.Image1;
+                        var secondLocalPoint = GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
+                            secondImage.GetComponent<RectTransform>());
+                        
+                        CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
+                        _currentHandlerId++;
+                    }
                 }
             }
         }
     }
     
+    void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id) {
+        var handler = Instantiate(_config.DifHandlerPrefab);
+        var handlerRect = handler.GetComponent<RectTransform>();
+        handlerRect.SetParent(image.transform, false);
+        handlerRect.localPosition = pos;
+        handler.ImageSpaceCoordinates = coords;
+        handler.Id = id;
+        _handlers.Add(handler);
+    }
+
     RaycastResult RaycastMouse() {
         var pointerData = new PointerEventData(EventSystem.current) {
             pointerId = -1,
@@ -84,24 +114,6 @@ public class DiffImage : MonoBehaviour {
         return imageCoord;
     }
     
-    // imageAspect = height / width
-    // rectAspect = height / width
-    // imageAspect > rectAspect ?
-        // YES
-            // imageWidth = (rectAspect/imageAspect) * rect.width
-            // excess = rect.width - imageWidth
-            // imageRectInScreen = rect.pivot.x * excess, 0, imageRect.height / imageAspect, rect.height
-        // NO
-            // imageHeight = (imageAspect/rectAspect) * rect.height
-            // ..
-            // ..
-    
-    // imageCoords
-    // locationRelativeToImage =  x / width, y / height
-    // inSpace =  var pivotCancelledLocation =
-    // new Vector2(pos.x - imageRect.rect.x, pos.y - imageRect.rect.y);
-    // 
-
     Vector2 GetRectSpaceCoordinateFromPixel(Vector2 imageCoord, Image image, RectTransform imageRect) {
         var locationRelativeToImage01 = new Vector2(imageCoord.x / image.sprite.texture.width, imageCoord.y / image.sprite.texture.height);
         
@@ -123,22 +135,11 @@ public class DiffImage : MonoBehaviour {
         }
         
        
-        // locationRelativeToImage01.Set(
-            // locationRelativeToImageInScreenCoordinates.x / imageRectInLocalScreenCoordinates.width,
-            // locationRelativeToImageInScreenCoordinates.y / imageRectInLocalScreenCoordinates.height);
-        
-        // var locationRelativeToImageInScreenCoordinates = imageRectInLocalScreenCoordinates *  locationRelativeToImage01
         var locationRelativeToImageInScreenCoordinates = new Vector2(imageRectInLocalScreenCoordinates.width * locationRelativeToImage01.x,
             imageRectInLocalScreenCoordinates.height * locationRelativeToImage01.y);
-        // locationRelativeToImageInScreenCoordinates.Set(
-        // pivotCancelledLocation.x - imageRectInLocalScreenCoordinates.x,
-        // pivotCancelledLocation.y - imageRectInLocalScreenCoordinates.y);
         var pivotCancelledLocation = new Vector2(imageRectInLocalScreenCoordinates.x + locationRelativeToImageInScreenCoordinates.x, 
             imageRectInLocalScreenCoordinates.y + locationRelativeToImageInScreenCoordinates.y);
         
-        // var pivotCancelledLocation = imageRectInLocalScreenCoordinates +  locationRelativeToImageInScreenCoordinates
-
-        // var pos = pivotCancelledLocation + imageRect.rect.xy
         var pos = new Vector2(pivotCancelledLocation.x + imageRect.rect.x, pivotCancelledLocation.y + imageRect.rect.y);
             
         return pos;
@@ -151,20 +152,57 @@ public class DiffImage : MonoBehaviour {
     }
 
     void FindResources() {
-        _diff1 = GameObject.Find("DiffImage1").GetComponent<Image>();
-        _diff2 = GameObject.Find("DiffImage2").GetComponent<Image>();
+        _config = GetComponentInChildren<EditorConfig>();
     }
 
     [Button, ShowIf(nameof(IsPlaymode))]
     void Load() {
-        _diff1.sprite = _image1;
-        _diff2.sprite = _image2;
+        _config.Image1.sprite = _image1;
+        _config.Image2.sprite = _image2;
     }
 
     [Button, ShowIf(nameof(IsPlaymode))]
     void Clear() {
-        _diff1.sprite = null;
-        _diff2.sprite = null;
+        _config.Image1.sprite = null;
+        _config.Image2.sprite = null;
+    }
+    
+    [Button, ShowIf(nameof(IsPlaymode))]
+    void Save() {
+        var data = new Data();
+        var points = new List<Point>();
+        var uniq = _handlers.Distinct();
+        foreach (var handler in uniq) {
+            points.Add(new Point() {
+                X = handler.ImageSpaceCoordinates.x,
+                Y = handler.ImageSpaceCoordinates.y,
+                Radius = handler.Radius
+            });
+        }
+
+        data.Points = points.ToArray();
+
+        // copy image to streaming assets
+        // set path
+        
+        var jsonString = JsonUtility.ToJson(data);
+        var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
+        File.WriteAllText(path, jsonString);
+        AssetDatabase.Refresh();
+    }
+
+    [System.Serializable]
+    struct Data {
+        public string Image1Path;
+        public string Image2Path;
+        public Point[] Points;
+    }
+
+    [System.Serializable]
+    struct Point {
+        public float X;
+        public float Y;
+        public float Radius;
     }
 
     void Err(string message) {
