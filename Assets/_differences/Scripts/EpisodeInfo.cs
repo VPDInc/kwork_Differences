@@ -14,6 +14,7 @@ using Zenject;
 
 public class EpisodeInfo : MonoBehaviour {
     public int LevelCount => _levelCount;
+    public bool IsUnlocked => _isUnlocked;
     public List<LevelInfo> Levels => _levels;
     
     [Header("Episode Info")] [SerializeField]
@@ -39,7 +40,7 @@ public class EpisodeInfo : MonoBehaviour {
         }
     }
 
-    void UnlockEpisode(bool isInstant) {
+    public void UnlockEpisode(bool isInstant) {
         _blockerRenderer.DOFade(0, isInstant ? 0 : BLOCK_DISSOLVE_EFFECT_DURATION);
     }
 
@@ -55,7 +56,7 @@ public class EpisodeInfo : MonoBehaviour {
                         .InstantiatePrefab(_levelPrefab, _pathCreator.path.GetPointAtTime(step * i + step * 0.5f),
                                            Quaternion.identity, _levelHolder).GetComponent<LevelInfo>();
 
-            level.Setup(levelOffset + i);
+            level.Init(this, levelOffset + i);
             _levels.Add(level);
         }
     }

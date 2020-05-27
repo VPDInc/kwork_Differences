@@ -1,6 +1,4 @@
-﻿using System;
-
-using DG.Tweening;
+﻿using DG.Tweening;
 
 using TMPro;
 
@@ -12,6 +10,7 @@ using Random = UnityEngine.Random;
 
 public class LevelInfo : MonoBehaviour {
     public bool IsCompleted => _isCompleted;
+    public int LevelNum => _levelNum;
 
     [SerializeField] TMP_Text _levelNumLabel = default;
     [SerializeField] SpriteRenderer[] _spritesToHide = default;
@@ -19,6 +18,7 @@ public class LevelInfo : MonoBehaviour {
     [Inject] LevelController _levelController = default;
 
     StarHandler _starHandler;
+    EpisodeInfo _episodeInfo;
     int _levelNum = 0;
     bool _isCompleted = false;
     bool _isUnlocked = false;
@@ -34,12 +34,16 @@ public class LevelInfo : MonoBehaviour {
         HandleStarHandler(true);
     }
 
-    public void Setup(int levelNum) {
+    public void Init(EpisodeInfo episodeInfo, int levelNum) {
+        _episodeInfo = episodeInfo;
+        
         _levelNum = levelNum;
         _levelNumLabel.text = (levelNum + 1).ToString();
+    }
 
-        _isCompleted = levelNum <= _levelController.LastLevel;
-        _isUnlocked = levelNum <=_levelController.LastLevel + 1;
+    public void Setup(bool isUnlocked, bool isCompleted) {
+        _isCompleted = isCompleted;
+        _isUnlocked = isUnlocked;
         
         if (_isCompleted) {
             UnlockVfx(true);
@@ -48,9 +52,12 @@ public class LevelInfo : MonoBehaviour {
         }
     }
 
-    public void UnlockLevel() {
+    public void UnlockLevel(bool isInstant) {
         _isUnlocked = true;
-        HandleStarHandler(false);
+        HandleStarHandler(isInstant);
+        
+        if(!_episodeInfo.IsUnlocked)
+            _episodeInfo.UnlockEpisode(isInstant);
     }
 
     public void CompleteLevel() {
