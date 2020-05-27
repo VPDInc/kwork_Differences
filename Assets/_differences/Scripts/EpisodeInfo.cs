@@ -2,23 +2,30 @@
 
 using PathCreation;
 
+using TMPro;
+
 using UnityEngine;
 
-public class MapInfo : MonoBehaviour {
+public class EpisodeInfo : MonoBehaviour {
+    public int LevelCount => _levelCount;
+    
+    [SerializeField] string _episodeName = "Episode";
     [SerializeField] LevelInfo _levelPrefab = default;
     [SerializeField] PathCreator _pathCreator = default;
     [SerializeField] int _levelCount = 10;
     [SerializeField] Transform _levelHolder = default;
+    [SerializeField] TMP_Text _episodeLabel = default;
 
-    void Start() {
-        PopulateMap();
+    public void Init(int levelOffset) {
+        PopulateMap(levelOffset);
     }
-
-    void PopulateMap() {
+    
+    void PopulateMap(int levelOffset) {
+        _episodeLabel.text = _episodeName;
         var step = 1f / _levelCount;
         for (int i = 0; i < _levelCount; i++) {
             var level = Instantiate(_levelPrefab, _pathCreator.path.GetPointAtTime(step * i + step * 0.5f), Quaternion.identity, _levelHolder);
-            level.Setup(i+1);
+            level.Setup(levelOffset + i+1);
         }
     }
 
