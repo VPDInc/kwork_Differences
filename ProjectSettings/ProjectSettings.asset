@@ -539,7 +539,7 @@ PlayerSettings:
   scriptingDefineSymbols:
     1: ODIN_INSPECTOR;dUI_MANAGER;dUI_TextMeshPro
     4: dUI_MANAGER;dUI_TextMeshPro
-    7: dUI_MANAGER;dUI_TextMeshPro;ODIN_INSPECTOR
+    7: dUI_MANAGER;ODIN_INSPECTOR;dUI_TextMeshPro
     13: dUI_MANAGER;dUI_TextMeshPro
     14: dUI_MANAGER;dUI_TextMeshPro
     19: dUI_MANAGER;dUI_TextMeshPro
