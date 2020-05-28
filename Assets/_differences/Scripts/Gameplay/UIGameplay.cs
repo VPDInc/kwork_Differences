@@ -59,7 +59,7 @@ public class UIGameplay : MonoBehaviour {
                         for (var index = 0; index < _points.Count; index++) {
                             var point = _points[index];
                             if (IsPixelInsidePoint(pixelPos, point)) {
-                                SelectDifference(localPos);
+                                SelectDifference(point);
                                 _points.RemoveAt(index);
                                 return;
                             }
@@ -73,24 +73,30 @@ public class UIGameplay : MonoBehaviour {
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
         return Pow(pixel.x - point.X, 2) +
                Pow(pixel.y - point.Y, 2) <
-               Pow(point.Radius * 10, 2);
+               Pow(point.Radius, 2);
     }
 
-    void SelectDifference(Vector2 localPos) {
+    void SelectDifference(Point point) {
         _currentPointsFound++;
         UpdatePointsAmountVisual();
-        CreateDiffsVisual(localPos);
+        CreateDiffsVisual(point);
     }
     
-    void CreateDiffsVisual(Vector2 pos) {
+    void CreateDiffsVisual(Point point) {
         var handler = Instantiate(_diffVisualPrefab);
         var handlerRect = handler.GetComponent<RectTransform>();
+        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(new Vector2(point.X, point.Y), _image1,
+            _image1.GetComponent<RectTransform>());
         handlerRect.SetParent(_image1.transform, false);
+        handlerRect.sizeDelta = new Vector2(point.Radius, point.Radius);
         handlerRect.localPosition = pos;
         
         var handler2 = Instantiate(_diffVisualPrefab);
         var handlerRect2 = handler2.GetComponent<RectTransform>();
+        var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(new Vector2(point.X, point.Y), _image2,
+            _image2.GetComponent<RectTransform>());
         handlerRect2.SetParent(_image2.transform, false);
-        handlerRect2.localPosition = pos;
+        handlerRect2.sizeDelta = new Vector2(point.Radius, point.Radius);
+        handlerRect2.localPosition = pos2;
     }
 }

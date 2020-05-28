@@ -5,11 +5,14 @@ using System.Linq;
 using Airion.Extensions;
 
 using Sirenix.OdinInspector;
+using Sirenix.Utilities;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
+using System;
+
 using UnityEditor;
 
 public class DiffEditor : MonoBehaviour {
@@ -21,10 +24,15 @@ public class DiffEditor : MonoBehaviour {
         set {
             if (_currentSelectedHandler == null)
                 return;
-            
-            _currentSelectedHandler.SetRadius(value, value);
+
+            SetRadius(_currentSelectedHandler.Id, value);
         }
         get => _currentSelectedHandler?.Radius ?? 0;
+    }
+
+    void SetRadius(int id, float value) {
+        var handlers = _handlers.Where(handler => handler.Id == id);
+        handlers.ForEach(h => h.SetRadius(value, value));
     }
 
     bool IsSelected => _currentSelectedHandler != null;
@@ -47,13 +55,12 @@ public class DiffEditor : MonoBehaviour {
                 var handler = hit.gameObject.GetComponent<DiffHandler>();
 
                 if (_currentSelectedHandler != null) {
-                    _currentSelectedHandler.IsSelected = false;
-                    _currentSelectedHandler = null;
+                    Unselect(_currentSelectedHandler.Id);
                 }
 
                 if (handler != null) {
                     _currentSelectedHandler = handler;
-                    _currentSelectedHandler.IsSelected = true;
+                    Select(_currentSelectedHandler.Id);
                 } else {
                     var image = hit.gameObject.GetComponent<Image>();
                     if (DiffUtils.GetPixelFromScreen(mousePos, image,out var imageCoords, out var localPoint)) {
@@ -76,6 +83,16 @@ public class DiffEditor : MonoBehaviour {
                 }
             }
         }
+    }
+    
+    void Unselect(int id) {
+        var handlers = _handlers.Where(handler => handler.Id == id);
+        handlers.ForEach(h => h.IsSelected = false);
+    }
+    
+    void Select(int id) {
+        var handlers = _handlers.Where(handler => handler.Id == id);
+        handlers.ForEach(h => h.IsSelected = true);
     }
     
     void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id) {

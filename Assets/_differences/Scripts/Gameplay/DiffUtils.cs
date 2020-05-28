@@ -45,6 +45,14 @@ public static class DiffUtils {
 
         return pos;
     }
+
+    public static float RectToSpriteRadius(float radius, Sprite sprite, RectTransform rectTransform) {
+        return radius;
+    }
+    
+    public static float SpriteToRectRadius(float radius, Sprite sprite, RectTransform rectTransform) {
+        return radius;
+    }
     
     public static bool GetPixelFromScreen(Vector2 screenPos, Image image, out Vector2 pixelsSpace, out Vector2 localSpace) {
         var imageRect = image.GetComponent<RectTransform>();
