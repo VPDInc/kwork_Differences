@@ -13,7 +13,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class DiffImage : MonoBehaviour {
+public class DiffEditor : MonoBehaviour {
     [SerializeField] Sprite _image1 = default;
     [SerializeField] Sprite _image2 = default;
     
@@ -35,7 +35,7 @@ public class DiffImage : MonoBehaviour {
                 var mousePos = Input.mousePosition;
                 var image = hit.gameObject.GetComponent<Image>();
                 if (RectTransformUtility.ScreenPointToLocalPointInRectangle(imageRect, mousePos, null, out var localPoint)) {
-                    var imageCoords = GetPixelSpaceCoordinateFromRectPoint(localPoint, image, imageRect);
+                    var imageCoords = DiffUtils.GetPixelSpaceCoordinateFromRectPoint(localPoint, image, imageRect);
                     var imageWidth = image.sprite.texture.width;
                     var imageHeight = image.sprite.texture.height;
                     var isInWidthBounds = 0 <= imageCoords.x && imageCoords.x <= imageWidth;
@@ -45,7 +45,7 @@ public class DiffImage : MonoBehaviour {
                         CreateHandler(localPoint, imageCoords, image, _currentHandlerId);
 
                         var secondImage = image == _config.Image1 ? _config.Image2 : _config.Image1;
-                        var secondLocalPoint = GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
+                        var secondLocalPoint = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
                             secondImage.GetComponent<RectTransform>());
                         
                         CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
@@ -79,76 +79,6 @@ public class DiffImage : MonoBehaviour {
         return results.FirstOrDefault();
     }
 
-    Vector2 GetPixelSpaceCoordinateFromRectPoint(Vector2 pos, Image image, RectTransform imageRect) {
-        var locationRelativeToImageInScreenCoordinates = new Vector2();
-        var pivotCancelledLocation =
-            new Vector2(pos.x - imageRect.rect.x, pos.y - imageRect.rect.y);
-        var locationRelativeToImage01 = new Vector2();
-        var imageAspectRatio = image.sprite.rect.height / image.sprite.rect.width;
-        var rectAspectRatio = imageRect.rect.height / imageRect.rect.width;
-        var imageRectInLocalScreenCoordinates = new Rect();
-        if (imageAspectRatio > rectAspectRatio) {
-            // The image is constrained by its height.
-            var imageWidth = (rectAspectRatio / imageAspectRatio) * imageRect.rect.width;
-            var excessWidth = imageRect.rect.width - imageWidth;
-            imageRectInLocalScreenCoordinates.Set(imageRect.pivot.x * excessWidth, 0,
-                imageRect.rect.height / imageAspectRatio, imageRect.rect.height);
-        } else {
-            // The image is constrained by its width.
-            var imageHeight = (imageAspectRatio / rectAspectRatio) * imageRect.rect.height;
-            var excessHeight = imageRect.rect.height - imageHeight;
-            imageRectInLocalScreenCoordinates.Set(0, imageRect.pivot.y * excessHeight,
-                imageRect.rect.width, imageAspectRatio * imageRect.rect.width);
-        }
-
-        locationRelativeToImageInScreenCoordinates.Set(
-            pivotCancelledLocation.x - imageRectInLocalScreenCoordinates.x,
-            pivotCancelledLocation.y - imageRectInLocalScreenCoordinates.y);
-        
-        locationRelativeToImage01.Set(
-            locationRelativeToImageInScreenCoordinates.x / imageRectInLocalScreenCoordinates.width,
-            locationRelativeToImageInScreenCoordinates.y / imageRectInLocalScreenCoordinates.height);
-        
-        var imageCoord = new Vector2(locationRelativeToImage01.x * image.sprite.texture.width, 
-            locationRelativeToImage01.y * image.sprite.texture.height);
-        
-        return imageCoord;
-    }
-    
-    Vector2 GetRectSpaceCoordinateFromPixel(Vector2 imageCoord, Image image, RectTransform imageRect) {
-        if (image.sprite == null) {
-            Err("Image not loaded");
-            return default;
-        }
-        
-        var locationRelativeToImage01 = new Vector2(imageCoord.x / image.sprite.texture.width, imageCoord.y / image.sprite.texture.height);
-        var imageAspectRatio = image.sprite.rect.height / image.sprite.rect.width;
-        var rectAspectRatio = imageRect.rect.height / imageRect.rect.width;
-        var imageRectInLocalScreenCoordinates = new Rect();
-        if (imageAspectRatio > rectAspectRatio) {
-            // The image is constrained by its height.
-            var imageWidth = (rectAspectRatio / imageAspectRatio) * imageRect.rect.width;
-            var excessWidth = imageRect.rect.width - imageWidth;
-            imageRectInLocalScreenCoordinates.Set(imageRect.pivot.x * excessWidth, 0,
-                imageRect.rect.height / imageAspectRatio, imageRect.rect.height);
-        } else {
-            // The image is constrained by its width.
-            var imageHeight = (imageAspectRatio / rectAspectRatio) * imageRect.rect.height;
-            var excessHeight = imageRect.rect.height - imageHeight;
-            imageRectInLocalScreenCoordinates.Set(0, imageRect.pivot.y * excessHeight,
-                imageRect.rect.width, imageAspectRatio * imageRect.rect.width);
-        }
-        
-        var locationRelativeToImageInScreenCoordinates = new Vector2(imageRectInLocalScreenCoordinates.width * locationRelativeToImage01.x,
-            imageRectInLocalScreenCoordinates.height * locationRelativeToImage01.y);
-        var pivotCancelledLocation = new Vector2(imageRectInLocalScreenCoordinates.x + locationRelativeToImageInScreenCoordinates.x, 
-            imageRectInLocalScreenCoordinates.y + locationRelativeToImageInScreenCoordinates.y);
-        
-        var pos = new Vector2(pivotCancelledLocation.x + imageRect.rect.x, pivotCancelledLocation.y + imageRect.rect.y);
-
-        return pos;
-    }
-
     Vector2 GetRectSpaceCoordinate(RectTransform imageRect, Vector2 localPoint) {
         var normalizedPoint = Rect.PointToNormalized(imageRect.rect, localPoint);
         var rectCoord = new Vector2(imageRect.rect.width * normalizedPoint.x, imageRect.rect.height * normalizedPoint.y);
@@ -178,7 +108,7 @@ public class DiffImage : MonoBehaviour {
 
         var jsonString = File.ReadAllText(path);
         
-        var data = JsonUtility.FromJson<Data>(jsonString);
+        var data = DiffUtils.Parse(jsonString);
         
         LoadAndCreateImages(data);
     }
@@ -197,12 +127,12 @@ public class DiffImage : MonoBehaviour {
 
     void CreateHandlerFromPoint(Vector2 point) {
         var localPos1 =
-            GetRectSpaceCoordinateFromPixel(point, _config.Image1, _config.Image1.GetComponent<RectTransform>());
+            DiffUtils.GetRectSpaceCoordinateFromPixel(point, _config.Image1, _config.Image1.GetComponent<RectTransform>());
 
         CreateHandler(localPos1, point, _config.Image1, _currentHandlerId);
 
         var localPos2 =
-            GetRectSpaceCoordinateFromPixel(point, _config.Image2, _config.Image2.GetComponent<RectTransform>());
+            DiffUtils.GetRectSpaceCoordinateFromPixel(point, _config.Image2, _config.Image2.GetComponent<RectTransform>());
 
 
         CreateHandler(localPos2, point, _config.Image2, _currentHandlerId);
@@ -245,30 +175,7 @@ public class DiffImage : MonoBehaviour {
         AssetDatabase.Refresh();
     }
 
-    [Serializable]
-    struct Data {
-        public string Image1Path;
-        public string Image2Path;
-        public Point[] Points;
-    }
-
-    [Serializable]
-    struct Point {
-        public float X;
-        public float Y;
-        public float Radius;
-    }
-
     void Err(string message) {
         Debug.LogError($"[{GetType()}] {message}");
     }
 }
-
-public static class Extension {
-    public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
-        Func<TSource, TKey> keySelector) {
-        var knownKeys = new HashSet<TKey>();
-        return source.Where(element => knownKeys.Add(keySelector(element)));
-    }
-}
-
