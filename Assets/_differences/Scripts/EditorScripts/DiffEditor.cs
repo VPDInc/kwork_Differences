@@ -29,25 +29,23 @@ public class DiffEditor : MonoBehaviour {
 
     void Update() {
         if (Input.GetMouseButtonDown(0)) {
-            var hit = RaycastMouse();
+            var mousePos = Input.mousePosition;
+            var hit = DiffUtils.RaycastMouse(mousePos);
             if (hit.gameObject != null) {
-                var imageRect = hit.gameObject.GetComponent<RectTransform>();
-                var mousePos = Input.mousePosition;
                 var image = hit.gameObject.GetComponent<Image>();
-                if (RectTransformUtility.ScreenPointToLocalPointInRectangle(imageRect, mousePos, null, out var localPoint)) {
-                    var imageCoords = DiffUtils.GetPixelSpaceCoordinateFromRectPoint(localPoint, image, imageRect);
+                if (DiffUtils.GetPixelFromScreen(mousePos, image,out var imageCoords, out var localPoint)) {
                     var imageWidth = image.sprite.texture.width;
                     var imageHeight = image.sprite.texture.height;
                     var isInWidthBounds = 0 <= imageCoords.x && imageCoords.x <= imageWidth;
                     var isInHeightBounds = 0 <= imageCoords.y && imageCoords.y <= imageHeight;
-                    
+
                     if (isInHeightBounds && isInWidthBounds) {
                         CreateHandler(localPoint, imageCoords, image, _currentHandlerId);
 
                         var secondImage = image == _config.Image1 ? _config.Image2 : _config.Image1;
                         var secondLocalPoint = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
                             secondImage.GetComponent<RectTransform>());
-                        
+
                         CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
                         _currentHandlerId++;
                     }
@@ -64,19 +62,6 @@ public class DiffEditor : MonoBehaviour {
         handler.ImageSpaceCoordinates = coords;
         handler.Id = id;
         _handlers.Add(handler);
-    }
-
-    RaycastResult RaycastMouse() {
-        var pointerData = new PointerEventData(EventSystem.current) {
-            pointerId = -1,
-        };
-
-        pointerData.position = Input.mousePosition;
-
-        var results = new List<RaycastResult>();
-        EventSystem.current.RaycastAll(pointerData, results);
-
-        return results.FirstOrDefault();
     }
 
     Vector2 GetRectSpaceCoordinate(RectTransform imageRect, Vector2 localPoint) {

@@ -12,4 +12,8 @@ public struct Point {
     public float X;
     public float Y;
     public float Radius;
+
+    public override string ToString() {
+        return $"x: {X} y: {Y} Radius: {Radius}";
+    }
 }

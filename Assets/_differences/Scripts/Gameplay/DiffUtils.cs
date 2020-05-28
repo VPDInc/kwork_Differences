@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public static class DiffUtils {
@@ -45,45 +46,67 @@ public static class DiffUtils {
         return pos;
     }
     
-    public static Vector2 GetPixelSpaceCoordinateFromRectPoint(Vector2 pos, Image image, RectTransform imageRect) {
-        var locationRelativeToImageInScreenCoordinates = new Vector2();
-        var pivotCancelledLocation =
-            new Vector2(pos.x - imageRect.rect.x, pos.y - imageRect.rect.y);
-        var locationRelativeToImage01 = new Vector2();
-        var imageAspectRatio = image.sprite.rect.height / image.sprite.rect.width;
-        var rectAspectRatio = imageRect.rect.height / imageRect.rect.width;
-        var imageRectInLocalScreenCoordinates = new Rect();
-        if (imageAspectRatio > rectAspectRatio) {
-            // The image is constrained by its height.
-            var imageWidth = (rectAspectRatio / imageAspectRatio) * imageRect.rect.width;
-            var excessWidth = imageRect.rect.width - imageWidth;
-            imageRectInLocalScreenCoordinates.Set(imageRect.pivot.x * excessWidth, 0,
-                imageRect.rect.height / imageAspectRatio, imageRect.rect.height);
-        } else {
-            // The image is constrained by its width.
-            var imageHeight = (imageAspectRatio / rectAspectRatio) * imageRect.rect.height;
-            var excessHeight = imageRect.rect.height - imageHeight;
-            imageRectInLocalScreenCoordinates.Set(0, imageRect.pivot.y * excessHeight,
-                imageRect.rect.width, imageAspectRatio * imageRect.rect.width);
-        }
+    public static bool GetPixelFromScreen(Vector2 screenPos, Image image, out Vector2 pixelsSpace, out Vector2 localSpace) {
+        var imageRect = image.GetComponent<RectTransform>();
+        if (RectTransformUtility.ScreenPointToLocalPointInRectangle(imageRect, screenPos, null, out var pos)) {
+            var locationRelativeToImageInScreenCoordinates = new Vector2();
+            var pivotCancelledLocation =
+                new Vector2(pos.x - imageRect.rect.x, pos.y - imageRect.rect.y);
+            var locationRelativeToImage01 = new Vector2();
+            var imageAspectRatio = image.sprite.rect.height / image.sprite.rect.width;
+            var rectAspectRatio = imageRect.rect.height / imageRect.rect.width;
+            var imageRectInLocalScreenCoordinates = new Rect();
+            if (imageAspectRatio > rectAspectRatio) {
+                // The image is constrained by its height.
+                var imageWidth = (rectAspectRatio / imageAspectRatio) * imageRect.rect.width;
+                var excessWidth = imageRect.rect.width - imageWidth;
+                imageRectInLocalScreenCoordinates.Set(imageRect.pivot.x * excessWidth, 0,
+                    imageRect.rect.height / imageAspectRatio, imageRect.rect.height);
+            } else {
+                // The image is constrained by its width.
+                var imageHeight = (imageAspectRatio / rectAspectRatio) * imageRect.rect.height;
+                var excessHeight = imageRect.rect.height - imageHeight;
+                imageRectInLocalScreenCoordinates.Set(0, imageRect.pivot.y * excessHeight,
+                    imageRect.rect.width, imageAspectRatio * imageRect.rect.width);
+            }
 
-        locationRelativeToImageInScreenCoordinates.Set(
-            pivotCancelledLocation.x - imageRectInLocalScreenCoordinates.x,
-            pivotCancelledLocation.y - imageRectInLocalScreenCoordinates.y);
+            locationRelativeToImageInScreenCoordinates.Set(
+                pivotCancelledLocation.x - imageRectInLocalScreenCoordinates.x,
+                pivotCancelledLocation.y - imageRectInLocalScreenCoordinates.y);
         
-        locationRelativeToImage01.Set(
-            locationRelativeToImageInScreenCoordinates.x / imageRectInLocalScreenCoordinates.width,
-            locationRelativeToImageInScreenCoordinates.y / imageRectInLocalScreenCoordinates.height);
+            locationRelativeToImage01.Set(
+                locationRelativeToImageInScreenCoordinates.x / imageRectInLocalScreenCoordinates.width,
+                locationRelativeToImageInScreenCoordinates.y / imageRectInLocalScreenCoordinates.height);
         
-        var imageCoord = new Vector2(locationRelativeToImage01.x * image.sprite.texture.width, 
-            locationRelativeToImage01.y * image.sprite.texture.height);
+            var imageCoord = new Vector2(locationRelativeToImage01.x * image.sprite.texture.width, 
+                locationRelativeToImage01.y * image.sprite.texture.height);
+
+            localSpace = pos;
+            pixelsSpace = imageCoord;
+            return true;
+        }
         
-        return imageCoord;
+        pixelsSpace = Vector2.zero;
+        localSpace = Vector2.zero;
+        return false;
     }
     
     public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
         Func<TSource, TKey> keySelector) {
         var knownKeys = new HashSet<TKey>();
         return source.Where(element => knownKeys.Add(keySelector(element)));
+    }
+    
+    public static RaycastResult RaycastMouse(Vector2 position) {
+        var pointerData = new PointerEventData(EventSystem.current) {
+            pointerId = -1,
+        };
+
+        pointerData.position = position;
+
+        var results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(pointerData, results);
+
+        return results.FirstOrDefault();
     }
 }

@@ -1275,6 +1275,8 @@ MonoBehaviour:
   _image1: {fileID: 847970096}
   _image2: {fileID: 1648260776}
   _pointsCountText: {fileID: 285105027}
+  _diffVisualPrefab: {fileID: 1564477320706914290, guid: a3d2f94163b5641e586b5752a8513d84,
+    type: 3}
 --- !u!1 &1648260774
 GameObject:
   m_ObjectHideFlags: 0
@@ -1388,7 +1390,7 @@ MonoBehaviour:
   StartAlpha: 1
   CanvasName: MasterCanvas
   CustomCanvasName: 0
-  DontDestroyCanvasOnLoad: 1
+  DontDestroyCanvasOnLoad: 0
 --- !u!114 &1678742116
 MonoBehaviour:
   m_ObjectHideFlags: 0
