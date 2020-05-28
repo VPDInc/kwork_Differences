@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -10,8 +9,9 @@ using Sirenix.OdinInspector;
 using UnityEditor;
 
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
+
+#if UNITY_EDITOR
 
 public class DiffEditor : MonoBehaviour {
     [SerializeField] Sprite _image1 = default;
@@ -164,3 +164,5 @@ public class DiffEditor : MonoBehaviour {
         Debug.LogError($"[{GetType()}] {message}");
     }
 }
+
+#endif // UNITY_EDITOR
