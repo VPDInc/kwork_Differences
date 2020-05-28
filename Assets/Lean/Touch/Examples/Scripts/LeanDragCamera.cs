@@ -1,4 +1,7 @@
+using DG.Tweening;
+
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Lean.Touch {
     /// <summary>This component allows you to move the current GameObject (e.g. Camera) based on finger drags and the specified ScreenDepth.</summary>
@@ -39,6 +42,8 @@ namespace Lean.Touch {
         [SerializeField] bool _x = true;
         [SerializeField] bool _y = true;
 
+        bool _isForcedMoving;
+
         /// <summary>This method moves the current GameObject to the center point of all selected objects.</summary>
         [ContextMenu("Move To Selection")]
         public virtual void MoveToSelection() {
@@ -77,6 +82,15 @@ namespace Lean.Touch {
         public void RemoveAllFingers() {
             Use.RemoveAllFingers();
         }
+
+        public void MoveTo(Vector3 pos, bool isInstant) {
+            transform.DOKill();
+            _isForcedMoving = true;
+            pos.x = Mathf.Clamp(pos.x, _minSoftBounds.x, _maxSoftBounds.x);
+            pos.y = Mathf.Clamp(pos.y, _minSoftBounds.y, _maxSoftBounds.y);
+            pos.z = transform.localPosition.z;
+            transform.DOLocalMove(pos, isInstant ? 0 : 1f).OnComplete(()=>_isForcedMoving = false);
+        }
         #if UNITY_EDITOR
         protected virtual void Reset() {
             Use.UpdateRequiredSelectable(gameObject);
@@ -87,6 +101,8 @@ namespace Lean.Touch {
         }
 
         protected virtual void LateUpdate() {
+            if(_isForcedMoving || EventSystem.current.IsPointerOverGameObject()) return;
+            
             // Get the fingers we want to use
             var fingers = Use.GetFingers();
 
@@ -146,20 +162,6 @@ namespace Lean.Touch {
             } else if (fingers.Count == 0 && Inertia > 0.0f && Dampening > 0.0f) {
                 newRemainingDelta = Vector3.Lerp(newRemainingDelta, remainingDelta, Inertia);
             }
-
-            // if (Mathf.Abs(newRemainingDelta.x) < 0.02f) {
-            // 	if (transform.localPosition.x < _minSoftBounds.x && fingers.Count == 0) {
-            // 		var localPos = transform.localPosition;
-            // 		localPos.x = Mathf.Lerp(localPos.x, _minSoftBounds.x, 5 * Time.deltaTime);
-            // 		transform.localPosition = localPos;
-            // 	}
-            // 	
-            // 	if (transform.localPosition.x > _maxSoftBounds.x && fingers.Count == 0) {
-            // 		var localPos = transform.localPosition;
-            // 		localPos.x = Mathf.Lerp(localPos.x, _maxSoftBounds.x, 5 * Time.deltaTime);
-            // 		transform.localPosition = localPos;
-            // 	}
-            // }
 
             // Update remainingDelta with the dampened value
             remainingDelta = newRemainingDelta;
