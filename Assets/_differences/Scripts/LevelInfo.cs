@@ -45,11 +45,16 @@ public class LevelInfo : MonoBehaviour {
         _isCompleted = isCompleted;
         _isUnlocked = isUnlocked;
         
+        if(isUnlocked)
+            UnlockLevel(true);
+        
         if (_isCompleted) {
             UnlockVfx(true);
         } else {
             LockVfx(true);
         }
+        
+        
     }
 
     public void UnlockLevel(bool isInstant) {
@@ -61,9 +66,7 @@ public class LevelInfo : MonoBehaviour {
     }
 
     public void CompleteLevel() {
-        //TODO: Save info
         _isCompleted = true;
-        //
         _levelController.SetLastLevel(_levelNum);
         UnlockVfx(false);
         
@@ -74,6 +77,7 @@ public class LevelInfo : MonoBehaviour {
     //DUMMY
     public void HandleStarHandler(bool isInstant) {
         _starHandler.Show(_isUnlocked, isInstant);
+        //DUMMY
         if(_isCompleted)
             _starHandler.SetStars(Random.Range(1, 4), isInstant);
     }
