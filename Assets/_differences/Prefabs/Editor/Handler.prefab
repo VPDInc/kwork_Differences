@@ -88,3 +88,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ImageSpaceCoordinates: {x: 0, y: 0}
+  Id: 0
+  _visual: {fileID: 3974017821428873990}
+  _notSelected: {r: 0, g: 0, b: 0, a: 0.53333336}
+  _selected: {r: 1, g: 0, b: 0, a: 0.5372549}

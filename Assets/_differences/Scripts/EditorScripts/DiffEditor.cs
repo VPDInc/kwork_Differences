@@ -6,48 +6,72 @@ using Airion.Extensions;
 
 using Sirenix.OdinInspector;
 
-using UnityEditor;
-
 using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
+using UnityEditor;
 
 public class DiffEditor : MonoBehaviour {
     [SerializeField] Sprite _image1 = default;
     [SerializeField] Sprite _image2 = default;
-    
+
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
+    float Radius {
+        set {
+            if (_currentSelectedHandler == null)
+                return;
+            
+            _currentSelectedHandler.SetRadius(value, value);
+        }
+        get => _currentSelectedHandler?.Radius ?? 0;
+    }
+
+    bool IsSelected => _currentSelectedHandler != null;
     bool IsPlaymode => Application.isPlaying;
     EditorConfig _config;
     int _currentHandlerId = 0;
+    DiffHandler _currentSelectedHandler;
 
     readonly List<DiffHandler> _handlers = new List<DiffHandler>();
 
     void Awake() {
         FindResources();
     }
-
+    
     void Update() {
         if (Input.GetMouseButtonDown(0)) {
             var mousePos = Input.mousePosition;
             var hit = DiffUtils.RaycastMouse(mousePos);
             if (hit.gameObject != null) {
-                var image = hit.gameObject.GetComponent<Image>();
-                if (DiffUtils.GetPixelFromScreen(mousePos, image,out var imageCoords, out var localPoint)) {
-                    var imageWidth = image.sprite.texture.width;
-                    var imageHeight = image.sprite.texture.height;
-                    var isInWidthBounds = 0 <= imageCoords.x && imageCoords.x <= imageWidth;
-                    var isInHeightBounds = 0 <= imageCoords.y && imageCoords.y <= imageHeight;
+                var handler = hit.gameObject.GetComponent<DiffHandler>();
 
-                    if (isInHeightBounds && isInWidthBounds) {
-                        CreateHandler(localPoint, imageCoords, image, _currentHandlerId);
+                if (_currentSelectedHandler != null) {
+                    _currentSelectedHandler.IsSelected = false;
+                    _currentSelectedHandler = null;
+                }
 
-                        var secondImage = image == _config.Image1 ? _config.Image2 : _config.Image1;
-                        var secondLocalPoint = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
-                            secondImage.GetComponent<RectTransform>());
+                if (handler != null) {
+                    _currentSelectedHandler = handler;
+                    _currentSelectedHandler.IsSelected = true;
+                } else {
+                    var image = hit.gameObject.GetComponent<Image>();
+                    if (DiffUtils.GetPixelFromScreen(mousePos, image,out var imageCoords, out var localPoint)) {
+                        var imageWidth = image.sprite.texture.width;
+                        var imageHeight = image.sprite.texture.height;
+                        var isInWidthBounds = 0 <= imageCoords.x && imageCoords.x <= imageWidth;
+                        var isInHeightBounds = 0 <= imageCoords.y && imageCoords.y <= imageHeight;
 
-                        CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
-                        _currentHandlerId++;
+                        if (isInHeightBounds && isInWidthBounds) {
+                            CreateHandler(localPoint, imageCoords, image, _currentHandlerId);
+
+                            var secondImage = image == _config.Image1 ? _config.Image2 : _config.Image1;
+                            var secondLocalPoint = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
+                                secondImage.GetComponent<RectTransform>());
+
+                            CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
+                            _currentHandlerId++;
+                        }
                     }
                 }
             }
