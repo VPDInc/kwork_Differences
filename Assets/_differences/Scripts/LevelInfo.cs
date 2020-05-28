@@ -11,6 +11,7 @@ using Random = UnityEngine.Random;
 public class LevelInfo : MonoBehaviour {
     public bool IsCompleted => _isCompleted;
     public int LevelNum => _levelNum;
+    public int Estimation => _estimation;
 
     [SerializeField] TMP_Text _levelNumLabel = default;
     [SerializeField] SpriteRenderer[] _spritesToHide = default;
@@ -20,6 +21,7 @@ public class LevelInfo : MonoBehaviour {
     StarHandler _starHandler;
     EpisodeInfo _episodeInfo;
     int _levelNum = 0;
+    int _estimation = 0;
     bool _isCompleted = false;
     bool _isUnlocked = false;
 
@@ -31,7 +33,7 @@ public class LevelInfo : MonoBehaviour {
     }
 
     void Start() {
-        HandleStarHandler(true);
+        ShowStarHandler(true);
     }
 
     public void Init(EpisodeInfo episodeInfo, int levelNum) {
@@ -41,9 +43,11 @@ public class LevelInfo : MonoBehaviour {
         _levelNumLabel.text = (levelNum + 1).ToString();
     }
 
-    public void Setup(bool isUnlocked, bool isCompleted) {
+    public void Setup(bool isUnlocked, bool isCompleted, int stars = 0) {
         _isCompleted = isCompleted;
         _isUnlocked = isUnlocked;
+        
+        SetStars(stars, true);
         
         if(isUnlocked)
             UnlockLevel(true);
@@ -59,7 +63,7 @@ public class LevelInfo : MonoBehaviour {
 
     public void UnlockLevel(bool isInstant) {
         _isUnlocked = true;
-        HandleStarHandler(isInstant);
+        ShowStarHandler(isInstant);
         
         if(!_episodeInfo.IsUnlocked)
             _episodeInfo.UnlockEpisode(isInstant);
@@ -67,19 +71,19 @@ public class LevelInfo : MonoBehaviour {
 
     public void CompleteLevel() {
         _isCompleted = true;
-        _levelController.SetLastLevel(_levelNum);
+        ShowStarHandler(false);
+        SetStars(Random.Range(1, 4), false);
         UnlockVfx(false);
-        
-        //DUMMY
-        HandleStarHandler(false);
+        _levelController.CompleteLevel(_levelNum);
+    }
+    
+    public void ShowStarHandler(bool isInstant) {
+        _starHandler.Show(_isUnlocked, isInstant);
     }
 
-    //DUMMY
-    public void HandleStarHandler(bool isInstant) {
-        _starHandler.Show(_isUnlocked, isInstant);
-        //DUMMY
-        if(_isCompleted)
-            _starHandler.SetStars(Random.Range(1, 4), isInstant);
+    public void SetStars(int stars, bool isInstant) {
+        _estimation = stars;
+        _starHandler.SetStars(stars, isInstant);
     }
 
     void UnlockVfx(bool isInstant) {
