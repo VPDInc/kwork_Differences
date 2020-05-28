@@ -1,9 +1,15 @@
 ﻿using System.Collections.Generic;
 
+using Lean.Touch;
+
 using UnityEngine;
+
+using Zenject;
 
 public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
+
+    [Inject] LeanDragCamera _leanDragCamera = default;
     
     int _lastLevelNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
@@ -14,13 +20,14 @@ public class LevelController : MonoBehaviour {
     void Start() {
         LoadLastLevel();
         SetupLevels();
+        _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
     }
 
     public void CompleteLevel(int num) {
         if(num >= _lastLevelNum)
             _lastLevelNum = num + 1;
-        var level = _allLevels[num];
-        
+        var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count-1)];
+        _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
         SaveLevelEstimation(num, level.Estimation);
         
@@ -33,7 +40,7 @@ public class LevelController : MonoBehaviour {
     }
 
     public void PlayLastLevel() {
-        _allLevels[_lastLevelNum].PlayLevel();
+        _allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].PlayLevel();
     }
 
     void SetupLevels() {
