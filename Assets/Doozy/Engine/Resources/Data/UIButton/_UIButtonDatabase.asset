@@ -17,6 +17,8 @@ MonoBehaviour:
   - Custom
   - Example
   - General
+  - GlobalMap
   Categories:
   - {fileID: 11400000, guid: 40f9e81ff80114a47a3721228ba749ed, type: 2}
   - {fileID: 11400000, guid: 2eef84b7c865e450a82d5e8b3fa2634e, type: 2}
+  - {fileID: 11400000, guid: 276be67fa7a58a942bb7b635960a0158, type: 2}

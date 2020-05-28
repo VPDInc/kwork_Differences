@@ -17,11 +17,12 @@ public class LevelController : MonoBehaviour {
     }
 
     public void CompleteLevel(int num) {
-        _lastLevelNum = num;
+        if(num >= _lastLevelNum)
+            _lastLevelNum = num + 1;
         var level = _allLevels[num];
         
         SaveLastLevel();
-        SaveLevelEstimation(_lastLevelNum, level.Estimation);
+        SaveLevelEstimation(num, level.Estimation);
         
         if(num + 1 < _allLevels.Count)
             _allLevels[num+1].UnlockLevel(false);
@@ -31,11 +32,15 @@ public class LevelController : MonoBehaviour {
         _allLevels.AddRange(levelInfos);
     }
 
+    public void PlayLastLevel() {
+        _allLevels[_lastLevelNum].PlayLevel();
+    }
+
     void SetupLevels() {
         foreach (LevelInfo levelInfo in _allLevels) {
             var levelNum = levelInfo.LevelNum;
-            var isCompleted = levelNum <= LastLevelNum;
-            var isUnlocked = levelNum <= LastLevelNum + 1;
+            var isCompleted = _lastLevelNum > 0 && levelNum < LastLevelNum;
+            var isUnlocked = levelNum <= LastLevelNum;
             levelInfo.Setup(isUnlocked, isCompleted, LoadLevelEstimation(levelNum));
         }
     }
@@ -49,7 +54,7 @@ public class LevelController : MonoBehaviour {
     }
 
     void LoadLastLevel() {
-        _lastLevelNum = PlayerPrefs.GetInt(LAST_LEVEL_ID, -1);
+        _lastLevelNum = PlayerPrefs.GetInt(LAST_LEVEL_ID, 0);
     }
 
     int LoadLevelEstimation(int level) {

@@ -19,7 +19,7 @@ public class StarHandler : MonoBehaviour {
     }
 
     public void SetStars(int stars, bool isInstant) {
-        DOTween.Kill(this);
+        // DOTween.Kill(this);
         var seq = DOTween.Sequence().SetId(this);
         for (var i = 0; i < Mathf.Clamp(stars, 0, _stars.Length); i++) {
             Transform star = _stars[i];

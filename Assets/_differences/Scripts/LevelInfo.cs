@@ -3,6 +3,7 @@
 using TMPro;
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 using Zenject;
 
@@ -24,12 +25,14 @@ public class LevelInfo : MonoBehaviour {
     int _estimation = 0;
     bool _isCompleted = false;
     bool _isUnlocked = false;
+    EventSystem _eventSystem = default;
 
     const float LOCKED_ALPHA = 0.75f;
     const float VFX_DURATION = 0.5f;
 
     void Awake() {
         _starHandler = GetComponentInChildren<StarHandler>();
+        _eventSystem = EventSystem.current;
     }
 
     void Start() {
@@ -57,8 +60,11 @@ public class LevelInfo : MonoBehaviour {
         } else {
             LockVfx(true);
         }
-        
-        
+    }
+
+    public void PlayLevel() {
+        //DUMMY
+        CompleteLevel();
     }
 
     public void UnlockLevel(bool isInstant) {
@@ -69,7 +75,7 @@ public class LevelInfo : MonoBehaviour {
             _episodeInfo.UnlockEpisode(isInstant);
     }
 
-    public void CompleteLevel() {
+    void CompleteLevel() {
         _isCompleted = true;
         ShowStarHandler(false);
         SetStars(Random.Range(1, 4), false);
@@ -77,12 +83,12 @@ public class LevelInfo : MonoBehaviour {
         _levelController.CompleteLevel(_levelNum);
     }
     
-    public void ShowStarHandler(bool isInstant) {
+    void ShowStarHandler(bool isInstant) {
         _starHandler.Show(_isUnlocked, isInstant);
     }
 
-    public void SetStars(int stars, bool isInstant) {
-        _estimation = stars;
+    void SetStars(int stars, bool isInstant) {
+        _estimation = Mathf.Clamp(stars, _estimation, 3);
         _starHandler.SetStars(stars, isInstant);
     }
 
@@ -99,8 +105,8 @@ public class LevelInfo : MonoBehaviour {
     }
 
     void OnMouseDown() {
-        if(_isCompleted || !_isUnlocked) return;
+        if(!_isUnlocked && _eventSystem.IsPointerOverGameObject()) return;
         
-        CompleteLevel();
+        PlayLevel();
     }
 }
