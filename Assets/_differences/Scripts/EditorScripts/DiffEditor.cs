@@ -53,6 +53,20 @@ public class DiffEditor : MonoBehaviour {
         var handlers = _handlers.Where(handler => handler.Id == id);
         handlers.ForEach(h => h.SetHeight(value));
     }
+    
+    [Button, ShowIf(nameof(IsSelected))]
+    void Delete() {
+        var id = _currentSelectedHandler.Id;
+        var toDelete = _handlers.Where(h => h.Id == id).ToArray();
+        
+        for (int i = 0; i < toDelete.Length; i++) {
+            var handler = toDelete[i];
+            _handlers.Remove(handler);
+            Destroy(handler.gameObject);
+        }
+        
+        UpdateHandlersNum();
+    }
 
     bool IsSelected => _currentSelectedHandler != null;
     bool IsPlaymode => Application.isPlaying;
@@ -65,7 +79,7 @@ public class DiffEditor : MonoBehaviour {
     void Awake() {
         FindResources();
     }
-    
+
     void Update() {
         if (Input.GetMouseButtonDown(0)) {
             var mousePos = Input.mousePosition;
@@ -97,7 +111,26 @@ public class DiffEditor : MonoBehaviour {
 
                             CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
                             _currentHandlerId++;
+                            
+                            UpdateHandlersNum();
                         }
+                    }
+                }
+            }
+        }
+
+        if (Input.GetMouseButton(0)) {
+            if (_currentSelectedHandler != null) {
+                var mousePos = Input.mousePosition;
+                var image = _currentSelectedHandler.transform.parent.GetComponent<Image>();
+                if (DiffUtils.GetPixelFromScreen(mousePos, image, out var imageCoords, out var localPoint)) {
+                    var handlers = _handlers.Where(h => h.Id == _currentSelectedHandler.Id);
+                    foreach (var handler in handlers) {
+                        var img = handler.transform.parent.GetComponent<Image>();
+                        var imageRect = img.GetComponent<RectTransform>();
+                        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, img, imageRect);
+                        handler.GetComponent<RectTransform>().localPosition = pos;
+                        handler.ImageSpaceCoordinates = imageCoords;
                     }
                 }
             }
@@ -181,6 +214,8 @@ public class DiffEditor : MonoBehaviour {
 
         CreateHandler(localPos2, point, _config.Image2, _currentHandlerId);
 
+        UpdateHandlersNum();
+        
         _currentHandlerId++;
     }
 
@@ -204,7 +239,8 @@ public class DiffEditor : MonoBehaviour {
             points.Add(new Point() {
                 Center = handler.ImageSpaceCoordinates,
                 Width = handler.Width,
-                Height = handler.Height
+                Height = handler.Height,
+                Number = handler.Number
             });
         }
 
@@ -217,6 +253,15 @@ public class DiffEditor : MonoBehaviour {
         var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
         File.WriteAllText(path, jsonString);
         AssetDatabase.Refresh();
+    }
+    
+    void UpdateHandlersNum() {
+        var uniqHandlers = _handlers.DistinctBy(h => h.Id).ToArray();
+        for (int i = 0; i < uniqHandlers.Length; i++) {
+            var id = uniqHandlers[i].Id;
+            var handlers = _handlers.Where(h => h.Id == id);
+            handlers.ForEach(h => h.Number = i);
+        }
     }
 
     void Err(string message) {

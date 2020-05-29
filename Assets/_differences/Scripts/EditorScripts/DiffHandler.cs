@@ -1,5 +1,7 @@
 ﻿using Sirenix.OdinInspector;
 
+using TMPro;
+
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -21,12 +23,23 @@ public class DiffHandler : MonoBehaviour {
         get => _isSelected;
     }
     
+    [ShowInInspector, ReadOnly]
+    public int Number {
+        get => _number;
+        set {
+            _number = value;
+            _numberText.text = _number.ToString();
+        }
+    }
+    
     [SerializeField] Image _visual = default;
+    [SerializeField] TextMeshProUGUI _numberText = default;
     [SerializeField] Color _notSelected = Color.black;
     [SerializeField] Color _selected = Color.red;
 
     bool _isSelected = false;
-
+    int _number = 0;
+    
     const float DEFAULT_SIZE = 50;
 
     void Awake() {

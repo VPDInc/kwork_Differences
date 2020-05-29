@@ -14,6 +14,7 @@ public struct Point {
     public Vector2 Center;
     public float Width;
     public float Height;
+    public int Number;
 
     public override string ToString() {
         return $"Center: {Center} Width: {Width} Height: {Height}";
