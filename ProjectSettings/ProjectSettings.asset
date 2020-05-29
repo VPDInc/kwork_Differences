@@ -12,7 +12,7 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: DefaultCompany
+  companyName: Airion Games
   productName: Differences
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
@@ -162,7 +162,8 @@ PlayerSettings:
   resolutionScalingMode: 0
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
-  applicationIdentifier: {}
+  applicationIdentifier:
+    iPhone: games.airion.differences
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 19
@@ -226,7 +227,7 @@ PlayerSettings:
   metalEditorSupport: 1
   metalAPIValidation: 1
   iOSRenderExtraFrameOnPause: 0
-  appleDeveloperTeamID: 
+  appleDeveloperTeamID: 8JGKQJBA88
   iOSManualSigningProvisioningProfileID: 
   tvOSManualSigningProvisioningProfileID: 
   iOSManualSigningProvisioningProfileType: 0
@@ -538,7 +539,7 @@ PlayerSettings:
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
     1: ODIN_INSPECTOR;dUI_MANAGER;dUI_TextMeshPro
-    4: dUI_MANAGER;dUI_TextMeshPro
+    4: dUI_MANAGER;dUI_TextMeshPro;ODIN_INSPECTOR
     7: dUI_MANAGER;ODIN_INSPECTOR;dUI_TextMeshPro
     13: dUI_MANAGER;dUI_TextMeshPro
     14: dUI_MANAGER;dUI_TextMeshPro
