@@ -71,9 +71,9 @@ public class UIGameplay : MonoBehaviour {
     }
 
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
-        return Pow(pixel.x - point.X, 2) +
-               Pow(pixel.y - point.Y, 2) <
-               Pow(point.Radius, 2);
+        var rect = new Rect(Vector2.zero, new Vector2(point.Width, point.Height));
+        rect.center = point.Center;
+        return rect.Contains(pixel);
     }
 
     void SelectDifference(Point point) {
@@ -85,18 +85,21 @@ public class UIGameplay : MonoBehaviour {
     void CreateDiffsVisual(Point point) {
         var handler = Instantiate(_diffVisualPrefab);
         var handlerRect = handler.GetComponent<RectTransform>();
-        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(new Vector2(point.X, point.Y), _image1,
-            _image1.GetComponent<RectTransform>());
+        var image1Rect = _image1.GetComponent<RectTransform>();
+        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _image1, image1Rect);
         handlerRect.SetParent(_image1.transform, false);
-        handlerRect.sizeDelta = new Vector2(point.Radius, point.Radius);
+        handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, _image1.sprite), 
+            DiffUtils.PixelHeightToRect(point.Height, image1Rect, _image1.sprite));
         handlerRect.localPosition = pos;
         
         var handler2 = Instantiate(_diffVisualPrefab);
         var handlerRect2 = handler2.GetComponent<RectTransform>();
-        var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(new Vector2(point.X, point.Y), _image2,
+        var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _image2,
             _image2.GetComponent<RectTransform>());
         handlerRect2.SetParent(_image2.transform, false);
-        handlerRect2.sizeDelta = new Vector2(point.Radius, point.Radius);
+        var image2Rect = _image1.GetComponent<RectTransform>();
+        handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, _image2.sprite), 
+            DiffUtils.PixelHeightToRect(point.Height, image2Rect, _image2.sprite));
         handlerRect2.localPosition = pos2;
     }
 }

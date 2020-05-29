@@ -1,5 +1,7 @@
 ﻿using System;
 
+using UnityEngine;
+
 [Serializable]
 public struct Data {
     public string Image1Path;
@@ -9,11 +11,12 @@ public struct Data {
 
 [Serializable]
 public struct Point {
-    public float X;
-    public float Y;
-    public float Radius;
+    public Vector2 Center;
+    public float Width;
+    public float Height;
+    public int Number;
 
     public override string ToString() {
-        return $"x: {X} y: {Y} Radius: {Radius}";
+        return $"Center: {Center} Width: {Width} Height: {Height}";
     }
 }

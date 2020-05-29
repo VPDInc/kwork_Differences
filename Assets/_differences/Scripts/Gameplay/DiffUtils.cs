@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
 using UnityEngine;
@@ -46,14 +45,6 @@ public static class DiffUtils {
         return pos;
     }
 
-    public static float RectToSpriteRadius(float radius, Sprite sprite, RectTransform rectTransform) {
-        return radius;
-    }
-    
-    public static float SpriteToRectRadius(float radius, Sprite sprite, RectTransform rectTransform) {
-        return radius;
-    }
-    
     public static bool GetPixelFromScreen(Vector2 screenPos, Image image, out Vector2 pixelsSpace, out Vector2 localSpace) {
         var imageRect = image.GetComponent<RectTransform>();
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(imageRect, screenPos, null, out var pos)) {
@@ -98,13 +89,7 @@ public static class DiffUtils {
         localSpace = Vector2.zero;
         return false;
     }
-    
-    public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
-        Func<TSource, TKey> keySelector) {
-        var knownKeys = new HashSet<TKey>();
-        return source.Where(element => knownKeys.Add(keySelector(element)));
-    }
-    
+
     public static RaycastResult RaycastMouse(Vector2 position) {
         var pointerData = new PointerEventData(EventSystem.current) {
             pointerId = -1,
@@ -116,5 +101,13 @@ public static class DiffUtils {
         EventSystem.current.RaycastAll(pointerData, results);
 
         return results.FirstOrDefault();
+    }
+
+    public static float PixelHeightToRect(float pixel, RectTransform rect, Sprite sprite) {
+        return pixel * (rect.rect.height / sprite.texture.height);
+    }
+    
+    public static float PixelWidthToRect(float pixel, RectTransform rect, Sprite sprite) {
+        return pixel * (rect.rect.width / sprite.texture.width);
     }
 }

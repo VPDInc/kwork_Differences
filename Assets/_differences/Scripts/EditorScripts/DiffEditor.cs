@@ -18,21 +18,54 @@ using UnityEditor;
 public class DiffEditor : MonoBehaviour {
     [SerializeField] Sprite _image1 = default;
     [SerializeField] Sprite _image2 = default;
+    
+    [SerializeField, ShowIf(nameof(IsPlaymode))]
+    string _folderName = "Diff_1";
 
     [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
-    float Radius {
+    float Width {
         set {
             if (_currentSelectedHandler == null)
                 return;
 
-            SetRadius(_currentSelectedHandler.Id, value);
+            SetWidth(_currentSelectedHandler.Id, value);
         }
-        get => _currentSelectedHandler?.Radius ?? 0;
+        get => _currentSelectedHandler?.Width ?? 0;
     }
+    
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
+    float Height {
+        set {
+            if (_currentSelectedHandler == null)
+                return;
 
-    void SetRadius(int id, float value) {
+            SetHeight(_currentSelectedHandler.Id, value);
+        }
+        get => _currentSelectedHandler?.Height ?? 0;
+    }
+    
+    void SetWidth(int id, float value) {
+        var handlers = _handlers.Where(h => h.Id == id);
+        handlers.ForEach(h => h.SetWidth(value));
+    }
+    
+    void SetHeight(int id, float value) {
         var handlers = _handlers.Where(handler => handler.Id == id);
-        handlers.ForEach(h => h.SetRadius(value, value));
+        handlers.ForEach(h => h.SetHeight(value));
+    }
+    
+    [Button, ShowIf(nameof(IsSelected))]
+    void Delete() {
+        var id = _currentSelectedHandler.Id;
+        var toDelete = _handlers.Where(h => h.Id == id).ToArray();
+        
+        for (int i = 0; i < toDelete.Length; i++) {
+            var handler = toDelete[i];
+            _handlers.Remove(handler);
+            Destroy(handler.gameObject);
+        }
+        
+        UpdateHandlersNum();
     }
 
     bool IsSelected => _currentSelectedHandler != null;
@@ -46,7 +79,7 @@ public class DiffEditor : MonoBehaviour {
     void Awake() {
         FindResources();
     }
-    
+
     void Update() {
         if (Input.GetMouseButtonDown(0)) {
             var mousePos = Input.mousePosition;
@@ -78,7 +111,26 @@ public class DiffEditor : MonoBehaviour {
 
                             CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
                             _currentHandlerId++;
+                            
+                            UpdateHandlersNum();
                         }
+                    }
+                }
+            }
+        }
+
+        if (Input.GetMouseButton(0)) {
+            if (_currentSelectedHandler != null) {
+                var mousePos = Input.mousePosition;
+                var image = _currentSelectedHandler.transform.parent.GetComponent<Image>();
+                if (DiffUtils.GetPixelFromScreen(mousePos, image, out var imageCoords, out var localPoint)) {
+                    var handlers = _handlers.Where(h => h.Id == _currentSelectedHandler.Id);
+                    foreach (var handler in handlers) {
+                        var img = handler.transform.parent.GetComponent<Image>();
+                        var imageRect = img.GetComponent<RectTransform>();
+                        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, img, imageRect);
+                        handler.GetComponent<RectTransform>().localPosition = pos;
+                        handler.ImageSpaceCoordinates = imageCoords;
                     }
                 }
             }
@@ -96,9 +148,8 @@ public class DiffEditor : MonoBehaviour {
     }
     
     void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id) {
-        var handler = Instantiate(_config.DifHandlerPrefab);
+        var handler = Instantiate(_config.DifHandlerPrefab, image.transform);
         var handlerRect = handler.GetComponent<RectTransform>();
-        handlerRect.SetParent(image.transform, false);
         handlerRect.localPosition = pos;
         handler.ImageSpaceCoordinates = coords;
         handler.Id = id;
@@ -147,7 +198,7 @@ public class DiffEditor : MonoBehaviour {
         _config.Image2.sprite = sprite2;
         
         foreach (var point in data.Points) {
-            CreateHandlerFromPoint(new Vector2(point.X, point.Y));
+            CreateHandlerFromPoint(point.Center);
         }
     }
 
@@ -163,6 +214,8 @@ public class DiffEditor : MonoBehaviour {
 
         CreateHandler(localPos2, point, _config.Image2, _currentHandlerId);
 
+        UpdateHandlersNum();
+        
         _currentHandlerId++;
     }
 
@@ -184,21 +237,31 @@ public class DiffEditor : MonoBehaviour {
         
         foreach (var handler in uniq.ToArray()) {
             points.Add(new Point() {
-                X = handler.ImageSpaceCoordinates.x,
-                Y = handler.ImageSpaceCoordinates.y,
-                Radius = handler.Radius
+                Center = handler.ImageSpaceCoordinates,
+                Width = handler.Width,
+                Height = handler.Height,
+                Number = handler.Number
             });
         }
 
         data.Points = points.ToArray();
 
-        data.Image1Path = $"{_config.Image1.sprite.name}/{Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_config.Image1.sprite))}";
-        data.Image2Path = $"{_config.Image1.sprite.name}/{Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_config.Image2.sprite))}";
+        data.Image1Path = $"{_folderName}/{_config.Image1.sprite.name}";
+        data.Image2Path = $"{_folderName}/{_config.Image2.sprite.name}";
         
         var jsonString = JsonUtility.ToJson(data);
         var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
         File.WriteAllText(path, jsonString);
         AssetDatabase.Refresh();
+    }
+    
+    void UpdateHandlersNum() {
+        var uniqHandlers = _handlers.DistinctBy(h => h.Id).ToArray();
+        for (int i = 0; i < uniqHandlers.Length; i++) {
+            var id = uniqHandlers[i].Id;
+            var handlers = _handlers.Where(h => h.Id == id);
+            handlers.ForEach(h => h.Number = i);
+        }
     }
 
     void Err(string message) {
