@@ -18,24 +18,40 @@ using UnityEditor;
 public class DiffEditor : MonoBehaviour {
     [SerializeField] Sprite _image1 = default;
     [SerializeField] Sprite _image2 = default;
+    
+    [SerializeField, ShowIf(nameof(IsPlaymode))]
+    string _folderName = "Diff_1";
 
     [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
-    float Radius {
+    float Width {
         set {
             if (_currentSelectedHandler == null)
                 return;
 
-            SetRadius(_currentSelectedHandler.Id, value);
+            SetWidth(_currentSelectedHandler.Id, value);
         }
-        get => _currentSelectedHandler?.Radius ?? 0;
+        get => _currentSelectedHandler?.Width ?? 0;
     }
+    
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
+    float Height {
+        set {
+            if (_currentSelectedHandler == null)
+                return;
 
-    [SerializeField, ShowIf(nameof(IsPlaymode))]
-    string _folderName = "Diff_1";
-
-    void SetRadius(int id, float value) {
+            SetHeight(_currentSelectedHandler.Id, value);
+        }
+        get => _currentSelectedHandler?.Height ?? 0;
+    }
+    
+    void SetWidth(int id, float value) {
+        var handlers = _handlers.Where(h => h.Id == id);
+        handlers.ForEach(h => h.SetWidth(value));
+    }
+    
+    void SetHeight(int id, float value) {
         var handlers = _handlers.Where(handler => handler.Id == id);
-        handlers.ForEach(h => h.SetRadius(value, value));
+        handlers.ForEach(h => h.SetHeight(value));
     }
 
     bool IsSelected => _currentSelectedHandler != null;
@@ -99,9 +115,8 @@ public class DiffEditor : MonoBehaviour {
     }
     
     void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id) {
-        var handler = Instantiate(_config.DifHandlerPrefab);
+        var handler = Instantiate(_config.DifHandlerPrefab, image.transform);
         var handlerRect = handler.GetComponent<RectTransform>();
-        handlerRect.SetParent(image.transform, false);
         handlerRect.localPosition = pos;
         handler.ImageSpaceCoordinates = coords;
         handler.Id = id;
@@ -150,7 +165,7 @@ public class DiffEditor : MonoBehaviour {
         _config.Image2.sprite = sprite2;
         
         foreach (var point in data.Points) {
-            CreateHandlerFromPoint(new Vector2(point.X, point.Y));
+            CreateHandlerFromPoint(point.Center);
         }
     }
 
@@ -187,9 +202,9 @@ public class DiffEditor : MonoBehaviour {
         
         foreach (var handler in uniq.ToArray()) {
             points.Add(new Point() {
-                X = handler.ImageSpaceCoordinates.x,
-                Y = handler.ImageSpaceCoordinates.y,
-                Radius = handler.Radius
+                Center = handler.ImageSpaceCoordinates,
+                Width = handler.Width,
+                Height = handler.Height
             });
         }
 

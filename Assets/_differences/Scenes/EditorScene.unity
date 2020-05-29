@@ -165,8 +165,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55538eb9cf46d49de8d3cbafb4753215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _image1: {fileID: 21300000, guid: a2198125b44b340f0ba753cf3d5d8290, type: 3}
-  _image2: {fileID: 21300000, guid: 9626ad3b8dbef44c78246cd3c8181676, type: 3}
+  _image1: {fileID: 21300000, guid: c84dca7980d2a44459c53713debca0fd, type: 3}
+  _image2: {fileID: 21300000, guid: 95d81fcdcda95426c831b28499699733, type: 3}
+  _folderName: Diff_1
 --- !u!1 &410411336
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,6 +1,4 @@
-﻿using System;
-
-using Sirenix.OdinInspector;
+﻿using Sirenix.OdinInspector;
 
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +8,10 @@ public class DiffHandler : MonoBehaviour {
     [ReadOnly] public int Id;
     
     [ShowInInspector, ReadOnly]
-    public float Radius { get; private set; } = DEFAULT_SIZE;
+    public float Height { get; private set; } = DEFAULT_SIZE;
+    [ShowInInspector, ReadOnly]
+    public float Width { get; private set; } = DEFAULT_SIZE;
+
     public bool IsSelected {
         set {
             _isSelected = value;
@@ -26,14 +27,32 @@ public class DiffHandler : MonoBehaviour {
 
     bool _isSelected = false;
 
-    const float DEFAULT_SIZE = 100;
+    const float DEFAULT_SIZE = 50;
 
     void Awake() {
-        SetRadius(DEFAULT_SIZE, DEFAULT_SIZE);
+        SetWidth(DEFAULT_SIZE);
+        SetHeight(DEFAULT_SIZE);
     }
 
-    public void SetRadius(float spriteSpace, float imageSpace) {
-        Radius = spriteSpace;
-        _visual.GetComponent<RectTransform>().sizeDelta = new Vector2(imageSpace, imageSpace);
+    public void SetWidth(float spriteSpace) {
+        Width = spriteSpace;
+        var parentRect = transform.parent.GetComponent<RectTransform>().rect;
+        var sprite = transform.parent.GetComponent<Image>().sprite;
+        var imageSpace = spriteSpace * (parentRect.width / sprite.texture.width);
+        var visualRect = _visual.GetComponent<RectTransform>();
+        var sizeDelta = visualRect.sizeDelta;
+        sizeDelta.Set(imageSpace, visualRect.sizeDelta.y);
+        visualRect.sizeDelta = sizeDelta;
+    }
+    
+    public void SetHeight(float spriteSpace) {
+        Height = spriteSpace;
+        var parentRect = transform.parent.GetComponent<RectTransform>().rect;
+        var sprite = transform.parent.GetComponent<Image>().sprite;
+        var imageSpace = spriteSpace * (parentRect.height / sprite.texture.height);
+        var visualRect = _visual.GetComponent<RectTransform>();
+        var sizeDelta = visualRect.sizeDelta;
+        sizeDelta.Set(visualRect.sizeDelta.x, imageSpace);
+        visualRect.sizeDelta = sizeDelta;
     }
 }
