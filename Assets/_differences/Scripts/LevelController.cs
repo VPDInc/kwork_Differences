@@ -10,6 +10,7 @@ public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
 
     [Inject] LeanDragCamera _leanDragCamera = default;
+    [Inject] UILevelStartView _levelStartView = default;
     
     int _lastLevelNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
@@ -39,8 +40,27 @@ public class LevelController : MonoBehaviour {
         _allLevels.AddRange(levelInfos);
     }
 
-    public void PlayLastLevel() {
-        _allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].PlayLevel();
+    public void OpenLastPlayView() {
+        OpenPlayView(_lastLevelNum);
+    }
+
+    public void OpenPlayView(int levelNum) {
+        _levelStartView.SetLevelName(levelNum);
+        
+        //DUMMY
+        _levelStartView.SetPicturesCount(Random.Range(1,3));
+        _levelStartView.SetDifferencesCount(Random.Range(5, 9));
+        _levelStartView.SetPlayerName("Babaduk");
+        //
+        
+        _levelStartView.SetStars(_allLevels[levelNum].Estimation, true);
+        _levelStartView.StartTimer(()=>PlayLevel(levelNum));
+        _levelStartView.Show();
+    }
+    
+    void PlayLevel(int levelNum) {
+        //DUMMY
+        _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count-1)].PlayLevel();
     }
 
     void SetupLevels() {

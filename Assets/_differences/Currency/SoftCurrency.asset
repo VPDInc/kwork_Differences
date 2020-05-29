@@ -18,4 +18,4 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e18dcbf8589ee4986b3d22432f5487cc, type: 2}
   - {fileID: 11400000, guid: b4ae4f0bfa42846b28c8ca6e19f59b6a, type: 2}
   _isEnablePrefsStore: 0
-  _debugAmount: 50
+  _debugAmount: 5
