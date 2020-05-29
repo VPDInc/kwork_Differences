@@ -383,7 +383,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0e51c9ee5d7498383fa74e35b34226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugLevel: {fileID: 4900000, guid: 0a4954c64bd67403387acac8fdfc365d, type: 3}
+  _debugLevel: {fileID: 4900000, guid: ff4c7a989bfcb4b71b02e523fa6fa8a8, type: 3}
 --- !u!114 &667101123
 MonoBehaviour:
   m_ObjectHideFlags: 0

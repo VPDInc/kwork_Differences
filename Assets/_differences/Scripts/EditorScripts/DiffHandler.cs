@@ -36,9 +36,9 @@ public class DiffHandler : MonoBehaviour {
 
     public void SetWidth(float spriteSpace) {
         Width = spriteSpace;
-        var parentRect = transform.parent.GetComponent<RectTransform>().rect;
+        var parentRect = transform.parent.GetComponent<RectTransform>();
         var sprite = transform.parent.GetComponent<Image>().sprite;
-        var imageSpace = spriteSpace * (parentRect.width / sprite.texture.width);
+        var imageSpace = DiffUtils.PixelWidthToRect(spriteSpace, parentRect, sprite);
         var visualRect = _visual.GetComponent<RectTransform>();
         var sizeDelta = visualRect.sizeDelta;
         sizeDelta.Set(imageSpace, visualRect.sizeDelta.y);
@@ -47,9 +47,9 @@ public class DiffHandler : MonoBehaviour {
     
     public void SetHeight(float spriteSpace) {
         Height = spriteSpace;
-        var parentRect = transform.parent.GetComponent<RectTransform>().rect;
+        var parentRect = transform.parent.GetComponent<RectTransform>();
         var sprite = transform.parent.GetComponent<Image>().sprite;
-        var imageSpace = spriteSpace * (parentRect.height / sprite.texture.height);
+        var imageSpace = DiffUtils.PixelHeightToRect(spriteSpace, parentRect, sprite);
         var visualRect = _visual.GetComponent<RectTransform>();
         var sizeDelta = visualRect.sizeDelta;
         sizeDelta.Set(visualRect.sizeDelta.x, imageSpace);

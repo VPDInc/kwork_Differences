@@ -117,4 +117,12 @@ public static class DiffUtils {
 
         return results.FirstOrDefault();
     }
+
+    public static float PixelHeightToRect(float pixel, RectTransform rect, Sprite sprite) {
+        return pixel * (rect.rect.height / sprite.texture.height);
+    }
+    
+    public static float PixelWidthToRect(float pixel, RectTransform rect, Sprite sprite) {
+        return pixel * (rect.rect.width / sprite.texture.width);
+    }
 }
