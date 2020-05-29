@@ -30,6 +30,9 @@ public class DiffEditor : MonoBehaviour {
         get => _currentSelectedHandler?.Radius ?? 0;
     }
 
+    [SerializeField, ShowIf(nameof(IsPlaymode))]
+    string _folderName = "Diff_1";
+
     void SetRadius(int id, float value) {
         var handlers = _handlers.Where(handler => handler.Id == id);
         handlers.ForEach(h => h.SetRadius(value, value));
@@ -192,8 +195,8 @@ public class DiffEditor : MonoBehaviour {
 
         data.Points = points.ToArray();
 
-        data.Image1Path = $"{_config.Image1.sprite.name}/{Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_config.Image1.sprite))}";
-        data.Image2Path = $"{_config.Image1.sprite.name}/{Path.GetFileNameWithoutExtension(AssetDatabase.GetAssetPath(_config.Image2.sprite))}";
+        data.Image1Path = $"{_folderName}/{_config.Image1.sprite.name}";
+        data.Image2Path = $"{_folderName}/{_config.Image2.sprite.name}";
         
         var jsonString = JsonUtility.ToJson(data);
         var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
