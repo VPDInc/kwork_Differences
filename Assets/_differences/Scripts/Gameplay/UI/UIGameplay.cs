@@ -12,7 +12,6 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] Image _image2Hor = default;
     [SerializeField] Image _image1Vert = default;
     [SerializeField] Image _image2Vert = default;
-    [SerializeField] TextMeshProUGUI _pointsCountText = default;
     [SerializeField] GameObject _diffVisualPrefab = default;
     
     [Inject] Database _database = default;
@@ -55,7 +54,6 @@ public class UIGameplay : MonoBehaviour {
     }
 
     void UpdatePointsAmountVisual() {
-        _pointsCountText.text = $"{_currentPointsFound}/{_pointsCount}";
     }
 
     void Update() {
