@@ -20,3 +20,8 @@ public struct Point {
         return $"Center: {Center} Width: {Width} Height: {Height}";
     }
 }
+
+public enum Orientation {
+    Vertical,
+    Horizontal
+}

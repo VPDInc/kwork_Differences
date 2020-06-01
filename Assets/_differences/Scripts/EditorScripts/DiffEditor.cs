@@ -68,6 +68,53 @@ public class DiffEditor : MonoBehaviour {
         UpdateHandlersNum();
     }
 
+    [SerializeField, ReadOnly, ShowIf(nameof(IsPlaymode))] Orientation _currentOrientation = Orientation.Horizontal;
+
+    [Button, ShowIf(nameof(IsPlaymode))]
+    void SwitchOrientation() {
+        _currentOrientation = _currentOrientation == Orientation.Horizontal
+            ? Orientation.Vertical
+            : Orientation.Horizontal;
+        SwitchImages();
+        TranslateMarks();
+    }
+
+    void SwitchImages() {
+        var newImages = _config.GetImages(_currentOrientation);
+        var oldImages = _config.GetImages(_currentOrientation == Orientation.Horizontal
+            ? Orientation.Vertical
+            : Orientation.Horizontal);
+        
+        oldImages.Item1.transform.parent.gameObject.SetActive(false);
+        newImages.Item1.transform.parent.gameObject.SetActive(true);
+
+        newImages.Item1.sprite = oldImages.Item1.sprite;
+        newImages.Item2.sprite = oldImages.Item2.sprite;
+    }
+
+    void TranslateMarks() {
+        var newImages = _config.GetImages(_currentOrientation);
+        var oldImages = _config.GetImages(_currentOrientation == Orientation.Horizontal
+            ? Orientation.Vertical
+            : Orientation.Horizontal);
+        
+        foreach (var handler in _handlers) {
+            if (handler.transform.parent == oldImages.Item1.transform)
+                handler.transform.SetParent(newImages.Item1.transform, false);
+            else
+                handler.transform.SetParent(newImages.Item2.transform, false);
+
+            var pixels = handler.ImageSpaceCoordinates;
+            var image = handler.transform.parent.GetComponent<Image>();
+            var rect = image.GetComponent<RectTransform>();
+            var local = DiffUtils.GetRectSpaceCoordinateFromPixel(pixels, image, rect);
+            var handlerRect = handler.GetComponent<RectTransform>();
+            handlerRect.localPosition = local;
+            handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(handler.Width, rect, image.sprite), 
+                DiffUtils.PixelHeightToRect(handler.Height, rect, image.sprite));
+        }
+    }
+
     bool IsSelected => _currentSelectedHandler != null;
     bool IsPlaymode => Application.isPlaying;
     EditorConfig _config;
@@ -104,8 +151,8 @@ public class DiffEditor : MonoBehaviour {
 
                         if (isInHeightBounds && isInWidthBounds) {
                             CreateHandler(localPoint, imageCoords, image, _currentHandlerId);
-
-                            var secondImage = image == _config.Image1 ? _config.Image2 : _config.Image1;
+                            var images = _config.GetImages(_currentOrientation);
+                            var secondImage = image == images.Item1 ? images.Item2 : images.Item1;
                             var secondLocalPoint = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
                                 secondImage.GetComponent<RectTransform>());
 
@@ -169,8 +216,9 @@ public class DiffEditor : MonoBehaviour {
     [Button, ShowIf(nameof(IsPlaymode))]
     void CreateNew() {
         Clear();
-        _config.Image1.sprite = _image1;
-        _config.Image2.sprite = _image2;
+        var images = _config.GetImages(_currentOrientation);
+        images.Item1.sprite = _image1;
+        images.Item2.sprite = _image2;
     }
     
     [Button, ShowIf(nameof(IsPlaymode))]
@@ -194,8 +242,9 @@ public class DiffEditor : MonoBehaviour {
         var sprite1 = Resources.Load<Sprite>("Images/" +data.Image1Path);
         var sprite2 = Resources.Load<Sprite>("Images/" +data.Image2Path);
 
-        _config.Image1.sprite = sprite1;
-        _config.Image2.sprite = sprite2;
+        var images = _config.GetImages(_currentOrientation);
+        images.Item1.sprite = sprite1;
+        images.Item2.sprite = sprite2;
         
         foreach (var point in data.Points) {
             CreateHandlerFromPoint(point.Center);
@@ -203,16 +252,18 @@ public class DiffEditor : MonoBehaviour {
     }
 
     void CreateHandlerFromPoint(Vector2 point) {
+        var images = _config.GetImages(_currentOrientation);
+        
         var localPos1 =
-            DiffUtils.GetRectSpaceCoordinateFromPixel(point, _config.Image1, _config.Image1.GetComponent<RectTransform>());
+            DiffUtils.GetRectSpaceCoordinateFromPixel(point, images.Item1, images.Item1.GetComponent<RectTransform>());
 
-        CreateHandler(localPos1, point, _config.Image1, _currentHandlerId);
+        CreateHandler(localPos1, point, images.Item1, _currentHandlerId);
 
         var localPos2 =
-            DiffUtils.GetRectSpaceCoordinateFromPixel(point, _config.Image2, _config.Image2.GetComponent<RectTransform>());
+            DiffUtils.GetRectSpaceCoordinateFromPixel(point, images.Item2, images.Item2.GetComponent<RectTransform>());
 
 
-        CreateHandler(localPos2, point, _config.Image2, _currentHandlerId);
+        CreateHandler(localPos2, point, images.Item2, _currentHandlerId);
 
         UpdateHandlersNum();
         
@@ -221,10 +272,11 @@ public class DiffEditor : MonoBehaviour {
 
     [Button, ShowIf(nameof(IsPlaymode))]
     void Clear() {
-        _config.Image1.sprite = null;
-        _config.Image2.sprite = null;
-        _config.Image1.transform.DestroyAllChildren();
-        _config.Image2.transform.DestroyAllChildren();
+        var images = _config.GetImages(_currentOrientation);
+        images.Item1.sprite = null;
+        images.Item2.sprite = null;
+        images.Item1.transform.DestroyAllChildren();
+        images.Item2.transform.DestroyAllChildren();
         _handlers.Clear();
         _currentHandlerId = 0;
     }
@@ -245,9 +297,9 @@ public class DiffEditor : MonoBehaviour {
         }
 
         data.Points = points.ToArray();
-
-        data.Image1Path = $"{_folderName}/{_config.Image1.sprite.name}";
-        data.Image2Path = $"{_folderName}/{_config.Image2.sprite.name}";
+        var images = _config.GetImages(_currentOrientation);
+        data.Image1Path = $"{_folderName}/{images.Item1.sprite.name}";
+        data.Image2Path = $"{_folderName}/{images.Item2.sprite.name}";
         
         var jsonString = JsonUtility.ToJson(data);
         var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
