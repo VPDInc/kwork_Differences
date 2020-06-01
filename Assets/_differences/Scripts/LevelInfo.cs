@@ -106,6 +106,6 @@ public class LevelInfo : MonoBehaviour {
 
     void OnMouseDown() {
         if(!_isUnlocked || _eventSystem.IsPointerOverGameObject()) return;
-        PlayLevel();
+        _levelController.OpenPlayView(_levelNum);
     }
 }

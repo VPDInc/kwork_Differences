@@ -9,11 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f42f06ff6cc543ea942180e019f0fc8d, type: 3}
-  m_Name: UIView_GlobalMap
+  m_Script: {fileID: 11500000, guid: 2e89f613592a34290a9ce36e338a44c3, type: 3}
+  m_Name: Integer Decorator
   m_EditorClassIdentifier: 
-  CategoryName: GlobalMap
-  DatabaseType: 2
-  Names:
-  - GlobalMapView
-  - PlayLevelView
+  _roundMode: 0
