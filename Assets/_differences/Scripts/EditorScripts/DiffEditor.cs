@@ -43,6 +43,8 @@ public class DiffEditor : MonoBehaviour {
         }
         get => _currentSelectedHandler?.Height ?? 0;
     }
+
+    Vector2 _offset;
     
     void SetWidth(int id, float value) {
         var handlers = _handlers.Where(h => h.Id == id);
@@ -142,6 +144,11 @@ public class DiffEditor : MonoBehaviour {
                 if (handler != null) {
                     _currentSelectedHandler = handler;
                     Select(_currentSelectedHandler.Id);
+                    var image = _currentSelectedHandler.transform.parent.GetComponent<Image>();
+                    if (DiffUtils.GetPixelFromScreen(mousePos, image, out var imageCoords, out var localPoint)) {
+                        _offset = handler.ImageSpaceCoordinates - imageCoords;
+                    }
+
                 } else {
                     var image = hit.gameObject.GetComponent<Image>();
                     if (DiffUtils.GetPixelFromScreen(mousePos, image,out var imageCoords, out var localPoint)) {
@@ -174,9 +181,9 @@ public class DiffEditor : MonoBehaviour {
                     foreach (var handler in handlers) {
                         var img = handler.transform.parent.GetComponent<Image>();
                         var imageRect = img.GetComponent<RectTransform>();
-                        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, img, imageRect);
+                        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords + _offset, img, imageRect);
                         handler.GetComponent<RectTransform>().localPosition = pos;
-                        handler.ImageSpaceCoordinates = imageCoords;
+                        handler.ImageSpaceCoordinates = imageCoords + _offset;
                     }
                 }
             }
