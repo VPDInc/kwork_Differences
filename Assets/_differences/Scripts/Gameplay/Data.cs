@@ -7,6 +7,7 @@ public struct Data {
     public string Image1Path;
     public string Image2Path;
     public Point[] Points;
+    public Orientation Orientation;
 }
 
 [Serializable]
@@ -21,6 +22,7 @@ public struct Point {
     }
 }
 
+[Serializable]
 public enum Orientation {
     Vertical,
     Horizontal

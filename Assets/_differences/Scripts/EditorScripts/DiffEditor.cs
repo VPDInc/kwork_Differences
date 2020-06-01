@@ -81,6 +81,11 @@ public class DiffEditor : MonoBehaviour {
         TranslateMarks();
     }
 
+    void SetOrientation(Orientation orientation) {
+        if (_currentOrientation != orientation)
+            SwitchOrientation();
+    }
+
     void SwitchImages() {
         var newImages = _config.GetImages(_currentOrientation);
         var oldImages = _config.GetImages(_currentOrientation == Orientation.Horizontal
@@ -201,13 +206,17 @@ public class DiffEditor : MonoBehaviour {
         handlers.ForEach(h => h.IsSelected = true);
     }
     
-    void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id) {
+    void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id, float width = 0, float height = 0) {
         var handler = Instantiate(_config.DifHandlerPrefab, image.transform);
         var handlerRect = handler.GetComponent<RectTransform>();
         handlerRect.localPosition = pos;
         handler.ImageSpaceCoordinates = coords;
         handler.Id = id;
         _handlers.Add(handler);
+        if (width != 0 && height != 0) {
+           handler.SetHeight(height);
+           handler.SetWidth(width);
+        }
     }
 
     Vector2 GetRectSpaceCoordinate(RectTransform imageRect, Vector2 localPoint) {
@@ -246,6 +255,8 @@ public class DiffEditor : MonoBehaviour {
     }
 
     void LoadAndCreateImages(Data data) {
+        SetOrientation(data.Orientation);
+        
         var sprite1 = Resources.Load<Sprite>("Images/" +data.Image1Path);
         var sprite2 = Resources.Load<Sprite>("Images/" +data.Image2Path);
 
@@ -254,23 +265,24 @@ public class DiffEditor : MonoBehaviour {
         images.Item2.sprite = sprite2;
         
         foreach (var point in data.Points) {
-            CreateHandlerFromPoint(point.Center);
+            CreateHandlerFromPoint(point);
         }
     }
 
-    void CreateHandlerFromPoint(Vector2 point) {
+    void CreateHandlerFromPoint(Point point) {
         var images = _config.GetImages(_currentOrientation);
         
         var localPos1 =
-            DiffUtils.GetRectSpaceCoordinateFromPixel(point, images.Item1, images.Item1.GetComponent<RectTransform>());
+            DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item1, images.Item1.GetComponent<RectTransform>());
 
-        CreateHandler(localPos1, point, images.Item1, _currentHandlerId);
+        CreateHandler(localPos1, point.Center, images.Item1, _currentHandlerId, point.Width, point.Height);
+        
 
         var localPos2 =
-            DiffUtils.GetRectSpaceCoordinateFromPixel(point, images.Item2, images.Item2.GetComponent<RectTransform>());
+            DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item2, images.Item2.GetComponent<RectTransform>());
 
 
-        CreateHandler(localPos2, point, images.Item2, _currentHandlerId);
+        CreateHandler(localPos2, point.Center, images.Item2, _currentHandlerId, point.Width, point.Height);
 
         UpdateHandlersNum();
         
@@ -303,6 +315,7 @@ public class DiffEditor : MonoBehaviour {
             });
         }
 
+        data.Orientation = _currentOrientation;
         data.Points = points.ToArray();
         var images = _config.GetImages(_currentOrientation);
         data.Image1Path = $"{_folderName}/{images.Item1.sprite.name}";
