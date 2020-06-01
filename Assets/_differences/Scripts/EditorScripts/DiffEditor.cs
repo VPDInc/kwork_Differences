@@ -131,12 +131,13 @@ public class DiffEditor : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             var mousePos = Input.mousePosition;
             var hit = DiffUtils.RaycastMouse(mousePos);
+            
+            if (_currentSelectedHandler != null) {
+                Unselect(_currentSelectedHandler.Id);
+            }
+            
             if (hit.gameObject != null) {
                 var handler = hit.gameObject.GetComponent<DiffHandler>();
-
-                if (_currentSelectedHandler != null) {
-                    Unselect(_currentSelectedHandler.Id);
-                }
 
                 if (handler != null) {
                     _currentSelectedHandler = handler;
@@ -164,9 +165,7 @@ public class DiffEditor : MonoBehaviour {
                     }
                 }
             }
-        }
-
-        if (Input.GetMouseButton(0)) {
+        } else if (Input.GetMouseButton(0)) {
             if (_currentSelectedHandler != null) {
                 var mousePos = Input.mousePosition;
                 var image = _currentSelectedHandler.transform.parent.GetComponent<Image>();
@@ -187,6 +186,7 @@ public class DiffEditor : MonoBehaviour {
     void Unselect(int id) {
         var handlers = _handlers.Where(handler => handler.Id == id);
         handlers.ForEach(h => h.IsSelected = false);
+        _currentSelectedHandler = null;
     }
     
     void Select(int id) {
