@@ -16,7 +16,6 @@ public class LevelController : MonoBehaviour {
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     
     const string LAST_LEVEL_ID = "last_level";
-    const string LEVEL_ESTIMATION_PREFIX = "level_estimation_";
 
     void Start() {
         LoadLastLevel();
@@ -30,8 +29,7 @@ public class LevelController : MonoBehaviour {
         var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count-1)];
         _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
-        SaveLevelEstimation(num, level.Estimation);
-        
+
         if(num + 1 < _allLevels.Count)
             _allLevels[num+1].UnlockLevel(false);
     }
@@ -53,7 +51,6 @@ public class LevelController : MonoBehaviour {
         _levelStartView.SetPlayerName("Babaduk");
         //
         
-        // _levelStartView.SetStars(_allLevels[levelNum].Estimation, true);
         _levelStartView.StartTimer(()=>PlayLevel(levelNum));
         _levelStartView.Show();
     }
@@ -68,7 +65,7 @@ public class LevelController : MonoBehaviour {
             var levelNum = levelInfo.LevelNum;
             var isCompleted = _lastLevelNum > 0 && levelNum < LastLevelNum;
             var isUnlocked = levelNum <= LastLevelNum;
-            levelInfo.Setup(isUnlocked, isCompleted, LoadLevelEstimation(levelNum));
+            levelInfo.Setup(isUnlocked, isCompleted);
         }
     }
 
@@ -76,16 +73,8 @@ public class LevelController : MonoBehaviour {
         PlayerPrefs.SetInt(LAST_LEVEL_ID, _lastLevelNum);
     }
 
-    void SaveLevelEstimation(int level, int estimation) {
-        PlayerPrefs.SetInt(LEVEL_ESTIMATION_PREFIX + level, estimation);
-    }
-
     void LoadLastLevel() {
         _lastLevelNum = PlayerPrefs.GetInt(LAST_LEVEL_ID, 0);
     }
 
-    int LoadLevelEstimation(int level) {
-        var estimation = PlayerPrefs.GetInt(LEVEL_ESTIMATION_PREFIX + level);
-        return estimation;
-    }
 }

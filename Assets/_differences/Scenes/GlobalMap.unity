@@ -291,8 +291,6 @@ GameObject:
   - component: {fileID: 73155810}
   - component: {fileID: 73155809}
   - component: {fileID: 73155808}
-  - component: {fileID: 73155807}
-  - component: {fileID: 73155806}
   - component: {fileID: 73155805}
   m_Layer: 0
   m_Name: View - FinishLevelView
@@ -318,7 +316,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -2025, y: 1356}
+  m_AnchoredPosition: {x: -2617, y: 1356}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &73155805
@@ -350,49 +348,6 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &73155806
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 73155803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _components:
-  - {fileID: 73155807}
-  _identifier: 
-  _useSceneContext: 1
-  _context: {fileID: 0}
-  _bindType: 0
---- !u!114 &73155807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 73155803}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba0b577c8c9dc084c8010cad71248b48, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _levelLabel: {fileID: 452367330}
-  _timerLabel: {fileID: 197780703}
-  _picturesCountLabel: {fileID: 0}
-  _differencesCountLabel: {fileID: 0}
-  _playerNameLabel: {fileID: 29906866}
-  _profileIcon: {fileID: 849453654}
-  _picturesCounterContainer: {fileID: 0}
-  _differencesCounterContainer: {fileID: 0}
-  _picturesCounterPrefab: {fileID: 8586540950091457103, guid: 4731d689aa890ae49af8c3f13d659329,
-    type: 3}
-  _differencesCounterPrefab: {fileID: 1031182575015982816, guid: 90a40c7066934d04f942f4fdcda8270d,
-    type: 3}
-  _secondsTillStart: 3
 --- !u!222 &73155808
 CanvasRenderer:
   m_ObjectHideFlags: 0

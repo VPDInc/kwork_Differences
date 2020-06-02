@@ -23,8 +23,7 @@ public class UILevelStartView : MonoBehaviour {
     [SerializeField] Image _profileIcon = default;
     [SerializeField] Transform _picturesCounterContainer = default;
     [SerializeField] Transform _differencesCounterContainer = default;
-    // [SerializeField] UIStarHandler _uiStarHandler = default;
-    
+
     [Header("Prefabs")]
     [SerializeField] GameObject _picturesCounterPrefab = default;
     [SerializeField] GameObject _differencesCounterPrefab = default;
@@ -95,11 +94,7 @@ public class UILevelStartView : MonoBehaviour {
 
         _picturesCountLabel.text = count + PICTURES_COUNTER_POSTFIX;
     }
-
-    // public void SetStars(int stars, bool isInstant) {
-    //     _uiStarHandler.ResetStars();
-    //     _uiStarHandler.SetStars(stars, isInstant);
-    // }
+    
     
     public void SetDifferencesCount(int count) {
         _differencesCounterContainer.DestroyAllChildren();
