@@ -19,7 +19,7 @@ public class LevelInfo : MonoBehaviour {
 
     [Inject] LevelController _levelController = default;
 
-    StarHandler _starHandler;
+    // StarHandler _starHandler;
     EpisodeInfo _episodeInfo;
     int _levelNum = 0;
     int _estimation = 0;
@@ -31,12 +31,12 @@ public class LevelInfo : MonoBehaviour {
     const float VFX_DURATION = 0.5f;
 
     void Awake() {
-        _starHandler = GetComponentInChildren<StarHandler>();
+        // _starHandler = GetComponentInChildren<StarHandler>();
         _eventSystem = EventSystem.current;
     }
 
     void Start() {
-        ShowStarHandler(true);
+        // ShowStarHandler(true);
     }
 
     public void Init(EpisodeInfo episodeInfo, int levelNum) {
@@ -50,7 +50,7 @@ public class LevelInfo : MonoBehaviour {
         _isCompleted = isCompleted;
         _isUnlocked = isUnlocked;
         
-        SetStars(stars, true);
+        // SetStars(stars, true);
         
         if(isUnlocked)
             UnlockLevel(true);
@@ -69,7 +69,7 @@ public class LevelInfo : MonoBehaviour {
 
     public void UnlockLevel(bool isInstant) {
         _isUnlocked = true;
-        ShowStarHandler(isInstant);
+        // ShowStarHandler(isInstant);
         
         if(!_episodeInfo.IsUnlocked)
             _episodeInfo.UnlockEpisode(isInstant);
@@ -77,20 +77,20 @@ public class LevelInfo : MonoBehaviour {
 
     void CompleteLevel() {
         _isCompleted = true;
-        ShowStarHandler(false);
-        SetStars(Random.Range(1, 4), false);
+        // ShowStarHandler(false);
+        // SetStars(Random.Range(1, 4), false);
         UnlockVfx(false);
         _levelController.CompleteLevel(_levelNum);
     }
     
-    void ShowStarHandler(bool isInstant) {
-        _starHandler.Show(_isUnlocked, isInstant);
-    }
+    // void ShowStarHandler(bool isInstant) {
+    //     _starHandler.Show(_isUnlocked, isInstant);
+    // }
 
-    void SetStars(int stars, bool isInstant) {
-        _estimation = Mathf.Clamp(stars, _estimation, 3);
-        _starHandler.SetStars(stars, isInstant);
-    }
+    // void SetStars(int stars, bool isInstant) {
+    //     _estimation = Mathf.Clamp(stars, _estimation, 3);
+    //     _starHandler.SetStars(stars, isInstant);
+    // }
 
     void UnlockVfx(bool isInstant) {
         foreach (SpriteRenderer spriteRenderer in _spritesToHide) {

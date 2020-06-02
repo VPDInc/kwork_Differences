@@ -111,6 +111,8 @@ PlayerSettings:
   switchNVNShaderPoolsGranularity: 33554432
   switchNVNDefaultPoolsGranularity: 16777216
   switchNVNOtherPoolsGranularity: 16777216
+  stadiaPresentMode: 0
+  stadiaTargetFramerate: 0
   vulkanNumSwapchainBuffers: 3
   vulkanEnableSetSRGBWrite: 0
   m_SupportedAspectRatios:
@@ -538,17 +540,17 @@ PlayerSettings:
   webGLThreadsSupport: 0
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
-    1: ODIN_INSPECTOR;dUI_MANAGER;dUI_TextMeshPro
-    4: dUI_MANAGER;dUI_TextMeshPro;ODIN_INSPECTOR
-    7: dUI_MANAGER;ODIN_INSPECTOR;dUI_TextMeshPro
-    13: dUI_MANAGER;dUI_TextMeshPro
-    14: dUI_MANAGER;dUI_TextMeshPro
-    19: dUI_MANAGER;dUI_TextMeshPro
-    21: dUI_MANAGER;dUI_TextMeshPro
-    25: dUI_MANAGER;dUI_TextMeshPro
-    27: dUI_MANAGER;dUI_TextMeshPro
-    28: dUI_MANAGER;dUI_TextMeshPro
-    29: dUI_MANAGER;dUI_TextMeshPro
+    1: ODIN_INSPECTOR;dUI_MANAGER
+    4: dUI_MANAGER;ODIN_INSPECTOR
+    7: dUI_MANAGER;ODIN_INSPECTOR
+    13: dUI_MANAGER
+    14: dUI_MANAGER
+    19: dUI_MANAGER
+    21: dUI_MANAGER
+    25: dUI_MANAGER
+    27: dUI_MANAGER
+    28: dUI_MANAGER
+    29: dUI_MANAGER
   platformArchitecture: {}
   scriptingBackend: {}
   il2cppCompilerConfiguration: {}

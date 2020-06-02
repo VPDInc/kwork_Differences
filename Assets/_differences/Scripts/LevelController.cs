@@ -53,7 +53,7 @@ public class LevelController : MonoBehaviour {
         _levelStartView.SetPlayerName("Babaduk");
         //
         
-        _levelStartView.SetStars(_allLevels[levelNum].Estimation, true);
+        // _levelStartView.SetStars(_allLevels[levelNum].Estimation, true);
         _levelStartView.StartTimer(()=>PlayLevel(levelNum));
         _levelStartView.Show();
     }
