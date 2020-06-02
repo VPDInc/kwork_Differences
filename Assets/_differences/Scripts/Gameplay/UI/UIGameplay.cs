@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using TMPro;
 
@@ -13,6 +14,7 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] Image _image1Vert = default;
     [SerializeField] Image _image2Vert = default;
     [SerializeField] GameObject _diffVisualPrefab = default;
+    [SerializeField] UIDiffHelper _helper = default;
     
     [Inject] Database _database = default;
     [Inject] ImagesLoader _loader = default;
@@ -50,10 +52,7 @@ public class UIGameplay : MonoBehaviour {
         _currentPointsFound = 0;
         _points.Clear();
         _points.AddRange(levelData.Points);
-        UpdatePointsAmountVisual();
-    }
-
-    void UpdatePointsAmountVisual() {
+        _helper.SetPointsAmount(_points.Count);
     }
 
     void Update() {
@@ -86,7 +85,7 @@ public class UIGameplay : MonoBehaviour {
 
     void SelectDifference(Point point) {
         _currentPointsFound++;
-        UpdatePointsAmountVisual();
+        _helper.Open(point.Number);
         CreateDiffsVisual(point);
     }
     

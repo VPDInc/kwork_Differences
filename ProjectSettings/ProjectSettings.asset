@@ -111,6 +111,8 @@ PlayerSettings:
   switchNVNShaderPoolsGranularity: 33554432
   switchNVNDefaultPoolsGranularity: 16777216
   switchNVNOtherPoolsGranularity: 16777216
+  stadiaPresentMode: 0
+  stadiaTargetFramerate: 0
   vulkanNumSwapchainBuffers: 3
   vulkanEnableSetSRGBWrite: 0
   m_SupportedAspectRatios:
@@ -539,7 +541,7 @@ PlayerSettings:
   webGLWasmStreaming: 0
   scriptingDefineSymbols:
     1: ODIN_INSPECTOR;dUI_MANAGER;dUI_TextMeshPro
-    4: dUI_MANAGER;dUI_TextMeshPro;ODIN_INSPECTOR
+    4: dUI_MANAGER;ODIN_INSPECTOR;dUI_TextMeshPro
     7: dUI_MANAGER;ODIN_INSPECTOR;dUI_TextMeshPro
     13: dUI_MANAGER;dUI_TextMeshPro
     14: dUI_MANAGER;dUI_TextMeshPro
