@@ -11,16 +11,24 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
-using System;
 
 using UnityEditor;
 
 public class DiffEditor : MonoBehaviour {
-    [SerializeField] Sprite _image1 = default;
-    [SerializeField] Sprite _image2 = default;
-    
     [SerializeField, ShowIf(nameof(IsPlaymode))]
     string _folderName = "Diff_1";
+    
+    [SerializeField, ReadOnly, ShowIf(nameof(IsPlaymode))] 
+    Orientation _currentOrientation = Orientation.Horizontal;
+    
+    Vector2 _offset;
+    bool IsSelected => _currentSelectedHandler != null;
+    bool IsPlaymode => Application.isPlaying;
+    EditorConfig _config;
+    int _currentHandlerId = 0;
+    DiffHandler _currentSelectedHandler;
+    readonly List<DiffHandler> _handlers = new List<DiffHandler>();
+
 
     [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
     float Width {
@@ -43,92 +51,8 @@ public class DiffEditor : MonoBehaviour {
         }
         get => _currentSelectedHandler?.Height ?? 0;
     }
-
-    Vector2 _offset;
     
-    void SetWidth(int id, float value) {
-        var handlers = _handlers.Where(h => h.Id == id);
-        handlers.ForEach(h => h.SetWidth(value));
-    }
-    
-    void SetHeight(int id, float value) {
-        var handlers = _handlers.Where(handler => handler.Id == id);
-        handlers.ForEach(h => h.SetHeight(value));
-    }
-    
-    [Button, ShowIf(nameof(IsSelected))]
-    void Delete() {
-        var id = _currentSelectedHandler.Id;
-        var toDelete = _handlers.Where(h => h.Id == id).ToArray();
-        
-        for (int i = 0; i < toDelete.Length; i++) {
-            var handler = toDelete[i];
-            _handlers.Remove(handler);
-            Destroy(handler.gameObject);
-        }
-        
-        UpdateHandlersNum();
-    }
-
-    [SerializeField, ReadOnly, ShowIf(nameof(IsPlaymode))] Orientation _currentOrientation = Orientation.Horizontal;
-
-    [Button, ShowIf(nameof(IsPlaymode))]
-    void SwitchOrientation() {
-        _currentOrientation = _currentOrientation == Orientation.Horizontal
-            ? Orientation.Vertical
-            : Orientation.Horizontal;
-        SwitchImages();
-        TranslateMarks();
-    }
-
-    void SetOrientation(Orientation orientation) {
-        if (_currentOrientation != orientation)
-            SwitchOrientation();
-    }
-
-    void SwitchImages() {
-        var newImages = _config.GetImages(_currentOrientation);
-        var oldImages = _config.GetImages(_currentOrientation == Orientation.Horizontal
-            ? Orientation.Vertical
-            : Orientation.Horizontal);
-        
-        oldImages.Item1.transform.parent.gameObject.SetActive(false);
-        newImages.Item1.transform.parent.gameObject.SetActive(true);
-
-        newImages.Item1.sprite = oldImages.Item1.sprite;
-        newImages.Item2.sprite = oldImages.Item2.sprite;
-    }
-
-    void TranslateMarks() {
-        var newImages = _config.GetImages(_currentOrientation);
-        var oldImages = _config.GetImages(_currentOrientation == Orientation.Horizontal
-            ? Orientation.Vertical
-            : Orientation.Horizontal);
-        
-        foreach (var handler in _handlers) {
-            if (handler.transform.parent == oldImages.Item1.transform)
-                handler.transform.SetParent(newImages.Item1.transform, false);
-            else
-                handler.transform.SetParent(newImages.Item2.transform, false);
-
-            var pixels = handler.ImageSpaceCoordinates;
-            var image = handler.transform.parent.GetComponent<Image>();
-            var rect = image.GetComponent<RectTransform>();
-            var local = DiffUtils.GetRectSpaceCoordinateFromPixel(pixels, image, rect);
-            var handlerRect = handler.GetComponent<RectTransform>();
-            handlerRect.localPosition = local;
-            handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(handler.Width, rect, image.sprite), 
-                DiffUtils.PixelHeightToRect(handler.Height, rect, image.sprite));
-        }
-    }
-
-    bool IsSelected => _currentSelectedHandler != null;
-    bool IsPlaymode => Application.isPlaying;
-    EditorConfig _config;
-    int _currentHandlerId = 0;
-    DiffHandler _currentSelectedHandler;
-
-    readonly List<DiffHandler> _handlers = new List<DiffHandler>();
+    #region Unity Messages
 
     void Awake() {
         FindResources();
@@ -195,6 +119,83 @@ public class DiffEditor : MonoBehaviour {
         }
     }
     
+    #endregion // Unity Messages
+
+    
+    void SetWidth(int id, float value) {
+        var handlers = _handlers.Where(h => h.Id == id);
+        handlers.ForEach(h => h.SetWidth(value));
+    }
+    
+    void SetHeight(int id, float value) {
+        var handlers = _handlers.Where(handler => handler.Id == id);
+        handlers.ForEach(h => h.SetHeight(value));
+    }
+    
+    [Button, ShowIf(nameof(IsSelected))]
+    void Delete() {
+        var id = _currentSelectedHandler.Id;
+        var toDelete = _handlers.Where(h => h.Id == id).ToArray();
+        
+        for (int i = 0; i < toDelete.Length; i++) {
+            var handler = toDelete[i];
+            _handlers.Remove(handler);
+            Destroy(handler.gameObject);
+        }
+        
+        UpdateHandlersNum();
+    }
+    
+    [Button, ShowIf(nameof(IsPlaymode))]
+    void SwitchOrientation() {
+        _currentOrientation = _currentOrientation == Orientation.Horizontal
+            ? Orientation.Vertical
+            : Orientation.Horizontal;
+        SwitchImages();
+        TranslateMarks();
+    }
+
+    void SetOrientation(Orientation orientation) {
+        if (_currentOrientation != orientation)
+            SwitchOrientation();
+    }
+
+    void SwitchImages() {
+        var newImages = _config.GetImages(_currentOrientation);
+        var oldImages = _config.GetImages(_currentOrientation == Orientation.Horizontal
+            ? Orientation.Vertical
+            : Orientation.Horizontal);
+        
+        oldImages.Item1.transform.parent.gameObject.SetActive(false);
+        newImages.Item1.transform.parent.gameObject.SetActive(true);
+
+        newImages.Item1.sprite = oldImages.Item1.sprite;
+        newImages.Item2.sprite = oldImages.Item2.sprite;
+    }
+
+    void TranslateMarks() {
+        var newImages = _config.GetImages(_currentOrientation);
+        var oldImages = _config.GetImages(_currentOrientation == Orientation.Horizontal
+            ? Orientation.Vertical
+            : Orientation.Horizontal);
+        
+        foreach (var handler in _handlers) {
+            if (handler.transform.parent == oldImages.Item1.transform)
+                handler.transform.SetParent(newImages.Item1.transform, false);
+            else
+                handler.transform.SetParent(newImages.Item2.transform, false);
+
+            var pixels = handler.ImageSpaceCoordinates;
+            var image = handler.transform.parent.GetComponent<Image>();
+            var rect = image.GetComponent<RectTransform>();
+            var local = DiffUtils.GetRectSpaceCoordinateFromPixel(pixels, image, rect);
+            var handlerRect = handler.GetComponent<RectTransform>();
+            handlerRect.localPosition = local;
+            handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(handler.Width, rect, image.sprite), 
+                DiffUtils.PixelHeightToRect(handler.Height, rect, image.sprite));
+        }
+    }
+    
     void Unselect(int id) {
         var handlers = _handlers.Where(handler => handler.Id == id);
         handlers.ForEach(h => h.IsSelected = false);
@@ -233,8 +234,8 @@ public class DiffEditor : MonoBehaviour {
     void CreateNew() {
         Clear();
         var images = _config.GetImages(_currentOrientation);
-        images.Item1.sprite = _image1;
-        images.Item2.sprite = _image2;
+        images.Item1.sprite = Resources.Load<Sprite>("Images/" + _folderName + "/1");
+        images.Item2.sprite = Resources.Load<Sprite>("Images/" + _folderName + "/2");
     }
     
     [Button, ShowIf(nameof(IsPlaymode))]
@@ -322,7 +323,7 @@ public class DiffEditor : MonoBehaviour {
         data.Image2Path = $"{_folderName}/{images.Item2.sprite.name}";
         
         var jsonString = JsonUtility.ToJson(data);
-        var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
+        var path = EditorUtility.SaveFilePanelInProject("Save json", images.Item1.sprite.name, "json", "Save json");
         File.WriteAllText(path, jsonString);
         AssetDatabase.Refresh();
     }

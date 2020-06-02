@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using TMPro;
 
@@ -13,8 +14,8 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] Image _image1Vert = default;
     [SerializeField] Image _image2Vert = default;
     [SerializeField] GameObject _diffVisualPrefab = default;
+    [SerializeField] UIDiffHelper _helper = default;
     
-    [Inject] Database _database = default;
     [Inject] ImagesLoader _loader = default;
     
     readonly List<Point> _points = new List<Point>();
@@ -24,12 +25,34 @@ public class UIGameplay : MonoBehaviour {
     int _currentPointsFound = 0;
     (Image, Image) _currentImages;
 
-    void Start() {
-        var levelData = _database.GetLevelByNum(0);
+    public void Initialize(Data levelData) {
         _data = levelData;
         _loader.LoadImagesAndCreateSprite(levelData.Image1Path, levelData.Image2Path, OnLoaded);
     }
     
+    public bool IsOverlap(Vector2 mousePos, out Point outPoint) {
+        var raycast = DiffUtils.RaycastMouse(mousePos);
+        if (raycast.gameObject != null) {
+            var image = raycast.gameObject.GetComponent<Image>();
+            if (image != null) {
+                if (DiffUtils.GetPixelFromScreen(mousePos, image, out var pixelPos, out var localPos)) {
+                    for (var index = 0; index < _points.Count; index++) {
+                        var point = _points[index];
+                        if (IsPixelInsidePoint(pixelPos, point)) {
+                            SelectDifference(point);
+                            _points.RemoveAt(index);
+                            outPoint = point;
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+        outPoint = default;
+        return false;
+    }
+
     void OnLoaded(Sprite im1, Sprite im2) {
         Fill(im1, im2, _data);
     }
@@ -50,32 +73,7 @@ public class UIGameplay : MonoBehaviour {
         _currentPointsFound = 0;
         _points.Clear();
         _points.AddRange(levelData.Points);
-        UpdatePointsAmountVisual();
-    }
-
-    void UpdatePointsAmountVisual() {
-    }
-
-    void Update() {
-        if (Input.GetMouseButtonDown(0)) {
-            var mousePos = Input.mousePosition;
-            var raycast = DiffUtils.RaycastMouse(mousePos);
-            if (raycast.gameObject != null) {
-                var image = raycast.gameObject.GetComponent<Image>();
-                if (image != null) {
-                    if (DiffUtils.GetPixelFromScreen(mousePos, image, out var pixelPos, out var localPos)) {
-                        for (var index = 0; index < _points.Count; index++) {
-                            var point = _points[index];
-                            if (IsPixelInsidePoint(pixelPos, point)) {
-                                SelectDifference(point);
-                                _points.RemoveAt(index);
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-        }
+        _helper.SetPointsAmount(_points.Count);
     }
 
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
@@ -86,7 +84,7 @@ public class UIGameplay : MonoBehaviour {
 
     void SelectDifference(Point point) {
         _currentPointsFound++;
-        UpdatePointsAmountVisual();
+        _helper.Open(point.Number);
         CreateDiffsVisual(point);
     }
     
