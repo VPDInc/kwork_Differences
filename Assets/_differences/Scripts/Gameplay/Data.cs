@@ -7,6 +7,7 @@ public struct Data {
     public string Image1Path;
     public string Image2Path;
     public Point[] Points;
+    public Orientation Orientation;
 }
 
 [Serializable]
@@ -19,4 +20,10 @@ public struct Point {
     public override string ToString() {
         return $"Center: {Center} Width: {Width} Height: {Height}";
     }
+}
+
+[Serializable]
+public enum Orientation {
+    Vertical,
+    Horizontal
 }
