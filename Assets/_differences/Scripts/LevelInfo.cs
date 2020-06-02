@@ -87,8 +87,8 @@ public class LevelInfo : MonoBehaviour {
         }
     }
 
-    void OnMouseDown() {
-        if(!_isUnlocked || _eventSystem.IsPointerOverGameObject()) return;
-        _levelController.OpenPlayView(_levelNum);
-    }
+    // void OnMouseDown() {
+    //     if(!_isUnlocked || _eventSystem.IsPointerOverGameObject()) return;
+    //     _levelController.OpenPlayView(_levelNum);
+    // }
 }
