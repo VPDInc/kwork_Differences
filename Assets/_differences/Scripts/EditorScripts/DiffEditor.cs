@@ -16,8 +16,8 @@ using System;
 using UnityEditor;
 
 public class DiffEditor : MonoBehaviour {
-    [SerializeField] Sprite _image1 = default;
-    [SerializeField] Sprite _image2 = default;
+    // [SerializeField] Sprite _image1 = default;
+    // [SerializeField] Sprite _image2 = default;
     
     [SerializeField, ShowIf(nameof(IsPlaymode))]
     string _folderName = "Diff_1";
@@ -233,8 +233,8 @@ public class DiffEditor : MonoBehaviour {
     void CreateNew() {
         Clear();
         var images = _config.GetImages(_currentOrientation);
-        images.Item1.sprite = _image1;
-        images.Item2.sprite = _image2;
+        images.Item1.sprite = Resources.Load<Sprite>("Images/" + _folderName + "/1");
+        images.Item2.sprite = Resources.Load<Sprite>("Images/" + _folderName + "/2");
     }
     
     [Button, ShowIf(nameof(IsPlaymode))]
@@ -322,7 +322,7 @@ public class DiffEditor : MonoBehaviour {
         data.Image2Path = $"{_folderName}/{images.Item2.sprite.name}";
         
         var jsonString = JsonUtility.ToJson(data);
-        var path = EditorUtility.SaveFilePanelInProject("Save json", _image1.texture.name, "json", "Save json");
+        var path = EditorUtility.SaveFilePanelInProject("Save json", images.Item1.sprite.name, "json", "Save json");
         File.WriteAllText(path, jsonString);
         AssetDatabase.Refresh();
     }
