@@ -13,6 +13,10 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Zenject;
+
+using Random = UnityEngine.Random;
+
 public class UILevelStartView : MonoBehaviour {
     [Header("References")]
     [SerializeField] TMP_Text _levelLabel = default;
@@ -29,6 +33,10 @@ public class UILevelStartView : MonoBehaviour {
     [SerializeField] GameObject _differencesCounterPrefab = default;
 
     [Header("Settings")] [SerializeField] int _secondsTillStart = 3;
+    
+    //DUMMY
+    [Inject] UIFinishLevelView _uiFinishLevelView = default;
+    [Inject] LevelController _levelController = default;
 
     int _currentTimer = 0;
     Sequence _timerSequence = default;
@@ -67,9 +75,9 @@ public class UILevelStartView : MonoBehaviour {
         _timerSequence?.Kill();
 
         _currentTimer = _secondsTillStart;
-        
+
         _timerLabel.text = TIMER_PREFIX + _currentTimer;
-        
+
         _timerSequence = DOTween.Sequence();
         for (int i = 0; i < _secondsTillStart; i++) {
             _timerSequence.AppendInterval(1);
@@ -82,6 +90,14 @@ public class UILevelStartView : MonoBehaviour {
         _timerSequence.AppendCallback(() => {
                                           Hide();
                                           action?.Invoke();
+                                      });
+
+        //DUMMY
+        _timerSequence.AppendCallback(() => {
+                                          _uiFinishLevelView.Show();
+                                          _uiFinishLevelView.SetLevelName(_levelController.LastLevelNum);
+                                          _uiFinishLevelView.SetPlayerName("Babaduk");
+                                          _uiFinishLevelView.Setup(Random.Range(1,3), Random.Range(5, 8));
                                       });
     }
 
