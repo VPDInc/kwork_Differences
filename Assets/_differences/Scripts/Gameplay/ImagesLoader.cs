@@ -3,6 +3,8 @@ using System.Collections;
 
 using UnityEngine;
 
+using Zenject;
+
 public class ImagesLoader : MonoBehaviour {
     public void LoadImagesAndCreateSprite(string path1, string path2, Action<Sprite, Sprite> Completed) {
         StartCoroutine(Loading(path1, path2, Completed));
