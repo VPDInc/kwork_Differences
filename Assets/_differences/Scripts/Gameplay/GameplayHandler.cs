@@ -4,7 +4,7 @@ using UnityEngine;
 
 using Zenject;
 
-public class GameplayController : MonoBehaviour {
+public class GameplayHandler : MonoBehaviour {
     [SerializeField] float _duration = 10f;
     
     bool IsStarted { get; set; }
@@ -12,16 +12,22 @@ public class GameplayController : MonoBehaviour {
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
     [Inject] Database _database = default;
+    [Inject] GameplayController _gameplayController = default;
     
     readonly List<Point> _points = new List<Point>();
     
     void Start() {
         _timer.Expired += OnTimerExpired;
-        StartGameplay();
+        _gameplayController.LevelStarted += OnLevelStarted;
     }
 
     void OnDestroy() {
         _timer.Expired -= OnTimerExpired;
+        _gameplayController.LevelStarted += OnLevelStarted;
+    }
+
+    void OnLevelStarted() {
+        StartGameplay();
     }
 
     void Update() {
@@ -44,6 +50,7 @@ public class GameplayController : MonoBehaviour {
         _points.Clear();
         _points.AddRange(levelData.Points);
         _uiGameplay.Initialize(levelData);
+        // TODO: Start it only after images loading in UiGameplay
         _timer.Launch(_duration);
         IsStarted = true;
     }
@@ -51,6 +58,8 @@ public class GameplayController : MonoBehaviour {
     void StopGameplay() {
         IsStarted = false;
         _timer.Stop();
+        _uiGameplay.Complete();
+        _gameplayController.StopLevel();
     }
     
     void OnTimerExpired() {

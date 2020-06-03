@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Doozy.Engine.UI;
+
 using TMPro;
 
 using UnityEngine;
@@ -15,6 +17,7 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] Image _image2Vert = default;
     [SerializeField] GameObject _diffVisualPrefab = default;
     [SerializeField] UIDiffHelper _helper = default;
+    [SerializeField] UIView _view = default;
     
     [Inject] ImagesLoader _loader = default;
     
@@ -28,6 +31,11 @@ public class UIGameplay : MonoBehaviour {
     public void Initialize(Data levelData) {
         _data = levelData;
         _loader.LoadImagesAndCreateSprite(levelData.Image1Path, levelData.Image2Path, OnLoaded);
+    }
+
+    public void Complete() {
+        //TODO: Make event
+        _view.Hide();
     }
     
     public bool IsOverlap(Vector2 mousePos, out Point outPoint) {
@@ -74,6 +82,8 @@ public class UIGameplay : MonoBehaviour {
         _points.Clear();
         _points.AddRange(levelData.Points);
         _helper.SetPointsAmount(_points.Count);
+        //TODO: Make event
+        _view.Show();
     }
 
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {

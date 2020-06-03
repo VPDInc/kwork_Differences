@@ -423,7 +423,7 @@ GameObject:
   - component: {fileID: 525831334}
   - component: {fileID: 525831335}
   m_Layer: 0
-  m_Name: GameplayController
+  m_Name: GameplayHandler
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -644,7 +644,6 @@ GameObject:
   m_Component:
   - component: {fileID: 937643312}
   - component: {fileID: 937643311}
-  - component: {fileID: 937643310}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -652,14 +651,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!81 &937643310
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 937643309}
-  m_Enabled: 1
 --- !u!20 &937643311
 Camera:
   m_ObjectHideFlags: 0
@@ -1042,12 +1033,12 @@ MonoBehaviour:
   AutoHideAfterShow: 0
   AutoHideAfterShowDelay: 3
   AutoSelectButtonAfterShow: 0
-  BehaviorAtStart: 0
+  BehaviorAtStart: 1
   CustomStartAnchoredPosition: {x: 0, y: 0, z: 0}
   DeselectAnyButtonSelectedOnHide: 0
   DeselectAnyButtonSelectedOnShow: 0
   DisableCanvasWhenHidden: 1
-  DisableGameObjectWhenHidden: 1
+  DisableGameObjectWhenHidden: 0
   DisableGraphicRaycasterWhenHidden: 1
   HideBehavior:
     Animation:
@@ -1138,7 +1129,7 @@ MonoBehaviour:
         StartDelay: 0
         Duration: 1
     AutoStartLoopAnimation: 1
-    LoadSelectedPresetAtRuntime: 0
+    LoadSelectedPresetAtRuntime: 1
     InstantAnimation: 0
     OnFinished:
       AnimatorEvents: []
@@ -1180,8 +1171,8 @@ MonoBehaviour:
         SoundName: No Sound
         AudioClip: {fileID: 0}
         OutputAudioMixerGroup: {fileID: 0}
-    PresetCategory: Uncategorized
-    PresetName: Default
+    PresetCategory: Fade
+    PresetName: OutNormal
   HideProgressor: {fileID: 0}
   LoopBehavior:
     Animation:
@@ -1412,7 +1403,7 @@ MonoBehaviour:
         StartDelay: 0
         Duration: 1
     AutoStartLoopAnimation: 1
-    LoadSelectedPresetAtRuntime: 0
+    LoadSelectedPresetAtRuntime: 1
     InstantAnimation: 0
     OnFinished:
       AnimatorEvents: []
@@ -1454,8 +1445,8 @@ MonoBehaviour:
         SoundName: No Sound
         AudioClip: {fileID: 0}
         OutputAudioMixerGroup: {fileID: 0}
-    PresetCategory: Uncategorized
-    PresetName: Default
+    PresetCategory: Fade
+    PresetName: InNormal
   ShowProgressor: {fileID: 0}
   TargetOrientation: 2
   UpdateHideProgressorOnShow: 0
@@ -1532,6 +1523,7 @@ MonoBehaviour:
   _diffVisualPrefab: {fileID: 1564477320706914290, guid: a3d2f94163b5641e586b5752a8513d84,
     type: 3}
   _helper: {fileID: 1781289516}
+  _view: {fileID: 1526731829}
 --- !u!114 &1526731834
 MonoBehaviour:
   m_ObjectHideFlags: 0
