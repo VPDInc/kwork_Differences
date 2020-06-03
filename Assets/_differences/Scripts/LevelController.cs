@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Lean.Touch;
 
@@ -6,21 +7,31 @@ using UnityEngine;
 
 using Zenject;
 
+using Random = UnityEngine.Random;
+
 public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
 
     [Inject] LeanDragCamera _leanDragCamera = default;
     [Inject] UILevelStartView _levelStartView = default;
+    [Inject] GameplayController _gameplay = default;
     
     int _lastLevelNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
+    LevelInfo _currentLevel;
+
     
     const string LAST_LEVEL_ID = "last_level";
 
     void Start() {
         LoadLastLevel();
         SetupLevels();
+        _gameplay.LevelCompleted += OnLevelCompleted;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
+    }
+
+    void OnDestroy() {
+        _gameplay.LevelCompleted -= OnLevelCompleted;
     }
 
     public void CompleteLevel(int num) {
@@ -32,6 +43,10 @@ public class LevelController : MonoBehaviour {
 
         if(num + 1 < _allLevels.Count)
             _allLevels[num+1].UnlockLevel(false);
+    }
+    
+    void OnLevelCompleted() {
+        _currentLevel.CompleteLevel();
     }
 
     public void AddLevelToList(IEnumerable<LevelInfo> levelInfos) {
@@ -54,10 +69,13 @@ public class LevelController : MonoBehaviour {
         _levelStartView.StartTimer(()=>PlayLevel(levelNum));
         _levelStartView.Show();
     }
+
     
     void PlayLevel(int levelNum) {
         //DUMMY
-        _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count-1)].PlayLevel();
+        _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
+        _gameplay.StartLevel(levelNum);
+        _currentLevel.PlayLevel();
     }
 
     void SetupLevels() {

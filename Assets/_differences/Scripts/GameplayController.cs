@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class GameplayController : MonoBehaviour {
     public event Action LevelStarted;
+    public event Action LevelCompleted;
+
     
     [SerializeField] string _gameplaySceneName = "GameplayScene";
 
@@ -25,6 +27,6 @@ public class GameplayController : MonoBehaviour {
     }
 
     public void StopLevel() {
-        
+        LevelCompleted?.Invoke();
     }
 }

@@ -57,7 +57,7 @@ public class LevelInfo : MonoBehaviour {
 
     public void PlayLevel() {
         //DUMMY
-        CompleteLevel();
+        // CompleteLevel();
     }
 
     public void UnlockLevel(bool isInstant) {
@@ -68,7 +68,7 @@ public class LevelInfo : MonoBehaviour {
             _episodeInfo.UnlockEpisode(isInstant);
     }
 
-    void CompleteLevel() {
+    public void CompleteLevel() {
         _isCompleted = true;
         _activeSprite.SetActive(false);
         UnlockVfx(false);
