@@ -10,16 +10,15 @@ using Zenject;
 using Random = UnityEngine.Random;
 
 public class LevelInfo : MonoBehaviour {
-    public bool IsCompleted => _isCompleted;
     public int LevelNum => _levelNum;
     public int Estimation => _estimation;
 
     [SerializeField] TMP_Text _levelNumLabel = default;
+    [SerializeField] GameObject _activeSprite = default;
     [SerializeField] SpriteRenderer[] _spritesToHide = default;
 
     [Inject] LevelController _levelController = default;
-
-    StarHandler _starHandler;
+    
     EpisodeInfo _episodeInfo;
     int _levelNum = 0;
     int _estimation = 0;
@@ -31,12 +30,7 @@ public class LevelInfo : MonoBehaviour {
     const float VFX_DURATION = 0.5f;
 
     void Awake() {
-        _starHandler = GetComponentInChildren<StarHandler>();
         _eventSystem = EventSystem.current;
-    }
-
-    void Start() {
-        ShowStarHandler(true);
     }
 
     public void Init(EpisodeInfo episodeInfo, int levelNum) {
@@ -46,17 +40,16 @@ public class LevelInfo : MonoBehaviour {
         _levelNumLabel.text = (levelNum + 1).ToString();
     }
 
-    public void Setup(bool isUnlocked, bool isCompleted, int stars = 0) {
+    public void Setup(bool isUnlocked, bool isCompleted) {
         _isCompleted = isCompleted;
         _isUnlocked = isUnlocked;
-        
-        SetStars(stars, true);
-        
+
         if(isUnlocked)
             UnlockLevel(true);
         
         if (_isCompleted) {
-            UnlockVfx(true);
+            CompleteLevel();
+            // UnlockVfx(true);
         } else {
             LockVfx(true);
         }
@@ -69,27 +62,17 @@ public class LevelInfo : MonoBehaviour {
 
     public void UnlockLevel(bool isInstant) {
         _isUnlocked = true;
-        ShowStarHandler(isInstant);
-        
+        _activeSprite.SetActive(true);
+
         if(!_episodeInfo.IsUnlocked)
             _episodeInfo.UnlockEpisode(isInstant);
     }
 
     void CompleteLevel() {
         _isCompleted = true;
-        ShowStarHandler(false);
-        SetStars(Random.Range(1, 4), false);
+        _activeSprite.SetActive(false);
         UnlockVfx(false);
         _levelController.CompleteLevel(_levelNum);
-    }
-    
-    void ShowStarHandler(bool isInstant) {
-        _starHandler.Show(_isUnlocked, isInstant);
-    }
-
-    void SetStars(int stars, bool isInstant) {
-        _estimation = Mathf.Clamp(stars, _estimation, 3);
-        _starHandler.SetStars(stars, isInstant);
     }
 
     void UnlockVfx(bool isInstant) {
@@ -104,8 +87,8 @@ public class LevelInfo : MonoBehaviour {
         }
     }
 
-    void OnMouseDown() {
-        if(!_isUnlocked || _eventSystem.IsPointerOverGameObject()) return;
-        _levelController.OpenPlayView(_levelNum);
-    }
+    // void OnMouseDown() {
+    //     if(!_isUnlocked || _eventSystem.IsPointerOverGameObject()) return;
+    //     _levelController.OpenPlayView(_levelNum);
+    // }
 }
