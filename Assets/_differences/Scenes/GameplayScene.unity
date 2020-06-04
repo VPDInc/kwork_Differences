@@ -571,6 +571,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25c6dbcb0e7f34318bc32eacb7dc3d14, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _clickWarnDeltaSec: 5
+  _reduceTimeLevels:
+  - 10
+  - 20
+  - 30
+  _clearingDeltaSec: 20
+  _clicksToChangeLevel: 3
 --- !u!1 &911908065
 GameObject:
   m_ObjectHideFlags: 0
@@ -1536,6 +1543,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _timerText: {fileID: 1451874693}
+  _uiMissClickWarningPrefab: {fileID: 5857164298473235508, guid: 4f3b4e53683c7450a85bfcde9b107473,
+    type: 3}
 --- !u!114 &1526731835
 MonoBehaviour:
   m_ObjectHideFlags: 0

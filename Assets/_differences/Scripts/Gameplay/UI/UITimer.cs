@@ -11,6 +11,7 @@ public class UITimer : MonoBehaviour {
     public event Action Expired;
     
     [SerializeField] TextMeshProUGUI _timerText = default;
+    [SerializeField] UIMissClickWarning _uiMissClickWarningPrefab = default;
 
     AsyncFunc<float> _timerRoutine;
 
@@ -46,7 +47,10 @@ public class UITimer : MonoBehaviour {
         _timerText.text = time.ToString("F0");
     }
 
-    public void ReduceTime(float reduceTimeLevel) {
-        _timestamp -= reduceTimeLevel;
+    public void ReduceTime(float reduceTime) {
+        var missClick = Instantiate(_uiMissClickWarningPrefab, transform);
+        missClick.SetReducedTimeAndRun(reduceTime);
+        
+        _timestamp -= reduceTime;
     }
 }
