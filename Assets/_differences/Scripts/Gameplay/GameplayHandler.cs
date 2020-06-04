@@ -10,6 +10,7 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
     [Inject] GameplayController _gameplayController = default;
+    [Inject] MissClickManager _missClickManager = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _points = new List<Point>();
@@ -75,6 +76,8 @@ public class GameplayHandler : MonoBehaviour {
                     else
                         FillGameplay(_levelsData[_currentPictureResult]);
                 }
+            } else {
+                _missClickManager.Catch();
             }
         }
     }
@@ -87,6 +90,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void StopGameplay(bool isWin) {
+        _missClickManager.Reset();
         IsStarted = false;
         _timer.Stop();
         _uiGameplay.Complete();

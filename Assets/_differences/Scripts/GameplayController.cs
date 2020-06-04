@@ -39,4 +39,9 @@ public class GameplayController : MonoBehaviour {
     public void StopLevel(bool result, PictureResult[] pictureResults) {
         Completed?.Invoke(new GameplayResult(result, pictureResults));
     }
+
+    void Update() {
+        if (Input.GetKeyDown(KeyCode.Space))
+            DebugLoadLevel1();
+    }
 }
