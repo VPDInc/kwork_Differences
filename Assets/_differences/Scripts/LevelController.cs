@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Airion.Currency;
+
 using Lean.Touch;
 
 using UnityEngine;
@@ -16,15 +18,19 @@ public class LevelController : MonoBehaviour {
     [Inject] UILevelStartView _levelStartView = default;
     [Inject] UIFinishLevelView _uiFinishLevelView = default;
     [Inject] GameplayController _gameplay = default;
-    
+    [Inject] CurrencyManager _currencyManager = default;
+
+    Currency _coinCurrency = default;
     int _lastLevelNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     LevelInfo _currentLevel;
 
     
     const string LAST_LEVEL_ID = "last_level";
+    const string COIN_CURRENCY_ID = "Soft";
 
     void Start() {
+        _coinCurrency = _currencyManager.GetCurrency(COIN_CURRENCY_ID);
         LoadLastLevel();
         SetupLevels();
         _gameplay.LevelCompleted += OnLevelCompleted;
@@ -47,8 +53,12 @@ public class LevelController : MonoBehaviour {
             _allLevels[num+1].UnlockLevel(false);
     }
     
+    //DUMMY
+    //TODO: Implement coin rewards logic
     void OnLevelCompleted(int picturesCount, int differencesCount) {
-        _uiFinishLevelView.Show(_lastLevelNum, picturesCount, differencesCount);
+        var coinReward = Random.Range(3, 5);
+        _coinCurrency.Earn(coinReward);
+        _uiFinishLevelView.Show(_lastLevelNum, picturesCount, differencesCount, coinReward);
         CompleteLevel(_lastLevelNum);
     }
 

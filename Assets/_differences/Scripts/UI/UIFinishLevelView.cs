@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-using Airion.Extensions;
+﻿using Airion.Extensions;
 
 using Doozy.Engine.UI;
 
@@ -16,6 +12,7 @@ using Random = UnityEngine.Random;
 public class UIFinishLevelView : MonoBehaviour {
     [Header("References")] [SerializeField]
     TMP_Text _levelLabel = default;
+    [SerializeField] TMP_Text _coinRewardLabel = default;
     [SerializeField] TMP_Text _playerNameLabel = default;
     [SerializeField] Image _profileIcon = default;
     [SerializeField] Transform _infoHolder = default;
@@ -35,9 +32,10 @@ public class UIFinishLevelView : MonoBehaviour {
     }
 
     //DUMMY
-    public void Show(int levelNum, int picturesCount, int differencesCount) {
+    public void Show(int levelNum, int picturesCount, int differencesCount, int coinReward) {
         Show();
         SetLevelName(levelNum);
+        SetCoinsAmount(coinReward);
         Setup(picturesCount, differencesCount);
     }
 
@@ -49,11 +47,15 @@ public class UIFinishLevelView : MonoBehaviour {
         _currentView.Hide();
     }
 
-    public void SetLevelName(int levelNum) {
+    void SetLevelName(int levelNum) {
         _levelLabel.text = LEVEL_NAME_PREFIX + (levelNum + 1);
     }
 
-    public void SetPlayerName(string name) {
+    void SetCoinsAmount(int coinsAmount) {
+        _coinRewardLabel.text = coinsAmount.ToString();
+    }
+
+    void SetPlayerName(string name) {
         _playerNameLabel.text = name;
     }
 
@@ -63,7 +65,7 @@ public class UIFinishLevelView : MonoBehaviour {
 
     //DUMMY
     //TODO: Decide how to get game results
-    public void Setup(int pictureCount, int differencesCount) {
+    void Setup(int pictureCount, int differencesCount) {
         _infoHolder.DestroyAllChildren();
         for (int i = 0; i < pictureCount; i++) {
             var info = Instantiate(_pictureResultInfoPrefab, _infoHolder);
