@@ -40,7 +40,6 @@ public class GameplayHandler : MonoBehaviour {
         //    show blocker
         //     wait
         
-        
         _pictureResults.Clear();
         _currentPictureResult = 0;
         foreach (var data in _levelsData) {
@@ -55,7 +54,9 @@ public class GameplayHandler : MonoBehaviour {
             });
         }
         
-        StartGameplay(_levelsData[_currentPictureResult]);
+        FillGameplay(_levelsData[_currentPictureResult]);
+        IsStarted = true;
+        _timer.Launch(_duration);
     }
 
     void Update() {
@@ -68,23 +69,21 @@ public class GameplayHandler : MonoBehaviour {
                 _points.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
                 if (_points.Count == 0) {
-                    // TODO: Switch level
-                    StopGameplay(true);
+                    _currentPictureResult++;
+                    if (_currentPictureResult == _levelsData.Length)
+                        StopGameplay(true);
+                    else
+                        FillGameplay(_levelsData[_currentPictureResult]);
                 }
             }
         }
     }
 
-    void StartGameplay(Data levelData) {
-        //Clear old points
+    void FillGameplay(Data levelData) {
+        _uiGameplay.Clear();
         _points.Clear();
         _points.AddRange(levelData.Points);
         _uiGameplay.Initialize(levelData);
-        // TODO: Start it only after images loading in UiGameplay
-        _timer.Launch(_duration);
-        IsStarted = true;
-        // TODO: Show ui and block if need
-        // TODO: Coroutine
     }
 
     void StopGameplay(bool isWin) {

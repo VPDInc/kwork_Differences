@@ -29,7 +29,7 @@ public class GameplayController : MonoBehaviour {
 
     public void Load(int levelNum) {
         var levelData = _database.GetLevelByNum(levelNum);
-        Initialized?.Invoke(new [] {levelData});
+        Initialized?.Invoke(new [] {levelData, levelData});
     }
     
     public void Begin() {

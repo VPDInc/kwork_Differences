@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using Airion.Extensions;
+
 using Doozy.Engine.UI;
 
 using UnityEngine;
@@ -21,18 +23,23 @@ public class UIGameplay : MonoBehaviour {
     readonly List<Point> _points = new List<Point>();
 
     Data _data;
-    int _pointsCount;
-    int _currentPointsFound = 0;
     (Image, Image) _currentImages;
 
     public void Initialize(Data levelData) {
         _data = levelData;
+        // TODO: Move in to GameplayHandler
         _loader.LoadImagesAndCreateSprite(levelData.Image1Path, levelData.Image2Path, OnLoaded);
     }
 
     public void Complete() {
-        //TODO: Make event
         _view.Hide();
+    }
+    
+    public void Clear() {
+        _image1Hor.transform.DestroyAllChildren();
+        _image2Hor.transform.DestroyAllChildren();
+        _image1Vert.transform.DestroyAllChildren();
+        _image2Vert.transform.DestroyAllChildren();
     }
     
     public bool IsOverlap(Vector2 mousePos, out Point outPoint) {
@@ -74,12 +81,9 @@ public class UIGameplay : MonoBehaviour {
 
         _currentImages.Item1.sprite = image1;
         _currentImages.Item2.sprite = image2;
-        _pointsCount = levelData.Points.Length;
-        _currentPointsFound = 0;
         _points.Clear();
         _points.AddRange(levelData.Points);
         _helper.SetPointsAmount(_points.Count);
-        //TODO: Make event
         _view.Show();
     }
 
@@ -90,7 +94,6 @@ public class UIGameplay : MonoBehaviour {
     }
 
     void SelectDifference(Point point) {
-        _currentPointsFound++;
         _helper.Open(point.Number);
         CreateDiffsVisual(point);
     }
