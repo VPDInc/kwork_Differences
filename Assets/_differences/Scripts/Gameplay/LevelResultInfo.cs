@@ -2,49 +2,77 @@
 
 using Airion.Extensions;
 
+using JetBrains.Annotations;
+
 using UnityEngine;
 
 public class LevelResultInfo {
+    List<PictureResult> _pictureResults = new List<PictureResult>();
     int _picturesCount = 0;
     int _differencesCount = 0;
-    List<Dictionary<int, bool>> _differencesGuesses = new List<Dictionary<int, bool>>();
+    bool _isCompleted = false;
 
     public int PicturesCount => _picturesCount;
-
+    
     public int DifferencesCount => _differencesCount;
 
-    public List<Dictionary<int, bool>> DifferencesGuesses => _differencesGuesses;
+    public bool IsCompleted => _isCompleted;
+
+    public List<PictureResult> PictureResults => _pictureResults;
 
     public LevelResultInfo(int picturesCount,
                            int differencesCount,
-                           List<Dictionary<int, bool>> differencesGuesses = null) {
+                           bool isCompleted,
+                           List<PictureResult> pictureResults = null) {
         _picturesCount = picturesCount;
         _differencesCount = differencesCount;
-        
-        if(differencesGuesses != null)
-            _differencesGuesses = differencesGuesses;
+        _isCompleted = isCompleted;
+        _pictureResults = pictureResults;
     }
     
     //DUMMY
     public LevelResultInfo() {
         _picturesCount = Random.Range(1,3);
         _differencesCount = Random.Range(5, 8);
-        
-        FillRandomDifferencesInfo();
-    }
 
-    public void AddPictureDifferences(Dictionary<int, bool> differences) {
-        _differencesGuesses.Add(differences);
+        FillRandomDifferencesInfo();
     }
 
     void FillRandomDifferencesInfo() {
         for (int i = 0; i < _picturesCount; i++) {
-            Dictionary<int, bool> differencesInfo = new Dictionary<int, bool>();
+            var pictureResult = new PictureResult(null, new List<DifferencePoint>());
             for (int j = 0; j < _differencesCount; j++) {
                 bool differenceGuess = i < _picturesCount - 1 || RandomExtensions.TryChance(0.75f);
-                differencesInfo.Add(j, differenceGuess);
+                pictureResult.AddPoint(differenceGuess);
             }
-            AddPictureDifferences(differencesInfo);
+            _pictureResults.Add(pictureResult);
         }
+    }
+}
+
+public class PictureResult {
+    Sprite _picture = default;
+    List<DifferencePoint> _differencePoints = new List<DifferencePoint>();
+
+    public Sprite Picture => _picture;
+    public List<DifferencePoint> DifferencePoints => _differencePoints;
+
+    public PictureResult(Sprite picture, List<DifferencePoint> differencePoints) {
+        _picture = picture;
+        _differencePoints = differencePoints;
+    }
+
+    public void AddPoint(bool isOpen) {
+        _differencePoints.Add(new DifferencePoint(isOpen));
+    }
+}
+
+public class DifferencePoint {
+    bool _isOpen = false;
+
+    public bool IsOpen => _isOpen;
+
+    public DifferencePoint(bool isOpen) {
+        _isOpen = isOpen;
     }
 }

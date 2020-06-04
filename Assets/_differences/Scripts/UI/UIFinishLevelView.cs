@@ -75,9 +75,10 @@ public class UIFinishLevelView : MonoBehaviour {
         
         for (int i = 0; i < pictureCount; i++) {
             var info = Instantiate(_pictureResultInfoPrefab, _infoHolder);
-            var guessedDifferences = levelResultInfo.DifferencesGuesses[i].Count(x => x.Value);
+            var differencePoints = levelResultInfo.PictureResults[i].DifferencePoints;
+            var guessedDifferences = differencePoints.Count(x => x.IsOpen);
             //TODO: Implement ranking score
-            info.Setup(levelResultInfo.DifferencesGuesses[i], 5 * guessedDifferences);
+            info.Setup(differencePoints, 5 * guessedDifferences);
         }
     }
 }
