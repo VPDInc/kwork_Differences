@@ -7,7 +7,7 @@ using Random = UnityEngine.Random;
 
 public class GameplayController : MonoBehaviour {
     public event Action LevelStarted;
-    public event Action<int, int> LevelCompleted;
+    public event Action<LevelResultInfo> LevelCompleted;
 
     
     [SerializeField] string _gameplaySceneName = "GameplayScene";
@@ -35,6 +35,6 @@ public class GameplayController : MonoBehaviour {
 
     public void StopLevel() {
         //DUMMY
-        LevelCompleted?.Invoke(Random.Range(1,3), Random.Range(5, 8));
+        LevelCompleted?.Invoke(new LevelResultInfo());
     }
 }

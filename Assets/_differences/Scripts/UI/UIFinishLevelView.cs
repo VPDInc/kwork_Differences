@@ -1,4 +1,6 @@
-﻿using Airion.Extensions;
+﻿using System.Linq;
+
+using Airion.Extensions;
 
 using Doozy.Engine.UI;
 
@@ -32,11 +34,11 @@ public class UIFinishLevelView : MonoBehaviour {
     }
 
     //DUMMY
-    public void Show(int levelNum, int picturesCount, int differencesCount, int coinReward) {
+    public void Show(int levelNum, LevelResultInfo levelResultInfo, int coinReward) {
         Show();
         SetLevelName(levelNum);
         SetCoinsAmount(coinReward);
-        Setup(picturesCount, differencesCount);
+        Setup(levelResultInfo);
     }
 
     void Show() {
@@ -65,12 +67,17 @@ public class UIFinishLevelView : MonoBehaviour {
 
     //DUMMY
     //TODO: Decide how to get game results
-    void Setup(int pictureCount, int differencesCount) {
+    void Setup(LevelResultInfo levelResultInfo) {
         _infoHolder.DestroyAllChildren();
+
+        var pictureCount = levelResultInfo.PicturesCount;
+        var differencesCount = levelResultInfo.DifferencesCount;
+        
         for (int i = 0; i < pictureCount; i++) {
             var info = Instantiate(_pictureResultInfoPrefab, _infoHolder);
-            var currentDifferencesCount = i == pictureCount - 1 ? Random.Range(1, differencesCount) : differencesCount;
-            info.Setup(differencesCount, currentDifferencesCount, 5 * currentDifferencesCount);
+            var guessedDifferences = levelResultInfo.DifferencesGuesses[i].Count(x => x.Value);
+            //TODO: Implement ranking score
+            info.Setup(levelResultInfo.DifferencesGuesses[i], 5 * guessedDifferences);
         }
     }
 }

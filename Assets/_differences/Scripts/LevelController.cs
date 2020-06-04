@@ -21,6 +21,8 @@ public class LevelController : MonoBehaviour {
     [Inject] CurrencyManager _currencyManager = default;
 
     Currency _coinCurrency = default;
+    Currency _ratingCurrency = default;
+    
     int _lastLevelNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     LevelInfo _currentLevel;
@@ -28,9 +30,11 @@ public class LevelController : MonoBehaviour {
     
     const string LAST_LEVEL_ID = "last_level";
     const string COIN_CURRENCY_ID = "Soft";
+    const string RATING_CURRENCY_ID = "Rating";
 
     void Start() {
         _coinCurrency = _currencyManager.GetCurrency(COIN_CURRENCY_ID);
+        _ratingCurrency = _currencyManager.GetCurrency(RATING_CURRENCY_ID);
         LoadLastLevel();
         SetupLevels();
         _gameplay.LevelCompleted += OnLevelCompleted;
@@ -55,10 +59,10 @@ public class LevelController : MonoBehaviour {
     
     //DUMMY
     //TODO: Implement coin rewards logic
-    void OnLevelCompleted(int picturesCount, int differencesCount) {
+    void OnLevelCompleted(LevelResultInfo levelResultInfo) {
         var coinReward = Random.Range(3, 5);
         _coinCurrency.Earn(coinReward);
-        _uiFinishLevelView.Show(_lastLevelNum, picturesCount, differencesCount, coinReward);
+        _uiFinishLevelView.Show(_lastLevelNum, levelResultInfo, coinReward);
         CompleteLevel(_lastLevelNum);
     }
 
