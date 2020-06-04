@@ -63,7 +63,8 @@ public class LevelController : MonoBehaviour {
         var coinReward = Random.Range(3, 5);
         _coinCurrency.Earn(coinReward);
         _uiFinishLevelView.Show(_lastLevelNum, levelResultInfo, coinReward);
-        CompleteLevel(_lastLevelNum);
+        if(levelResultInfo.IsCompleted)
+            CompleteLevel(_lastLevelNum);
     }
 
     public void AddLevelToList(IEnumerable<LevelInfo> levelInfos) {
@@ -92,7 +93,6 @@ public class LevelController : MonoBehaviour {
 
     
     void PlayLevel(int levelNum) {
-        //DUMMY
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.StartLevel(levelNum);
     }

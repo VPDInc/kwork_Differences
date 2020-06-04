@@ -8,41 +8,32 @@ using UnityEngine;
 
 public class LevelResultInfo {
     List<PictureResult> _pictureResults = new List<PictureResult>();
-    int _picturesCount = 0;
-    int _differencesCount = 0;
     bool _isCompleted = false;
-
-    public int PicturesCount => _picturesCount;
-    
-    public int DifferencesCount => _differencesCount;
 
     public bool IsCompleted => _isCompleted;
 
     public List<PictureResult> PictureResults => _pictureResults;
 
-    public LevelResultInfo(int picturesCount,
-                           int differencesCount,
-                           bool isCompleted,
+    public LevelResultInfo(bool isCompleted,
                            List<PictureResult> pictureResults = null) {
-        _picturesCount = picturesCount;
-        _differencesCount = differencesCount;
         _isCompleted = isCompleted;
         _pictureResults = pictureResults;
     }
     
     //DUMMY
     public LevelResultInfo() {
-        _picturesCount = Random.Range(1,3);
-        _differencesCount = Random.Range(5, 8);
-
         FillRandomDifferencesInfo();
     }
 
     void FillRandomDifferencesInfo() {
-        for (int i = 0; i < _picturesCount; i++) {
+        var picturesCount = Random.Range(1,3);
+        var differencesCount = Random.Range(5, 8);
+        _isCompleted = RandomExtensions.TryChance(0.75f);
+
+        for (int i = 0; i < picturesCount; i++) {
             var pictureResult = new PictureResult(null, new List<DifferencePoint>());
-            for (int j = 0; j < _differencesCount; j++) {
-                bool differenceGuess = i < _picturesCount - 1 || RandomExtensions.TryChance(0.75f);
+            for (int j = 0; j < differencesCount; j++) {
+                bool differenceGuess = i < picturesCount - 1 || _isCompleted || RandomExtensions.TryChance(0.75f);
                 pictureResult.AddPoint(differenceGuess);
             }
             _pictureResults.Add(pictureResult);

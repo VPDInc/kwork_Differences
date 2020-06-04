@@ -9,9 +9,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-using Random = UnityEngine.Random;
-
 public class UIFinishLevelView : MonoBehaviour {
+    [Header("UIVisualReferences")] [SerializeField]
+    GameObject[] _victoryObjects = default;
+    [SerializeField] GameObject[] _loseObjects = default;
+
     [Header("References")] [SerializeField]
     TMP_Text _levelLabel = default;
     [SerializeField] TMP_Text _coinRewardLabel = default;
@@ -30,15 +32,27 @@ public class UIFinishLevelView : MonoBehaviour {
     }
 
     void Start() {
+        //DUMMY
         SetPlayerName("Babaduk");
     }
 
     //DUMMY
     public void Show(int levelNum, LevelResultInfo levelResultInfo, int coinReward) {
+        SetupVictory(levelResultInfo.IsCompleted);
         Show();
         SetLevelName(levelNum);
         SetCoinsAmount(coinReward);
         Setup(levelResultInfo);
+    }
+
+    void SetupVictory(bool isVictory) {
+        foreach (GameObject victoryObject in _victoryObjects) {
+            victoryObject.SetActive(isVictory);
+        }
+
+        foreach (GameObject loseObject in _loseObjects) {
+            loseObject.SetActive(!isVictory);
+        }
     }
 
     void Show() {
@@ -70,10 +84,7 @@ public class UIFinishLevelView : MonoBehaviour {
     void Setup(LevelResultInfo levelResultInfo) {
         _infoHolder.DestroyAllChildren();
 
-        var pictureCount = levelResultInfo.PicturesCount;
-        var differencesCount = levelResultInfo.DifferencesCount;
-        
-        for (int i = 0; i < pictureCount; i++) {
+        for (int i = 0; i < levelResultInfo.PictureResults.Count; i++) {
             var info = Instantiate(_pictureResultInfoPrefab, _infoHolder);
             var differencePoints = levelResultInfo.PictureResults[i].DifferencePoints;
             var guessedDifferences = differencePoints.Count(x => x.IsOpen);
