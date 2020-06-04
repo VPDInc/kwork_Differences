@@ -4,10 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameplayController : MonoBehaviour {
-    public event Action LevelStarted;
-    public event Action<LevelResultInfo> LevelCompleted;
+    public event Action Began;
+    public event Action<GameplayResult> Completed;
 
-    
     [SerializeField] string _gameplaySceneName = "GameplayScene";
 
     void Start() {
@@ -19,20 +18,20 @@ public class GameplayController : MonoBehaviour {
 
     [ContextMenu("Load scene")]
     void DebugLoadLevel1() {
-        StartLevel(1);
+        Load(1);
+        Begin();
     }
 
-    public void LoadPicture() {
-        //TODO: Implement loading picture logic
-        Debug.Log("Pretend we're loading a new picture");
+    public void Load(int levelNum) {
+        //TODO: Implement loading pictures logic
     }
     
-    public void StartLevel(int levelNum) {
-        LevelStarted?.Invoke();
+    public void Begin() {
+        Began?.Invoke();
     }
 
     public void StopLevel() {
         //DUMMY
-        LevelCompleted?.Invoke(new LevelResultInfo());
+        Completed?.Invoke(new GameplayResult());
     }
 }

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Doozy.Engine.UI;
-
-using TMPro;
 
 using UnityEngine;
 using UnityEngine.UI;

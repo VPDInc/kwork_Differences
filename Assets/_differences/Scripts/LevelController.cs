@@ -37,12 +37,12 @@ public class LevelController : MonoBehaviour {
         _ratingCurrency = _currencyManager.GetCurrency(RATING_CURRENCY_ID);
         LoadLastLevel();
         SetupLevels();
-        _gameplay.LevelCompleted += OnLevelCompleted;
+        _gameplay.Completed += OnCompleted;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
     }
 
     void OnDestroy() {
-        _gameplay.LevelCompleted -= OnLevelCompleted;
+        _gameplay.Completed -= OnCompleted;
     }
 
     void CompleteLevel(int num) {
@@ -59,10 +59,10 @@ public class LevelController : MonoBehaviour {
     
     //DUMMY
     //TODO: Implement coin rewards logic
-    void OnLevelCompleted(LevelResultInfo levelResultInfo) {
+    void OnCompleted(GameplayResult gameplayResult) {
         var coinReward = Random.Range(3, 5);
         _coinCurrency.Earn(coinReward);
-        _uiFinishLevelView.Show(_lastLevelNum, levelResultInfo, coinReward);
+        _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinReward);
         CompleteLevel(_lastLevelNum);
     }
 
@@ -76,7 +76,7 @@ public class LevelController : MonoBehaviour {
 
     //DUMMY
     public void OpenPlayView(int levelNum) {
-        _gameplay.LoadPicture();
+        _gameplay.Load(levelNum);
         
         _levelStartView.SetLevelName(levelNum);
         
@@ -94,7 +94,7 @@ public class LevelController : MonoBehaviour {
     void PlayLevel(int levelNum) {
         //DUMMY
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
-        _gameplay.StartLevel(levelNum);
+        _gameplay.Begin();
     }
 
     void SetupLevels() {

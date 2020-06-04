@@ -18,15 +18,15 @@ public class GameplayHandler : MonoBehaviour {
     
     void Start() {
         _timer.Expired += OnTimerExpired;
-        _gameplayController.LevelStarted += OnLevelStarted;
+        _gameplayController.Began += OnBegan;
     }
 
     void OnDestroy() {
         _timer.Expired -= OnTimerExpired;
-        _gameplayController.LevelStarted += OnLevelStarted;
+        _gameplayController.Began += OnBegan;
     }
 
-    void OnLevelStarted() {
+    void OnBegan() {
         StartGameplay();
     }
 

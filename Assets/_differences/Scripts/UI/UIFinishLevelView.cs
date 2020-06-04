@@ -34,11 +34,11 @@ public class UIFinishLevelView : MonoBehaviour {
     }
 
     //DUMMY
-    public void Show(int levelNum, LevelResultInfo levelResultInfo, int coinReward) {
+    public void Show(int levelNum, GameplayResult gameplayResult, int coinReward) {
         Show();
         SetLevelName(levelNum);
         SetCoinsAmount(coinReward);
-        Setup(levelResultInfo);
+        Setup(gameplayResult);
     }
 
     void Show() {
@@ -67,15 +67,15 @@ public class UIFinishLevelView : MonoBehaviour {
 
     //DUMMY
     //TODO: Decide how to get game results
-    void Setup(LevelResultInfo levelResultInfo) {
+    void Setup(GameplayResult gameplayResult) {
         _infoHolder.DestroyAllChildren();
 
-        var pictureCount = levelResultInfo.PicturesCount;
-        var differencesCount = levelResultInfo.DifferencesCount;
+        var pictureCount = gameplayResult.PicturesCount;
+        var differencesCount = gameplayResult.DifferencesCount;
         
         for (int i = 0; i < pictureCount; i++) {
             var info = Instantiate(_pictureResultInfoPrefab, _infoHolder);
-            var differencePoints = levelResultInfo.PictureResults[i].DifferencePoints;
+            var differencePoints = gameplayResult.PictureResults[i].DifferencePoints;
             var guessedDifferences = differencePoints.Count(x => x.IsOpen);
             //TODO: Implement ranking score
             info.Setup(differencePoints, 5 * guessedDifferences);
