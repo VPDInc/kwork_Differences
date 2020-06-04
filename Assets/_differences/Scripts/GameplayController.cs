@@ -3,8 +3,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-using Random = UnityEngine.Random;
-
 public class GameplayController : MonoBehaviour {
     public event Action LevelStarted;
     public event Action<LevelResultInfo> LevelCompleted;

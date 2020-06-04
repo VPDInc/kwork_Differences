@@ -74,6 +74,7 @@ public class LevelController : MonoBehaviour {
         OpenPlayView(_lastLevelNum);
     }
 
+    //DUMMY
     public void OpenPlayView(int levelNum) {
         _gameplay.LoadPicture();
         

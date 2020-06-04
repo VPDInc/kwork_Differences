@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
 using Airion.Extensions;
 
 using DG.Tweening;
@@ -14,8 +11,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
-
-using Random = UnityEngine.Random;
 
 public class UILevelStartView : MonoBehaviour {
     [Header("References")]
@@ -34,9 +29,6 @@ public class UILevelStartView : MonoBehaviour {
 
     [Header("Settings")] [SerializeField] int _secondsTillStart = 3;
     
-    //DUMMY
-    [Inject] UIFinishLevelView _uiFinishLevelView = default;
-    [Inject] LevelController _levelController = default;
 
     int _currentTimer = 0;
     Sequence _timerSequence = default;
