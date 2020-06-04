@@ -20,7 +20,6 @@ public class GameplayResult {
         PictureResults = pictureResults;
     }
     
-    //DUMMY
     public GameplayResult() {
         PicturesCount = Random.Range(1,3);
         DifferencesCount = Random.Range(5, 8);
