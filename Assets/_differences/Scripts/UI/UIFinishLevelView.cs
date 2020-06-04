@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Airion.Extensions;
@@ -9,6 +10,8 @@ using TMPro;
 
 using UnityEngine;
 using UnityEngine.UI;
+
+using Random = UnityEngine.Random;
 
 public class UIFinishLevelView : MonoBehaviour {
     [Header("References")] [SerializeField]
@@ -27,7 +30,18 @@ public class UIFinishLevelView : MonoBehaviour {
         _currentView = GetComponent<UIView>();
     }
 
-    public void Show() {
+    void Start() {
+        SetPlayerName("Babaduk");
+    }
+
+    //DUMMY
+    public void Show(int levelNum, int picturesCount, int differencesCount) {
+        Show();
+        SetLevelName(levelNum);
+        Setup(picturesCount, differencesCount);
+    }
+
+    void Show() {
         _currentView.Show();
     }
 

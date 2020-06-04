@@ -14,6 +14,7 @@ public class LevelController : MonoBehaviour {
 
     [Inject] LeanDragCamera _leanDragCamera = default;
     [Inject] UILevelStartView _levelStartView = default;
+    [Inject] UIFinishLevelView _uiFinishLevelView = default;
     [Inject] GameplayController _gameplay = default;
     
     int _lastLevelNum = 0;
@@ -34,10 +35,11 @@ public class LevelController : MonoBehaviour {
         _gameplay.LevelCompleted -= OnLevelCompleted;
     }
 
-    public void CompleteLevel(int num) {
+    void CompleteLevel(int num) {
         if(num >= _lastLevelNum)
             _lastLevelNum = num + 1;
         var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count-1)];
+        level.CompleteLevel();
         _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
 
@@ -45,8 +47,9 @@ public class LevelController : MonoBehaviour {
             _allLevels[num+1].UnlockLevel(false);
     }
     
-    void OnLevelCompleted() {
-        _currentLevel.CompleteLevel();
+    void OnLevelCompleted(int picturesCount, int differencesCount) {
+        _uiFinishLevelView.Show(_lastLevelNum, picturesCount, differencesCount);
+        CompleteLevel(_lastLevelNum);
     }
 
     public void AddLevelToList(IEnumerable<LevelInfo> levelInfos) {
@@ -58,6 +61,8 @@ public class LevelController : MonoBehaviour {
     }
 
     public void OpenPlayView(int levelNum) {
+        _gameplay.LoadPicture();
+        
         _levelStartView.SetLevelName(levelNum);
         
         //DUMMY
@@ -75,7 +80,6 @@ public class LevelController : MonoBehaviour {
         //DUMMY
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.StartLevel(levelNum);
-        _currentLevel.PlayLevel();
     }
 
     void SetupLevels() {

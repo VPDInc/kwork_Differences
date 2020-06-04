@@ -91,14 +91,6 @@ public class UILevelStartView : MonoBehaviour {
                                           Hide();
                                           action?.Invoke();
                                       });
-
-        //DUMMY
-        _timerSequence.AppendCallback(() => {
-                                          _uiFinishLevelView.Show();
-                                          _uiFinishLevelView.SetLevelName(_levelController.LastLevelNum);
-                                          _uiFinishLevelView.SetPlayerName("Babaduk");
-                                          _uiFinishLevelView.Setup(Random.Range(1,3), Random.Range(5, 8));
-                                      });
     }
 
     public void SetPicturesCount(int count) {

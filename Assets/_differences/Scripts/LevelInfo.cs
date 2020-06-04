@@ -17,8 +17,6 @@ public class LevelInfo : MonoBehaviour {
     [SerializeField] GameObject _activeSprite = default;
     [SerializeField] SpriteRenderer[] _spritesToHide = default;
 
-    [Inject] LevelController _levelController = default;
-    
     EpisodeInfo _episodeInfo;
     int _levelNum = 0;
     int _estimation = 0;
@@ -49,15 +47,9 @@ public class LevelInfo : MonoBehaviour {
         
         if (_isCompleted) {
             CompleteLevel();
-            // UnlockVfx(true);
         } else {
             LockVfx(true);
         }
-    }
-
-    public void PlayLevel() {
-        //DUMMY
-        // CompleteLevel();
     }
 
     public void UnlockLevel(bool isInstant) {
@@ -72,7 +64,6 @@ public class LevelInfo : MonoBehaviour {
         _isCompleted = true;
         _activeSprite.SetActive(false);
         UnlockVfx(false);
-        _levelController.CompleteLevel(_levelNum);
     }
 
     void UnlockVfx(bool isInstant) {
