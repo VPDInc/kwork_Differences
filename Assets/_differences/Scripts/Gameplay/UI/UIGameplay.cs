@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Airion.Extensions;
 
@@ -10,12 +11,17 @@ using UnityEngine.UI;
 using Zenject;
 
 public class UIGameplay : MonoBehaviour {
+    public event Action Initialized;
+    public event Action<Point> PointOpened; 
+    public (Image, Image) CurrentImages => _currentImages;
+    public Point[] ClosedPoints => _points.ToArray();
+    
     [SerializeField] Image _image1Hor = default;
     [SerializeField] Image _image2Hor = default;
     [SerializeField] Image _image1Vert = default;
     [SerializeField] Image _image2Vert = default;
     [SerializeField] GameObject _diffVisualPrefab = default;
-    [SerializeField] UIDiffHelper _helper = default;
+    [SerializeField] UIPointsBar _helper = default;
     [SerializeField] UIView _view = default;
     
     [Inject] ImagesLoader _loader = default;
@@ -54,6 +60,7 @@ public class UIGameplay : MonoBehaviour {
                             SelectDifference(point);
                             _points.RemoveAt(index);
                             outPoint = point;
+                            PointOpened?.Invoke(point);
                             return true;
                         }
                     }
@@ -67,6 +74,10 @@ public class UIGameplay : MonoBehaviour {
 
     void OnLoaded(Sprite im1, Sprite im2) {
         Fill(im1, im2, _data);
+        _points.Clear();
+        _points.AddRange(_data.Points);
+        _helper.SetPointsAmount(_points.Count);
+        Initialized?.Invoke();
     }
     
     void Fill(Sprite image1, Sprite image2, Data levelData) {
@@ -81,9 +92,7 @@ public class UIGameplay : MonoBehaviour {
 
         _currentImages.Item1.sprite = image1;
         _currentImages.Item2.sprite = image2;
-        _points.Clear();
-        _points.AddRange(levelData.Points);
-        _helper.SetPointsAmount(_points.Count);
+        
         _view.Show();
     }
 

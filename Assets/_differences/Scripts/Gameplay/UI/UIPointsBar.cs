@@ -6,7 +6,7 @@ using TMPro;
 
 using UnityEngine;
 
-public class UIDiffHelper : MonoBehaviour {
+public class UIPointsBar : MonoBehaviour {
     [SerializeField] float _delta = 1;
     [SerializeField] float _startSize = 100;
     [SerializeField] RectTransform _back = default;
