@@ -1,16 +1,21 @@
 ﻿using System.Collections.Generic;
 
+using Doozy.Engine.UI;
+
 using UnityEngine;
 
 using Zenject;
 
 public class GameplayHandler : MonoBehaviour {
     [SerializeField] float _duration = 10f;
+    [SerializeField] float _addTimeAfterOver = 25f;
+    [SerializeField] UIView _timeExpiredView = default;
     
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
     [Inject] GameplayController _gameplayController = default;
     [Inject] MissClickManager _missClickManager = default;
+    [Inject] UIAimTip _aimTip = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _points = new List<Point>();
@@ -31,8 +36,19 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnInitialized(Data[] levelsData) {
+        _timeExpiredView.Hide(true);
         _levelsData = levelsData;
         //TODO: Start pictures loading
+    }
+
+    public void ExitClick() {
+        StopGameplay(false);
+    }
+
+    public void AddTimeClick() {
+        _timer.Launch(_addTimeAfterOver);
+        _aimTip.ShowTip();
+        _timeExpiredView.Hide();
     }
 
     void OnBegan() {
@@ -98,6 +114,6 @@ public class GameplayHandler : MonoBehaviour {
     }
     
     void OnTimerExpired() {
-        StopGameplay(false);
+        _timeExpiredView.Show();
     }
 }

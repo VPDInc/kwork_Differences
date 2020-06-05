@@ -38,6 +38,10 @@ public class UIAimTip : MonoBehaviour {
     }
 
     public void OnButtonClick() {
+        ShowTip();
+    }
+
+    public void ShowTip() {
         var point = GetPoint();
         if (point.HasValue)
             CreateAims(point.Value);

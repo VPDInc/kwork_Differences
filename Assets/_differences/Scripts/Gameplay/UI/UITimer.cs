@@ -15,7 +15,7 @@ public class UITimer : MonoBehaviour {
 
     AsyncFunc<float> _timerRoutine;
 
-    float _timestamp;
+    float _timeExpireTimestamp;
 
     void Awake() {
         _timerRoutine = new AsyncFunc<float>(this, TimerRoutine);
@@ -31,10 +31,10 @@ public class UITimer : MonoBehaviour {
 
     IEnumerator TimerRoutine(float duration) {
         UpdateTimer(duration);
-        _timestamp = Time.time;
+        _timeExpireTimestamp = Time.time + duration;
 
-        while (Time.time - _timestamp <= duration) {
-            var time = Mathf.Max(0, duration - (Time.time - _timestamp));
+        while (_timeExpireTimestamp - Time.time >= 0) {
+            var time = Mathf.Max(0, _timeExpireTimestamp - Time.time);
             UpdateTimer(time);
             yield return null;
         }
@@ -51,10 +51,10 @@ public class UITimer : MonoBehaviour {
         var missClick = Instantiate(_uiMissClickWarningPrefab, transform);
         missClick.SetReducedTimeAndRun(reduceTime);
         
-        _timestamp -= reduceTime;
+        _timeExpireTimestamp -= reduceTime;
     }
 
     public void AddTime(float timeBoost) {
-        _timestamp += timeBoost;
+        _timeExpireTimestamp += timeBoost;
     }
 }
