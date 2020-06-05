@@ -53,4 +53,8 @@ public class UITimer : MonoBehaviour {
         
         _timestamp -= reduceTime;
     }
+
+    public void AddTime(float timeBoost) {
+        _timestamp += timeBoost;
+    }
 }
