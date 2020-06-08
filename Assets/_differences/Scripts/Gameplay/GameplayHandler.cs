@@ -81,7 +81,8 @@ public class GameplayHandler : MonoBehaviour {
             return;
 
         var mousePos = Input.mousePosition;
-        if (Input.GetMouseButtonDown(0)) {
+        // TODO: Check swipe
+        if (Input.GetMouseButtonUp(0)) {
             if (_uiGameplay.IsOverlap(mousePos, out var point)) {
                 _points.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;

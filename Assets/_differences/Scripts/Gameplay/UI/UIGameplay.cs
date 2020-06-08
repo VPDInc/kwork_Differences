@@ -83,14 +83,14 @@ public class UIGameplay : MonoBehaviour {
     }
     
     void Fill(Sprite image1, Sprite image2, Data levelData) {
-        _image1Hor.transform.parent.gameObject.SetActive(false);
-        _image1Vert.transform.parent.gameObject.SetActive(false);
+        _image1Hor.transform.parent.parent.gameObject.SetActive(false);
+        _image1Vert.transform.parent.parent.gameObject.SetActive(false);
         
         _currentImages = (_image1Hor, _image2Hor);
         if (levelData.Orientation == Orientation.Vertical)
             _currentImages = (_image1Vert, _image2Vert);
         
-        _currentImages.Item1.transform.parent.gameObject.SetActive(true);
+        _currentImages.Item1.transform.parent.parent.gameObject.SetActive(true);
 
         _currentImages.Item1.sprite = image1;
         _currentImages.Item2.sprite = image2;
