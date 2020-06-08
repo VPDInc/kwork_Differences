@@ -683,7 +683,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _duration: 60
   _addTimeAfterOver: 25
-  _timeExpiredView: {fileID: 2009132001}
 --- !u!114 &525831335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12402,7 +12401,8 @@ MonoBehaviour:
   _diffVisualPrefab: {fileID: 1564477320706914290, guid: a3d2f94163b5641e586b5752a8513d84,
     type: 3}
   _helper: {fileID: 1781289516}
-  _view: {fileID: 1526731829}
+  _mainView: {fileID: 1526731829}
+  _timeExpiredView: {fileID: 2009132001}
 --- !u!114 &1526731834
 MonoBehaviour:
   m_ObjectHideFlags: 0

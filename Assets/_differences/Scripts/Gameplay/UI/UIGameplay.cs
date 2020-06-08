@@ -22,7 +22,8 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] Image _image2Vert = default;
     [SerializeField] GameObject _diffVisualPrefab = default;
     [SerializeField] UIPointsBar _helper = default;
-    [SerializeField] UIView _view = default;
+    [SerializeField] UIView _mainView = default;
+    [SerializeField] UIView _timeExpiredView = default;
     
     [Inject] ImagesLoader _loader = default;
     
@@ -38,7 +39,7 @@ public class UIGameplay : MonoBehaviour {
     }
 
     public void Complete() {
-        _view.Hide();
+        _mainView.Hide();
     }
     
     public void Clear() {
@@ -85,6 +86,14 @@ public class UIGameplay : MonoBehaviour {
         return false;
     }
 
+    public void ShowTimeExpired() {
+        _timeExpiredView.Show();
+    }
+
+    public void HideTimeExpired(bool isInstance = false) {
+        _timeExpiredView.Hide(isInstance);
+    }
+    
     void OnLoaded(Sprite im1, Sprite im2) {
         Fill(im1, im2, _data);
         _points.Clear();
@@ -106,7 +115,7 @@ public class UIGameplay : MonoBehaviour {
         _currentImages.Item1.sprite = image1;
         _currentImages.Item2.sprite = image2;
         
-        _view.Show();
+        _mainView.Show();
     }
 
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {

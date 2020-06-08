@@ -9,7 +9,6 @@ using Zenject;
 public class GameplayHandler : MonoBehaviour {
     [SerializeField] float _duration = 10f;
     [SerializeField] float _addTimeAfterOver = 25f;
-    [SerializeField] UIView _timeExpiredView = default;
     
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
@@ -39,7 +38,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnInitialized(Data[] levelsData) {
-        _timeExpiredView.Hide(true);
+        _uiGameplay.HideTimeExpired(true);
         _levelsData = levelsData;
         //TODO: Start pictures loading
     }
@@ -51,7 +50,7 @@ public class GameplayHandler : MonoBehaviour {
     public void AddTimeClick() {
         _timer.Launch(_addTimeAfterOver);
         _aimTip.ShowTip();
-        _timeExpiredView.Hide();
+        _uiGameplay.HideTimeExpired();
     }
 
     void OnBegan() {
@@ -126,6 +125,6 @@ public class GameplayHandler : MonoBehaviour {
     }
     
     void OnTimerExpired() {
-        _timeExpiredView.Show();
+        _uiGameplay.ShowTimeExpired();
     }
 }
