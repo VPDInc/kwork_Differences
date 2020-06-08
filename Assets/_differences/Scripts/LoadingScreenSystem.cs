@@ -20,7 +20,7 @@ public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] string _versionPrefix = "v";
 
     AsyncOperation _async;
-    bool _isFirstLevelLoaded;
+    // bool _isFirstLevelLoaded;
 
     void StartLoading(int sceneNo) {
         StartCoroutine(Loading(sceneNo));
@@ -42,7 +42,7 @@ public class LoadingScreenSystem : MonoBehaviour {
     }
 
     void OnFirstLevelLoaded() {
-        _isFirstLevelLoaded = true;
+        // _isFirstLevelLoaded = true;
     }
 
     IEnumerator Loading(int sceneNo) {

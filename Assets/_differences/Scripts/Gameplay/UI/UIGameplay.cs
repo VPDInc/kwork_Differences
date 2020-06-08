@@ -49,8 +49,6 @@ public class UIGameplay : MonoBehaviour {
     }
     
     public bool IsOverlap(Vector2 mousePos, out Point outPoint) {
-        // TODO: Check if click on picture
-        
         var raycast = DiffUtils.RaycastMouse(mousePos);
         if (raycast.gameObject != null) {
             var image = raycast.gameObject.GetComponent<Image>();
@@ -71,6 +69,19 @@ public class UIGameplay : MonoBehaviour {
         }
 
         outPoint = default;
+        return false;
+    }
+    
+    public bool IsOverImage(Vector3 mousePos) {
+        var raycast = DiffUtils.RaycastMouse(mousePos);
+        if (raycast.gameObject != null) {
+            var images = _currentImages;
+            if (raycast.gameObject.Equals(images.Item1.gameObject))
+                return true;
+            if (raycast.gameObject.Equals(images.Item2.gameObject))
+                return true;
+        }
+
         return false;
     }
 

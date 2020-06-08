@@ -22,6 +22,9 @@ public class GameplayHandler : MonoBehaviour {
     readonly List<PictureResult> _pictureResults = new List<PictureResult>();
     Data[] _levelsData;
     int _currentPictureResult = 0;
+    Vector3 _startPos;
+
+    const float SWIPE_DETECTION_LEN = 20;
     
     void Start() {
         _timer.Expired += OnTimerExpired;
@@ -79,10 +82,18 @@ public class GameplayHandler : MonoBehaviour {
     void Update() {
         if (!IsStarted)
             return;
+        if (Input.GetMouseButtonDown(0))
+            _startPos = Input.mousePosition;
+
 
         var mousePos = Input.mousePosition;
-        // TODO: Check swipe
         if (Input.GetMouseButtonUp(0)) {
+            if ((_startPos - Input.mousePosition).magnitude > SWIPE_DETECTION_LEN)
+                return;
+            
+            if (!_uiGameplay.IsOverImage(mousePos))
+                return;
+            
             if (_uiGameplay.IsOverlap(mousePos, out var point)) {
                 _points.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
