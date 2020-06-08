@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+
+using Airion.Extensions;
 
 using Doozy.Engine.UI;
 
@@ -8,12 +11,17 @@ using UnityEngine.UI;
 using Zenject;
 
 public class UIGameplay : MonoBehaviour {
+    public event Action Initialized;
+    public event Action<Point> PointOpened; 
+    public (Image, Image) CurrentImages => _currentImages;
+    public Point[] ClosedPoints => _points.ToArray();
+    
     [SerializeField] Image _image1Hor = default;
     [SerializeField] Image _image2Hor = default;
     [SerializeField] Image _image1Vert = default;
     [SerializeField] Image _image2Vert = default;
     [SerializeField] GameObject _diffVisualPrefab = default;
-    [SerializeField] UIDiffHelper _helper = default;
+    [SerializeField] UIPointsBar _helper = default;
     [SerializeField] UIView _view = default;
     
     [Inject] ImagesLoader _loader = default;
@@ -21,21 +29,28 @@ public class UIGameplay : MonoBehaviour {
     readonly List<Point> _points = new List<Point>();
 
     Data _data;
-    int _pointsCount;
-    int _currentPointsFound = 0;
     (Image, Image) _currentImages;
 
     public void Initialize(Data levelData) {
         _data = levelData;
+        // TODO: Move in to GameplayHandler
         _loader.LoadImagesAndCreateSprite(levelData.Image1Path, levelData.Image2Path, OnLoaded);
     }
 
     public void Complete() {
-        //TODO: Make event
         _view.Hide();
     }
     
+    public void Clear() {
+        _image1Hor.transform.DestroyAllChildren();
+        _image2Hor.transform.DestroyAllChildren();
+        _image1Vert.transform.DestroyAllChildren();
+        _image2Vert.transform.DestroyAllChildren();
+    }
+    
     public bool IsOverlap(Vector2 mousePos, out Point outPoint) {
+        // TODO: Check if click on picture
+        
         var raycast = DiffUtils.RaycastMouse(mousePos);
         if (raycast.gameObject != null) {
             var image = raycast.gameObject.GetComponent<Image>();
@@ -47,6 +62,7 @@ public class UIGameplay : MonoBehaviour {
                             SelectDifference(point);
                             _points.RemoveAt(index);
                             outPoint = point;
+                            PointOpened?.Invoke(point);
                             return true;
                         }
                     }
@@ -60,6 +76,10 @@ public class UIGameplay : MonoBehaviour {
 
     void OnLoaded(Sprite im1, Sprite im2) {
         Fill(im1, im2, _data);
+        _points.Clear();
+        _points.AddRange(_data.Points);
+        _helper.SetPointsAmount(_points.Count);
+        Initialized?.Invoke();
     }
     
     void Fill(Sprite image1, Sprite image2, Data levelData) {
@@ -74,12 +94,7 @@ public class UIGameplay : MonoBehaviour {
 
         _currentImages.Item1.sprite = image1;
         _currentImages.Item2.sprite = image2;
-        _pointsCount = levelData.Points.Length;
-        _currentPointsFound = 0;
-        _points.Clear();
-        _points.AddRange(levelData.Points);
-        _helper.SetPointsAmount(_points.Count);
-        //TODO: Make event
+        
         _view.Show();
     }
 
@@ -90,7 +105,6 @@ public class UIGameplay : MonoBehaviour {
     }
 
     void SelectDifference(Point point) {
-        _currentPointsFound++;
         _helper.Open(point.Number);
         CreateDiffsVisual(point);
     }

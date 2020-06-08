@@ -1,15 +1,21 @@
 ﻿using System.Collections.Generic;
 
+using Doozy.Engine.UI;
+
 using UnityEngine;
 
 using Zenject;
 
 public class GameplayHandler : MonoBehaviour {
     [SerializeField] float _duration = 10f;
+    [SerializeField] float _addTimeAfterOver = 25f;
+    [SerializeField] UIView _timeExpiredView = default;
     
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
     [Inject] GameplayController _gameplayController = default;
+    [Inject] MissClickManager _missClickManager = default;
+    [Inject] UIAimTip _aimTip = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _points = new List<Point>();
@@ -30,8 +36,19 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnInitialized(Data[] levelsData) {
+        _timeExpiredView.Hide(true);
         _levelsData = levelsData;
         //TODO: Start pictures loading
+    }
+
+    public void ExitClick() {
+        StopGameplay(false);
+    }
+
+    public void AddTimeClick() {
+        _timer.Launch(_addTimeAfterOver);
+        _aimTip.ShowTip();
+        _timeExpiredView.Hide();
     }
 
     void OnBegan() {
@@ -39,7 +56,6 @@ public class GameplayHandler : MonoBehaviour {
         // if pucteures not loading
         //    show blocker
         //     wait
-        
         
         _pictureResults.Clear();
         _currentPictureResult = 0;
@@ -55,7 +71,9 @@ public class GameplayHandler : MonoBehaviour {
             });
         }
         
-        StartGameplay(_levelsData[_currentPictureResult]);
+        FillGameplay(_levelsData[_currentPictureResult]);
+        IsStarted = true;
+        _timer.Launch(_duration);
     }
 
     void Update() {
@@ -68,26 +86,27 @@ public class GameplayHandler : MonoBehaviour {
                 _points.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
                 if (_points.Count == 0) {
-                    // TODO: Switch level
-                    StopGameplay(true);
+                    _currentPictureResult++;
+                    if (_currentPictureResult == _levelsData.Length)
+                        StopGameplay(true);
+                    else
+                        FillGameplay(_levelsData[_currentPictureResult]);
                 }
+            } else {
+                _missClickManager.Catch();
             }
         }
     }
 
-    void StartGameplay(Data levelData) {
-        //Clear old points
+    void FillGameplay(Data levelData) {
+        _uiGameplay.Clear();
         _points.Clear();
         _points.AddRange(levelData.Points);
         _uiGameplay.Initialize(levelData);
-        // TODO: Start it only after images loading in UiGameplay
-        _timer.Launch(_duration);
-        IsStarted = true;
-        // TODO: Show ui and block if need
-        // TODO: Coroutine
     }
 
     void StopGameplay(bool isWin) {
+        _missClickManager.Reset();
         IsStarted = false;
         _timer.Stop();
         _uiGameplay.Complete();
@@ -95,6 +114,6 @@ public class GameplayHandler : MonoBehaviour {
     }
     
     void OnTimerExpired() {
-        StopGameplay(false);
+        _timeExpiredView.Show();
     }
 }

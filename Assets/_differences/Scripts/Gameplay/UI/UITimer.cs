@@ -11,8 +11,11 @@ public class UITimer : MonoBehaviour {
     public event Action Expired;
     
     [SerializeField] TextMeshProUGUI _timerText = default;
+    [SerializeField] UIMissClickWarning _uiMissClickWarningPrefab = default;
 
     AsyncFunc<float> _timerRoutine;
+
+    float _timeExpireTimestamp;
 
     void Awake() {
         _timerRoutine = new AsyncFunc<float>(this, TimerRoutine);
@@ -28,10 +31,11 @@ public class UITimer : MonoBehaviour {
 
     IEnumerator TimerRoutine(float duration) {
         UpdateTimer(duration);
-        var timestamp = Time.time;
+        _timeExpireTimestamp = Time.time + duration;
 
-        while (Time.time - timestamp <= duration) {
-            UpdateTimer(duration - (Time.time - timestamp));
+        while (_timeExpireTimestamp - Time.time >= 0) {
+            var time = Mathf.Max(0, _timeExpireTimestamp - Time.time);
+            UpdateTimer(time);
             yield return null;
         }
 
@@ -41,5 +45,16 @@ public class UITimer : MonoBehaviour {
 
     void UpdateTimer(float time) {
         _timerText.text = time.ToString("F0");
+    }
+
+    public void ReduceTime(float reduceTime) {
+        var missClick = Instantiate(_uiMissClickWarningPrefab, transform);
+        missClick.SetReducedTimeAndRun(reduceTime);
+        
+        _timeExpireTimestamp -= reduceTime;
+    }
+
+    public void AddTime(float timeBoost) {
+        _timeExpireTimestamp += timeBoost;
     }
 }
