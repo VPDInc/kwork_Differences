@@ -129,9 +129,54 @@ public class UIGameplay : MonoBehaviour {
     }
 
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
+        switch (point.Shape) {
+            case Shape.Rectangle:
+                return TestRectangle(pixel, point);
+            case Shape.Circle:
+                return TestEllipse(pixel, point.Center, point.Width, point.Height, point.Rotation);
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    bool TestRectangle(Vector2 pixel, Point point) {
         var rect = new Rect(Vector2.zero, new Vector2(point.Width, point.Height));
         rect.center = point.Center;
-        return rect.Contains(pixel);
+        return Contains(rect, point.Rotation, pixel);
+    }
+
+    bool Contains(Rect rect, float rectAngle, Vector2 point) {
+        // rotate around rectangle center by -rectAngle
+        var s = Mathf.Sin(-rectAngle * Mathf.Deg2Rad);
+        var c = Mathf.Cos(-rectAngle * Mathf.Deg2Rad);
+
+        // set origin to rect center
+        var newPoint = point - rect.center;
+        // rotate
+        newPoint = new Vector2(newPoint.x * c - newPoint.y * s, newPoint.x * s + newPoint.y * c);
+        // put origin back
+        newPoint = newPoint + rect.center;
+
+        // check if our transformed point is in the rectangle, which is no longer
+        // rotated relative to the point
+
+        return newPoint.x >= rect.xMin && newPoint.x <= rect.xMax && newPoint.y >= rect.yMin && newPoint.y <= rect.yMax;
+    }
+
+    bool TestEllipse(Vector2 point, Vector2 center, float width, float height, float angle) {
+        // #tests if a point[xp,yp] is within
+        // #boundaries defined by the ellipse
+        // #of center[x,y], diameter d D, and tilted at angle
+        var cosa = Mathf.Cos(angle * Mathf.Deg2Rad);
+        var sina = Mathf.Sin(angle * Mathf.Deg2Rad);
+        var widthD = (width * 0.5f) * (width * 0.5f);
+        var heightD = (height * 0.5f) * (height * 0.5f);
+
+        var a = Mathf.Pow(cosa * (point.x - center.x) + sina * (point.y - center.y), 2);
+        var b = Mathf.Pow(sina * (point.x - center.x) - cosa * (point.y - center.y), 2);
+        var ellipse = (a / widthD) + (b / heightD);
+
+        return ellipse <= 1;
     }
 
     void SelectDifference(Point point) {
