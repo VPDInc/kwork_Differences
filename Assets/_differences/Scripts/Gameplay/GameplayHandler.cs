@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-
-using Doozy.Engine.UI;
+﻿using System.Collections;
+using System.Collections.Generic;
 
 using UnityEngine;
 
@@ -22,6 +21,7 @@ public class GameplayHandler : MonoBehaviour {
     Data[] _levelsData;
     int _currentPictureResult = 0;
     Vector3 _startPos;
+    (Sprite, Sprite)[] _loadedSprites;
 
     const float SWIPE_DETECTION_LEN = 20;
     
@@ -40,7 +40,20 @@ public class GameplayHandler : MonoBehaviour {
     void OnInitialized(Data[] levelsData) {
         _uiGameplay.HideTimeExpired(true);
         _levelsData = levelsData;
-        //TODO: Start pictures loading
+        // TODO HANDLE IT
+        StartCoroutine(LoadSprites());
+    }
+
+    IEnumerator LoadSprites() {
+        _loadedSprites = new (Sprite, Sprite)[_levelsData.Length];
+        for (var index = 0; index < _levelsData.Length; index++) {
+            var data = _levelsData[index];
+            var async1 = Resources.LoadAsync<Sprite>("Images/" + data.Image1Path);
+            var async2 = Resources.LoadAsync<Sprite>("Images/" + data.Image2Path);
+            yield return new WaitWhile(() => !async1.isDone && !async2.isDone);
+            _loadedSprites[index].Item1 = (Sprite) async1.asset;
+            _loadedSprites[index].Item2 = (Sprite) async2.asset;
+        }
     }
 
     public void ExitClick() {
@@ -73,9 +86,9 @@ public class GameplayHandler : MonoBehaviour {
             });
         }
         
-        FillGameplay(_levelsData[_currentPictureResult]);
-        IsStarted = true;
         _timer.Launch(_duration);
+        _uiGameplay.Show();
+        FillGameplay();
     }
 
     void Update() {
@@ -101,7 +114,7 @@ public class GameplayHandler : MonoBehaviour {
                     if (_currentPictureResult == _levelsData.Length)
                         StopGameplay(true);
                     else
-                        FillGameplay(_levelsData[_currentPictureResult]);
+                        FillGameplay();
                 }
             } else {
                 _missClickManager.Catch();
@@ -109,11 +122,40 @@ public class GameplayHandler : MonoBehaviour {
         }
     }
 
-    void FillGameplay(Data levelData) {
+    void FillGameplay() {
+        // TODO: Coroutine. Stop timer
+        // Wait for images loading
+        // Continue timer
+        // TODO HANDLE IT
+        StartCoroutine(FillAndStartGameplay());
+    }
+
+    bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
+                                    _loadedSprites[_currentPictureResult].Item2 != null;
+    
+    IEnumerator FillAndStartGameplay() {
+        _timer.Pause();
+        IsStarted = false;
+
+        
+        var levelData = _levelsData[_currentPictureResult];
         _uiGameplay.Clear();
         _points.Clear();
         _points.AddRange(levelData.Points);
-        _uiGameplay.Initialize(levelData);
+
+
+
+        if (!IsCurrentSpritesLoaded)
+            _uiGameplay.ShowWaitWindow();
+        
+        yield return new WaitWhile(()=> !IsCurrentSpritesLoaded);
+        
+        _uiGameplay.HideWaitWindow();
+
+        _uiGameplay.Initialize(levelData, _loadedSprites[_currentPictureResult]);
+
+        IsStarted = true;
+        _timer.Resume();
     }
 
     void StopGameplay(bool isWin) {

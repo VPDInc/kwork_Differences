@@ -24,22 +24,41 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] UIPointsBar _helper = default;
     [SerializeField] UIView _mainView = default;
     [SerializeField] UIView _timeExpiredView = default;
+    [SerializeField] UIView _loadingView = default;
     
-    [Inject] ImagesLoader _loader = default;
+    // [Inject] ImagesLoader _loader = default;
     
     readonly List<Point> _points = new List<Point>();
 
     Data _data;
     (Image, Image) _currentImages;
 
-    public void Initialize(Data levelData) {
+    public void Initialize(Data levelData, (Sprite, Sprite) sprites) {
         _data = levelData;
+        Fill(sprites.Item1, sprites.Item2, _data);
+        _points.Clear();
+        _points.AddRange(_data.Points);
+        _helper.SetPointsAmount(_points.Count);
+        Initialized?.Invoke();
+        
         // TODO: Move in to GameplayHandler
-        _loader.LoadImagesAndCreateSprite(levelData.Image1Path, levelData.Image2Path, OnLoaded);
+        // _loader.LoadImagesAndCreateSprite(levelData.Image1Path, levelData.Image2Path, OnLoaded);
+    }
+    
+    public void ShowWaitWindow() {
+        _loadingView.Show();
+    }
+
+    public void HideWaitWindow() {
+        _loadingView.Hide();
     }
 
     public void Complete() {
         _mainView.Hide();
+    }
+
+    public void Show() {
+        _mainView.Show();
     }
     
     public void Clear() {
@@ -94,13 +113,13 @@ public class UIGameplay : MonoBehaviour {
         _timeExpiredView.Hide(isInstance);
     }
     
-    void OnLoaded(Sprite im1, Sprite im2) {
-        Fill(im1, im2, _data);
-        _points.Clear();
-        _points.AddRange(_data.Points);
-        _helper.SetPointsAmount(_points.Count);
-        Initialized?.Invoke();
-    }
+    // void OnLoaded(Sprite im1, Sprite im2) {
+        // Fill(im1, im2, _data);
+        // _points.Clear();
+        // _points.AddRange(_data.Points);
+        // _helper.SetPointsAmount(_points.Count);
+        // Initialized?.Invoke();
+    // }
     
     void Fill(Sprite image1, Sprite image2, Data levelData) {
         _image1Hor.transform.parent.parent.gameObject.SetActive(false);
@@ -114,8 +133,6 @@ public class UIGameplay : MonoBehaviour {
 
         _currentImages.Item1.sprite = image1;
         _currentImages.Item2.sprite = image2;
-        
-        _mainView.Show();
     }
 
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
