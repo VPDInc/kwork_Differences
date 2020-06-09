@@ -13277,6 +13277,8 @@ MonoBehaviour:
   _mainView: {fileID: 1526731829}
   _timeExpiredView: {fileID: 2009132001}
   _loadingView: {fileID: 134137771}
+  _addTimeButton: {fileID: 1246087295}
+  _addTimeCost: 900
 --- !u!114 &1526731834
 MonoBehaviour:
   m_ObjectHideFlags: 0

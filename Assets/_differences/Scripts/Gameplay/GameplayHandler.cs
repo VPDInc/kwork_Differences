@@ -1,19 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 
+using Airion.Currency;
+
 using UnityEngine;
 
 using Zenject;
 
 public class GameplayHandler : MonoBehaviour {
+    public bool IsEnoughToAddTime => _soft.IsEnough(_addTimeCost);
+    
     [SerializeField] float _duration = 10f;
     [SerializeField] float _addTimeAfterOver = 25f;
+    [SerializeField] int _addTimeCost = 900;
     
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
     [Inject] GameplayController _gameplayController = default;
     [Inject] MissClickManager _missClickManager = default;
     [Inject] UIAimTip _aimTip = default;
+    [Inject] CurrencyManager _currencyManager = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _points = new List<Point>();
@@ -26,6 +32,7 @@ public class GameplayHandler : MonoBehaviour {
     Coroutine _gameplayFillingRoutine;
     bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
                                    _loadedSprites[_currentPictureResult].Item2 != null;
+    Currency _soft;
 
     const float SWIPE_DETECTION_LEN = 20;
     
@@ -33,6 +40,7 @@ public class GameplayHandler : MonoBehaviour {
         _timer.Expired += OnTimerExpired;
         _gameplayController.Began += OnBegan;
         _gameplayController.Initialized += OnInitialized;
+        _soft = _currencyManager.GetCurrency("Soft");
     }
 
     void OnDestroy() {
@@ -80,6 +88,7 @@ public class GameplayHandler : MonoBehaviour {
         _timer.Launch(_addTimeAfterOver);
         _aimTip.ShowTip();
         _uiGameplay.HideTimeExpired();
+        _soft.Spend(_addTimeCost);
     }
     
     void FillGameplay() {
@@ -153,8 +162,6 @@ public class GameplayHandler : MonoBehaviour {
         _uiGameplay.Clear();
         _points.Clear();
         _points.AddRange(levelData.Points);
-
-
 
         if (!IsCurrentSpritesLoaded)
             _uiGameplay.ShowWaitWindow();

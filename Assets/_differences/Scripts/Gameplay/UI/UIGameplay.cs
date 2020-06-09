@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Airion.Currency;
 using Airion.Extensions;
 
 using Doozy.Engine.UI;
 
 using UnityEngine;
 using UnityEngine.UI;
+
+using Zenject;
 
 public class UIGameplay : MonoBehaviour {
     public event Action Initialized;
@@ -23,7 +26,10 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] UIView _mainView = default;
     [SerializeField] UIView _timeExpiredView = default;
     [SerializeField] UIView _loadingView = default;
-    
+    [SerializeField] Button _addTimeButton = default;
+
+    [Inject] GameplayHandler _handler = default;
+
     Data _data;
     (Image, Image) _currentImages;
     
@@ -100,6 +106,7 @@ public class UIGameplay : MonoBehaviour {
 
     public void ShowTimeExpired() {
         _timeExpiredView.Show();
+        _addTimeButton.interactable = _handler.IsEnoughToAddTime;
     }
 
     public void HideTimeExpired(bool isInstance = false) {
