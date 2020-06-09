@@ -223,7 +223,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_Sprite: {fileID: 21300000, guid: 15dd4feeef2a2044fa81f5aead5c5355, type: 3}
-  m_Type: 1
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -250,3 +250,5 @@ MonoBehaviour:
   _numberText: {fileID: 3512527647392903628}
   _notSelected: {r: 0, g: 0, b: 0, a: 0.53333336}
   _selected: {r: 1, g: 0, b: 0, a: 0.5372549}
+  _rectangle: {fileID: 21300000, guid: 15dd4feeef2a2044fa81f5aead5c5355, type: 3}
+  _circle: {fileID: 21300000, guid: f61b5dca646ed404792eb7c860b6ff57, type: 3}

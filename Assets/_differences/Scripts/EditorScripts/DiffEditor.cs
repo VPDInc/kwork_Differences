@@ -51,6 +51,19 @@ public class DiffEditor : MonoBehaviour {
         }
         get => _currentSelectedHandler?.Height ?? 0;
     }
+
+    [ShowInInspector, ShowIf(nameof(IsPlaymode))]
+    Shape Shape {
+        set {
+            _shape = value;
+            if (IsSelected)
+                SetShape(_currentSelectedHandler.Id, _shape);
+        }
+
+        get => _shape;
+    }
+
+    Shape _shape = Shape.Rectangle;
     
     #region Unity Messages
 
@@ -87,13 +100,13 @@ public class DiffEditor : MonoBehaviour {
                         var isInHeightBounds = 0 <= imageCoords.y && imageCoords.y <= imageHeight;
 
                         if (isInHeightBounds && isInWidthBounds) {
-                            CreateHandler(localPoint, imageCoords, image, _currentHandlerId);
+                            CreateHandler(localPoint, imageCoords, image, _currentHandlerId, Shape);
                             var images = _config.GetImages(_currentOrientation);
                             var secondImage = image == images.Item1 ? images.Item2 : images.Item1;
                             var secondLocalPoint = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
                                 secondImage.GetComponent<RectTransform>());
 
-                            CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId);
+                            CreateHandler(secondLocalPoint, imageCoords, secondImage, _currentHandlerId, Shape);
                             _currentHandlerId++;
                             
                             UpdateHandlersNum();
@@ -130,6 +143,11 @@ public class DiffEditor : MonoBehaviour {
     void SetHeight(int id, float value) {
         var handlers = _handlers.Where(handler => handler.Id == id);
         handlers.ForEach(h => h.SetHeight(value));
+    }
+    
+    void SetShape(int id, Shape shape) {
+        var handlers = _handlers.Where(handler => handler.Id == id);
+        handlers.ForEach(h => h.SetShape(shape));
     }
     
     [Button, ShowIf(nameof(IsSelected))]
@@ -207,17 +225,18 @@ public class DiffEditor : MonoBehaviour {
         handlers.ForEach(h => h.IsSelected = true);
     }
     
-    void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id, float width = 0, float height = 0) {
+    void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id, Shape shape, float width = 0, float height = 0) {
         var handler = Instantiate(_config.DifHandlerPrefab, image.transform);
         var handlerRect = handler.GetComponent<RectTransform>();
         handlerRect.localPosition = pos;
         handler.ImageSpaceCoordinates = coords;
         handler.Id = id;
         _handlers.Add(handler);
-        if (width != 0 && height != 0) {
+        if (width > 0 && height > 0) {
            handler.SetHeight(height);
            handler.SetWidth(width);
         }
+        handler.SetShape(shape);
     }
 
     Vector2 GetRectSpaceCoordinate(RectTransform imageRect, Vector2 localPoint) {
@@ -276,14 +295,14 @@ public class DiffEditor : MonoBehaviour {
         var localPos1 =
             DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item1, images.Item1.GetComponent<RectTransform>());
 
-        CreateHandler(localPos1, point.Center, images.Item1, _currentHandlerId, point.Width, point.Height);
+        CreateHandler(localPos1, point.Center, images.Item1, _currentHandlerId, point.Shape, point.Width, point.Height);
         
 
         var localPos2 =
             DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item2, images.Item2.GetComponent<RectTransform>());
 
 
-        CreateHandler(localPos2, point.Center, images.Item2, _currentHandlerId, point.Width, point.Height);
+        CreateHandler(localPos2, point.Center, images.Item2, _currentHandlerId, point.Shape, point.Width, point.Height);
 
         UpdateHandlersNum();
         
@@ -312,7 +331,8 @@ public class DiffEditor : MonoBehaviour {
                 Center = handler.ImageSpaceCoordinates,
                 Width = handler.Width,
                 Height = handler.Height,
-                Number = handler.Number
+                Number = handler.Number,
+                Shape = handler.Shape
             });
         }
 

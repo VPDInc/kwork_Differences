@@ -1,4 +1,6 @@
-﻿using Sirenix.OdinInspector;
+﻿using System;
+
+using Sirenix.OdinInspector;
 
 using TMPro;
 
@@ -13,6 +15,7 @@ public class DiffHandler : MonoBehaviour {
     public float Height { get; private set; } = DEFAULT_SIZE;
     [ShowInInspector, ReadOnly]
     public float Width { get; private set; } = DEFAULT_SIZE;
+    public Shape Shape { get; private set; } = Shape.Rectangle;
 
     public bool IsSelected {
         set {
@@ -36,6 +39,8 @@ public class DiffHandler : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _numberText = default;
     [SerializeField] Color _notSelected = Color.black;
     [SerializeField] Color _selected = Color.red;
+    [SerializeField] Sprite _rectangle = default;
+    [SerializeField] Sprite _circle = default;
 
     bool _isSelected = false;
     int _number = 0;
@@ -67,5 +72,19 @@ public class DiffHandler : MonoBehaviour {
         var sizeDelta = visualRect.sizeDelta;
         sizeDelta.Set(visualRect.sizeDelta.x, imageSpace);
         visualRect.sizeDelta = sizeDelta;
+    }
+
+    public void SetShape(Shape shape) {
+        Shape = shape;
+        switch (shape) {
+            case Shape.Rectangle:
+                _visual.sprite = _rectangle;
+                break;
+            case Shape.Circle:
+                _visual.sprite = _circle;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException(nameof(shape), shape, null);
+        }
     }
 }

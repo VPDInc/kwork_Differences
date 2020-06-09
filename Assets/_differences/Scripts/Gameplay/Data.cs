@@ -16,9 +16,10 @@ public struct Point {
     public float Width;
     public float Height;
     public int Number;
+    public Shape Shape;
 
     public override string ToString() {
-        return $"Center: {Center} Width: {Width} Height: {Height}";
+        return $"Center: {Center} Width: {Width} Height: {Height} Shape: {Shape}";
     }
 }
 
