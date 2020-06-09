@@ -73,6 +73,7 @@ public class UIAimTip : Tip {
         handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, _currentImages.Item1.sprite), 
             DiffUtils.PixelHeightToRect(point.Height, image1Rect, _currentImages.Item1.sprite));
         handlerRect.localPosition = pos;
+        handler.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
         
         var handler2 = Instantiate(_aimPrefab);
         handler2.Id = point.Number;
@@ -85,6 +86,7 @@ public class UIAimTip : Tip {
         handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, _currentImages.Item2.sprite), 
             DiffUtils.PixelHeightToRect(point.Height, image2Rect, _currentImages.Item2.sprite));
         handlerRect2.localPosition = pos2;
+        handler2.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
     }
 
     void OnPointOpened(Point point) {

@@ -159,6 +159,7 @@ public class UIGameplay : MonoBehaviour {
         handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, _currentImages.Item1.sprite), 
             DiffUtils.PixelHeightToRect(point.Height, image1Rect, _currentImages.Item1.sprite));
         handlerRect.localPosition = pos;
+        handler.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
         
         var handler2 = Instantiate(diffPrefab);
         var handlerRect2 = handler2.GetComponent<RectTransform>();
@@ -169,5 +170,6 @@ public class UIGameplay : MonoBehaviour {
         handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, _currentImages.Item2.sprite), 
             DiffUtils.PixelHeightToRect(point.Height, image2Rect, _currentImages.Item2.sprite));
         handlerRect2.localPosition = pos2;
+        handler2.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
     }
 }
