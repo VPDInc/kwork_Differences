@@ -29,21 +29,7 @@ public class UITimer : MonoBehaviour {
     public void Stop() {
         _timerRoutine.Stop();
     }
-
-    IEnumerator TimerRoutine(float duration) {
-        UpdateTimer(duration);
-        _timeExpireTimestamp = Time.time + duration;
-
-        while (_timeExpireTimestamp - Time.time >= 0) {
-            var time = Mathf.Max(0, _timeExpireTimestamp - Time.time);
-            UpdateTimer(time);
-            yield return null;
-        }
-
-        UpdateTimer(0);
-        Expired?.Invoke();
-    }
-
+    
     void UpdateTimer(float time) {
         _timerText.text = time.ToString("F0");
     }
@@ -67,4 +53,19 @@ public class UITimer : MonoBehaviour {
     public void Resume() {
         _timerRoutine.Start(_timeLeft);
     }
+    
+    IEnumerator TimerRoutine(float duration) {
+        UpdateTimer(duration);
+        _timeExpireTimestamp = Time.time + duration;
+
+        while (_timeExpireTimestamp - Time.time >= 0) {
+            var time = Mathf.Max(0, _timeExpireTimestamp - Time.time);
+            UpdateTimer(time);
+            yield return null;
+        }
+
+        UpdateTimer(0);
+        Expired?.Invoke();
+    }
+
 }

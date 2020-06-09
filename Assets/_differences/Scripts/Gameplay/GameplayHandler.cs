@@ -24,6 +24,8 @@ public class GameplayHandler : MonoBehaviour {
     (Sprite, Sprite)[] _loadedSprites;
     Coroutine _spriteLoaderRoutine;
     Coroutine _gameplayFillingRoutine;
+    bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
+                                   _loadedSprites[_currentPictureResult].Item2 != null;
 
     const float SWIPE_DETECTION_LEN = 20;
     
@@ -38,61 +40,7 @@ public class GameplayHandler : MonoBehaviour {
         _gameplayController.Began -= OnBegan;
         _gameplayController.Initialized -= OnInitialized;
     }
-
-    void OnInitialized(Data[] levelsData) {
-        _uiGameplay.HideTimeExpired(true);
-        _levelsData = levelsData;
-        
-        if (_spriteLoaderRoutine != null)
-            StopCoroutine(_spriteLoaderRoutine);
-        _spriteLoaderRoutine = StartCoroutine(LoadSprites());
-    }
-
-    IEnumerator LoadSprites() {
-        _loadedSprites = new (Sprite, Sprite)[_levelsData.Length];
-        for (var index = 0; index < _levelsData.Length; index++) {
-            var data = _levelsData[index];
-            var async1 = Resources.LoadAsync<Sprite>("Images/" + data.Image1Path);
-            var async2 = Resources.LoadAsync<Sprite>("Images/" + data.Image2Path);
-            yield return new WaitWhile(() => !async1.isDone && !async2.isDone);
-            _loadedSprites[index].Item1 = (Sprite) async1.asset;
-            _loadedSprites[index].Item2 = (Sprite) async2.asset;
-
-            var diff = _pictureResults[index];
-            diff.Picture = _loadedSprites[index].Item1;
-            _pictureResults[index] = diff;
-        }
-    }
-
-    public void ExitClick() {
-        StopGameplay(false);
-    }
-
-    public void AddTimeClick() {
-        _timer.Launch(_addTimeAfterOver);
-        _aimTip.ShowTip();
-        _uiGameplay.HideTimeExpired();
-    }
-
-    void OnBegan() {
-        _pictureResults.Clear();
-        _currentPictureResult = 0;
-        foreach (var data in _levelsData) {
-            var points = new DifferencePoint[data.Points.Length];
-            for (int i = 0; i < data.Points.Length; i++) {
-                points[i].IsOpen = false;
-            } 
-            
-            _pictureResults.Add(new PictureResult() {
-                DifferencePoints = points
-            });
-        }
-        
-        _timer.Launch(_duration);
-        _uiGameplay.Show();
-        FillGameplay();
-    }
-
+    
     void Update() {
         if (!IsStarted)
             return;
@@ -124,14 +72,77 @@ public class GameplayHandler : MonoBehaviour {
         }
     }
 
+    public void ExitClick() {
+        StopGameplay(false);
+    }
+
+    public void AddTimeClick() {
+        _timer.Launch(_addTimeAfterOver);
+        _aimTip.ShowTip();
+        _uiGameplay.HideTimeExpired();
+    }
+    
     void FillGameplay() {
         if (_gameplayFillingRoutine != null) 
             StopCoroutine(_gameplayFillingRoutine);
         _gameplayFillingRoutine = StartCoroutine(FillAndStartGameplay());
     }
 
-    bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
-                                    _loadedSprites[_currentPictureResult].Item2 != null;
+    void StopGameplay(bool isWin) {
+        _missClickManager.Reset();
+        IsStarted = false;
+        _timer.Stop();
+        _uiGameplay.Complete();
+        _gameplayController.StopLevel(isWin, _pictureResults.ToArray());
+    }
+
+    void OnBegan() {
+        _pictureResults.Clear();
+        _currentPictureResult = 0;
+        foreach (var data in _levelsData) {
+            var points = new DifferencePoint[data.Points.Length];
+            for (int i = 0; i < data.Points.Length; i++) {
+                points[i].IsOpen = false;
+            } 
+            
+            _pictureResults.Add(new PictureResult() {
+                DifferencePoints = points
+            });
+        }
+        
+        _timer.Launch(_duration);
+        _uiGameplay.Show();
+        FillGameplay();
+    }
+
+    void OnTimerExpired() {
+        _uiGameplay.ShowTimeExpired();
+    }
+    
+    void OnInitialized(Data[] levelsData) {
+        _uiGameplay.HideTimeExpired(true);
+        _levelsData = levelsData;
+        
+        if (_spriteLoaderRoutine != null)
+            StopCoroutine(_spriteLoaderRoutine);
+        _spriteLoaderRoutine = StartCoroutine(LoadSprites());
+    }
+    
+    IEnumerator LoadSprites() {
+        _loadedSprites = new (Sprite, Sprite)[_levelsData.Length];
+        for (var index = 0; index < _levelsData.Length; index++) {
+            var data = _levelsData[index];
+            var async1 = Resources.LoadAsync<Sprite>("Images/" + data.Image1Path);
+            var async2 = Resources.LoadAsync<Sprite>("Images/" + data.Image2Path);
+            yield return new WaitWhile(() => !async1.isDone && !async2.isDone);
+            _loadedSprites[index].Item1 = (Sprite) async1.asset;
+            _loadedSprites[index].Item2 = (Sprite) async2.asset;
+
+            var diff = _pictureResults[index];
+            diff.Picture = _loadedSprites[index].Item1;
+            _pictureResults[index] = diff;
+        }
+    }
     
     IEnumerator FillAndStartGameplay() {
         _timer.Pause();
@@ -156,17 +167,5 @@ public class GameplayHandler : MonoBehaviour {
 
         IsStarted = true;
         _timer.Resume();
-    }
-
-    void StopGameplay(bool isWin) {
-        _missClickManager.Reset();
-        IsStarted = false;
-        _timer.Stop();
-        _uiGameplay.Complete();
-        _gameplayController.StopLevel(isWin, _pictureResults.ToArray());
-    }
-    
-    void OnTimerExpired() {
-        _uiGameplay.ShowTimeExpired();
     }
 }

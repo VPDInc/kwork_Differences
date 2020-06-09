@@ -8,8 +8,6 @@ using Doozy.Engine.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-using Zenject;
-
 public class UIGameplay : MonoBehaviour {
     public event Action Initialized;
     public event Action<Point> PointOpened; 
@@ -26,12 +24,10 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] UIView _timeExpiredView = default;
     [SerializeField] UIView _loadingView = default;
     
-    // [Inject] ImagesLoader _loader = default;
-    
-    readonly List<Point> _points = new List<Point>();
-
     Data _data;
     (Image, Image) _currentImages;
+    
+    readonly List<Point> _points = new List<Point>();
 
     public void Initialize(Data levelData, (Sprite, Sprite) sprites) {
         _data = levelData;
@@ -40,9 +36,6 @@ public class UIGameplay : MonoBehaviour {
         _points.AddRange(_data.Points);
         _helper.SetPointsAmount(_points.Count);
         Initialized?.Invoke();
-        
-        // TODO: Move in to GameplayHandler
-        // _loader.LoadImagesAndCreateSprite(levelData.Image1Path, levelData.Image2Path, OnLoaded);
     }
     
     public void ShowWaitWindow() {
@@ -112,14 +105,6 @@ public class UIGameplay : MonoBehaviour {
     public void HideTimeExpired(bool isInstance = false) {
         _timeExpiredView.Hide(isInstance);
     }
-    
-    // void OnLoaded(Sprite im1, Sprite im2) {
-        // Fill(im1, im2, _data);
-        // _points.Clear();
-        // _points.AddRange(_data.Points);
-        // _helper.SetPointsAmount(_points.Count);
-        // Initialized?.Invoke();
-    // }
     
     void Fill(Sprite image1, Sprite image2, Data levelData) {
         _image1Hor.transform.parent.parent.gameObject.SetActive(false);
