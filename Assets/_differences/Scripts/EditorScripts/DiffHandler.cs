@@ -16,6 +16,7 @@ public class DiffHandler : MonoBehaviour {
     [ShowInInspector, ReadOnly]
     public float Width { get; private set; } = DEFAULT_SIZE;
     public Shape Shape { get; private set; } = Shape.Rectangle;
+    public float Rotation { get; private set; } = 0;
 
     public bool IsSelected {
         set {
@@ -86,5 +87,10 @@ public class DiffHandler : MonoBehaviour {
             default:
                 throw new ArgumentOutOfRangeException(nameof(shape), shape, null);
         }
+    }
+
+    public void SetRotation(float rotation) {
+        Rotation = rotation;
+        _visual.transform.rotation = Quaternion.Euler(0, 0, rotation);
     }
 }

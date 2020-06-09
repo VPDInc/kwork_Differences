@@ -51,6 +51,17 @@ public class DiffEditor : MonoBehaviour {
         }
         get => _currentSelectedHandler?.Height ?? 0;
     }
+    
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 179)]
+    float Rotation {
+        set {
+            if (_currentSelectedHandler == null)
+                return;
+
+            SetRotation(_currentSelectedHandler.Id, value);
+        }
+        get => _currentSelectedHandler?.Rotation ?? 0;
+    }
 
     [ShowInInspector, ShowIf(nameof(IsPlaymode))]
     Shape Shape {
@@ -150,6 +161,11 @@ public class DiffEditor : MonoBehaviour {
         handlers.ForEach(h => h.SetShape(shape));
     }
     
+    void SetRotation(int id, float value) {
+        var handlers = _handlers.Where(handler => handler.Id == id);
+        handlers.ForEach(h => h.SetRotation(value));
+    }
+    
     [Button, ShowIf(nameof(IsSelected))]
     void Delete() {
         var id = _currentSelectedHandler.Id;
@@ -225,7 +241,7 @@ public class DiffEditor : MonoBehaviour {
         handlers.ForEach(h => h.IsSelected = true);
     }
     
-    void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id, Shape shape, float width = 0, float height = 0) {
+    void CreateHandler(Vector2 pos, Vector2 coords, Image image, int id, Shape shape, float width = 0, float height = 0, float rotation = 0) {
         var handler = Instantiate(_config.DifHandlerPrefab, image.transform);
         var handlerRect = handler.GetComponent<RectTransform>();
         handlerRect.localPosition = pos;
@@ -237,6 +253,7 @@ public class DiffEditor : MonoBehaviour {
            handler.SetWidth(width);
         }
         handler.SetShape(shape);
+        handler.SetRotation(rotation);
     }
 
     Vector2 GetRectSpaceCoordinate(RectTransform imageRect, Vector2 localPoint) {
@@ -295,14 +312,14 @@ public class DiffEditor : MonoBehaviour {
         var localPos1 =
             DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item1, images.Item1.GetComponent<RectTransform>());
 
-        CreateHandler(localPos1, point.Center, images.Item1, _currentHandlerId, point.Shape, point.Width, point.Height);
+        CreateHandler(localPos1, point.Center, images.Item1, _currentHandlerId, point.Shape, point.Width, point.Height, point.Rotation);
         
 
         var localPos2 =
             DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item2, images.Item2.GetComponent<RectTransform>());
 
 
-        CreateHandler(localPos2, point.Center, images.Item2, _currentHandlerId, point.Shape, point.Width, point.Height);
+        CreateHandler(localPos2, point.Center, images.Item2, _currentHandlerId, point.Shape, point.Width, point.Height, point.Rotation);
 
         UpdateHandlersNum();
         
@@ -332,7 +349,8 @@ public class DiffEditor : MonoBehaviour {
                 Width = handler.Width,
                 Height = handler.Height,
                 Number = handler.Number,
-                Shape = handler.Shape
+                Shape = handler.Shape,
+                Rotation = handler.Rotation
             });
         }
 
