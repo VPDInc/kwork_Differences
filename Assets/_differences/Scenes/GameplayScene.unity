@@ -1162,6 +1162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _duration: 60
   _addTimeAfterOver: 25
+  _addTimeCost: 900
 --- !u!114 &525831335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13271,14 +13272,15 @@ MonoBehaviour:
   _image2Hor: {fileID: 610878283}
   _image1Vert: {fileID: 815225901}
   _image2Vert: {fileID: 1920635366}
-  _diffVisualPrefab: {fileID: 1564477320706914290, guid: a3d2f94163b5641e586b5752a8513d84,
+  _rectDiffVisual: {fileID: 1564477320706914290, guid: a3d2f94163b5641e586b5752a8513d84,
+    type: 3}
+  _circleDiffVisual: {fileID: 1564477320706914290, guid: 692470f890fb74e44a88542fbb4911e2,
     type: 3}
   _helper: {fileID: 1781289516}
   _mainView: {fileID: 1526731829}
   _timeExpiredView: {fileID: 2009132001}
   _loadingView: {fileID: 134137771}
   _addTimeButton: {fileID: 1246087295}
-  _addTimeCost: 900
 --- !u!114 &1526731834
 MonoBehaviour:
   m_ObjectHideFlags: 0

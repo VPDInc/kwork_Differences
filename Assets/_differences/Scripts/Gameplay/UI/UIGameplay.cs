@@ -21,7 +21,8 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] Image _image2Hor = default;
     [SerializeField] Image _image1Vert = default;
     [SerializeField] Image _image2Vert = default;
-    [SerializeField] GameObject _diffVisualPrefab = default;
+    [SerializeField] GameObject _rectDiffVisual = default;
+    [SerializeField] GameObject _circleDiffVisual = default;
     [SerializeField] UIPointsBar _helper = default;
     [SerializeField] UIView _mainView = default;
     [SerializeField] UIView _timeExpiredView = default;
@@ -139,7 +140,18 @@ public class UIGameplay : MonoBehaviour {
     }
     
     void CreateDiffsVisual(Point point) {
-        var handler = Instantiate(_diffVisualPrefab);
+        GameObject diffPrefab = null;
+        switch (point.Shape) {
+            case Shape.Rectangle:
+                diffPrefab = _rectDiffVisual;
+                break;
+            case Shape.Circle:
+                diffPrefab = _circleDiffVisual;
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+        var handler = Instantiate(diffPrefab);
         var handlerRect = handler.GetComponent<RectTransform>();
         var image1Rect = _currentImages.Item1.GetComponent<RectTransform>();
         var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item1, image1Rect);
@@ -148,7 +160,7 @@ public class UIGameplay : MonoBehaviour {
             DiffUtils.PixelHeightToRect(point.Height, image1Rect, _currentImages.Item1.sprite));
         handlerRect.localPosition = pos;
         
-        var handler2 = Instantiate(_diffVisualPrefab);
+        var handler2 = Instantiate(diffPrefab);
         var handlerRect2 = handler2.GetComponent<RectTransform>();
         var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item2,
             _currentImages.Item2.GetComponent<RectTransform>());
