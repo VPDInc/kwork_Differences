@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 using Zenject;
 
-public class UIAimTip : MonoBehaviour {
+public class UIAimTip : Tip {
     [SerializeField] AimVisual _aimPrefab = default;
 
     [Inject] UIGameplay _gameplay = default;
@@ -20,12 +20,14 @@ public class UIAimTip : MonoBehaviour {
 
     readonly List<AimVisual> _aims = new List<AimVisual>();
     
-    void Start() {
+    protected override void Start() {
+        base.Start();
         _gameplay.Initialized += OnInit;
         _gameplay.PointOpened += OnPointOpened;
     }
 
-    void OnDestroy() {
+    protected override void OnDestroy() {
+        base.OnDestroy();
         _gameplay.Initialized -= OnInit;
         _gameplay.PointOpened -= OnPointOpened;
     }
@@ -37,7 +39,8 @@ public class UIAimTip : MonoBehaviour {
         _aims.Clear();
     }
 
-    public void OnButtonClick() {
+    public override void OnButtonClick() {
+        base.OnButtonClick();
         ShowTip();
     }
 

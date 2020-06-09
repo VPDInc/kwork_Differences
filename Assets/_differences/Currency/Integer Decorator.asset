@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2e89f613592a34290a9ce36e338a44c3, type: 3}
   m_Name: Integer Decorator
   m_EditorClassIdentifier: 
-  _roundMode: 0
+  _roundMode: 3

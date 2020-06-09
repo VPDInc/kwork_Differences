@@ -6,12 +6,13 @@ using UnityEngine.UI;
 
 using Zenject;
 
-public class UICompassTip : MonoBehaviour {
+public class UICompassTip : Tip {
     [SerializeField] CompassVisual _compassVisualPrefab = default;
 
     [Inject] UIGameplay _gameplay = default;
     
-    public void OnButtonClick() {
+    public override void OnButtonClick() {
+        base.OnButtonClick();
         var points = _gameplay.ClosedPoints;
         if (points != null && points.Length > 0) {
             var images = _gameplay.CurrentImages;

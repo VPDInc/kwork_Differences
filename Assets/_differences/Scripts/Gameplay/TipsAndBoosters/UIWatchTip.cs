@@ -2,12 +2,13 @@
 
 using Zenject;
 
-public class UIWatchTip : MonoBehaviour {
+public class UIWatchTip : Tip {
     [Inject] UITimer _timer = default;
 
     [SerializeField] float _timeBoost = 45f;
     
-    public void OnButtonClick() {
+    public override void OnButtonClick() {
+        base.OnButtonClick();
         _timer.AddTime(_timeBoost);
     }
 }

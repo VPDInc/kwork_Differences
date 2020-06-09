@@ -1,13 +1,9 @@
-﻿using System;
-
-using Doozy.Engine.UI.Animation;
-
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 using Zenject;
 
-public class UIZoomTip : MonoBehaviour {
+public class UIZoomTip : Tip {
     [SerializeField] float _scaleIncreaseFactor = 1.5f;
     
     [Inject] UIGameplay _gameplay = default;
@@ -15,12 +11,14 @@ public class UIZoomTip : MonoBehaviour {
     bool _isUnderZoom = false;
     Vector3 _startPos;
 
-    void Start() {
+    protected override void Start() {
+        base.Start();
         _gameplay.PointOpened += OnPointOpened;
         _gameplay.Initialized += OnInitialized;
     }
 
-    void OnDestroy() {
+    protected override void OnDestroy() {
+        base.OnDestroy();
         _gameplay.PointOpened -= OnPointOpened;
         _gameplay.Initialized -= OnInitialized;
     }
@@ -56,7 +54,8 @@ public class UIZoomTip : MonoBehaviour {
         rect.anchoredPosition = pos;
     }
 
-    public void OnButtonClick() {
+    public override void OnButtonClick() {
+        base.OnButtonClick();
         ZoomIn();
     }
     

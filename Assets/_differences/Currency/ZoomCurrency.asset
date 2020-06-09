@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 40d6030e07e224b5699039e0a60dc522, type: 3}
-  m_Name: SoftCurrency
+  m_Name: ZoomCurrency
   m_EditorClassIdentifier: 
-  _type: Soft
-  _defaultAmount: 0
+  _type: Zoom
+  _defaultAmount: 10
   _decorators:
   - {fileID: 11400000, guid: 2953b3de041bf1746829c14a7981ad3e, type: 2}
-  _isEnablePrefsStore: 0
-  _debugAmount: 400
+  _isEnablePrefsStore: 1
+  _debugAmount: 0

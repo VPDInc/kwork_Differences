@@ -263,6 +263,35 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.size
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.data[2]
+      value: 
+      objectReference: {fileID: 11400000, guid: 3430c2418d2064b389c9efa58e85b629,
+        type: 2}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.data[3]
+      value: 
+      objectReference: {fileID: 11400000, guid: 569513a31cd864ef0813dda559e68179,
+        type: 2}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.data[4]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8302c4c97d89a4a16aee42c34a371274,
+        type: 2}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1206ac1a7a71b49d8b44923a945c88ae,
+        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f458c560cda8e414d8dd05981c88bfaf, type: 3}
 --- !u!4 &8202894523445636659 stripped
