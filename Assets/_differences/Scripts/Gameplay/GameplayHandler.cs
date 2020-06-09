@@ -57,7 +57,10 @@ public class GameplayHandler : MonoBehaviour {
             yield return new WaitWhile(() => !async1.isDone && !async2.isDone);
             _loadedSprites[index].Item1 = (Sprite) async1.asset;
             _loadedSprites[index].Item2 = (Sprite) async2.asset;
-            // TODO: Fill result
+
+            var diff = _pictureResults[index];
+            diff.Picture = _loadedSprites[index].Item1;
+            _pictureResults[index] = diff;
         }
     }
 
