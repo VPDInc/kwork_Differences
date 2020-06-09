@@ -22,6 +22,8 @@ public class GameplayHandler : MonoBehaviour {
     int _currentPictureResult = 0;
     Vector3 _startPos;
     (Sprite, Sprite)[] _loadedSprites;
+    Coroutine _spriteLoaderRoutine;
+    Coroutine _gameplayFillingRoutine;
 
     const float SWIPE_DETECTION_LEN = 20;
     
@@ -40,8 +42,10 @@ public class GameplayHandler : MonoBehaviour {
     void OnInitialized(Data[] levelsData) {
         _uiGameplay.HideTimeExpired(true);
         _levelsData = levelsData;
-        // TODO HANDLE IT
-        StartCoroutine(LoadSprites());
+        
+        if (_spriteLoaderRoutine != null)
+            StopCoroutine(_spriteLoaderRoutine);
+        _spriteLoaderRoutine = StartCoroutine(LoadSprites());
     }
 
     IEnumerator LoadSprites() {
@@ -53,6 +57,7 @@ public class GameplayHandler : MonoBehaviour {
             yield return new WaitWhile(() => !async1.isDone && !async2.isDone);
             _loadedSprites[index].Item1 = (Sprite) async1.asset;
             _loadedSprites[index].Item2 = (Sprite) async2.asset;
+            // TODO: Fill result
         }
     }
 
@@ -67,11 +72,6 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnBegan() {
-        // TODO: show view
-        // if pucteures not loading
-        //    show blocker
-        //     wait
-        
         _pictureResults.Clear();
         _currentPictureResult = 0;
         foreach (var data in _levelsData) {
@@ -81,7 +81,6 @@ public class GameplayHandler : MonoBehaviour {
             } 
             
             _pictureResults.Add(new PictureResult() {
-                // TODO: Load sprite
                 DifferencePoints = points
             });
         }
@@ -123,11 +122,9 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void FillGameplay() {
-        // TODO: Coroutine. Stop timer
-        // Wait for images loading
-        // Continue timer
-        // TODO HANDLE IT
-        StartCoroutine(FillAndStartGameplay());
+        if (_gameplayFillingRoutine != null) 
+            StopCoroutine(_gameplayFillingRoutine);
+        _gameplayFillingRoutine = StartCoroutine(FillAndStartGameplay());
     }
 
     bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&

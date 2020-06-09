@@ -16,7 +16,7 @@ public class UITimer : MonoBehaviour {
     AsyncFunc<float> _timerRoutine;
 
     float _timeExpireTimestamp;
-    float _timerPauseTimestamp;
+    float _timeLeft;
 
     void Awake() {
         _timerRoutine = new AsyncFunc<float>(this, TimerRoutine);
@@ -60,12 +60,11 @@ public class UITimer : MonoBehaviour {
     }
 
     public void Pause() {
-        _timerPauseTimestamp = Time.time;
+        _timeLeft = _timeExpireTimestamp - Time.time;
         _timerRoutine.Stop();
     }
 
     public void Resume() {
-        var pauseDuration = Time.time - _timerPauseTimestamp;
-        _timerRoutine.Start(_timeExpireTimestamp + pauseDuration);
+        _timerRoutine.Start(_timeLeft);
     }
 }
