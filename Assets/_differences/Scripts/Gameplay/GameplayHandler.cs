@@ -97,19 +97,6 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnBegan() {
-        _pictureResults.Clear();
-        _currentPictureResult = 0;
-        foreach (var data in _levelsData) {
-            var points = new DifferencePoint[data.Points.Length];
-            for (int i = 0; i < data.Points.Length; i++) {
-                points[i].IsOpen = false;
-            } 
-            
-            _pictureResults.Add(new PictureResult() {
-                DifferencePoints = points
-            });
-        }
-        
         _timer.Launch(_duration);
         _uiGameplay.Show();
         FillGameplay();
@@ -122,6 +109,19 @@ public class GameplayHandler : MonoBehaviour {
     void OnInitialized(Data[] levelsData) {
         _uiGameplay.HideTimeExpired(true);
         _levelsData = levelsData;
+        
+        _pictureResults.Clear();
+        _currentPictureResult = 0;
+        foreach (var data in _levelsData) {
+            var points = new DifferencePoint[data.Points.Length];
+            for (int i = 0; i < data.Points.Length; i++) {
+                points[i].IsOpen = false;
+            } 
+            
+            _pictureResults.Add(new PictureResult() {
+                DifferencePoints = points
+            });
+        }
         
         if (_spriteLoaderRoutine != null)
             StopCoroutine(_spriteLoaderRoutine);
