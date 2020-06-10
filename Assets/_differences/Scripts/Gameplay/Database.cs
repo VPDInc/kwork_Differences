@@ -73,17 +73,16 @@ public class Database : MonoBehaviour {
                 _data.Add(pointsAmount, new List<Data>());
             _data[pointsAmount].Add(data);
 
-            // TODO: Date?
-            // if (!_completedLevels.Contains(data.Id)) {
-            if (!_openedData.ContainsKey(pointsAmount))
-                _openedData.Add(pointsAmount, new List<Data>());
-            _openedData[pointsAmount].Add(data);
-            // }
+            if (!_completedLevels.Contains(data.Id)) {
+                if (!_openedData.ContainsKey(pointsAmount))
+                    _openedData.Add(pointsAmount, new List<Data>());
+                _openedData[pointsAmount].Add(data);
+            }
         }
     }
 
     void SaveLevel(Data data) {
-        // SaveLevels(new []{data.Id});
+        SaveLevels(new []{data.Id});
     }
 
     void SaveLevels(IEnumerable<string> ids) {

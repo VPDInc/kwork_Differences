@@ -8,6 +8,7 @@ public struct Data {
     public string Image2Path;
     public Point[] Points;
     public Orientation Orientation;
+    public string Id;
 }
 
 [Serializable]
