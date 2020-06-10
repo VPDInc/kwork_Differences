@@ -7,7 +7,7 @@ using Zenject;
 
 public class GameplayController : MonoBehaviour {
     public event Action Began;
-    public event Action<Data[]> Initialized;
+    public event Action<int, Data[]> Initialized;
     public event Action<GameplayResult> Completed;
 
     [SerializeField] string _gameplaySceneName = "GameplayScene";
@@ -31,7 +31,7 @@ public class GameplayController : MonoBehaviour {
     public void Load(int levelNum) {
         var levelBalanceData = _levelBalanceLibrary.GetLevelBalanceInfo(levelNum);
         var levelData = _database.GetData(levelBalanceData.PictureCount, levelBalanceData.PictureCount);
-        Initialized?.Invoke(levelData);
+        Initialized?.Invoke(levelNum, levelData);
     }
     
     public void Begin() {

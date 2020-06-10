@@ -115,7 +115,7 @@ public class GameplayHandler : MonoBehaviour {
         _uiGameplay.ShowTimeExpired();
     }
     
-    void OnInitialized(Data[] levelsData) {
+    void OnInitialized(int levelNum, Data[] levelsData) {
         _uiGameplay.HideTimeExpired(true);
         _levelsData = levelsData;
         

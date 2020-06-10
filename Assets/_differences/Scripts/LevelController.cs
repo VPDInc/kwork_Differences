@@ -26,7 +26,6 @@ public class LevelController : MonoBehaviour {
     int _lastLevelNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     LevelInfo _currentLevel;
-
     
     const string LAST_LEVEL_ID = "last_level";
     const string COIN_CURRENCY_ID = "Soft";
@@ -38,11 +37,13 @@ public class LevelController : MonoBehaviour {
         LoadLastLevel();
         SetupLevels();
         _gameplay.Completed += OnCompleted;
+        _gameplay.Initialized += OnGameplayInit;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
     }
 
     void OnDestroy() {
         _gameplay.Completed -= OnCompleted;
+        _gameplay.Initialized -= OnGameplayInit;
     }
 
     void CompleteLevel(int num) {
@@ -75,23 +76,10 @@ public class LevelController : MonoBehaviour {
         OpenPlayView(_lastLevelNum);
     }
 
-    //DUMMY
-    public void OpenPlayView(int levelNum) {
+    void OpenPlayView(int levelNum) {
         _gameplay.Load(levelNum);
-        
-        _levelStartView.SetLevelName(levelNum);
-        
-        //DUMMY
-        _levelStartView.SetPicturesCount(Random.Range(1,3));
-        _levelStartView.SetDifferencesCount(Random.Range(5, 9));
-        _levelStartView.SetPlayerName("Babaduk");
-        //
-        
-        _levelStartView.StartTimer(()=>PlayLevel(levelNum));
-        _levelStartView.Show();
     }
 
-    
     void PlayLevel(int levelNum) {
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.Begin();
@@ -113,5 +101,15 @@ public class LevelController : MonoBehaviour {
     void LoadLastLevel() {
         _lastLevelNum = PlayerPrefs.GetInt(LAST_LEVEL_ID, 0);
     }
-
+    
+    void OnGameplayInit(int levelNum, Data[] data) {
+        _levelStartView.SetLevelName(levelNum);
+        
+        _levelStartView.SetPicturesCount(data.Length);
+        _levelStartView.SetDifferencesCount(data[0].Points.Length);
+        _levelStartView.SetPlayerName("Babaduk");
+        
+        _levelStartView.StartTimer(()=>PlayLevel(levelNum));
+        _levelStartView.Show();
+    }
 }
