@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9107e9ea1c83b4d4eb9f7be6f7110f0c, type: 3}
+  m_Name: LevelBalanceInfo
+  m_EditorClassIdentifier: 
+  AssociatedSheet: 18UG0Qh1AmI8oxMm748NVtsaXjTPWjGWQRh52-mY-oSI
+  AssociatedWorksheet: Levels
+  LevelBalanceInfos: []
