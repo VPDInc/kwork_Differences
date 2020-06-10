@@ -8,6 +8,7 @@ using UnityEngine;
 public delegate void OnSpreedSheetLoaded(GstuSpreadSheet sheet);
 namespace GoogleSheetsToUnity
 {
+    #pragma warning disable 0618
     /// <summary>
     /// Partial class for the spreadsheet manager to handle all Public functions
     /// </summary>
@@ -86,4 +87,6 @@ namespace GoogleSheetsToUnity
             }
         }
     }
+#pragma warning restore 0618
+
 }

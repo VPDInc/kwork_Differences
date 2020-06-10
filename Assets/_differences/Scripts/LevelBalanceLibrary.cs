@@ -38,7 +38,6 @@ public class LevelBalanceLibrary : ScriptableObject {
             levelToLoad = _repeatAfter + partingLevel;
         }
 
-        Debug.Log("Loaded: " + levelToLoad);
         return LevelBalanceInfos[levelToLoad];
     }
 }

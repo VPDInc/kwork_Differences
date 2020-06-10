@@ -11,6 +11,8 @@ using UnityEngine.Networking;
 
 namespace GoogleSheetsToUnity.ThirdPary
 {
+#pragma warning disable 0618
+
     public class EditorCoroutineRunner
     {
         private static List<EditorCoroutineState> coroutineStates;
@@ -449,5 +451,7 @@ namespace GoogleSheetsToUnity.ThirdPary
     {
         public bool HasFinished;
     }
+#pragma warning restore 0618
 }
+
 #endif
