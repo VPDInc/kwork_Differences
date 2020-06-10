@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using GoogleSheetsToUnity;
 
 using UnityEngine;
-using UnityEngine.Events;
 #if UNITY_EDITOR
 using UnityEditor;
 
@@ -12,8 +11,15 @@ using UnityEditor;
 
 [CreateAssetMenu(fileName = "LevelBalanceInfo", menuName = "ScriptableObjects/Create LevelBalanceInfo", order = 1)]
 public class LevelBalanceLibrary : ScriptableObject {
-    public string AssociatedSheet = "17NDb4vAhBR8-XUrxEDFAkcxJIX6D3mbYyIR47KwYS9I";
-    public string AssociatedWorksheet = "Levels";
+    [Header("Table Info")] [SerializeField]
+    string _associatedSheet = "18UG0Qh1AmI8oxMm748NVtsaXjTPWjGWQRh52-mY-oSI";
+    [SerializeField] string _associatedWorksheet = "Levels";
+
+    [Header("Level Handling Info")] [SerializeField]
+    int _repeatAfter = 10;
+
+    public string AssociatedSheet => _associatedSheet;
+    public string AssociatedWorksheet => _associatedWorksheet;
 
     [Serializable]
     public struct LevelBalanceInfo {
@@ -21,11 +27,19 @@ public class LevelBalanceLibrary : ScriptableObject {
         public int DifferenceCount;
     }
 
-    [SerializeField]
+    [Header("Level Library")] [SerializeField]
     public List<LevelBalanceInfo> LevelBalanceInfos = new List<LevelBalanceInfo>();
 
     public LevelBalanceInfo GetLevelBalanceInfo(int levelNum) {
-        return LevelBalanceInfos[levelNum];
+        var levelToLoad = levelNum;
+        if (levelToLoad >= LevelBalanceInfos.Count) {
+            var repeatableAmount = LevelBalanceInfos.Count - _repeatAfter;
+            var partingLevel = levelToLoad % repeatableAmount;
+            levelToLoad = _repeatAfter + partingLevel;
+        }
+
+        Debug.Log("Loaded: " + levelToLoad);
+        return LevelBalanceInfos[levelToLoad];
     }
 }
 
@@ -67,6 +81,7 @@ public class LevelBalancedInfoEditor : Editor {
                         break;
                 }
             }
+
             _levelBalanceLibrary.LevelBalanceInfos.Add(levelBalanceInfo);
         }
     }

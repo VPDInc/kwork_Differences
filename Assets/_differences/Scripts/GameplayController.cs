@@ -13,6 +13,7 @@ public class GameplayController : MonoBehaviour {
     [SerializeField] string _gameplaySceneName = "GameplayScene";
 
     [Inject] Database _database = default;
+    [Inject] LevelBalanceLibrary _levelBalanceLibrary = default;
     
     void Start() {
         if (SceneManager.GetSceneByName(_gameplaySceneName).isLoaded)
@@ -28,6 +29,7 @@ public class GameplayController : MonoBehaviour {
     }
 
     public void Load(int levelNum) {
+        var levelBalanceData = _levelBalanceLibrary.GetLevelBalanceInfo(levelNum);
         var levelData = _database.GetLevelByNum(levelNum);
         Initialized?.Invoke(new [] {levelData, levelData});
     }
