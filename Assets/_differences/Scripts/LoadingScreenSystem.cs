@@ -27,6 +27,7 @@ public class LoadingScreenSystem : MonoBehaviour {
     }
 
     void Awake() {
+        Application.targetFrameRate = 60;
         _versionText.text = _versionPrefix + Application.version;
     }
 
