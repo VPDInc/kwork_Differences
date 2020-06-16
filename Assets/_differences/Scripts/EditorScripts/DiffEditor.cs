@@ -12,13 +12,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
+using System.Collections;
 
 using UnityEditor;
 
 public class DiffEditor : MonoBehaviour {
-    [SerializeField, ShowIf(nameof(IsPlaymode))]
-    string _id = "Diff_1";
-    
     [SerializeField, ReadOnly, ShowIf(nameof(IsPlaymode))] 
     Orientation _currentOrientation = Orientation.Horizontal;
     
@@ -31,7 +29,7 @@ public class DiffEditor : MonoBehaviour {
     readonly List<DiffHandler> _handlers = new List<DiffHandler>();
 
 
-    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 2000)]
     float Width {
         set {
             if (_currentSelectedHandler == null)
@@ -42,7 +40,7 @@ public class DiffEditor : MonoBehaviour {
         get => _currentSelectedHandler?.Width ?? 0;
     }
     
-    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 2000)]
     float Height {
         set {
             if (_currentSelectedHandler == null)
@@ -301,13 +299,19 @@ public class DiffEditor : MonoBehaviour {
 
     void LoadAndCreateImages(Data data) {
         SetOrientation(data.Orientation);
-        
-        var sprite1 = Resources.Load<Sprite>("Images/" +data.Image1Path);
-        var sprite2 = Resources.Load<Sprite>("Images/" +data.Image2Path);
 
+        StartCoroutine(DataLoading(data));
+    }
+
+    IEnumerator DataLoading(Data data) {
         var images = _config.GetImages(_currentOrientation);
-        images.Item1.sprite = sprite1;
-        images.Item2.sprite = sprite2;
+        
+        var loader = new Loader(this);
+
+        yield return loader.Run(data.Image1Path, data.Image2Path, data.Storage);
+            
+        images.Item1.sprite = loader.Result.Item1;
+        images.Item2.sprite = loader.Result.Item2;
         
         foreach (var point in data.Points) {
             CreateHandlerFromPoint(point);
@@ -365,13 +369,15 @@ public class DiffEditor : MonoBehaviour {
         data.Storage = Storage;
         data.Orientation = _currentOrientation;
         data.Points = points.ToArray();
-        data.Id = _id;
         var images = _config.GetImages(_currentOrientation);
 
+        var path = EditorUtility.SaveFilePanelInProject("Save json", "Diff_", "json", "Save json");
+
+        data.Id = Path.GetFileNameWithoutExtension(path);
         var imagesPath = string.Empty;
         switch (Storage) {
             case Storage.Resources:
-                imagesPath = $"{_id}/";
+                imagesPath = $"{data.Id}/";
                 break;
             case Storage.Addressable:
                 break;
@@ -383,7 +389,7 @@ public class DiffEditor : MonoBehaviour {
         data.Image2Path = $"{imagesPath}{images.Item2.sprite.name}";
         
         var jsonString = JsonUtility.ToJson(data);
-        var path = EditorUtility.SaveFilePanelInProject("Save json", _id, "json", "Save json");
+
         File.WriteAllText(path, jsonString);
         AssetDatabase.Refresh();
     }
