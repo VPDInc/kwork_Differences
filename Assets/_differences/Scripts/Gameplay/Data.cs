@@ -9,6 +9,7 @@ public struct Data {
     public Point[] Points;
     public Orientation Orientation;
     public string Id;
+    public Storage Storage;
 }
 
 [Serializable]

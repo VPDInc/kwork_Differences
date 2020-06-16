@@ -30,8 +30,6 @@ public class GameplayHandler : MonoBehaviour {
     (Sprite, Sprite)[] _loadedSprites;
     Coroutine _spriteLoaderRoutine;
     Coroutine _gameplayFillingRoutine;
-    bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
-                                   _loadedSprites[_currentPictureResult].Item2 != null;
     Currency _soft;
 
     const float SWIPE_DETECTION_LEN = 20;
@@ -136,27 +134,30 @@ public class GameplayHandler : MonoBehaviour {
             StopCoroutine(_spriteLoaderRoutine);
         _spriteLoaderRoutine = StartCoroutine(LoadSprites());
     }
-    
+
     IEnumerator LoadSprites() {
+        var loader = new Loader(this);
         _loadedSprites = new (Sprite, Sprite)[_levelsData.Length];
         for (var index = 0; index < _levelsData.Length; index++) {
             var data = _levelsData[index];
-            var async1 = Resources.LoadAsync<Sprite>("Images/" + data.Image1Path);
-            var async2 = Resources.LoadAsync<Sprite>("Images/" + data.Image2Path);
-            yield return new WaitWhile(() => !async1.isDone && !async2.isDone);
-            _loadedSprites[index].Item1 = (Sprite) async1.asset;
-            _loadedSprites[index].Item2 = (Sprite) async2.asset;
+            var path1 = data.Image1Path;
+            var path2 = data.Image2Path;
+            yield return loader.Run(path1, path2, data.Storage);
+            _loadedSprites[index].Item1 = loader.Result.Item1;
+            _loadedSprites[index].Item2 = loader.Result.Item2;
 
             var diff = _pictureResults[index];
             diff.Picture = _loadedSprites[index].Item1;
             _pictureResults[index] = diff;
         }
     }
+
+    bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
+                                   _loadedSprites[_currentPictureResult].Item2 != null;
     
     IEnumerator FillAndStartGameplay() {
         _timer.Pause();
         IsStarted = false;
-
         
         var levelData = _levelsData[_currentPictureResult];
         _uiGameplay.Clear();
