@@ -107,7 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad0e51c9ee5d7498383fa74e35b34226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _debugLevel: {fileID: 4900000, guid: dc16bd64311674992932d7932cbb25e8, type: 3}
 --- !u!114 &5173940810032223381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,6 +156,7 @@ Transform:
   - {fileID: 56389863}
   - {fileID: 8202894523445636659}
   - {fileID: 6977594041984342283}
+  - {fileID: 32976304683366732}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -189,6 +189,71 @@ MonoBehaviour:
       _missingHandlerDefaultResponse: 2
       _requireStrictUnsubscribe: 0
       _defaultAsyncTickPriority: 1
+--- !u!1 &8062533279194769000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 32976304683366732}
+  - component: {fileID: 5710731910500827084}
+  - component: {fileID: 7437454038384144567}
+  m_Layer: 0
+  m_Name: EnergyController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &32976304683366732
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8062533279194769000}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5679670365130544554}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5710731910500827084
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8062533279194769000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3801b14048d72ee479682621e3244f45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _playCost: 10
+  _refillTime: 2.5
+  _refillAmount: 1
+--- !u!114 &7437454038384144567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8062533279194769000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - {fileID: 5710731910500827084}
+  _identifier: 
+  _useSceneContext: 0
+  _context: {fileID: 2341104111116120515}
+  _bindType: 0
 --- !u!1001 &3062505112505612369
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -267,29 +332,47 @@ PrefabInstance:
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
       propertyPath: _currenciesObjects.Array.size
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
       propertyPath: _currenciesObjects.Array.data[2]
       value: 
-      objectReference: {fileID: 11400000, guid: 3430c2418d2064b389c9efa58e85b629,
+      objectReference: {fileID: 11400000, guid: c556c70afda01f04781a90cc6e96a298,
         type: 2}
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
       propertyPath: _currenciesObjects.Array.data[3]
       value: 
-      objectReference: {fileID: 11400000, guid: 569513a31cd864ef0813dda559e68179,
+      objectReference: {fileID: 11400000, guid: 3430c2418d2064b389c9efa58e85b629,
         type: 2}
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
       propertyPath: _currenciesObjects.Array.data[4]
       value: 
-      objectReference: {fileID: 11400000, guid: 8302c4c97d89a4a16aee42c34a371274,
+      objectReference: {fileID: 11400000, guid: 569513a31cd864ef0813dda559e68179,
         type: 2}
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
       propertyPath: _currenciesObjects.Array.data[5]
+      value: 
+      objectReference: {fileID: 11400000, guid: 8302c4c97d89a4a16aee42c34a371274,
+        type: 2}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 064815995fe4bd240b36b3e5ba458f42,
+        type: 2}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.data[1]
+      value: 
+      objectReference: {fileID: 11400000, guid: 1ce1aa71df6150c4baf8650c5170c122,
+        type: 2}
+    - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
+        type: 3}
+      propertyPath: _currenciesObjects.Array.data[6]
       value: 
       objectReference: {fileID: 11400000, guid: 1206ac1a7a71b49d8b44923a945c88ae,
         type: 2}
