@@ -19,6 +19,7 @@ public class LevelController : MonoBehaviour {
     [Inject] UIFinishLevelView _uiFinishLevelView = default;
     [Inject] GameplayController _gameplay = default;
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] EnergyController _energyController = default;
 
     Currency _coinCurrency = default;
     Currency _ratingCurrency = default;
@@ -73,7 +74,8 @@ public class LevelController : MonoBehaviour {
     }
 
     public void OpenLastPlayView() {
-        OpenPlayView(_lastLevelNum);
+        if(_energyController.TryPlay())
+            OpenPlayView(_lastLevelNum);
     }
 
     void OpenPlayView(int levelNum) {
