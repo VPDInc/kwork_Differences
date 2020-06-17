@@ -13,6 +13,7 @@ public class GameplayHandler : MonoBehaviour {
     [SerializeField] float _duration = 10f;
     [SerializeField] float _addTimeAfterOver = 25f;
     [SerializeField] int _addTimeCost = 900;
+    [SerializeField] StarsEarningConfig _config = default;
     
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
@@ -20,6 +21,7 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] MissClickManager _missClickManager = default;
     [Inject] UIAimTip _aimTip = default;
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] UIStars _uiStars = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _points = new List<Point>();
@@ -65,7 +67,10 @@ public class GameplayHandler : MonoBehaviour {
             if (_uiGameplay.IsOverlap(mousePos, out var point)) {
                 _points.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
+                UpdateStars(_config.StarsPerFoundDifference);
+                
                 if (_points.Count == 0) {
+                    UpdateStars(_config.StarsPerCompletedPicture);
                     _currentPictureResult++;
                     if (_currentPictureResult == _levelsData.Length)
                         StopGameplay(true);
@@ -76,6 +81,13 @@ public class GameplayHandler : MonoBehaviour {
                 _missClickManager.Catch();
             }
         }
+    }
+
+    void UpdateStars(int amount) {
+        _uiStars.Add(amount);
+        var diff = _pictureResults[_currentPictureResult];
+        diff.StarsCollected += amount;
+        _pictureResults[_currentPictureResult] = diff;
     }
 
     public void ExitClick() {
@@ -118,6 +130,8 @@ public class GameplayHandler : MonoBehaviour {
         _levelsData = levelsData;
         
         _pictureResults.Clear();
+        _uiStars.Reset();
+        
         _currentPictureResult = 0;
         foreach (var data in _levelsData) {
             var points = new DifferencePoint[data.Points.Length];

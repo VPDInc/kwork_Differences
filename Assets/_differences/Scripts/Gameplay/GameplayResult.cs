@@ -1,4 +1,6 @@
-﻿using JetBrains.Annotations;
+﻿using System.Linq;
+
+using JetBrains.Annotations;
 
 using UnityEngine;
 
@@ -6,6 +8,7 @@ public class GameplayResult {
     public readonly PictureResult[] PictureResults;
     public readonly bool IsCompleted;
     public readonly int PicturesCount;
+    public int TotalStarsCollected => PictureResults.Sum(res => res.StarsCollected);
 
     public GameplayResult(bool isCompleted, [NotNull] PictureResult[] pictureResults) {
         PicturesCount = pictureResults.Length;
@@ -17,6 +20,7 @@ public class GameplayResult {
 public struct PictureResult {
     public Sprite Picture;
     public DifferencePoint[] DifferencePoints;
+    public int StarsCollected;
 }
 
 public struct DifferencePoint {
