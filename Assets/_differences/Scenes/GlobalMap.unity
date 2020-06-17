@@ -4530,6 +4530,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 376906966}
+  - component: {fileID: 376906967}
   m_Layer: 0
   m_Name: DailyReward
   m_TagString: Untagged
@@ -4551,6 +4552,26 @@ Transform:
   m_Father: {fileID: 1028308347}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &376906967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376906965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8232b1aa4cfd343aaa4d20b16642fb8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _daysCount: 2
+  _rewards:
+  - {fileID: 11400000, guid: ef3f1d6d473854043acf34ec240f7363, type: 2}
+  - {fileID: 11400000, guid: 720c219a3655a4a908e39f9d4d73cd5b, type: 2}
+  - {fileID: 11400000, guid: 5d1c1dc5ba55d42bdb8d91559d5ef315, type: 2}
+  - {fileID: 11400000, guid: 076604b6d4f244e239e1f1285366ea37, type: 2}
+  - {fileID: 11400000, guid: fb0173e06f3a34a5899b8cabdfbee09b, type: 2}
+  _isDebugEnabled: 0
 --- !u!1 &432235797
 GameObject:
   m_ObjectHideFlags: 0
