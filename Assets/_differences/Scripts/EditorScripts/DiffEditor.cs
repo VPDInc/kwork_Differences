@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -11,13 +12,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 #if UNITY_EDITOR
+using System.Collections;
 
 using UnityEditor;
 
 public class DiffEditor : MonoBehaviour {
-    [SerializeField, ShowIf(nameof(IsPlaymode))]
-    string _folderName = "Diff_1";
-    
     [SerializeField, ReadOnly, ShowIf(nameof(IsPlaymode))] 
     Orientation _currentOrientation = Orientation.Horizontal;
     
@@ -30,7 +29,7 @@ public class DiffEditor : MonoBehaviour {
     readonly List<DiffHandler> _handlers = new List<DiffHandler>();
 
 
-    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 2000)]
     float Width {
         set {
             if (_currentSelectedHandler == null)
@@ -41,7 +40,7 @@ public class DiffEditor : MonoBehaviour {
         get => _currentSelectedHandler?.Width ?? 0;
     }
     
-    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 500)]
+    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 2000)]
     float Height {
         set {
             if (_currentSelectedHandler == null)
@@ -73,6 +72,9 @@ public class DiffEditor : MonoBehaviour {
 
         get => _shape;
     }
+
+    [ShowInInspector, ShowIf(nameof(IsPlaymode))]
+    Storage Storage { get; set; } = Storage.Addressable;
 
     Shape _shape = Shape.Rectangle;
     
@@ -270,8 +272,12 @@ public class DiffEditor : MonoBehaviour {
     void CreateNew() {
         Clear();
         var images = _config.GetImages(_currentOrientation);
-        images.Item1.sprite = Resources.Load<Sprite>("Images/" + _folderName + "/1");
-        images.Item2.sprite = Resources.Load<Sprite>("Images/" + _folderName + "/2");
+        var spritePath = EditorUtility.OpenFilePanel("Load file", "Assets/_differences/Images", "jpg");
+        spritePath = "Assets" +spritePath.Substring(Application.dataPath.Length);
+        images.Item1.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+        var spritePath2 = EditorUtility.OpenFilePanel("Load file", spritePath, "jpg");
+        spritePath2 = "Assets" +spritePath2.Substring(Application.dataPath.Length);
+        images.Item2.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath2);
     }
     
     [Button, ShowIf(nameof(IsPlaymode))]
@@ -293,13 +299,19 @@ public class DiffEditor : MonoBehaviour {
 
     void LoadAndCreateImages(Data data) {
         SetOrientation(data.Orientation);
-        
-        var sprite1 = Resources.Load<Sprite>("Images/" +data.Image1Path);
-        var sprite2 = Resources.Load<Sprite>("Images/" +data.Image2Path);
 
+        StartCoroutine(DataLoading(data));
+    }
+
+    IEnumerator DataLoading(Data data) {
         var images = _config.GetImages(_currentOrientation);
-        images.Item1.sprite = sprite1;
-        images.Item2.sprite = sprite2;
+        
+        var loader = new Loader(this);
+
+        yield return loader.Run(data.Image1Path, data.Image2Path, data.Storage);
+            
+        images.Item1.sprite = loader.Result.Item1;
+        images.Item2.sprite = loader.Result.Item2;
         
         foreach (var point in data.Points) {
             CreateHandlerFromPoint(point);
@@ -354,15 +366,30 @@ public class DiffEditor : MonoBehaviour {
             });
         }
 
+        data.Storage = Storage;
         data.Orientation = _currentOrientation;
         data.Points = points.ToArray();
-        data.Id = _folderName;
         var images = _config.GetImages(_currentOrientation);
-        data.Image1Path = $"{_folderName}/{images.Item1.sprite.name}";
-        data.Image2Path = $"{_folderName}/{images.Item2.sprite.name}";
+
+        var path = EditorUtility.SaveFilePanelInProject("Save json", "Diff_", "json", "Save json");
+
+        data.Id = Path.GetFileNameWithoutExtension(path);
+        var imagesPath = string.Empty;
+        switch (Storage) {
+            case Storage.Resources:
+                imagesPath = $"{data.Id}/";
+                break;
+            case Storage.Addressable:
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+
+        data.Image1Path = $"{imagesPath}{images.Item1.sprite.name}";
+        data.Image2Path = $"{imagesPath}{images.Item2.sprite.name}";
         
         var jsonString = JsonUtility.ToJson(data);
-        var path = EditorUtility.SaveFilePanelInProject("Save json", _folderName, "json", "Save json");
+
         File.WriteAllText(path, jsonString);
         AssetDatabase.Refresh();
     }

@@ -46,7 +46,7 @@ public class DiffHandler : MonoBehaviour {
     bool _isSelected = false;
     int _number = 0;
     
-    const float DEFAULT_SIZE = 50;
+    const float DEFAULT_SIZE = 150;
 
     void Awake() {
         SetWidth(DEFAULT_SIZE);
