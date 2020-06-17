@@ -17,6 +17,12 @@ public class UIProfileInfoHandler : MonoBehaviour {
 
     void Start() {
         UpdateInfo();
+
+        _playerInfoController.InfoUpdated += UpdateInfo;
+    }
+
+    void OnDestroy() {
+        _playerInfoController.InfoUpdated -= UpdateInfo;
     }
 
     void UpdateInfo() {

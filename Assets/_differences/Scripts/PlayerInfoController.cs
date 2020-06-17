@@ -5,6 +5,8 @@ using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class PlayerInfoController : MonoBehaviour {
+    public event Action InfoUpdated;
+    
     [SerializeField] Sprite[] _profileIcons = default;
     
     int _playerIconId = default;
@@ -20,6 +22,7 @@ public class PlayerInfoController : MonoBehaviour {
 
     void LoadName() {
         _playerName = PlayerPrefs.GetString(NAME_ID, "user" + Random.Range(10000, 100000));
+        InfoUpdated?.Invoke();
     }
 
     void SaveName() {
@@ -28,6 +31,7 @@ public class PlayerInfoController : MonoBehaviour {
 
     void LoadPlayerIcon() {
         _playerIconId = PlayerPrefs.GetInt(ICON_ID, 0);
+        InfoUpdated?.Invoke();
     }
 
     void SavePlayerIcon() {
@@ -38,6 +42,7 @@ public class PlayerInfoController : MonoBehaviour {
         get => _playerName;
         set {
             _playerName = value;
+            InfoUpdated?.Invoke();
             SaveName();
         }
     }
@@ -45,6 +50,7 @@ public class PlayerInfoController : MonoBehaviour {
     public Sprite SetIcon(int id) {
         _playerIconId = id;
         SavePlayerIcon();
+        InfoUpdated?.Invoke();
         return _profileIcons[Mathf.Clamp(id, 0, _profileIcons.Length)];
     }
     
