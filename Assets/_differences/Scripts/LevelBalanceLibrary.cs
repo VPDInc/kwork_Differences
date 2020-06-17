@@ -9,7 +9,7 @@ using UnityEditor;
 
 #endif
 
-[CreateAssetMenu(fileName = "LevelBalanceInfo", menuName = "ScriptableObjects/Create LevelBalanceInfo", order = 1)]
+[CreateAssetMenu(fileName = "LevelBalanceInfo", menuName = "Differences/Create LevelBalanceInfo", order = 1)]
 public class LevelBalanceLibrary : ScriptableObject {
     [Header("Table Info")] [SerializeField]
     string _associatedSheet = "18UG0Qh1AmI8oxMm748NVtsaXjTPWjGWQRh52-mY-oSI";
