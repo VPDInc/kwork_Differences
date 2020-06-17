@@ -26,6 +26,17 @@ public class UIPlayerInfoChange : MonoBehaviour {
 
     void Start() {
         FillImages();
+        _inputField.text = _playerInfoController.PlayerName;
+        
+        _playerInfoController.InfoUpdated += OnInfoUpdated;
+    }
+
+    void OnDestroy() {
+        _playerInfoController.InfoUpdated -= OnInfoUpdated;
+    }
+
+    void OnInfoUpdated() {
+        _inputField.text = _playerInfoController.PlayerName;
     }
 
     public void Show() {
