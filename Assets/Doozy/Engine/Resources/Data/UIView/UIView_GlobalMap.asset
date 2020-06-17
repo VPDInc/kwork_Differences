@@ -15,6 +15,9 @@ MonoBehaviour:
   CategoryName: GlobalMap
   DatabaseType: 2
   Names:
-  - GlobalMapView
-  - PlayLevelView
-  - FinishLevelView
+  - HUD
+  - PlayLevel
+  - FinishLevel
+  - Profile
+  - Settings
+  - ProfileInfoChange

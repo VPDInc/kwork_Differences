@@ -17,3 +17,5 @@ MonoBehaviour:
   Names:
   - PlayLastLevel
   - PlaySelectedLevel
+  - OpenProfile
+  - OpenSettings
