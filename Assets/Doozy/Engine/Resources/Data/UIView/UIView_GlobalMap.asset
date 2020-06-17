@@ -18,3 +18,4 @@ MonoBehaviour:
   - GlobalMapView
   - PlayLevelView
   - FinishLevelView
+  - DailyReward
