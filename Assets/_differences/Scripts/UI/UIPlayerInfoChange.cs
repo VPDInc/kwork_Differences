@@ -24,7 +24,6 @@ public class UIPlayerInfoChange : MonoBehaviour {
     [Inject] PlayerInfoController _playerInfoController = default;
 
     int _iconId = 0;
-    float _scrollStep = 0;
     UIView _currentView = default;
     List<ProfileIconElement> _iconElements = new List<ProfileIconElement>();
 
@@ -43,19 +42,19 @@ public class UIPlayerInfoChange : MonoBehaviour {
     void OnDestroy() {
         _playerInfoController.InfoUpdated -= OnInfoUpdated;
     }
-
-    public void OnInfoUpdated() {
-        _inputField.text = _playerInfoController.PlayerName;
+    
+    public void ScrollEnd() {
+        var closestPicture = GetClosestPicture();
+        
+        SnapTo(closestPicture.GetComponent<RectTransform>(), false);
     }
-
+    
     public void HandleScroll() {
-        var point = _selectedProfileIcon.transform.position;
-        var ordered = _iconElements.OrderBy(build => Vector2.Distance(point, build.transform.position));
-        var closestPicture = ordered.First();
+        var closestPicture = GetClosestPicture();
         _selectedProfileIcon.sprite = closestPicture.Sprite;
         _iconId = closestPicture.Id;
     }
-
+    
     public void Show() {
         _currentView.Show();
         SnapToActualIcon();
@@ -63,6 +62,16 @@ public class UIPlayerInfoChange : MonoBehaviour {
 
     public void Hide() {
         _currentView.Hide();
+    }
+    
+    public void Save() {
+        _playerInfoController.PlayerName = _inputField.text;
+        _playerInfoController.SetIcon(_iconId);
+        Hide();
+    }
+
+    void OnInfoUpdated() {
+        _inputField.text = _playerInfoController.PlayerName;
     }
 
     void FillImages() {
@@ -75,10 +84,11 @@ public class UIPlayerInfoChange : MonoBehaviour {
         _uiInfiniteScroll.Init();
     }
 
-    public void Save() {
-        _playerInfoController.PlayerName = _inputField.text;
-        _playerInfoController.SetIcon(_iconId);
-        Hide();
+    ProfileIconElement GetClosestPicture() {
+        var point = _selectedProfileIcon.transform.position;
+        var ordered = _iconElements.OrderBy(build => Vector2.Distance(point, build.transform.position));
+        var closestPicture = ordered.First();
+        return closestPicture;
     }
 
     void SnapToActualIcon() {
@@ -97,13 +107,5 @@ public class UIPlayerInfoChange : MonoBehaviour {
         } else {
             _scrollRect.content.DOAnchorPos(targetPos, 0.25f);
         }
-    }
-
-    public void ScrollEnd() {
-        var point = _selectedProfileIcon.transform.position;
-        var ordered = _iconElements.OrderBy(build => Vector2.Distance(point, build.transform.position));
-        var closestPicture = ordered.First();
-        
-        SnapTo(closestPicture.GetComponent<RectTransform>(), false);
     }
 }
