@@ -47,6 +47,8 @@ public class PlayerInfoController : MonoBehaviour {
         }
     }
 
+    public int IconId => _playerIconId;
+
     public Sprite SetIcon(int id) {
         _playerIconId = id;
         SavePlayerIcon();
