@@ -30,13 +30,7 @@ public class UIFinishLevelView : MonoBehaviour {
     void Awake() {
         _currentView = GetComponent<UIView>();
     }
-
-    void Start() {
-        //DUMMY
-        SetPlayerName("Babaduk");
-    }
-
-    //DUMMY
+    
     public void Show(int levelNum, GameplayResult gameplayResult, int coinReward) {
         SetupVictory(gameplayResult.IsCompleted);
         Show();
@@ -87,9 +81,8 @@ public class UIFinishLevelView : MonoBehaviour {
         for (int i = 0; i < gameplayResult.PicturesCount; i++) {
             var info = Instantiate(_pictureResultInfoPrefab, _infoHolder);
             var differencePoints = gameplayResult.PictureResults[i].DifferencePoints;
-            var guessedDifferences = differencePoints.Count(x => x.IsOpen);
             //TODO: Implement ranking score
-            info.Setup(differencePoints, 5 * guessedDifferences);
+            info.Setup(differencePoints, gameplayResult.PictureResults[i].StarsCollected);
         }
     }
 }

@@ -14,6 +14,8 @@ using Random = UnityEngine.Random;
 public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
 
+    [SerializeField] int _completeCoinReward = 25;
+
     [Inject] LeanDragCamera _leanDragCamera = default;
     [Inject] UILevelStartView _levelStartView = default;
     [Inject] UIFinishLevelView _uiFinishLevelView = default;
@@ -62,9 +64,9 @@ public class LevelController : MonoBehaviour {
     //DUMMY
     //TODO: Implement coin rewards logic
     void OnCompleted(GameplayResult gameplayResult) {
-        var coinReward = Random.Range(3, 5);
-        _coinCurrency.Earn(coinReward);
-        _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinReward);
+        var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
+        _coinCurrency.Earn(coinsToEarn);
+        _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
         if (gameplayResult.IsCompleted)
             CompleteLevel(_lastLevelNum);
     }
@@ -109,8 +111,7 @@ public class LevelController : MonoBehaviour {
         
         _levelStartView.SetPicturesCount(data.Length);
         _levelStartView.SetDifferencesCount(data[0].Points.Length);
-        _levelStartView.SetPlayerName("Babaduk");
-        
+
         _levelStartView.StartTimer(()=>PlayLevel(levelNum));
         _levelStartView.Show();
     }
