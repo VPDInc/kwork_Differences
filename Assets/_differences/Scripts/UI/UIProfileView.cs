@@ -12,11 +12,11 @@ public class UIProfileView : MonoBehaviour {
         _currentView = GetComponent<UIView>();
     }
 
-    public void Show() {
-        _currentView.Show();
+    public void Show(bool instant) {
+        _currentView.Show(instant);
     }
 
-    public void Hide() {
-        _currentView.Hide();
+    public void Hide(bool instant) {
+        _currentView.Hide(instant);
     }
 }
