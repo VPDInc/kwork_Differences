@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Airion.Extensions;
@@ -7,7 +8,11 @@ using UnityEngine;
 
 namespace Airion.DailyRewards {
    public class DailyRewardsSystem : MonoBehaviour {
-      public event Action Initialized;
+      /// <summary>
+      /// Fired when system has been initialized.
+      /// IsNeedToOpenWindow 
+      /// </summary>
+      public event Action<bool> Initialized;
       public event Action<DayInfo[]> Filled;
       public event Action<Reward> Rewarded;
       
@@ -27,7 +32,9 @@ namespace Airion.DailyRewards {
       const string CURRENT_DAY_PREFS = "current_day";
       const string IS_OPENED_TODAY_PREFS = "is_opened_today";
       
-      void Awake() {
+      IEnumerator Start() {
+         _debugNowDateTime = DateTime.Now;
+         yield return new WaitForEndOfFrame();
          Initialize();
       }
       
@@ -49,6 +56,10 @@ namespace Airion.DailyRewards {
          Fill();
       }
       
+      public DayInfo GetCurrentDayInfo() {
+         return _infos[_currentDay];
+      }
+      
       void Save() {
          PrefsExtensions.SetDateTime(LAST_TIME_PREFS, _lastOpenTimestamp);
          PlayerPrefs.SetInt(CURRENT_DAY_PREFS, _currentDay);
@@ -59,18 +70,17 @@ namespace Airion.DailyRewards {
       void Initialize() {
          Load();
          Fill();
-         
-         Initialized?.Invoke();
+
+         var isNeedToOpenWindow = !_isOpenedToday;
+         Initialized?.Invoke(isNeedToOpenWindow);
       }
       
       void Load() {
-         _debugNowDateTime = DateTime.Now;
-         
          _lastOpenTimestamp = PrefsExtensions.GetDateTime(LAST_TIME_PREFS, DateTime.MinValue);
          _currentDay = PlayerPrefs.GetInt(CURRENT_DAY_PREFS, 0);
          _isOpenedToday = PrefsExtensions.GetBool(IS_OPENED_TODAY_PREFS, false);
          
-         int daysPassedFromLastOpen = (Now - _lastOpenTimestamp).Days;
+         var daysPassedFromLastOpen = (Now - _lastOpenTimestamp).Days;
          if (_isOpenedToday && daysPassedFromLastOpen >= 1) {
             IncreaseCurrentDay();
             Save();
@@ -141,6 +151,7 @@ namespace Airion.DailyRewards {
       void DebugClear() {
          _currentDay = 0;
          _lastOpenTimestamp = DateTime.MinValue;
+         _isOpenedToday = false;
          Save();
          Initialize();
       }
