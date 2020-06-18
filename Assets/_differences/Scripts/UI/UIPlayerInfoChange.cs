@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using DG.Tweening;
+
 using Doozy.Engine.UI;
 
 using TMPro;
@@ -83,12 +85,25 @@ public class UIPlayerInfoChange : MonoBehaviour {
         SnapTo(_iconElements[_playerInfoController.IconId].GetComponent<RectTransform>());
     }
 
-    void SnapTo(RectTransform target)
+    void SnapTo(RectTransform target, bool isInstant = true)
     {
         Canvas.ForceUpdateCanvases();
+        
+        var targetPos = (Vector2) _scrollRect.transform.InverseTransformPoint(_scrollRect.content.position)
+                        - (Vector2) _scrollRect.transform.InverseTransformPoint(target.position);
 
-        _scrollRect.content.anchoredPosition =
-            (Vector2)_scrollRect.transform.InverseTransformPoint(_scrollRect.content.position)
-            - (Vector2)_scrollRect.transform.InverseTransformPoint(target.position);
+        if (isInstant) {
+            _scrollRect.content.anchoredPosition = targetPos;
+        } else {
+            _scrollRect.content.DOAnchorPos(targetPos, 0.25f);
+        }
+    }
+
+    public void ScrollEnd() {
+        var point = _selectedProfileIcon.transform.position;
+        var ordered = _iconElements.OrderBy(build => Vector2.Distance(point, build.transform.position));
+        var closestPicture = ordered.First();
+        
+        SnapTo(closestPicture.GetComponent<RectTransform>(), false);
     }
 }
