@@ -8508,7 +8508,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -5320, y: 3047.3}
+  m_AnchoredPosition: {x: -5320, y: 3047}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &709912781
@@ -20158,6 +20158,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8402833497508264643, guid: 8786bab20a47c4e63bde94d5e0fb4ba5,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 184
+      objectReference: {fileID: 0}
     - target: {fileID: 8402833498124264934, guid: 8786bab20a47c4e63bde94d5e0fb4ba5,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -20267,6 +20272,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: View - DailyReward
+      objectReference: {fileID: 0}
+    - target: {fileID: 8402833498516483289, guid: 8786bab20a47c4e63bde94d5e0fb4ba5,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 470
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8786bab20a47c4e63bde94d5e0fb4ba5, type: 3}

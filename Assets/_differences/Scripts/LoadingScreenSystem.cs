@@ -1,10 +1,8 @@
-﻿using System;
-
-using UnityEngine;
-using UnityEngine.UI;
+﻿using UnityEngine;
 
 using System.Collections;
 
+using Doozy.Engine;
 using Doozy.Engine.Progress;
 using Doozy.Engine.UI;
 
@@ -20,7 +18,9 @@ public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] string _versionPrefix = "v";
 
     AsyncOperation _async;
-    // bool _isFirstLevelLoaded;
+    bool _isPlayFabConnected;
+
+    const string GAME_LOADED_EVENT_NAME = "GameLoaded";
 
     void StartLoading(int sceneNo) {
         StartCoroutine(Loading(sceneNo));
@@ -32,18 +32,16 @@ public class LoadingScreenSystem : MonoBehaviour {
     }
 
     void Start() {
-        // LevelController.FirstLevelLoaded += OnFirstLevelLoaded;
         StartLoading(_sceneToLoad);
         _bar.SetProgress(0);
     }
 
     void OnDestroy() {
-        // LevelController.FirstLevelLoaded -= OnFirstLevelLoaded;
         _async.completed -= AsyncOnCompleted;
     }
 
-    void OnFirstLevelLoaded() {
-        // _isFirstLevelLoaded = true;
+    public void OnPlayFabConnected() {
+        _isPlayFabConnected = true;
     }
 
     IEnumerator Loading(int sceneNo) {
@@ -64,21 +62,25 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        // while (!_isFirstLevelLoaded) {
-        //     _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
-        //     yield return null;
-        // }
+        while (!_isPlayFabConnected) {
+            _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
+            yield return null;
+        }
 
         _bar.SetProgress(1);
-        DisableLoadingScreen();
     }
 
     void AsyncOnCompleted(AsyncOperation obj) {
-        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(1));
+        GameEventMessage.SendEvent(GAME_LOADED_EVENT_NAME);
     }
 
     void DisableLoadingScreen() {
         _loadingScreen.Hide();
         SceneManager.UnloadSceneAsync("LoadingScene");
+        SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(1));
+    }
+
+    public void ProcessToGame() {
+        DisableLoadingScreen();
     }
 }
