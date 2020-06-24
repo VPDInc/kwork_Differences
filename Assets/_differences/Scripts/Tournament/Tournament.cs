@@ -13,6 +13,8 @@ using Zenject;
 
 public class Tournament : MonoBehaviour {
     public event Action<LeaderboardPlayer[]> Filled;
+    public event Action<LeaderboardPlayer[]> Completed;
+
     
     [SerializeField] bool _isDebugEnabled = true;
     
@@ -22,15 +24,25 @@ public class Tournament : MonoBehaviour {
     
     const string LEADERBOARD_NAME = "Tournament";
     const string SAVED_COHORT_PREFS = "saved_cohort";
+    const string LAST_LEADERBOARD_VERSION_PREFS = "last_leaderboard_version";
     
     int _retrievedUsers = 0;
     int _needToRetrieve = 0;
+    int _lastVersion = -1;
+    DateTime _nextReset;
     
     void Start() {
         Filled += (players) => {
             foreach (var player in players) {
                 Log(player);
             }
+        };
+        Completed += (players) => {
+            Log("Winners ==============");
+            foreach (var player in players) {
+                Log(player);
+            }
+            Log("/Winners ==============");
         };
         if (_login.IsLogged) {
             LoadLeaderboard();
@@ -57,7 +69,6 @@ public class Tournament : MonoBehaviour {
             }
         }, result => {
             Log($"Score updated to {score}"); 
-            LoadLeaderboard();
         }, err => Err(err.GenerateErrorReport()));
     }
 
@@ -76,16 +87,73 @@ public class Tournament : MonoBehaviour {
         _players.Clear();
         _retrievedUsers = 0;
         _needToRetrieve = 0;
-        
-        var savedIds = PrefsExtensions.GetStringArray(SAVED_COHORT_PREFS);
-        if (savedIds.Length == 0) {
-            Log("Try to generate leaderboard cohort");
-            GenerateNewCohort();
-            return;
-        }
 
-        Log("Try to load saved leaderboard cohort");
-        LoadPlayers(savedIds);
+        LoadLeaderboardInfo();
+    }
+
+    void LoadLeaderboardInfo() {
+        PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
+            StatisticName = LEADERBOARD_NAME,
+            MaxResultsCount = 0
+        }, (result) => {
+            _lastVersion = PlayerPrefs.GetInt(LAST_LEADERBOARD_VERSION_PREFS, -1);
+            var savedIds = PrefsExtensions.GetStringArray(SAVED_COHORT_PREFS);
+            
+            if (_lastVersion != result.Version) {
+                if (savedIds.Length > 0) {
+                    RequestLastWinners(_lastVersion, savedIds);
+                }
+
+                _lastVersion = result.Version;
+                PlayerPrefs.SetInt(LAST_LEADERBOARD_VERSION_PREFS, _lastVersion);
+                PlayerPrefs.DeleteKey(SAVED_COHORT_PREFS);
+                savedIds = new string[0];
+            }
+            
+            if (savedIds.Length == 0) {
+                Log("Try to generate leaderboard cohort");
+                GenerateNewCohort();
+                return;
+            }
+            
+            Log("Try to load saved leaderboard cohort");
+            LoadPlayers(savedIds);
+            
+        }, err => {
+            Err(err.GenerateErrorReport());
+        });
+    }
+
+    void RequestLastWinners(int version, string[] ids) {
+        
+        PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
+            StatisticName = LEADERBOARD_NAME,
+            Version = version
+        }, (result) => {
+            List<LeaderboardPlayer> playersInCohort = new List<LeaderboardPlayer>();
+            foreach (var entry in result.Leaderboard) {
+                if (ids.Contains(entry.PlayFabId)) {
+                    playersInCohort.Add(new LeaderboardPlayer() {
+                        AvatarPath = entry.Profile.AvatarUrl,
+                        DisplayName = entry.DisplayName,
+                        Id = entry.PlayFabId,
+                        Score = entry.StatValue
+                    });
+                }
+            }
+            
+            var ordered = playersInCohort.OrderByDescending(p => p.Score).ToArray();
+            var winners = new List<LeaderboardPlayer>();
+            for (int i = 0; i < 3; i++) {
+                if (ordered.Length > 0 && ordered.Length > i) {
+                    winners.Add(ordered[i]);
+                }
+            }
+
+            Completed?.Invoke(winners.ToArray());
+        }, err => {
+            Err(err.GenerateErrorReport());
+        });
     }
 
     void LoadPlayers(string[] savedIds) {
@@ -108,7 +176,7 @@ public class Tournament : MonoBehaviour {
             DisplayName = result.PlayerProfile.DisplayName,
             AvatarPath = result.PlayerProfile.AvatarUrl,
             Id = result.PlayerProfile.PlayerId,
-            Score = result.PlayerProfile.Statistics.Where(model => model.Name.Equals(LEADERBOARD_NAME)).Select(model => model.Value).FirstOrDefault()
+            Score = result.PlayerProfile.Statistics.Where(model => model.Name.Equals(LEADERBOARD_NAME)).Select(model => model.Value).LastOrDefault()
         });
         if (_retrievedUsers >= _needToRetrieve) {
             Filled?.Invoke(_players.ToArray());
@@ -137,7 +205,6 @@ public class Tournament : MonoBehaviour {
                 Score = player.StatValue
             });
         }
-
         SaveCohort();
         LoadFriends();
     }
