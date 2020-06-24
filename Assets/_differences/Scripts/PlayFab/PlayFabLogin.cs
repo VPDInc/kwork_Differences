@@ -9,12 +9,14 @@ using UnityEngine.Events;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 public class PlayFabLogin : MonoBehaviour {
-    public UnityEvent OnPlayFabLogged = default;
-    public UnityEvent OnPlayFabLoginFailed = default;
+    public event Action PlayFabLogged = default;
+    public event Action PlayFabLoginFailed = default;
+
+    public bool IsLogged { get; private set; } = false;
 
     [SerializeField] bool _isLoginOnStart = default;
 
-    void Start() {
+    void Awake() {
         if(_isLoginOnStart)
             LoginWithDeviceId();
     }
@@ -34,12 +36,14 @@ public class PlayFabLogin : MonoBehaviour {
 
     void OnLoginSuccess(LoginResult result) {
         Debug.Log("PlayFab login success.");
-        OnPlayFabLogged?.Invoke();
+        IsLogged = true;
+        PlayFabLogged?.Invoke();
     }
 
     void OnLoginFailure(PlayFabError error) {
         Debug.LogError("PlayFab login error:");
         Debug.LogError(error.GenerateErrorReport());
-        OnPlayFabLoginFailed?.Invoke();
+        IsLogged = false;
+        PlayFabLoginFailed?.Invoke();
     }
 }
