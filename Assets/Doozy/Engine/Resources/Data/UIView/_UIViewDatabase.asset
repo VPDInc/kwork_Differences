@@ -16,13 +16,15 @@ MonoBehaviour:
   CategoryNames:
   - Custom
   - Example
-  - General
   - Gameplay
+  - General
   - GlobalMap
   - Loading
+  - PopUps
   Categories:
   - {fileID: 11400000, guid: b01e98f4801f7124ba39e1dac4debf90, type: 2}
   - {fileID: 11400000, guid: d62037eaaf34141ec90090e0cf4bd1cc, type: 2}
   - {fileID: 11400000, guid: e523f61badf014252847395c9420c7b6, type: 2}
   - {fileID: 11400000, guid: 0bc800ace728a614486b063d40a0941c, type: 2}
   - {fileID: 11400000, guid: 818e11ab95a8af34dbc2662666c010ff, type: 2}
+  - {fileID: 11400000, guid: b0e293f0540f6fa459087ab5915498dc, type: 2}

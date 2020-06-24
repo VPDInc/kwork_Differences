@@ -4,7 +4,8 @@ using PlayFab;
 using PlayFab.ClientModels;
 
 using UnityEngine;
-using UnityEngine.Events;
+
+using Zenject;
 
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
@@ -16,9 +17,19 @@ public class PlayFabLogin : MonoBehaviour {
 
     [SerializeField] bool _isLoginOnStart = default;
 
+    [Inject] ConnectionHandler _connectionHandler = default;
+
     void Awake() {
         if(_isLoginOnStart)
             LoginWithDeviceId();
+    }
+
+    void Start() {
+        _connectionHandler.GameReload += Reload;
+    }
+
+    void OnDestroy() {
+        _connectionHandler.GameReload -= Reload;
     }
 
     public void LoginWithDeviceId() {
@@ -32,6 +43,12 @@ public class PlayFabLogin : MonoBehaviour {
  = true};
         PlayFabClientAPI.LoginWithIOSDeviceID(IOSRequest, OnLoginSuccess, OnLoginFailure);
         #endif
+    }
+
+    void Reload() {
+        IsLogged = false;
+        if(_isLoginOnStart)
+            LoginWithDeviceId();
     }
 
     void OnLoginSuccess(LoginResult result) {

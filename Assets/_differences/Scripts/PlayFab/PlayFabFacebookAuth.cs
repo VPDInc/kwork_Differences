@@ -1,5 +1,7 @@
 ﻿// Import statements introduce all the necessary classes for this example.
 
+using System;
+
 using Doozy.Engine;
 
 using Facebook.Unity;
@@ -10,22 +12,26 @@ using PlayFab.ClientModels;
 using UnityEngine;
 using UnityEngine.Events;
 
+using Zenject;
+
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 public class PlayFabFacebookAuth : MonoBehaviour {
-    public UnityEvent OnFacebookReady = default;
-    public UnityEvent OnFacebookLogged = default;
-    public UnityEvent OnFacebookLoginFailed = default;
+    public event Action FacebookReady = default;
+    public event Action FacebookLogged = default;
+    public event Action FacebookLoginFailed = default;
+
+    public bool IsFacebookReady { get; private set; } = false;
+
+    [Inject] ConnectionHandler _connectionHandler = default;
 
     string _message;
-    
+
     const string CONNECTION_ATTEMPT_EVENT_NAME = "ConnectionAttempt";
 
     void Start() {
-        SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
-
-        // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
-        FB.Init(OnFacebookInitialized);
+        InitFB();
+        _connectionHandler.GameReload += Reload;
     }
 
     public void LoginFacebook() {
@@ -42,8 +48,25 @@ public class PlayFabFacebookAuth : MonoBehaviour {
 
     public void LinkFacebook() {
         SetMessage("Link Facebook to PlayFab account");
-        var linkRequest = new LinkFacebookAccountRequest{AccessToken = AccessToken.CurrentAccessToken.TokenString, ForceLink = true};
+        var linkRequest = new LinkFacebookAccountRequest
+                          {AccessToken = AccessToken.CurrentAccessToken.TokenString, ForceLink = true};
+
         PlayFabClientAPI.LinkFacebookAccount(linkRequest, OnFacebookLinkComplete, OnFacebookLinkError);
+    }
+
+    public void Reload() {
+        InitFB();
+    }
+
+    void InitFB() {
+        if (FB.IsInitialized) return;
+
+        IsFacebookReady = false;
+
+        SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
+
+        // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
+        FB.Init(OnFacebookInitialized);
     }
 
     void OnFacebookLinkError(PlayFabError error) {
@@ -52,12 +75,13 @@ public class PlayFabFacebookAuth : MonoBehaviour {
 
     void OnFacebookLinkComplete(LinkFacebookAccountResult obj) {
         SetMessage("Facebook linked.");
-        OnFacebookLogged?.Invoke();
+        FacebookLogged?.Invoke();
     }
 
     void OnFacebookInitialized() {
         SetMessage("Facebook initialized.");
-        OnFacebookReady?.Invoke();
+        IsFacebookReady = true;
+        FacebookReady?.Invoke();
     }
 
     void OnFacebookLoggedIn(ILoginResult result) {
@@ -83,7 +107,7 @@ public class PlayFabFacebookAuth : MonoBehaviour {
     // When processing both results, we just set the message, explaining what's going on.
     void OnPlayFabFacebookAuthComplete(LoginResult result) {
         SetMessage("PlayFab Facebook Auth Complete. Session ticket: " + result.SessionTicket);
-        OnFacebookLogged?.Invoke();
+        FacebookLogged?.Invoke();
     }
 
     void OnPlayFabFacebookAuthFailed(PlayFabError error) {
@@ -97,11 +121,14 @@ public class PlayFabFacebookAuth : MonoBehaviour {
         else
             Debug.Log(message);
     }
-    
-    public void OnGUI()
-    {
-        var style = new GUIStyle { fontSize = 40, normal = new GUIStyleState { textColor = Color.white }, alignment = TextAnchor.MiddleCenter, wordWrap = true };
-        var area = new Rect(0,0,Screen.width,Screen.height);
-        GUI.Label(area, _message,style);
+
+    public void OnGUI() {
+        var style = new GUIStyle {
+                                     fontSize = 40, normal = new GUIStyleState {textColor = Color.white},
+                                     alignment = TextAnchor.MiddleCenter, wordWrap = true
+                                 };
+
+        var area = new Rect(0, 0, Screen.width, Screen.height);
+        GUI.Label(area, _message, style);
     }
 }

@@ -10,6 +10,8 @@ using TMPro;
 
 using UnityEngine.SceneManagement;
 
+using Zenject;
+
 public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] UIView _loadingScreen = default;
     [SerializeField] int _sceneToLoad = 1;
@@ -17,8 +19,10 @@ public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _versionText = default;
     [SerializeField] string _versionPrefix = "v";
 
+    [Inject] PlayFabLogin _playFabLogin = default;
+    [Inject] PlayFabFacebookAuth _playFabFacebookAuth = default;
+
     AsyncOperation _async;
-    bool _isPlayFabConnected;
 
     const string GAME_LOADED_EVENT_NAME = "GameLoaded";
 
@@ -40,10 +44,6 @@ public class LoadingScreenSystem : MonoBehaviour {
         _async.completed -= AsyncOnCompleted;
     }
 
-    public void OnPlayFabConnected() {
-        _isPlayFabConnected = true;
-    }
-
     IEnumerator Loading(int sceneNo) {
         yield return new WaitForSeconds(0.5f);
         _async = SceneManager.LoadSceneAsync(sceneNo, LoadSceneMode.Additive);
@@ -62,7 +62,7 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        while (!_isPlayFabConnected) {
+        while (!_playFabLogin.IsLogged && !_playFabFacebookAuth.IsFacebookReady) {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
             yield return null;
         }
