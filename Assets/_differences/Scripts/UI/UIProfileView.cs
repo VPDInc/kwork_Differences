@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-using Doozy.Engine.UI;
+﻿using Doozy.Engine.UI;
 
 using TMPro;
 
@@ -19,8 +15,9 @@ public class UIProfileView : MonoBehaviour {
     
     [SerializeField] GameObject _linkFacebookButton = default;
     [SerializeField] GameObject _facebookLinkedPanel = default;
+    [SerializeField] GameObject _editButton = default;
     
-    [Inject] PlayFabLogin _playFabLogin = default;
+    [Inject] PlayFabInfo _playFabInfo = default;
     [Inject] PlayFabFacebook _playFabFacebook = default;
     
     UIView _currentView = default;
@@ -51,9 +48,10 @@ public class UIProfileView : MonoBehaviour {
     
     void UpdateInfo() {
         _versionText.text = _versionPrefix + Application.version;
-        _userIdText.text = _userIdPrefix + _playFabLogin.AccountInfo.AccountInfo.PlayFabId;
+        _userIdText.text = _userIdPrefix + _playFabInfo.AccountInfo.AccountInfo.PlayFabId;
         
-        _linkFacebookButton.SetActive(!_playFabLogin.IsFacebookLinked);
-        _facebookLinkedPanel.SetActive(_playFabLogin.IsFacebookLinked);
+        _linkFacebookButton.SetActive(!_playFabInfo.IsFacebookLinked);
+        _facebookLinkedPanel.SetActive(_playFabInfo.IsFacebookLinked);
+        _editButton.SetActive(!_playFabInfo.IsFacebookLinked);
     }
 }

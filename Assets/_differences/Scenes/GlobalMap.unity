@@ -6592,6 +6592,7 @@ MonoBehaviour:
   _userIdText: {fileID: 417710624}
   _linkFacebookButton: {fileID: 63779779}
   _facebookLinkedPanel: {fileID: 1333326779}
+  _editButton: {fileID: 900374379}
 --- !u!1 &512064010
 GameObject:
   m_ObjectHideFlags: 0

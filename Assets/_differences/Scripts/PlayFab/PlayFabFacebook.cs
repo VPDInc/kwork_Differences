@@ -23,7 +23,8 @@ public class PlayFabFacebook : MonoBehaviour {
     public event Action FacebookUnlinked = default;
     public event Action FacebookError = default;
 
-    public bool IsFacebookReady { get; private set; } = false;
+    public bool IsFacebookReady => FB.IsInitialized;
+    public bool IsFacebookLogged => FB.IsLoggedIn;
 
     [Inject] ConnectionHandler _connectionHandler = default;
 
@@ -39,10 +40,6 @@ public class PlayFabFacebook : MonoBehaviour {
     public void LoginFacebook() {
         GameEventMessage.SendEvent(CONNECTION_ATTEMPT_EVENT_NAME);
         SetMessage("Logging into Facebook...");
-        //
-        // // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
-        // if (FB.IsLoggedIn)
-        //     FB.LogOut();
 
         // We invoke basic login procedure and pass in the callback to process the result
         FB.LogInWithReadPermissions(null, OnFacebookLoggedIn);
@@ -76,7 +73,6 @@ public class PlayFabFacebook : MonoBehaviour {
 
     void OnFacebookUnlinkComplete(UnlinkFacebookAccountResult obj) {
         SetMessage("Unlinked Facebook from PlayFab account");
-        
         FacebookUnlinked?.Invoke();
     }
 
@@ -86,8 +82,6 @@ public class PlayFabFacebook : MonoBehaviour {
 
     void InitFB() {
         if (FB.IsInitialized) return;
-
-        IsFacebookReady = false;
 
         SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
 
@@ -109,7 +103,6 @@ public class PlayFabFacebook : MonoBehaviour {
 
     void OnFacebookInitialized() {
         SetMessage("Facebook initialized.");
-        IsFacebookReady = true;
         FacebookReady?.Invoke();
     }
 
