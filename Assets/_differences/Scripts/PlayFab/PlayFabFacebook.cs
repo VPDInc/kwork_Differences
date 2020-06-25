@@ -39,16 +39,20 @@ public class PlayFabFacebook : MonoBehaviour {
     public void LoginFacebook() {
         GameEventMessage.SendEvent(CONNECTION_ATTEMPT_EVENT_NAME);
         SetMessage("Logging into Facebook...");
-
-        // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
-        if (FB.IsLoggedIn)
-            FB.LogOut();
+        //
+        // // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
+        // if (FB.IsLoggedIn)
+        //     FB.LogOut();
 
         // We invoke basic login procedure and pass in the callback to process the result
         FB.LogInWithReadPermissions(null, OnFacebookLoggedIn);
     }
 
     public void LinkFacebook() {
+        if (!FB.IsLoggedIn) {
+            LoginFacebook();
+            return;
+        }
         SetMessage("Link Facebook to PlayFab account");
         var linkRequest = new LinkFacebookAccountRequest
                           {AccessToken = AccessToken.CurrentAccessToken.TokenString, ForceLink = true};
