@@ -32,6 +32,8 @@ using System.Collections.Generic;
 
 public class InternetReachabilityVerifier : MonoBehaviour
 {
+#pragma warning disable 0618
+
     //! Method to detect if network only reaches a "captive portal".
     /*! DefaultByPlatform picks the "platform provider" method,
      * e.g. Android->Google204, iOS->Apple, Windows->MicrosoftNCSI.
@@ -580,5 +582,6 @@ public class InternetReachabilityVerifier : MonoBehaviour
     {
         StopCoroutine("netActivity");
     }
+#pragma warning restore 0618
 
 } // InternetReachabilityVerifier
