@@ -2,6 +2,9 @@
 
 using System;
 
+using Airion.Currency;
+using Airion.Extensions;
+
 using Doozy.Engine;
 
 using Facebook.Unity;
@@ -14,6 +17,7 @@ using UnityEngine.Events;
 
 using Zenject;
 
+using Currency = Airion.Currency.Currency;
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
 public class PlayFabFacebook : MonoBehaviour {
@@ -25,18 +29,31 @@ public class PlayFabFacebook : MonoBehaviour {
 
     public bool IsFacebookReady => FB.IsInitialized;
     public bool IsFacebookLogged => FB.IsLoggedIn;
+    public bool WasLinked => _wasLinked;
+
+    [SerializeField] int _facebookLinkReward = 200;
+    [SerializeField] string _currencyName = "Soft";
 
     [SerializeField] bool _isUsingAnnoyingDebugText = false;
 
     [Inject] ConnectionHandler _connectionHandler = default;
+    [Inject] CurrencyManager _currencyManager = default;
+
+    Currency _currency = default;
 
     string _message;
+    bool _wasLinked;
 
     const string CONNECTION_ATTEMPT_EVENT_NAME = "ConnectionAttempt";
+    const string WAS_LINKED_ID = "was_linked";
 
     void Start() {
         InitFB();
         _connectionHandler.GameReload += Reload;
+
+        _currency = _currencyManager.GetCurrency(_currencyName);
+
+        _wasLinked = PrefsExtensions.GetBool(WAS_LINKED_ID, false);
     }
 
     public void LoginFacebook() {
@@ -52,6 +69,7 @@ public class PlayFabFacebook : MonoBehaviour {
             LoginFacebook();
             return;
         }
+
         SetMessage("Link Facebook to PlayFab account");
         var linkRequest = new LinkFacebookAccountRequest
                           {AccessToken = AccessToken.CurrentAccessToken.TokenString, ForceLink = true};
@@ -61,7 +79,7 @@ public class PlayFabFacebook : MonoBehaviour {
 
     public void UnlinkFacebook() {
         SetMessage("Unlinking Facebook from PlayFab account");
-        
+
         var unlinkRequest = new UnlinkFacebookAccountRequest();
 
         PlayFabClientAPI.UnlinkFacebookAccount(unlinkRequest, OnFacebookUnlinkComplete, OnFacebookUnlinkError);
@@ -69,7 +87,7 @@ public class PlayFabFacebook : MonoBehaviour {
 
     void OnFacebookUnlinkError(PlayFabError obj) {
         SetMessage("Unlink Facebook from PlayFab account error: " + obj.GenerateErrorReport(), true);
-        
+
         FacebookError?.Invoke();
     }
 
@@ -93,13 +111,19 @@ public class PlayFabFacebook : MonoBehaviour {
 
     void OnFacebookLinkError(PlayFabError error) {
         SetMessage("PlayFab Facebook Link Failed: " + error.GenerateErrorReport(), true);
-        
+
         FacebookError?.Invoke();
     }
 
     void OnFacebookLinkComplete(LinkFacebookAccountResult obj) {
         SetMessage("Facebook linked.");
-        
+
+        if (!_wasLinked) {
+            _wasLinked = true;
+            PrefsExtensions.SetBool(WAS_LINKED_ID, _wasLinked);
+            _currency.Earn(_facebookLinkReward);
+        }
+
         FacebookLinked?.Invoke();
     }
 
@@ -131,13 +155,13 @@ public class PlayFabFacebook : MonoBehaviour {
     // When processing both results, we just set the message, explaining what's going on.
     void OnPlayFabFacebookAuthComplete(LoginResult result) {
         SetMessage("PlayFab Facebook Auth Complete. Session ticket: " + result.SessionTicket);
-        
+
         FacebookLogged?.Invoke();
     }
 
     void OnPlayFabFacebookAuthFailed(PlayFabError error) {
         SetMessage("PlayFab Facebook Auth Failed: " + error.GenerateErrorReport(), true);
-        
+
         FacebookError?.Invoke();
     }
 
@@ -150,8 +174,8 @@ public class PlayFabFacebook : MonoBehaviour {
     }
 
     public void OnGUI() {
-        if(!_isUsingAnnoyingDebugText) return;
-        
+        if (!_isUsingAnnoyingDebugText) return;
+
         var style = new GUIStyle {
                                      fontSize = 40, normal = new GUIStyleState {textColor = Color.white},
                                      alignment = TextAnchor.MiddleCenter, wordWrap = true
