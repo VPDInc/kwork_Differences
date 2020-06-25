@@ -14,6 +14,8 @@ public class PlayFabLogin : MonoBehaviour {
     public event Action PlayFabLoginFailed = default;
 
     public bool IsLogged { get; private set; } = false;
+    public bool IsFacebookLinked { get; private set; } = false;
+    public bool IsRecievedAccountInfo { get; private set; } = false;
 
     [SerializeField] bool _isLoginOnStart = default;
 
@@ -55,6 +57,7 @@ public class PlayFabLogin : MonoBehaviour {
         Debug.Log("PlayFab login success.");
         IsLogged = true;
         PlayFabLogged?.Invoke();
+        GetAccountInfo();
     }
 
     void OnLoginFailure(PlayFabError error) {
@@ -62,5 +65,18 @@ public class PlayFabLogin : MonoBehaviour {
         Debug.LogError(error.GenerateErrorReport());
         IsLogged = false;
         PlayFabLoginFailed?.Invoke();
+    }
+    
+    void GetAccountInfo() {
+        var accountInfoRequest = new GetAccountInfoRequest();
+        PlayFabClientAPI.GetAccountInfo(accountInfoRequest, AccountRequestSuccess, AccountRequestError);
+    }
+
+    void AccountRequestError(PlayFabError obj) {
+        Debug.LogError(obj.GenerateErrorReport());
+    }
+
+    void AccountRequestSuccess(GetAccountInfoResult obj) {
+        IsFacebookLinked = obj.AccountInfo.FacebookInfo != null;
     }
 }

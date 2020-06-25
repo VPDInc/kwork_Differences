@@ -1334,6 +1334,7 @@ MonoBehaviour:
   _bar: {fileID: 3325482209351884611}
   _versionText: {fileID: 2031649491}
   _versionPrefix: v
+  _facebookLoginButton: {fileID: 1672032311}
 --- !u!4 &1336475567
 Transform:
   m_ObjectHideFlags: 0
@@ -2150,6 +2151,7 @@ GameObject:
   - component: {fileID: 1672032314}
   - component: {fileID: 1672032313}
   - component: {fileID: 1672032315}
+  - component: {fileID: 1672032316}
   m_Layer: 0
   m_Name: LoginFacebookButton
   m_TagString: Untagged
@@ -2257,8 +2259,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_MethodName: LoginFacebook
+      - m_Target: {fileID: 1672032316}
+        m_MethodName: FacebookLogin
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2268,6 +2270,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1672032316
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1672032311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc0ff4e73012bf946ad139b0d8ddb940, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1809769807
 GameObject:
   m_ObjectHideFlags: 0

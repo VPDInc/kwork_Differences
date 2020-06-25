@@ -18,6 +18,7 @@ public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] Progressor _bar = default;
     [SerializeField] TextMeshProUGUI _versionText = default;
     [SerializeField] string _versionPrefix = "v";
+    [SerializeField] GameObject _facebookLoginButton = default;
 
     [Inject] PlayFabLogin _playFabLogin = default;
     [Inject] PlayFabFacebookAuth _playFabFacebookAuth = default;
@@ -36,12 +37,15 @@ public class LoadingScreenSystem : MonoBehaviour {
     }
 
     void Start() {
+        _playFabFacebookAuth.FacebookLogged += ProcessToGame;
+        
         StartLoading(_sceneToLoad);
         _bar.SetProgress(0);
     }
 
     void OnDestroy() {
         _async.completed -= AsyncOnCompleted;
+        _playFabFacebookAuth.FacebookLogged -= ProcessToGame;
     }
 
     IEnumerator Loading(int sceneNo) {
@@ -62,11 +66,12 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        while (!_playFabLogin.IsLogged && !_playFabFacebookAuth.IsFacebookReady) {
+        while (!_playFabLogin.IsLogged && !_playFabFacebookAuth.IsFacebookReady && _playFabLogin.IsRecievedAccountInfo) {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
             yield return null;
         }
 
+        _facebookLoginButton.SetActive(!_playFabLogin.IsFacebookLinked);
         _bar.SetProgress(1);
     }
 
