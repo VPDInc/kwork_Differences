@@ -35,9 +35,9 @@ public class UITournament : MonoBehaviour {
         _tournament.Filled += OnTournamentFilled;
     }
 
-    void OnTournamentFilled(Tournament.LeaderboardPlayer[] players) {
+    void OnTournamentFilled(LeaderboardPlayer[] players) {
         _content.DestroyAllChildren();
-        var orderedPlayers = players.OrderBy(player => player.Score).ToArray();
+        var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
         for (int i = 0; i <orderedPlayers.Length; i++) {
             var player = orderedPlayers[i];
             var element = Instantiate(_leaderboardElement, _content);
