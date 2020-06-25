@@ -14,6 +14,7 @@ using System.Collections;
 
 public class IRVExample : MonoBehaviour
 {
+    #pragma warning disable 0618
     public InternetReachabilityVerifier internetReachabilityVerifier;
 
     string log = "";
@@ -165,4 +166,6 @@ public class IRVExample : MonoBehaviour
         GUILayout.Label(log);
         GUILayout.EndScrollView();
     }
+#pragma warning restore 0618
+
 }
