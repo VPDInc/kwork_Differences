@@ -6,6 +6,10 @@ using Doozy.Engine;
 using Doozy.Engine.Progress;
 using Doozy.Engine.UI;
 
+using Facebook.Unity;
+
+using PlayFab.ClientModels;
+
 using TMPro;
 
 using UnityEngine.SceneManagement;
@@ -18,9 +22,11 @@ public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] Progressor _bar = default;
     [SerializeField] TextMeshProUGUI _versionText = default;
     [SerializeField] string _versionPrefix = "v";
+    [SerializeField] GameObject _facebookLoginButton = default;
 
     [Inject] PlayFabLogin _playFabLogin = default;
-    [Inject] PlayFabFacebookAuth _playFabFacebookAuth = default;
+    [Inject] PlayFabInfo _playFabInfo = default;
+    [Inject] PlayFabFacebook _playFabFacebook = default;
 
     AsyncOperation _async;
 
@@ -36,12 +42,25 @@ public class LoadingScreenSystem : MonoBehaviour {
     }
 
     void Start() {
+        _playFabInfo.AccountInfoRecieved += OnAccountInfoRecieved;
+        _playFabFacebook.FacebookLogged += ProcessToGame;
+        _playFabFacebook.FacebookLinked += ProcessToGame;
+        
         StartLoading(_sceneToLoad);
         _bar.SetProgress(0);
     }
 
+    void OnAccountInfoRecieved(GetAccountInfoResult obj) {
+        _facebookLoginButton.SetActive(!_playFabInfo.IsFacebookLinked);
+        if(_playFabInfo.IsFacebookLinked && !FB.IsLoggedIn)
+            _playFabFacebook.LoginFacebook();
+    }
+
     void OnDestroy() {
         _async.completed -= AsyncOnCompleted;
+        _playFabInfo.AccountInfoRecieved -= OnAccountInfoRecieved;
+        _playFabFacebook.FacebookLogged -= ProcessToGame;
+        _playFabFacebook.FacebookLinked -= ProcessToGame;
     }
 
     IEnumerator Loading(int sceneNo) {
@@ -62,11 +81,11 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        while (!_playFabLogin.IsLogged && !_playFabFacebookAuth.IsFacebookReady) {
+        while (!_playFabLogin.IsLogged && !_playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated) {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
             yield return null;
         }
-
+        
         _bar.SetProgress(1);
     }
 

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 
 using TMPro;
 
@@ -14,15 +12,24 @@ public class UIProfileInfoHandler : MonoBehaviour {
     [SerializeField] TMP_Text _nameLabel = default;
 
     [Inject] PlayerInfoController _playerInfoController = default;
+    [Inject] PlayFabFacebook _playFabFacebook = default;
 
     void Start() {
         UpdateInfo();
 
         _playerInfoController.InfoUpdated += UpdateInfo;
+        _playFabFacebook.FacebookLinked += UpdateInfo;
+        _playFabFacebook.FacebookUnlinked += UpdateInfo;
+    }
+
+    void OnEnable() {
+        UpdateInfo();
     }
 
     void OnDestroy() {
         _playerInfoController.InfoUpdated -= UpdateInfo;
+        _playFabFacebook.FacebookLinked -= UpdateInfo;
+        _playFabFacebook.FacebookUnlinked -= UpdateInfo;
     }
 
     void UpdateInfo() {

@@ -12,7 +12,6 @@ using LoginResult = PlayFab.ClientModels.LoginResult;
 public class PlayFabLogin : MonoBehaviour {
     public event Action PlayFabLogged = default;
     public event Action PlayFabLoginFailed = default;
-
     public bool IsLogged { get; private set; } = false;
 
     [SerializeField] bool _isLoginOnStart = default;
@@ -26,13 +25,14 @@ public class PlayFabLogin : MonoBehaviour {
 
     void Start() {
         _connectionHandler.GameReload += Reload;
+
     }
 
     void OnDestroy() {
         _connectionHandler.GameReload -= Reload;
     }
 
-    public void LoginWithDeviceId() {
+    void LoginWithDeviceId() {
         #if UNITY_ANDROID
         var androidRequest = new LoginWithAndroidDeviceIDRequest
                              {AndroidDeviceId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true};

@@ -18,14 +18,20 @@ public class ConnectionHandler : MonoBehaviour {
     [SerializeField] UIView _errorView = default;
     
     [Inject] InternetReachabilityVerifier _reachabilityVerifier = default;
+    [Inject] PlayFabLogin _playFabLogin = default;
+    [Inject] PlayFabFacebook m_playFabFacebook = default;
 
     void Start() {
         _reachabilityVerifier.statusChangedDelegate += OnStatusChangedDelegate;
+        _playFabLogin.PlayFabLoginFailed += ShowErrorView;
+        m_playFabFacebook.FacebookError += ShowErrorView;
         CheckConnection(_reachabilityVerifier.status);
     }
 
     void OnDestroy() {
         _reachabilityVerifier.statusChangedDelegate -= OnStatusChangedDelegate;
+        _playFabLogin.PlayFabLoginFailed -= ShowErrorView;
+        m_playFabFacebook.FacebookError -= ShowErrorView;
     }
 
     void OnStatusChangedDelegate(InternetReachabilityVerifier.Status newstatus) {
@@ -42,7 +48,7 @@ public class ConnectionHandler : MonoBehaviour {
     }
 
     [ContextMenu("DebugError")]
-    void SentDebugError() {
+    public void ShowErrorView() {
         _errorView.Show();
     }
 

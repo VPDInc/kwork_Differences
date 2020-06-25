@@ -16,12 +16,17 @@ using Zenject;
 
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
-public class PlayFabFacebookAuth : MonoBehaviour {
+public class PlayFabFacebook : MonoBehaviour {
     public event Action FacebookReady = default;
     public event Action FacebookLogged = default;
-    public event Action FacebookLoginFailed = default;
+    public event Action FacebookLinked = default;
+    public event Action FacebookUnlinked = default;
+    public event Action FacebookError = default;
 
-    public bool IsFacebookReady { get; private set; } = false;
+    public bool IsFacebookReady => FB.IsInitialized;
+    public bool IsFacebookLogged => FB.IsLoggedIn;
+
+    [SerializeField] bool _isUsingAnnoyingDebugText = false;
 
     [Inject] ConnectionHandler _connectionHandler = default;
 
@@ -38,20 +43,39 @@ public class PlayFabFacebookAuth : MonoBehaviour {
         GameEventMessage.SendEvent(CONNECTION_ATTEMPT_EVENT_NAME);
         SetMessage("Logging into Facebook...");
 
-        // Once Facebook SDK is initialized, if we are logged in, we log out to demonstrate the entire authentication cycle.
-        if (FB.IsLoggedIn)
-            FB.LogOut();
-
         // We invoke basic login procedure and pass in the callback to process the result
         FB.LogInWithReadPermissions(null, OnFacebookLoggedIn);
     }
 
     public void LinkFacebook() {
+        if (!FB.IsLoggedIn) {
+            LoginFacebook();
+            return;
+        }
         SetMessage("Link Facebook to PlayFab account");
         var linkRequest = new LinkFacebookAccountRequest
                           {AccessToken = AccessToken.CurrentAccessToken.TokenString, ForceLink = true};
 
         PlayFabClientAPI.LinkFacebookAccount(linkRequest, OnFacebookLinkComplete, OnFacebookLinkError);
+    }
+
+    public void UnlinkFacebook() {
+        SetMessage("Unlinking Facebook from PlayFab account");
+        
+        var unlinkRequest = new UnlinkFacebookAccountRequest();
+
+        PlayFabClientAPI.UnlinkFacebookAccount(unlinkRequest, OnFacebookUnlinkComplete, OnFacebookUnlinkError);
+    }
+
+    void OnFacebookUnlinkError(PlayFabError obj) {
+        SetMessage("Unlink Facebook from PlayFab account error: " + obj.GenerateErrorReport(), true);
+        
+        FacebookError?.Invoke();
+    }
+
+    void OnFacebookUnlinkComplete(UnlinkFacebookAccountResult obj) {
+        SetMessage("Unlinked Facebook from PlayFab account");
+        FacebookUnlinked?.Invoke();
     }
 
     public void Reload() {
@@ -61,8 +85,6 @@ public class PlayFabFacebookAuth : MonoBehaviour {
     void InitFB() {
         if (FB.IsInitialized) return;
 
-        IsFacebookReady = false;
-
         SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
 
         // This call is required before any other calls to the Facebook API. We pass in the callback to be invoked once initialization is finished
@@ -71,16 +93,18 @@ public class PlayFabFacebookAuth : MonoBehaviour {
 
     void OnFacebookLinkError(PlayFabError error) {
         SetMessage("PlayFab Facebook Link Failed: " + error.GenerateErrorReport(), true);
+        
+        FacebookError?.Invoke();
     }
 
     void OnFacebookLinkComplete(LinkFacebookAccountResult obj) {
         SetMessage("Facebook linked.");
-        FacebookLogged?.Invoke();
+        
+        FacebookLinked?.Invoke();
     }
 
     void OnFacebookInitialized() {
         SetMessage("Facebook initialized.");
-        IsFacebookReady = true;
         FacebookReady?.Invoke();
     }
 
@@ -107,11 +131,14 @@ public class PlayFabFacebookAuth : MonoBehaviour {
     // When processing both results, we just set the message, explaining what's going on.
     void OnPlayFabFacebookAuthComplete(LoginResult result) {
         SetMessage("PlayFab Facebook Auth Complete. Session ticket: " + result.SessionTicket);
+        
         FacebookLogged?.Invoke();
     }
 
     void OnPlayFabFacebookAuthFailed(PlayFabError error) {
         SetMessage("PlayFab Facebook Auth Failed: " + error.GenerateErrorReport(), true);
+        
+        FacebookError?.Invoke();
     }
 
     void SetMessage(string message, bool error = false) {
@@ -123,6 +150,8 @@ public class PlayFabFacebookAuth : MonoBehaviour {
     }
 
     public void OnGUI() {
+        if(!_isUsingAnnoyingDebugText) return;
+        
         var style = new GUIStyle {
                                      fontSize = 40, normal = new GUIStyleState {textColor = Color.white},
                                      alignment = TextAnchor.MiddleCenter, wordWrap = true
