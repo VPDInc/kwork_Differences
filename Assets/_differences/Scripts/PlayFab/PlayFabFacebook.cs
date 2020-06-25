@@ -16,10 +16,12 @@ using Zenject;
 
 using LoginResult = PlayFab.ClientModels.LoginResult;
 
-public class PlayFabFacebookAuth : MonoBehaviour {
+public class PlayFabFacebook : MonoBehaviour {
     public event Action FacebookReady = default;
     public event Action FacebookLogged = default;
-    public event Action FacebookLoginFailed = default;
+    public event Action FacebookLinked = default;
+    public event Action FacebookUnlinked = default;
+    public event Action FacebookError = default;
 
     public bool IsFacebookReady { get; private set; } = false;
 
@@ -54,6 +56,26 @@ public class PlayFabFacebookAuth : MonoBehaviour {
         PlayFabClientAPI.LinkFacebookAccount(linkRequest, OnFacebookLinkComplete, OnFacebookLinkError);
     }
 
+    public void UnlinkFacebook() {
+        SetMessage("Unlinking Facebook from PlayFab account");
+        
+        var unlinkRequest = new UnlinkFacebookAccountRequest();
+
+        PlayFabClientAPI.UnlinkFacebookAccount(unlinkRequest, OnFacebookUnlinkComplete, OnFacebookUnlinkError);
+    }
+
+    void OnFacebookUnlinkError(PlayFabError obj) {
+        SetMessage("Unlink Facebook from PlayFab account error: " + obj.GenerateErrorReport(), true);
+        
+        FacebookError?.Invoke();
+    }
+
+    void OnFacebookUnlinkComplete(UnlinkFacebookAccountResult obj) {
+        SetMessage("Unlinked Facebook from PlayFab account");
+        
+        FacebookUnlinked?.Invoke();
+    }
+
     public void Reload() {
         InitFB();
     }
@@ -71,11 +93,14 @@ public class PlayFabFacebookAuth : MonoBehaviour {
 
     void OnFacebookLinkError(PlayFabError error) {
         SetMessage("PlayFab Facebook Link Failed: " + error.GenerateErrorReport(), true);
+        
+        FacebookError?.Invoke();
     }
 
     void OnFacebookLinkComplete(LinkFacebookAccountResult obj) {
         SetMessage("Facebook linked.");
-        FacebookLogged?.Invoke();
+        
+        FacebookLinked?.Invoke();
     }
 
     void OnFacebookInitialized() {
@@ -107,11 +132,14 @@ public class PlayFabFacebookAuth : MonoBehaviour {
     // When processing both results, we just set the message, explaining what's going on.
     void OnPlayFabFacebookAuthComplete(LoginResult result) {
         SetMessage("PlayFab Facebook Auth Complete. Session ticket: " + result.SessionTicket);
+        
         FacebookLogged?.Invoke();
     }
 
     void OnPlayFabFacebookAuthFailed(PlayFabError error) {
         SetMessage("PlayFab Facebook Auth Failed: " + error.GenerateErrorReport(), true);
+        
+        FacebookError?.Invoke();
     }
 
     void SetMessage(string message, bool error = false) {

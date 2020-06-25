@@ -12,14 +12,17 @@ using LoginResult = PlayFab.ClientModels.LoginResult;
 public class PlayFabLogin : MonoBehaviour {
     public event Action PlayFabLogged = default;
     public event Action PlayFabLoginFailed = default;
+    public event Action<GetAccountInfoResult> AccountInfoRecieved = default;
 
     public bool IsLogged { get; private set; } = false;
     public bool IsFacebookLinked { get; private set; } = false;
     public bool IsRecievedAccountInfo { get; private set; } = false;
+    public GetAccountInfoResult AccountInfo { get; private set; } = default;
 
     [SerializeField] bool _isLoginOnStart = default;
 
     [Inject] ConnectionHandler _connectionHandler = default;
+    [Inject] PlayFabFacebook _playFabFacebook = default;
 
     void Awake() {
         if(_isLoginOnStart)
@@ -28,13 +31,25 @@ public class PlayFabLogin : MonoBehaviour {
 
     void Start() {
         _connectionHandler.GameReload += Reload;
+        _playFabFacebook.FacebookLinked += OnFacebookLinked;
+        _playFabFacebook.FacebookUnlinked += OnFacebookUnlinked;
+    }
+
+    void OnFacebookUnlinked() {
+        IsFacebookLinked = false;
+    }
+
+    void OnFacebookLinked() {
+        IsFacebookLinked = true;
     }
 
     void OnDestroy() {
         _connectionHandler.GameReload -= Reload;
+        _playFabFacebook.FacebookLinked -= OnFacebookLinked;
+        _playFabFacebook.FacebookUnlinked -= OnFacebookUnlinked;
     }
 
-    public void LoginWithDeviceId() {
+    void LoginWithDeviceId() {
         #if UNITY_ANDROID
         var androidRequest = new LoginWithAndroidDeviceIDRequest
                              {AndroidDeviceId = SystemInfo.deviceUniqueIdentifier, CreateAccount = true};
@@ -77,6 +92,8 @@ public class PlayFabLogin : MonoBehaviour {
     }
 
     void AccountRequestSuccess(GetAccountInfoResult obj) {
+        AccountInfo = obj;
         IsFacebookLinked = obj.AccountInfo.FacebookInfo != null;
+        AccountInfoRecieved?.Invoke(AccountInfo);
     }
 }

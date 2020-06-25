@@ -6,6 +6,8 @@ using Doozy.Engine;
 using Doozy.Engine.Progress;
 using Doozy.Engine.UI;
 
+using PlayFab.ClientModels;
+
 using TMPro;
 
 using UnityEngine.SceneManagement;
@@ -21,7 +23,7 @@ public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] GameObject _facebookLoginButton = default;
 
     [Inject] PlayFabLogin _playFabLogin = default;
-    [Inject] PlayFabFacebookAuth _playFabFacebookAuth = default;
+    [Inject] PlayFabFacebook _playFabFacebook = default;
 
     AsyncOperation _async;
 
@@ -37,15 +39,22 @@ public class LoadingScreenSystem : MonoBehaviour {
     }
 
     void Start() {
-        _playFabFacebookAuth.FacebookLogged += ProcessToGame;
+        _playFabLogin.AccountInfoRecieved += OnAccountInfoRecieved;
+        _playFabFacebook.FacebookLogged += ProcessToGame;
+        _playFabFacebook.FacebookLinked += ProcessToGame;
         
         StartLoading(_sceneToLoad);
         _bar.SetProgress(0);
     }
 
+    void OnAccountInfoRecieved(GetAccountInfoResult obj) {
+        _facebookLoginButton.SetActive(!_playFabLogin.IsFacebookLinked);
+    }
+
     void OnDestroy() {
         _async.completed -= AsyncOnCompleted;
-        _playFabFacebookAuth.FacebookLogged -= ProcessToGame;
+        _playFabFacebook.FacebookLogged -= ProcessToGame;
+        _playFabFacebook.FacebookLinked -= ProcessToGame;
     }
 
     IEnumerator Loading(int sceneNo) {
@@ -66,12 +75,11 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        while (!_playFabLogin.IsLogged && !_playFabFacebookAuth.IsFacebookReady && _playFabLogin.IsRecievedAccountInfo) {
+        while (!_playFabLogin.IsLogged && !_playFabFacebook.IsFacebookReady && _playFabLogin.IsRecievedAccountInfo) {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
             yield return null;
         }
-
-        _facebookLoginButton.SetActive(!_playFabLogin.IsFacebookLinked);
+        
         _bar.SetProgress(1);
     }
 

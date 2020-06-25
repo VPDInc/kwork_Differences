@@ -19,19 +19,19 @@ public class ConnectionHandler : MonoBehaviour {
     
     [Inject] InternetReachabilityVerifier _reachabilityVerifier = default;
     [Inject] PlayFabLogin _playFabLogin = default;
-    [Inject] PlayFabFacebookAuth _playFabFacebookAuth = default;
+    [Inject] PlayFabFacebook m_playFabFacebook = default;
 
     void Start() {
         _reachabilityVerifier.statusChangedDelegate += OnStatusChangedDelegate;
         _playFabLogin.PlayFabLoginFailed += ShowErrorView;
-        _playFabFacebookAuth.FacebookLoginFailed += ShowErrorView;
+        m_playFabFacebook.FacebookError += ShowErrorView;
         CheckConnection(_reachabilityVerifier.status);
     }
 
     void OnDestroy() {
         _reachabilityVerifier.statusChangedDelegate -= OnStatusChangedDelegate;
         _playFabLogin.PlayFabLoginFailed -= ShowErrorView;
-        _playFabFacebookAuth.FacebookLoginFailed -= ShowErrorView;
+        m_playFabFacebook.FacebookError -= ShowErrorView;
     }
 
     void OnStatusChangedDelegate(InternetReachabilityVerifier.Status newstatus) {
