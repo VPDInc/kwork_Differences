@@ -15,7 +15,6 @@ public class Tournament : MonoBehaviour {
     public event Action<LeaderboardPlayer[]> Filled;
     public event Action<LeaderboardPlayer[]> Completed;
 
-    
     [SerializeField] bool _isDebugEnabled = true;
     
     [Inject] PlayFabLogin _login = default;
@@ -77,6 +76,7 @@ public class Tournament : MonoBehaviour {
         public string Id;
         public int Score;
         public string AvatarPath;
+        public bool IsFriend;
 
         public override string ToString() {
             return $"{Id}: {DisplayName}, {AvatarPath}. Score: {Score}";
@@ -125,7 +125,6 @@ public class Tournament : MonoBehaviour {
     }
 
     void RequestLastWinners(int version, string[] ids) {
-        
         PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
             StatisticName = LEADERBOARD_NAME,
             Version = version
@@ -228,7 +227,8 @@ public class Tournament : MonoBehaviour {
                 DisplayName = player.DisplayName,
                 AvatarPath = player.Profile.AvatarUrl,
                 Id = player.PlayFabId,
-                Score = player.StatValue
+                Score = player.StatValue,
+                IsFriend = true
             });
         }
         
