@@ -26,6 +26,8 @@ public class PlayFabFacebook : MonoBehaviour {
     public bool IsFacebookReady => FB.IsInitialized;
     public bool IsFacebookLogged => FB.IsLoggedIn;
 
+    [SerializeField] bool _isUsingAnnoyingDebugText = false;
+
     [Inject] ConnectionHandler _connectionHandler = default;
 
     string _message;
@@ -148,6 +150,8 @@ public class PlayFabFacebook : MonoBehaviour {
     }
 
     public void OnGUI() {
+        if(!_isUsingAnnoyingDebugText) return;
+        
         var style = new GUIStyle {
                                      fontSize = 40, normal = new GUIStyleState {textColor = Color.white},
                                      alignment = TextAnchor.MiddleCenter, wordWrap = true
