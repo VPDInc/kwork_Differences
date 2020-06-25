@@ -28,6 +28,7 @@ public class Tournament : MonoBehaviour {
     const string PREV_SAVED_COHORT_PREFS = "prev_saved_cohort";
     const string CURRENT_LEADERBOARD_VERSION_PREFS = "current_leaderboard_version";
     const string PREV_LEADERBOARD_VERSION_PREFS = "prev_leaderboard_version";
+    const int COHORT_SIZE = 50;
 
     int _currentLeaderboardVersion = -1;
     int _prevLeaderboardVersion = -1;
@@ -142,12 +143,12 @@ public class Tournament : MonoBehaviour {
             _prevLeaderboardVersion = _currentLeaderboardVersion;
             _currentLeaderboardVersion = version;
             PlayerPrefs.SetInt(CURRENT_LEADERBOARD_VERSION_PREFS, _currentLeaderboardVersion);
-            GenerateNewCohort();
+            GenerateNewCohort(_currentLeaderboardVersion);
             return;
         }
 
-        if (savedIds.Length == 0) {
-            GenerateNewCohort();
+        if (savedIds.Length <= COHORT_SIZE) {
+            GenerateNewCohort(_currentLeaderboardVersion);
         } else {
             LoadProfiles(savedIds, _currentLeaderboardVersion, (res)=> {},(res) => {
                 Filled?.Invoke(res.ToArray());
@@ -161,9 +162,12 @@ public class Tournament : MonoBehaviour {
         }
     }
 
-    void GenerateNewCohort() {
+    void GenerateNewCohort(int version) {
         AddScoreWithCallback(0, () => {
-            PlayFabClientAPI.GetLeaderboardAroundPlayer(new GetLeaderboardAroundPlayerRequest() { StatisticName = LEADERBOARD_NAME, MaxResultsCount = 50 },
+            Log("Try to generate new cohort");
+            PlayFabClientAPI.GetLeaderboardAroundPlayer(new GetLeaderboardAroundPlayerRequest() {
+                    StatisticName = LEADERBOARD_NAME, MaxResultsCount = 50, Version = version
+                },
             result => {
                 foreach (var player in result.Leaderboard) {
                     _currentPlayers.Add(new LeaderboardPlayer() {
@@ -182,7 +186,9 @@ public class Tournament : MonoBehaviour {
     }
     
     void LoadCurrentFriends() {
-        PlayFabClientAPI.GetFriendLeaderboard(new GetFriendLeaderboardRequest() {StatisticName = LEADERBOARD_NAME},
+        PlayFabClientAPI.GetFriendLeaderboard(new GetFriendLeaderboardRequest() {
+                StatisticName = LEADERBOARD_NAME
+            },
             result => {
                 foreach (var player in result.Leaderboard) {
                     var loaded = false;
