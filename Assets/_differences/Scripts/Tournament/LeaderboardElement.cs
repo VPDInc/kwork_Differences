@@ -11,6 +11,8 @@ public class LeaderboardElement : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _displayName = default;
     [SerializeField] TextMeshProUGUI _score = default;
     [SerializeField] TextMeshProUGUI _reward = default;
+    [SerializeField] Image _back = default;
+    [SerializeField] Color _backColorIfMe = Color.magenta;
 
     public void Fill(int index, LeaderboardPlayer player) {
         _positionText.text = index.ToString();
@@ -18,5 +20,7 @@ public class LeaderboardElement : MonoBehaviour {
         _displayName.text = player.DisplayName.IsNullOrWhitespace() ? player.Id : player.DisplayName;
         _score.text = player.Score.ToString();
         _reward.text = "0";
+        if (player.IsMe)
+            _back.color = _backColorIfMe;
     }
 }

@@ -139,12 +139,7 @@ public class Tournament : MonoBehaviour {
                 },
             result => {
                 foreach (var player in result.Leaderboard) {
-                    _currentPlayers.Add(new LeaderboardPlayer() {
-                        DisplayName = player.DisplayName,
-                        AvatarPath = player.Profile.AvatarUrl,
-                        Id = player.PlayFabId,
-                        Score = player.StatValue
-                    });
+                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue));
                 }
                 SaveCohort(_currentPlayers, CURRENT_SAVED_COHORT_PREFS);
                 Filled?.Invoke(_currentPlayers.ToArray());
@@ -152,6 +147,17 @@ public class Tournament : MonoBehaviour {
             }, 
             err=> Err(err.GenerateErrorReport()));
         });
+    }
+
+    LeaderboardPlayer Create(string id, string displayName, int score, bool isFriend = false) {
+        var player = new LeaderboardPlayer() {
+            DisplayName = displayName,
+            Id = id,
+            Score = score,
+            IsFriend = isFriend,
+            IsMe = _login.PlayerPlayfabId.Equals(id)
+        };
+        return player;
     }
     
     void LoadCurrentFriends() {
@@ -175,13 +181,7 @@ public class Tournament : MonoBehaviour {
                     if (loaded)
                         continue;
                     
-                    _currentPlayers.Add(new LeaderboardPlayer() {
-                        DisplayName = player.DisplayName,
-                        AvatarPath = player.Profile.AvatarUrl,
-                        Id = player.PlayFabId,
-                        Score = player.StatValue,
-                        IsFriend = true
-                    });
+                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, true));
                 }
                 
                 Log("Friends load completed");
@@ -239,12 +239,7 @@ public class Tournament : MonoBehaviour {
                 }
             }, result => {
                 var score = result.PlayerProfile.Statistics.Where(model => model.Name.Equals(LEADERBOARD_NAME) && model.Version == version).Select(model => model.Value).FirstOrDefault();
-                players.Add(new LeaderboardPlayer() {
-                    DisplayName = result.PlayerProfile.DisplayName,
-                    AvatarPath = result.PlayerProfile.AvatarUrl,
-                    Id = result.PlayerProfile.PlayerId,
-                    Score = score
-                });
+                players.Add(Create(result.PlayerProfile.PlayerId, result.PlayerProfile.DisplayName, score));
                 loaded++;
                 if (loaded >= toLoad) {
                     callbackWithoutFriends?.Invoke(players.ToArray());
@@ -282,14 +277,8 @@ public class Tournament : MonoBehaviour {
                     
                     if (loaded)
                         continue;
-                    
-                    players.Add(new LeaderboardPlayer() {
-                        DisplayName = player.DisplayName,
-                        AvatarPath = player.Profile.AvatarUrl,
-                        Id = player.PlayFabId,
-                        Score = player.StatValue,
-                        IsFriend = true
-                    });
+
+                    players.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, true));
                 }
                 
                 Log("Friends load completed");

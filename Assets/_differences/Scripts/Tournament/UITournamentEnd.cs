@@ -1,11 +1,8 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 
 using Airion.Extensions;
 
 using Doozy.Engine.UI;
-
-using TMPro;
 
 using UnityEngine;
 using UnityEngine.UI;

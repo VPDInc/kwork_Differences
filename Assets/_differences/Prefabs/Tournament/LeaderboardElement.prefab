@@ -328,6 +328,8 @@ MonoBehaviour:
   _displayName: {fileID: 3880080572451914039}
   _score: {fileID: 3880080574062080190}
   _reward: {fileID: 3880080572904701731}
+  _back: {fileID: 3880080572518793132}
+  _backColorIfMe: {r: 1, g: 0.6839622, b: 1, a: 1}
 --- !u!1 &3880080572548555806
 GameObject:
   m_ObjectHideFlags: 0
