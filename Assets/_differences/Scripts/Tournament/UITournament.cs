@@ -59,6 +59,12 @@ public class UITournament : MonoBehaviour {
 
     void Start() {
         _tournament.Filled += OnTournamentFilled;
+        _tournament.FilledLastWinners += OnLastWinnersFilled;
+    }
+
+    void OnDestroy() {
+        _tournament.Filled -= OnTournamentFilled;
+        _tournament.FilledLastWinners -= OnLastWinnersFilled;
     }
     
     void Update() {
@@ -104,10 +110,6 @@ public class UITournament : MonoBehaviour {
         _lastUpdateTimestamp = Time.time;
     }
 
-    void OnDestroy() {
-        _tournament.Filled -= OnTournamentFilled;
-    }
-
     public void OnShowClick() {
         _view.Show();
     }
@@ -137,6 +139,41 @@ public class UITournament : MonoBehaviour {
     public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly) {
         Fill(_tournament.CurrentPlayers, isFriendsOnly);
     }
+    
+    void OnLastWinnersFilled(LeaderboardPlayer[] winners) {
+        var ordered = winners.OrderByDescending(p => p.Score).ToArray();
+        for (int i = 0; i < ordered.Length; i++) {
+            if (i >= ordered.Length)
+                return;
+            var winner = ordered[i];
+            if (i == 0) {
+                if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
+                    FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
+                        res => {
+                            _winnerAvatar1.sprite = Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2());
+                        });
+                } 
+            }
+            
+            if (i == 1) {
+                if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
+                    FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
+                        res => {
+                            _winnerAvatar2.sprite = Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2());
+                        });
+                } 
+            }
+            
+            if (i == 2) {
+                if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
+                    FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
+                        res => {
+                            _winnerAvatar3.sprite = Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2());
+                        });
+                } 
+            }
+        }
+    }
 
     void SetIcons() {
         foreach (var pair in _leaderboardElements) {
@@ -160,7 +197,8 @@ public class UITournament : MonoBehaviour {
 
     void SetIconTo(string id, Sprite icon) {
         if (_leaderboardElements.ContainsKey(id)) {
-            _leaderboardElements[id].SetIcon(icon);
+            var element = _leaderboardElements[id];
+            element.SetIcon(icon);
         }
     }
 }

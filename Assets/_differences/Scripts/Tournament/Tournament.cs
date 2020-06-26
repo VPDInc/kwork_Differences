@@ -177,7 +177,8 @@ public class Tournament : MonoBehaviour {
                     ShowLinkedAccounts = true,
                     ShowStatistics = true,
                     ShowDisplayName = true,
-                }
+                },
+                IncludeFacebookFriends = true
             },
             result => {
                 foreach (var player in result.Leaderboard) {
@@ -286,7 +287,8 @@ public class Tournament : MonoBehaviour {
                     ShowLinkedAccounts = true,
                     ShowStatistics = true,
                     ShowDisplayName = true,
-                }
+                },
+                IncludeFacebookFriends = true
             },
             result => {
                 foreach (var player in result.Leaderboard) {

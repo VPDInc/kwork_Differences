@@ -348,8 +348,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 10.2, y: -78.7}
-  m_SizeDelta: {x: 1123.6863, y: 793.2378}
+  m_AnchoredPosition: {x: 10.2, y: -29.7}
+  m_SizeDelta: {x: 1123.6863, y: 695.1892}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1302979806773014909
 CanvasRenderer:
@@ -465,7 +465,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0, y: -540.89}
+  m_AnchoredPosition: {x: -0, y: -425.48}
   m_SizeDelta: {x: 252.21164, y: 67.681076}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1302979806819936618
@@ -1693,7 +1693,6 @@ MonoBehaviour:
       m_Calls: []
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 1302979806826943425}
   ToggleProgressor: {fileID: 0}
 --- !u!1 &1302979806826718893
 GameObject:
@@ -4117,7 +4116,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!1 &1302979806826943427
 GameObject:
   m_ObjectHideFlags: 0
@@ -4547,8 +4545,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000015259, y: 0}
-  m_SizeDelta: {x: 1320.4077, y: 1149.4697}
+  m_AnchoredPosition: {x: 0, y: -26}
+  m_SizeDelta: {x: 1320.4077, y: 918.6465}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1302979807155387149
 CanvasRenderer:
@@ -5020,7 +5018,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -1741}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1302979807572032930
@@ -5542,7 +5540,6 @@ MonoBehaviour:
   _tournamentDuration: {fileID: 1302979807269842269}
   _content: {fileID: 1302979808162713252}
   _loadingView: {fileID: 1302979808145397217}
-  _buttonScore: {fileID: 0}
   _scroll: {fileID: 1302979806773014911}
   _toMyButton: {fileID: 1302979808540846359}
   _toLeadersButton: {fileID: 4885136619167241333}
@@ -8449,7 +8446,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 1302979808349854411}
 --- !u!1 &1302979808145396765
 GameObject:
   m_ObjectHideFlags: 0
@@ -9053,7 +9049,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -0.00091552734}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &1302979808162713259
@@ -11946,7 +11942,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!1 &1302979808560051145
 GameObject:
   m_ObjectHideFlags: 0
@@ -14603,4 +14598,3 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}

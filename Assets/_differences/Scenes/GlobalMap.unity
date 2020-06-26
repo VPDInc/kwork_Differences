@@ -3970,7 +3970,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!114 &190391666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14847,11 +14846,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 595494073}
     m_Modifications:
-    - target: {fileID: 1302979807572032929, guid: 9636f4381585d46e090f0a4334c8d2ae,
-        type: 3}
-      propertyPath: _buttonScore
-      value: 
-      objectReference: {fileID: 867885449}
     - target: {fileID: 1302979807572032984, guid: 9636f4381585d46e090f0a4334c8d2ae,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -14915,7 +14909,7 @@ PrefabInstance:
     - target: {fileID: 1302979807572032984, guid: 9636f4381585d46e090f0a4334c8d2ae,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -1744
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1302979807572032984, guid: 9636f4381585d46e090f0a4334c8d2ae,
         type: 3}
