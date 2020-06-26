@@ -13,6 +13,7 @@ public class PlayFabLogin : MonoBehaviour {
     public event Action PlayFabLogged = default;
     public event Action PlayFabLoginFailed = default;
     public bool IsLogged { get; private set; } = false;
+    public string PlayerPlayfabId { get; private set; } = string.Empty;
 
     [SerializeField] bool _isLoginOnStart = default;
 
@@ -54,6 +55,7 @@ public class PlayFabLogin : MonoBehaviour {
     void OnLoginSuccess(LoginResult result) {
         Debug.Log("PlayFab login success.");
         IsLogged = true;
+        PlayerPlayfabId = result.PlayFabId;
         PlayFabLogged?.Invoke();
     }
 

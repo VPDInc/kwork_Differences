@@ -2,10 +2,10 @@
     public string DisplayName;
     public string Id;
     public int Score;
-    public string AvatarPath;
     public bool IsFriend;
+    public bool IsMe;
 
     public override string ToString() {
-        return $"{Id}: {DisplayName}, {AvatarPath}. Score: {Score}";
+        return $"{Id}: {DisplayName}, Score: {Score}";
     }
 }
