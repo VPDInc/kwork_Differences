@@ -14936,7 +14936,7 @@ PrefabInstance:
     - target: {fileID: 1302979807269842269, guid: 9636f4381585d46e090f0a4334c8d2ae,
         type: 3}
       propertyPath: m_textInfo.characterCount
-      value: 16
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1302979807269842269, guid: 9636f4381585d46e090f0a4334c8d2ae,
         type: 3}
@@ -14952,6 +14952,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_textInfo.pageCount
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1302979807269842269, guid: 9636f4381585d46e090f0a4334c8d2ae,
+        type: 3}
+      propertyPath: m_text
+      value: '-'
       objectReference: {fileID: 0}
     - target: {fileID: 1302979807572032929, guid: 9636f4381585d46e090f0a4334c8d2ae,
         type: 3}
@@ -19296,6 +19301,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7bdde9232b87c41f08a9d8a79abf0d7b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _winnerAvatar1: {fileID: 0}
+  _winnerAvatar2: {fileID: 0}
+  _winnerAvatar3: {fileID: 0}
+  _leaderboardElement: {fileID: 0}
+  _content: {fileID: 0}
 --- !u!1001 &1886897256358924773
 PrefabInstance:
   m_ObjectHideFlags: 0

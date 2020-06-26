@@ -22,9 +22,12 @@ public class UITournament : MonoBehaviour {
     [SerializeField] UIView _loadingView = default;
     [SerializeField] TextMeshProUGUI _buttonScore = default;
 
-    UIView _view;
-    
     [Inject] Tournament _tournament = default;
+    
+    UIView _view;
+    float _lastUpdateTimestamp = 0;
+
+    const float UPDATE_TIMER_EVERY_SECONDS = 60;
     
     void Awake() {
         _view = GetComponent<UIView>();
@@ -34,8 +37,15 @@ public class UITournament : MonoBehaviour {
     void Start() {
         _tournament.Filled += OnTournamentFilled;
     }
+    
+    void Update() {
+        if (Time.time - _lastUpdateTimestamp >= UPDATE_TIMER_EVERY_SECONDS) {
+            UpdateTimer();
+        }
+    }
 
     void OnTournamentFilled(LeaderboardPlayer[] players) {
+        UpdateTimer();
         _content.DestroyAllChildren();
         var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
         for (int i = 0; i <orderedPlayers.Length; i++) {
@@ -44,6 +54,11 @@ public class UITournament : MonoBehaviour {
             element.Fill(i, player);
         }
         _loadingView.Hide();
+    }
+
+    void UpdateTimer() {
+        _tournamentDuration.text = (_tournament.NextReset - DateTime.Now).ToString(@"d\d\ hh\h\ mm\m");
+        _lastUpdateTimestamp = Time.time;
     }
 
     void OnDestroy() {
@@ -65,7 +80,4 @@ public class UITournament : MonoBehaviour {
     public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly) {
         
     }
-
-
-
 }
