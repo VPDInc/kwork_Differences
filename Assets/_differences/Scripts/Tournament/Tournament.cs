@@ -155,7 +155,8 @@ public class Tournament : MonoBehaviour {
             Id = id,
             Score = score,
             IsFriend = isFriend,
-            IsMe = _login.PlayerPlayfabId.Equals(id)
+            IsMe = _login.PlayerPlayfabId.Equals(id),
+            // Facebook = facebookId
         };
         return player;
     }

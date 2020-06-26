@@ -35,6 +35,10 @@ public class PlayerInfoController : MonoBehaviour {
         LoadPlayerIcon();
     }
 
+    public Sprite GetRandomIcon() {
+        return _profileIcons[Random.Range(0, _profileIcons.Length)];
+    }
+
     void Start() {
         _playFabFacebook.FacebookLogged += RequestFacebookInfo;
         _playFabFacebook.FacebookLinked += RequestFacebookInfo;

@@ -20,12 +20,12 @@ public class UITournament : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _tournamentDuration = default;
     [SerializeField] Transform _content = default;
     [SerializeField] UIView _loadingView = default;
-    [SerializeField] TextMeshProUGUI _buttonScore = default;
     [SerializeField] ScrollRect _scroll = default;
     [SerializeField] GameObject _toMyButton = default;
     [SerializeField] GameObject _toLeadersButton = default;
 
     [Inject] Tournament _tournament = default;
+    [Inject] DiContainer _container = default;
     
     UIView _view;
     float _lastUpdateTimestamp = 0;
@@ -79,6 +79,7 @@ public class UITournament : MonoBehaviour {
         for (int i = 0; i < orderedPlayers.Length; i++) {
             var player = orderedPlayers[i];
             var element = Instantiate(_leaderboardElement, _content);
+            _container.InjectGameObject(element.gameObject);
             _fullAmount++;
             element.Fill(i, player);
             if (player.IsMe)
