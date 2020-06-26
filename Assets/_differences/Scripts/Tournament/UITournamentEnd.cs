@@ -19,6 +19,7 @@ public class UITournamentEnd : MonoBehaviour {
     UIView _view;
     
     [Inject] Tournament _tournament = default;
+    [Inject] PlayerInfoController _infoController = default;
     
     void Awake() {
         _view = GetComponent<UIView>();
@@ -29,7 +30,7 @@ public class UITournamentEnd : MonoBehaviour {
     }
     
     void OnDestroy() {
-        _tournament.Filled -= OnTournamentFilled;
+        _tournament.Completed -= OnTournamentFilled;
     }
     
     public void OnExitClick() {
