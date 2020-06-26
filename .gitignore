@@ -44,3 +44,5 @@ sysinfo.txt
 *.apk
 *.unitypackage
 Build.zip
+Assets/screenshot.png
+Assets/screenshot.png.meta

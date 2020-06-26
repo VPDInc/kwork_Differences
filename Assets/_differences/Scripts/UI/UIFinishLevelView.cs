@@ -17,8 +17,6 @@ public class UIFinishLevelView : MonoBehaviour {
     [Header("References")] [SerializeField]
     TMP_Text _levelLabel = default;
     [SerializeField] TMP_Text _coinRewardLabel = default;
-    [SerializeField] TMP_Text _playerNameLabel = default;
-    [SerializeField] Image _profileIcon = default;
     [SerializeField] Transform _infoHolder = default;
 
     [Header("Prefabs")] [SerializeField] UIPictureResultInfo _pictureResultInfoPrefab = default;
@@ -63,14 +61,6 @@ public class UIFinishLevelView : MonoBehaviour {
 
     void SetCoinsAmount(int coinsAmount) {
         _coinRewardLabel.text = coinsAmount.ToString();
-    }
-
-    void SetPlayerName(string name) {
-        _playerNameLabel.text = name;
-    }
-
-    public void SetPlayerProfileIcon(Sprite icon) {
-        _profileIcon.sprite = icon;
     }
 
     //DUMMY

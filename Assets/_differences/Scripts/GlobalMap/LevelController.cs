@@ -65,7 +65,9 @@ public class LevelController : MonoBehaviour {
     //TODO: Implement coin rewards logic
     void OnCompleted(GameplayResult gameplayResult) {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
+        var ratingToEarn = gameplayResult.TotalStarsCollected;
         _coinCurrency.Earn(coinsToEarn);
+        _ratingCurrency.Earn(ratingToEarn);
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
         if (gameplayResult.IsCompleted)
             CompleteLevel(_lastLevelNum);
