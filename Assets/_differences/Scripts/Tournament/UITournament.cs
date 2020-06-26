@@ -147,6 +147,7 @@ public class UITournament : MonoBehaviour {
                 return;
             var winner = ordered[i];
             if (i == 0) {
+                _winnerAvatar1.sprite = _infoController.GetRandomIcon();
                 if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
                     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                         res => {
@@ -156,6 +157,7 @@ public class UITournament : MonoBehaviour {
             }
             
             if (i == 1) {
+                _winnerAvatar1.sprite = _infoController.GetRandomIcon();
                 if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
                     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                         res => {
@@ -165,6 +167,7 @@ public class UITournament : MonoBehaviour {
             }
             
             if (i == 2) {
+                _winnerAvatar1.sprite = _infoController.GetRandomIcon();
                 if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
                     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                         res => {
