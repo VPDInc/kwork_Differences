@@ -69,7 +69,6 @@ public class Tournament : MonoBehaviour {
         Clear();
         LoadCurrentLeaderboard();
     }
-    
 
     void Clear() {
         _currentPlayers.Clear();
@@ -218,7 +217,7 @@ public class Tournament : MonoBehaviour {
         AddScore(10);
     }
     
-    void AddScore(int score) {
+    public void AddScore(int score) {
         PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest {
             Statistics = new List<StatisticUpdate> {
                 new StatisticUpdate {

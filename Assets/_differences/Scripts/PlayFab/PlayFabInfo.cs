@@ -60,7 +60,6 @@ public class PlayFabInfo : MonoBehaviour {
     #endregion
 
     #region GetAccountInfo
-
     void GetAccountInfo() {
         var accountInfoRequest = new GetAccountInfoRequest();
         PlayFabClientAPI.GetAccountInfo(accountInfoRequest, AccountRequestSuccess, AccountRequestError);
