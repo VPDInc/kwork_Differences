@@ -144,7 +144,7 @@ public class UITournament : MonoBehaviour {
             var id = element.Player.Id;
             if (element.Player.IsMe) {
                 SetIconTo(id, _infoController.PlayerIcon);
-                return;
+                continue;
             }
 
             SetIconTo(id, _infoController.GetRandomIcon());
@@ -153,7 +153,6 @@ public class UITournament : MonoBehaviour {
                 FB.API($"{element.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                     res => {
                         SetIconTo(id, Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2()));
-                        Debug.Log("Loaded");
                     });
             } 
         }
@@ -162,8 +161,6 @@ public class UITournament : MonoBehaviour {
     void SetIconTo(string id, Sprite icon) {
         if (_leaderboardElements.ContainsKey(id)) {
             _leaderboardElements[id].SetIcon(icon);
-        } else {
-            Debug.Log(id);
         }
     }
 }
