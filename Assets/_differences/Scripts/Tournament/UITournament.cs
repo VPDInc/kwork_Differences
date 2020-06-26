@@ -45,10 +45,18 @@ public class UITournament : MonoBehaviour {
     }
 
     void OnTournamentFilled(LeaderboardPlayer[] players) {
+        Fill(players);
+    }
+
+    void Fill(LeaderboardPlayer[] players, bool friendsOnly = false) {
         UpdateTimer();
+        
         _content.DestroyAllChildren();
+        
+        if (friendsOnly)
+            players = players.Where(p => p.IsFriend).ToArray();
         var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
-        for (int i = 0; i <orderedPlayers.Length; i++) {
+        for (int i = 0; i < orderedPlayers.Length; i++) {
             var player = orderedPlayers[i];
             var element = Instantiate(_leaderboardElement, _content);
             element.Fill(i, player);
@@ -78,6 +86,6 @@ public class UITournament : MonoBehaviour {
     }
 
     public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly) {
-        
+        Fill(_tournament.CurrentPlayers, isFriendsOnly);
     }
 }

@@ -12,10 +12,11 @@ using UnityEngine;
 using Zenject;
 
 public class Tournament : MonoBehaviour {
-    public DateTime NextReset { get; private set; }
     public event Action<LeaderboardPlayer[]> Filled;
     public event Action<LeaderboardPlayer[]> FilledLastWinners;
     public event Action<LeaderboardPlayer[]> Completed;
+    public DateTime NextReset { get; private set; }
+    public LeaderboardPlayer[] CurrentPlayers => _currentPlayers.ToArray();
 
     [SerializeField] bool _isDebugEnabled = true;
 
