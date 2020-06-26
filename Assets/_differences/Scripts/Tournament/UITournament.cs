@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 using Airion.Extensions;
 
 using Doozy.Engine.UI;
+
+using Facebook.Unity;
 
 using TMPro;
 
@@ -26,6 +29,7 @@ public class UITournament : MonoBehaviour {
 
     [Inject] Tournament _tournament = default;
     [Inject] DiContainer _container = default;
+    [Inject] PlayerInfoController _infoController = default;
     
     UIView _view;
     float _lastUpdateTimestamp = 0;
@@ -45,6 +49,8 @@ public class UITournament : MonoBehaviour {
 
     const float UPDATE_TIMER_EVERY_SECONDS = 60;
     const float ELEMENTS_COUNT_IN_ONE_SCREEN = 7;
+    
+    readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string,LeaderboardElement>();
     
     void Awake() {
         _view = GetComponent<UIView>();
@@ -68,6 +74,7 @@ public class UITournament : MonoBehaviour {
     void Fill(LeaderboardPlayer[] players, bool friendsOnly = false) {
         UpdateTimer();
         
+        _leaderboardElements.Clear();
         _content.DestroyAllChildren();
         _fullAmount = 0;
         _myPosition = 0;
@@ -84,9 +91,12 @@ public class UITournament : MonoBehaviour {
             element.Fill(i, player);
             if (player.IsMe)
                 _myPosition = i;
+            
+            _leaderboardElements.Add(player.Id, element);
         }
         _loadingView.Hide();
         SelectMy();
+        SetIcons();
     }
 
     void UpdateTimer() {
@@ -126,5 +136,34 @@ public class UITournament : MonoBehaviour {
 
     public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly) {
         Fill(_tournament.CurrentPlayers, isFriendsOnly);
+    }
+
+    void SetIcons() {
+        foreach (var pair in _leaderboardElements) {
+            var element = pair.Value;
+            var id = element.Player.Id;
+            if (element.Player.IsMe) {
+                SetIconTo(id, _infoController.PlayerIcon);
+                return;
+            }
+
+            SetIconTo(id, _infoController.GetRandomIcon());
+            
+            if (!string.IsNullOrWhiteSpace(element.Player.Facebook)) {
+                FB.API($"{element.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
+                    res => {
+                        SetIconTo(id, Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2()));
+                        Debug.Log("Loaded");
+                    });
+            } 
+        }
+    }
+
+    void SetIconTo(string id, Sprite icon) {
+        if (_leaderboardElements.ContainsKey(id)) {
+            _leaderboardElements[id].SetIcon(icon);
+        } else {
+            Debug.Log(id);
+        }
     }
 }

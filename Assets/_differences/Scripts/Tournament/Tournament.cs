@@ -135,11 +135,21 @@ public class Tournament : MonoBehaviour {
         AddScoreWithCallback(0, () => {
             Log("Try to generate new cohort");
             PlayFabClientAPI.GetLeaderboardAroundPlayer(new GetLeaderboardAroundPlayerRequest() {
-                    StatisticName = LEADERBOARD_NAME, MaxResultsCount = 50, Version = version
+                    StatisticName = LEADERBOARD_NAME, 
+                    MaxResultsCount = 50, 
+                    Version = version,
+                    ProfileConstraints = new PlayerProfileViewConstraints() {
+                        ShowLinkedAccounts = true,
+                        ShowStatistics = true,
+                        ShowDisplayName = true,
+                    }
                 },
             result => {
                 foreach (var player in result.Leaderboard) {
-                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue));
+                    var accounts = player.Profile.LinkedAccounts;
+                    var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
+                    var id = facebook == null ? string.Empty : facebook.PlatformUserId;
+                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, id));
                 }
                 SaveCohort(_currentPlayers, CURRENT_SAVED_COHORT_PREFS);
                 Filled?.Invoke(_currentPlayers.ToArray());
@@ -149,21 +159,26 @@ public class Tournament : MonoBehaviour {
         });
     }
 
-    LeaderboardPlayer Create(string id, string displayName, int score, bool isFriend = false) {
+    LeaderboardPlayer Create(string id, string displayName, int score, string facebook, bool isFriend = false) {
         var player = new LeaderboardPlayer() {
             DisplayName = displayName,
             Id = id,
             Score = score,
             IsFriend = isFriend,
-            IsMe = _login.PlayerPlayfabId.Equals(id),
-            // Facebook = facebookId
+            Facebook = facebook,
+            IsMe = _login.PlayerPlayfabId.Equals(id)
         };
         return player;
     }
     
     void LoadCurrentFriends() {
         PlayFabClientAPI.GetFriendLeaderboard(new GetFriendLeaderboardRequest() {
-                StatisticName = LEADERBOARD_NAME
+                StatisticName = LEADERBOARD_NAME,
+                ProfileConstraints = new PlayerProfileViewConstraints() {
+                    ShowLinkedAccounts = true,
+                    ShowStatistics = true,
+                    ShowDisplayName = true,
+                }
             },
             result => {
                 foreach (var player in result.Leaderboard) {
@@ -182,7 +197,10 @@ public class Tournament : MonoBehaviour {
                     if (loaded)
                         continue;
                     
-                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, true));
+                    var accounts = player.Profile.LinkedAccounts;
+                    var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
+                    var id = facebook == null ? string.Empty : facebook.PlatformUserId;
+                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, id, true));
                 }
                 
                 Log("Friends load completed");
@@ -236,11 +254,15 @@ public class Tournament : MonoBehaviour {
                 PlayFabId = id,
                 ProfileConstraints = new PlayerProfileViewConstraints() {
                     ShowStatistics = true,
-                    ShowDisplayName = true
+                    ShowDisplayName = true,
+                    ShowLinkedAccounts = true
                 }
             }, result => {
                 var score = result.PlayerProfile.Statistics.Where(model => model.Name.Equals(LEADERBOARD_NAME) && model.Version == version).Select(model => model.Value).FirstOrDefault();
-                players.Add(Create(result.PlayerProfile.PlayerId, result.PlayerProfile.DisplayName, score));
+                var accounts = result.PlayerProfile.LinkedAccounts;
+                var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
+                var fbId = facebook == null ? string.Empty : facebook.PlatformUserId;
+                players.Add(Create(result.PlayerProfile.PlayerId, result.PlayerProfile.DisplayName, score, fbId));
                 loaded++;
                 if (loaded >= toLoad) {
                     callbackWithoutFriends?.Invoke(players.ToArray());
@@ -260,7 +282,12 @@ public class Tournament : MonoBehaviour {
     void LoadFriends(int version, List<LeaderboardPlayer> players, Action<LeaderboardPlayer[]> callback) {
         PlayFabClientAPI.GetFriendLeaderboard(new GetFriendLeaderboardRequest() {
                 StatisticName = LEADERBOARD_NAME,
-                Version = version
+                Version = version,
+                ProfileConstraints = new PlayerProfileViewConstraints() {
+                    ShowLinkedAccounts = true,
+                    ShowStatistics = true,
+                    ShowDisplayName = true,
+                }
             },
             result => {
                 foreach (var player in result.Leaderboard) {
@@ -279,7 +306,10 @@ public class Tournament : MonoBehaviour {
                     if (loaded)
                         continue;
 
-                    players.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, true));
+                    var accounts = player.Profile.LinkedAccounts;
+                    var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
+                    var fbId = facebook == null ? string.Empty : facebook.PlatformUserId;
+                    players.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, fbId, true));
                 }
                 
                 Log("Friends load completed");
