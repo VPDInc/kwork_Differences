@@ -22,6 +22,7 @@ public class UITournamentEnd : MonoBehaviour {
     
     [Inject] Tournament _tournament = default;
     [Inject] PlayerInfoController _infoController = default;
+    [Inject] DiContainer _container = default;
     
     readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string,LeaderboardElement>();
     
@@ -54,17 +55,18 @@ public class UITournamentEnd : MonoBehaviour {
             var player = orderedPlayers[i];
             
             if (i == 0)
-                _winner1.Fill(player);
+                _winner1.Fill(0,player);
             if (i == 1)
-                _winner2.Fill(player);
+                _winner2.Fill(0, player);
             if (i == 2)
-                _winner3.Fill(player);
+                _winner3.Fill(0, player);
         }
 
         if (orderedPlayers.Length > 3) {
             for (int i = 3; i < orderedPlayers.Length; i++) {
                 var player = orderedPlayers[i];
                 var element = Instantiate(_leaderboardElement, _content);
+                _container.InjectGameObject(element.gameObject);
                 element.Fill(i, player);
                 _leaderboardElements.Add(player.Id, element);
             }

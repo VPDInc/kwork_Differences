@@ -19227,10 +19227,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: View - TournamentEnd
       objectReference: {fileID: 0}
+    - target: {fileID: 94523618972219771, guid: 6f275781efdaa4288b1f7096aedb8735,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 94523619570665990, guid: 6f275781efdaa4288b1f7096aedb8735,
         type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 94523620852422860, guid: 6f275781efdaa4288b1f7096aedb8735,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f275781efdaa4288b1f7096aedb8735, type: 3}

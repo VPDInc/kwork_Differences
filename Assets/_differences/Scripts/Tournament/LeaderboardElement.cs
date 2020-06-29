@@ -27,15 +27,17 @@ public class LeaderboardElement : MonoBehaviour {
     [SerializeField] Color _backColorIfMe = Color.magenta;
 
     int _index;
+
+    [Inject] TournamentRewards _tournamentRewards = default;
     
     public void Fill(int index, LeaderboardPlayer player) {
-        _positionText.text = index.ToString();
+        _positionText.text = (index+1).ToString();
         _avatar.sprite = null;
         _displayName.text = player.DisplayName;
         _score.text = player.Score.ToString();
-        _reward.text = "0";
         Player = player;
         _index = index;
+        _reward.text = _tournamentRewards.GetRewardByPlace(_index).ToString();
         if (player.IsMe) {
             _back.color = _backColorIfMe;
         }
