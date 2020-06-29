@@ -106,7 +106,14 @@ public class UITournament : MonoBehaviour {
     }
 
     void UpdateTimer() {
-        _tournamentDuration.text = (_tournament.NextReset - DateTime.Now).ToString(@"d\d\ hh\h\ mm\m");
+        var delta = (_tournament.NextReset - DateTime.Now);
+        var toStr = delta;
+        if (delta < TimeSpan.Zero) {
+            toStr = TimeSpan.Zero;
+            _tournament.Reload();
+        }
+        
+        _tournamentDuration.text = toStr.ToString(@"d\d\ hh\h\ mm\m");
         _lastUpdateTimestamp = Time.time;
     }
 

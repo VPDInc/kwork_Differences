@@ -19,6 +19,7 @@ public class Tournament : MonoBehaviour {
     public LeaderboardPlayer[] CurrentPlayers => _currentPlayers.ToArray();
 
     [SerializeField] bool _isDebugEnabled = true;
+    [SerializeField] float _reloadCooldown = 120;
 
     [Inject] PlayFabLogin _login = default;
 
@@ -34,6 +35,7 @@ public class Tournament : MonoBehaviour {
 
     int _currentLeaderboardVersion = -1;
     int _prevLeaderboardVersion = -1;
+    float _lastReload = 0;
 
     void Start() {
         Filled += (players) => {
@@ -64,12 +66,20 @@ public class Tournament : MonoBehaviour {
 
         _login.PlayFabLogged += Load;
     }
+    
+    public void Reload() {
+        if (Time.time - _lastReload <= _reloadCooldown)
+            return;
+
+        _lastReload = Time.time;
+        Load();
+    }
 
     void Load() {
         Clear();
         LoadCurrentLeaderboard();
     }
-
+    
     void Clear() {
         _currentPlayers.Clear();
         _prevPlayers.Clear();
