@@ -33,7 +33,9 @@ public class UIProfileInfoHandler : MonoBehaviour {
     }
 
     void UpdateInfo() {
-        _profileIcon.sprite = _playerInfoController.PlayerIcon;
-        _nameLabel.text = _playerInfoController.PlayerName;
+        if(_profileIcon)
+            _profileIcon.sprite = _playerInfoController.PlayerIcon;
+        if(_nameLabel)
+            _nameLabel.text = _playerInfoController.PlayerName;
     }
 }
