@@ -10,7 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 231b4393e7be40a4eb1509b18b7a0fb6, type: 3}
-  m_Name: BalanceInfoInstaller
+  m_Name: Installer
   m_EditorClassIdentifier: 
   LevelBalanceLibrary: {fileID: 11400000, guid: d16321d07230f17498e8f1551ec5781b,
     type: 2}
+  TournamentRewards: {fileID: 11400000, guid: cb4edd8bad03846a18ec93b8e1f42625, type: 2}

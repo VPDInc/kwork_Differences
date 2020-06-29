@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using Airion.Currency;
 
@@ -8,8 +7,6 @@ using Lean.Touch;
 using UnityEngine;
 
 using Zenject;
-
-using Random = UnityEngine.Random;
 
 public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
@@ -22,6 +19,7 @@ public class LevelController : MonoBehaviour {
     [Inject] GameplayController _gameplay = default;
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] EnergyController _energyController = default;
+    [Inject] Tournament _tournament = default;
 
     Currency _coinCurrency = default;
     Currency _ratingCurrency = default;
@@ -61,13 +59,12 @@ public class LevelController : MonoBehaviour {
             _allLevels[num+1].UnlockLevel(false);
     }
     
-    //DUMMY
-    //TODO: Implement coin rewards logic
     void OnCompleted(GameplayResult gameplayResult) {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
         var ratingToEarn = gameplayResult.TotalStarsCollected;
         _coinCurrency.Earn(coinsToEarn);
         _ratingCurrency.Earn(ratingToEarn);
+        _tournament.AddScore(ratingToEarn);
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
         if (gameplayResult.IsCompleted)
             CompleteLevel(_lastLevelNum);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Airion.Currency;
 using Airion.Extensions;
 
 using PlayFab;
@@ -11,6 +12,8 @@ using UnityEngine;
 
 using Zenject;
 
+using Currency = Airion.Currency.Currency;
+
 public class Tournament : MonoBehaviour {
     public event Action<LeaderboardPlayer[]> Filled;
     public event Action<LeaderboardPlayer[]> FilledLastWinners;
@@ -19,8 +22,11 @@ public class Tournament : MonoBehaviour {
     public LeaderboardPlayer[] CurrentPlayers => _currentPlayers.ToArray();
 
     [SerializeField] bool _isDebugEnabled = true;
+    [SerializeField] float _reloadCooldown = 120;
 
     [Inject] PlayFabLogin _login = default;
+    [Inject] CurrencyManager _currencyManager = default;
+    Currency _rating = default;
 
     readonly List<LeaderboardPlayer> _currentPlayers = new List<LeaderboardPlayer>();
     readonly List<LeaderboardPlayer> _prevPlayers = new List<LeaderboardPlayer>();
@@ -34,8 +40,11 @@ public class Tournament : MonoBehaviour {
 
     int _currentLeaderboardVersion = -1;
     int _prevLeaderboardVersion = -1;
+    float _lastReload = 0;
 
     void Start() {
+        _rating = _currencyManager.GetCurrency("Rating");
+        
         Filled += (players) => {
             foreach (var player in players) {
                 Log(player);
@@ -64,12 +73,35 @@ public class Tournament : MonoBehaviour {
 
         _login.PlayFabLogged += Load;
     }
+    
+    public void Reload() {
+        if (Time.time - _lastReload <= _reloadCooldown)
+            return;
+
+        _lastReload = Time.time;
+        Load();
+    }
 
     void Load() {
         Clear();
+        LoadScore();
         LoadCurrentLeaderboard();
     }
 
+    void LoadScore() {
+        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest() {
+            StatisticNames = new List<string>(){LEADERBOARD_NAME},
+        }, result => {
+            if (result.Statistics.Count == 0) {
+                _rating.Set(0);
+            } else {
+                _rating.Set(result.Statistics[0].Value);
+            }
+        }, err => {
+            Err(err.GenerateErrorReport());
+        });
+    }
+    
     void Clear() {
         _currentPlayers.Clear();
         _prevPlayers.Clear();
@@ -228,6 +260,7 @@ public class Tournament : MonoBehaviour {
             }
         }, result => {
             Log($"Score updated to {score}"); 
+            Load();
         }, err => Err(err.GenerateErrorReport()));
     }
 
