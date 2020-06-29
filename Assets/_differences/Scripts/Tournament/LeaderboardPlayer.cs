@@ -1,4 +1,4 @@
-﻿public struct LeaderboardPlayer {
+﻿public class LeaderboardPlayer {
     public string DisplayName;
     public string Id;
     public int Score;
