@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using Airion.Currency;
 using Airion.Extensions;
 
 using PlayFab;
@@ -10,6 +11,8 @@ using PlayFab.ClientModels;
 using UnityEngine;
 
 using Zenject;
+
+using Currency = Airion.Currency.Currency;
 
 public class Tournament : MonoBehaviour {
     public event Action<LeaderboardPlayer[]> Filled;
@@ -22,6 +25,8 @@ public class Tournament : MonoBehaviour {
     [SerializeField] float _reloadCooldown = 120;
 
     [Inject] PlayFabLogin _login = default;
+    [Inject] CurrencyManager _currencyManager = default;
+    Currency _rating = default;
 
     readonly List<LeaderboardPlayer> _currentPlayers = new List<LeaderboardPlayer>();
     readonly List<LeaderboardPlayer> _prevPlayers = new List<LeaderboardPlayer>();
@@ -38,6 +43,8 @@ public class Tournament : MonoBehaviour {
     float _lastReload = 0;
 
     void Start() {
+        _rating = _currencyManager.GetCurrency("Rating");
+        
         Filled += (players) => {
             foreach (var player in players) {
                 Log(player);
@@ -77,7 +84,22 @@ public class Tournament : MonoBehaviour {
 
     void Load() {
         Clear();
+        LoadScore();
         LoadCurrentLeaderboard();
+    }
+
+    void LoadScore() {
+        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest() {
+            StatisticNames = new List<string>(){LEADERBOARD_NAME},
+        }, result => {
+            if (result.Statistics.Count == 0) {
+                _rating.Set(0);
+            } else {
+                _rating.Set(result.Statistics[0].Value);
+            }
+        }, err => {
+            Err(err.GenerateErrorReport());
+        });
     }
     
     void Clear() {
