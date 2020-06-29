@@ -238,6 +238,7 @@ public class Tournament : MonoBehaviour {
             }
         }, result => {
             Log($"Score updated to {score}"); 
+            Load();
         }, err => Err(err.GenerateErrorReport()));
     }
 
