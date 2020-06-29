@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using Airion.Currency;
 using Airion.Extensions;
 
 using Doozy.Engine.UI;
@@ -17,12 +18,15 @@ public class UITournamentEnd : MonoBehaviour {
     [SerializeField] UILeaderboardLastWinner _winner3 = default;
     [SerializeField] LeaderboardElement _leaderboardElement = default;
     [SerializeField] Transform _content = default;
-
-    UIView _view;
     
     [Inject] Tournament _tournament = default;
     [Inject] PlayerInfoController _infoController = default;
     [Inject] DiContainer _container = default;
+    [Inject] UIReceiveTournamentReward _receiveReward = default;
+    [Inject] TournamentRewards _rewards = default;
+    [Inject] CurrencyManager _currencyManager = default;
+    
+    UIView _view;
     
     readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string,LeaderboardElement>();
     
@@ -32,10 +36,12 @@ public class UITournamentEnd : MonoBehaviour {
 
     void Start() {
         _tournament.Completed += OnTournamentFilled;
+        _receiveReward.Received += OnRewardReceived;
     }
     
     void OnDestroy() {
         _tournament.Completed -= OnTournamentFilled;
+        _receiveReward.Received -= OnRewardReceived;
     }
     
     public void OnExitClick() {
@@ -53,13 +59,16 @@ public class UITournamentEnd : MonoBehaviour {
             }
 
             var player = orderedPlayers[i];
+            if (player.IsMe) {
+                _receiveReward.Show(_rewards.GetRewardByPlace(i));
+            }
             
             if (i == 0)
-                _winner1.Fill(0,player);
+                _winner1.Fill(i,player);
             if (i == 1)
-                _winner2.Fill(0, player);
+                _winner2.Fill(i, player);
             if (i == 2)
-                _winner3.Fill(0, player);
+                _winner3.Fill(i, player);
         }
 
         if (orderedPlayers.Length > 3) {
@@ -69,11 +78,19 @@ public class UITournamentEnd : MonoBehaviour {
                 _container.InjectGameObject(element.gameObject);
                 element.Fill(i, player);
                 _leaderboardElements.Add(player.Id, element);
+                if (player.IsMe) {
+                    _receiveReward.Show(_rewards.GetRewardByPlace(i));
+                }
             }
         }
 
         SetIcons();
         _view.Show();
+    }
+
+    void OnRewardReceived(int reward) {
+        _currencyManager.GetCurrency("Soft").Earn(reward);
+        _receiveReward.Hide();
     }
     
     void SetIcons() {
