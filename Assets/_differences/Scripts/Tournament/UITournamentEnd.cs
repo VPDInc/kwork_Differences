@@ -76,7 +76,7 @@ public class UITournamentEnd : MonoBehaviour {
                 var player = orderedPlayers[i];
                 var element = Instantiate(_leaderboardElement, _content);
                 _container.InjectGameObject(element.gameObject);
-                element.Fill(i, player);
+                element.Fill(i, i, player);
                 _leaderboardElements.Add(player.Id, element);
                 if (player.IsMe) {
                     _receiveReward.Show(_rewards.GetRewardByPlace(i));
