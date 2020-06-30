@@ -385,8 +385,8 @@ public class DiffEditor : MonoBehaviour {
                 throw new ArgumentOutOfRangeException();
         }
 
-        data.Image1Path = $"{imagesPath}{images.Item1.sprite.name}";
-        data.Image2Path = $"{imagesPath}{images.Item2.sprite.name}";
+        data.Image1Path = $"{imagesPath}{data.Id}_1";
+        data.Image2Path = $"{imagesPath}{data.Id}_2";
         
         var jsonString = JsonUtility.ToJson(data);
 
