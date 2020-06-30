@@ -94,6 +94,7 @@ public class PlayFabFacebook : MonoBehaviour {
 
     void OnFacebookUnlinkComplete(UnlinkFacebookAccountResult obj) {
         SetMessage("Unlinked Facebook from PlayFab account");
+        FB.LogOut();
         FacebookUnlinked?.Invoke();
     }
 
@@ -150,6 +151,7 @@ public class PlayFabFacebook : MonoBehaviour {
         } else {
             // If Facebook authentication failed, we stop the cycle with the message
             SetMessage("Facebook Auth Failed: " + result.Error + "\n" + result.RawResult, true);
+            FacebookError?.Invoke();
         }
     }
 
