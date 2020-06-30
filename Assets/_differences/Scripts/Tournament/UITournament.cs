@@ -103,6 +103,9 @@ public class UITournament : MonoBehaviour {
         _loadingView.Hide();
         SelectMy();
         SetIcons();
+        
+        _toLeadersButton.SetActive(IsMeInsideView);
+        _toMyButton.SetActive(!IsMeInsideView);
     }
 
     void UpdateTimer() {
