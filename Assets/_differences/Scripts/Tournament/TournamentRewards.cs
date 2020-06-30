@@ -9,7 +9,7 @@ public class TournamentRewards : ScriptableObject {
         if (place > _lastPlaces)
             return 0;
         
-        var placeClamped = Mathf.Clamp(place, 0, _rewards.Length);
+        var placeClamped = Mathf.Clamp(place, 0, _rewards.Length-1);
         return _rewards[placeClamped];
     }
 }
