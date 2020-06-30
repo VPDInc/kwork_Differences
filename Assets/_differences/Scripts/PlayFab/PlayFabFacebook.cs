@@ -1,6 +1,7 @@
 ﻿// Import statements introduce all the necessary classes for this example.
 
 using System;
+using System.Collections.Generic;
 
 using Airion.Currency;
 using Airion.Extensions;
@@ -61,7 +62,7 @@ public class PlayFabFacebook : MonoBehaviour {
         SetMessage("Logging into Facebook...");
 
         // We invoke basic login procedure and pass in the callback to process the result
-        FB.LogInWithReadPermissions(null, OnFacebookLoggedIn);
+        FB.LogInWithReadPermissions(new List<string>() {"public_profile", "email", "user_friends"}, OnFacebookLoggedIn);
     }
 
     public void LinkFacebook() {
