@@ -16,7 +16,6 @@ using Zenject;
 
 public class LeaderboardElement : MonoBehaviour {
     public LeaderboardPlayer Player { get; private set; }
-    public int Index => _index;
     
     [SerializeField] TextMeshProUGUI _positionText = default;
     [SerializeField] Image _avatar = default;
@@ -30,14 +29,13 @@ public class LeaderboardElement : MonoBehaviour {
 
     [Inject] TournamentRewards _tournamentRewards = default;
     
-    public void Fill(int index, LeaderboardPlayer player) {
-        _positionText.text = (index+1).ToString();
+    public void Fill(int placeInLeaderboard, int placeInGlobal, LeaderboardPlayer player) {
+        _positionText.text = (placeInLeaderboard+1).ToString();
         _avatar.sprite = null;
         _displayName.text = player.DisplayName;
         _score.text = player.Score.ToString();
         Player = player;
-        _index = index;
-        _reward.text = _tournamentRewards.GetRewardByPlace(_index).ToString();
+        _reward.text = _tournamentRewards.GetRewardByPlace(placeInGlobal).ToString();
         if (player.IsMe) {
             _back.color = _backColorIfMe;
         }

@@ -85,20 +85,22 @@ public class UITournament : MonoBehaviour {
         _fullAmount = 0;
         _myPosition = 0;
         
-        if (friendsOnly)
-            players = players.Where(p => p.IsFriend).ToArray();
-
         var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
+        var current = 0;
         for (int i = 0; i < orderedPlayers.Length; i++) {
             var player = orderedPlayers[i];
-            var element = Instantiate(_leaderboardElement, _content);
-            _container.InjectGameObject(element.gameObject);
-            _fullAmount++;
-            element.Fill(i, player);
-            if (player.IsMe)
-                _myPosition = i;
+            if (friendsOnly && player.IsFriend || !friendsOnly) {
+                var element = Instantiate(_leaderboardElement, _content);
+                _container.InjectGameObject(element.gameObject);
+                _fullAmount++;
+                element.Fill(current, i, player);
+                _leaderboardElements.Add(player.Id, element);
+                current++;
+            }
             
-            _leaderboardElements.Add(player.Id, element);
+            if (player.IsMe)
+                _myPosition = current;
+            
         }
         _loadingView.Hide();
         SelectMy();
