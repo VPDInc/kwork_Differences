@@ -312,9 +312,12 @@ public class DiffEditor : MonoBehaviour {
             
         images.Item1.sprite = loader.Result.Item1;
         images.Item2.sprite = loader.Result.Item2;
+
+        var width = images.Item1.sprite.texture.width;
+        var height = images.Item1.sprite.texture.height;
         
         foreach (var point in data.Points) {
-            CreateHandlerFromPoint(point);
+            CreateHandlerFromPoint(DiffUtils.FixPointRelative(point, width, height));
         }
     }
 
@@ -325,7 +328,6 @@ public class DiffEditor : MonoBehaviour {
             DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item1, images.Item1.GetComponent<RectTransform>());
 
         CreateHandler(localPos1, point.Center, images.Item1, _currentHandlerId, point.Shape, point.Width, point.Height, point.Rotation);
-        
 
         var localPos2 =
             DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item2, images.Item2.GetComponent<RectTransform>());
@@ -350,16 +352,29 @@ public class DiffEditor : MonoBehaviour {
     }
     
     [Button, ShowIf(nameof(IsPlaymode))]
+    void ClearPoints() {
+        var images = _config.GetImages(_currentOrientation);
+        images.Item1.transform.DestroyAllChildren();
+        images.Item2.transform.DestroyAllChildren();
+        _handlers.Clear();
+        _currentHandlerId = 0;
+    }
+    
+    [Button, ShowIf(nameof(IsPlaymode))]
     void SaveJson() {
         var data = new Data();
         var points = new List<Point>();
         var uniq = _handlers.DistinctBy(handler => handler.Id);
         
+        var images = _config.GetImages(_currentOrientation);
+        var imageWidth = images.Item1.sprite.texture.width;
+        var imageHeight = images.Item1.sprite.texture.height;
+        
         foreach (var handler in uniq.ToArray()) {
             points.Add(new Point() {
-                Center = handler.ImageSpaceCoordinates,
-                Width = handler.Width,
-                Height = handler.Height,
+                Center = new Vector2(handler.ImageSpaceCoordinates.x / imageWidth, handler.ImageSpaceCoordinates.y / imageHeight),
+                Width = handler.Width / imageWidth,
+                Height = handler.Height / imageHeight,
                 Number = handler.Number,
                 Shape = handler.Shape,
                 Rotation = handler.Rotation
@@ -369,7 +384,6 @@ public class DiffEditor : MonoBehaviour {
         data.Storage = Storage;
         data.Orientation = _currentOrientation;
         data.Points = points.ToArray();
-        var images = _config.GetImages(_currentOrientation);
 
         var path = EditorUtility.SaveFilePanelInProject("Save json", "Diff_", "json", "Save json");
 

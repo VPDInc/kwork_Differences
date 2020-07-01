@@ -176,12 +176,15 @@ public class GameplayHandler : MonoBehaviour {
         var levelData = _levelsData[_currentPictureResult];
         _uiGameplay.Clear();
         _points.Clear();
-        _points.AddRange(levelData.Points);
 
         if (!IsCurrentSpritesLoaded)
             _uiGameplay.ShowWaitWindow();
         
         yield return new WaitWhile(()=> !IsCurrentSpritesLoaded);
+
+        var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
+        levelData.Points = fixedPoints;
+        _points.AddRange(levelData.Points);
         
         _uiGameplay.HideWaitWindow();
 
@@ -189,5 +192,16 @@ public class GameplayHandler : MonoBehaviour {
 
         IsStarted = true;
         _timer.Resume();
+    }
+
+    Point[] FixPoints(Point[] points, (Sprite, Sprite) loadedSprite) {
+        var width = loadedSprite.Item1.texture.width;
+        var height = loadedSprite.Item1.texture.height;
+        var fixedPoints = new Point[points.Length];
+        for (int i = 0; i < points.Length; i++) {
+            fixedPoints[i] = DiffUtils.FixPointRelative(points[i], width, height);
+        }
+
+        return fixedPoints;
     }
 }

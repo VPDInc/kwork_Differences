@@ -110,4 +110,15 @@ public static class DiffUtils {
     public static float PixelWidthToRect(float pixel, RectTransform rect, Sprite sprite) {
         return pixel * (rect.rect.width / sprite.texture.width);
     }
+    
+    public static Point FixPointRelative(Point point, int realWidth, int realHeight) {
+        return new Point() {
+            Center = new Vector2(point.Center.x * realWidth, point.Center.y * realHeight),
+            Height = point.Height * realHeight,
+            Width = point.Width * realWidth,
+            Number = point.Number,
+            Rotation = point.Rotation,
+            Shape = point.Shape
+        };
+    }
 }
