@@ -103,9 +103,16 @@ public class DiffEditor : MonoBehaviour {
                     if (DiffUtils.GetPixelFromScreen(mousePos, image, out var imageCoords, out var localPoint)) {
                         _offset = handler.ImageSpaceCoordinates - imageCoords;
                     }
-
                 } else {
                     var image = hit.gameObject.GetComponent<Image>();
+                    var images = _config.GetImages(_currentOrientation);
+
+                    if (image != images.Item1 && image != images.Item2)
+                        return;
+                    
+                    if (image.sprite == null)
+                        return;
+                    
                     if (DiffUtils.GetPixelFromScreen(mousePos, image,out var imageCoords, out var localPoint)) {
                         var imageWidth = image.sprite.texture.width;
                         var imageHeight = image.sprite.texture.height;
@@ -114,7 +121,6 @@ public class DiffEditor : MonoBehaviour {
 
                         if (isInHeightBounds && isInWidthBounds) {
                             CreateHandler(localPoint, imageCoords, image, _currentHandlerId, Shape);
-                            var images = _config.GetImages(_currentOrientation);
                             var secondImage = image == images.Item1 ? images.Item2 : images.Item1;
                             var secondLocalPoint = DiffUtils.GetRectSpaceCoordinateFromPixel(imageCoords, secondImage,
                                 secondImage.GetComponent<RectTransform>());
