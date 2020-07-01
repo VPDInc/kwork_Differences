@@ -24,8 +24,10 @@ public class Tournament : MonoBehaviour {
     [SerializeField] bool _isDebugEnabled = true;
     [SerializeField] float _reloadCooldown = 120;
 
-    [Inject] PlayFabLogin _login = default;
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] PlayFabInfo _info = default;
+    [Inject] PlayFabLogin _login = default;
+    
     Currency _rating = default;
 
     readonly List<LeaderboardPlayer> _currentPlayers = new List<LeaderboardPlayer>();
@@ -66,23 +68,21 @@ public class Tournament : MonoBehaviour {
             Log("/Last ================");
         };
 
-        if (_login.IsLogged) {
+        if (_info.IsAccountInfoUpdated) {
             Load();
-            return;
         }
 
-        _login.PlayFabLogged += Load;
+        _info.AccountInfoRecieved += OnInfoReceived;
     }
-    
+
+    void OnInfoReceived(GetAccountInfoResult obj) {
+        Load();
+    }
+
     public void TryReloadTimed() {
         if (Time.time - _lastReload <= _reloadCooldown)
             return;
 
-        _lastReload = Time.time;
-        Load();
-    }
-
-    public void ForceReload() {
         _lastReload = Time.time;
         Load();
     }
