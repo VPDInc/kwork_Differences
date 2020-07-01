@@ -3,7 +3,7 @@ using EasyMobile;
 using UnityEngine;
 
 public class FBShare : MonoBehaviour {
-    [SerializeField] string _shareText = default;
+    [SerializeField] string _shareText = "Try to find differences!";
 
     public void Share() {
         StartCoroutine(SaveAndShareScreenshot());
@@ -17,7 +17,7 @@ public class FBShare : MonoBehaviour {
         // The SaveScreenshot() method returns the path of the saved image
         // The provided file name will be added a ".png" extension automatically
         string path = Sharing.SaveScreenshot("screenshot");
-        Sharing.ShareImage(path, "Try to find differences!");
+        Sharing.ShareImage(path, _shareText);
 
     }
 
