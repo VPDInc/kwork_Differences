@@ -44,4 +44,8 @@ public class LeaderboardElement : MonoBehaviour {
     public void SetIcon(Sprite icon) {
         _avatar.sprite = icon;
     }
+
+    public void SetPosition(int pos) {
+        _positionText.text = (pos+1).ToString();
+    }
 }

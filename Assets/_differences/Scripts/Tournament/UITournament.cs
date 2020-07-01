@@ -149,7 +149,24 @@ public class UITournament : MonoBehaviour {
     }
 
     public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly) {
-        Fill(_tournament.CurrentPlayers, isFriendsOnly);
+        // Fill(_tournament.CurrentPlayers, isFriendsOnly);
+        Filter(isFriendsOnly);
+    }
+
+    void Filter(bool isFriendsOnly) {
+        var elements = _leaderboardElements.Values;
+        var ordered = elements.OrderByDescending(e => e.Player.Score).ToArray();
+        var pos = 0;
+        for (int i = 0; i < ordered.Length; i++) {
+            var element = ordered[i];
+            if (element.Player.IsFriend && isFriendsOnly || !isFriendsOnly) {
+                element.gameObject.SetActive(true);
+                element.SetPosition(pos);
+                pos++;
+            } else {
+                element.gameObject.SetActive(false);
+            }
+        }
     }
     
     void OnLastWinnersFilled(LeaderboardPlayer[] winners) {
