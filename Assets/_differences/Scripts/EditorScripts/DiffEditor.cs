@@ -153,7 +153,6 @@ public class DiffEditor : MonoBehaviour {
     
     #endregion // Unity Messages
 
-    
     void SetWidth(int id, float value) {
         var handlers = _handlers.Where(h => h.Id == id);
         handlers.ForEach(h => h.SetWidth(value));
@@ -290,7 +289,7 @@ public class DiffEditor : MonoBehaviour {
     void LoadJson() {
         Clear();
         
-        var path = EditorUtility.OpenFilePanel("Load file", "", "json");
+        var path = EditorUtility.OpenFilePanel("Load file", "Assets/Resources/Jsons", "json");
         if (!File.Exists(path)) {
             Err(path + " Not exist!");
             return;
@@ -391,7 +390,9 @@ public class DiffEditor : MonoBehaviour {
         data.Orientation = _currentOrientation;
         data.Points = points.ToArray();
 
-        var path = EditorUtility.SaveFilePanelInProject("Save json", "Diff_", "json", "Save json");
+        // var path = EditorUtility.SaveFilePanelInProject("Save json", "Diff_", "json", "Save json");
+        var path = EditorUtility.SaveFilePanel("Save json", "Assets/Resources/Jsons", "Diff_", "json");
+
 
         data.Id = Path.GetFileNameWithoutExtension(path);
         var imagesPath = string.Empty;
