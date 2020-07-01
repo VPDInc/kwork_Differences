@@ -14,7 +14,7 @@ public abstract class Tip : MonoBehaviour {
    [Inject] CurrencyManager _currencyManager = default;
    
    Button _button;
-   Currency _currency;
+   protected Currency _currency;
    
    void Awake() {
       _button = GetComponentInChildren<Button>();

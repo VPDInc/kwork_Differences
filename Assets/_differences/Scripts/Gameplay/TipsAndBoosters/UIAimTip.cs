@@ -40,8 +40,16 @@ public class UIAimTip : Tip {
     }
 
     public override void OnButtonClick() {
-        base.OnButtonClick();
-        ShowTip();
+        var notOpenedPointsSet = _notOpenedPoints.ToHashSet();
+        var lastPoints = _gameplay.ClosedPoints.ToHashSet();
+        notOpenedPointsSet.IntersectWith(lastPoints);
+        if (notOpenedPointsSet.Count == 0)
+            return;
+
+        if (_currency.IsEnough(1)) {
+            _currency.Spend(1);
+            ShowTip();
+        }
     }
 
     public void ShowTip() {
