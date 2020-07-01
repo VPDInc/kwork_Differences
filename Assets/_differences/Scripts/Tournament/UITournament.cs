@@ -90,12 +90,16 @@ public class UITournament : MonoBehaviour {
         for (int i = 0; i < orderedPlayers.Length; i++) {
             var player = orderedPlayers[i];
             if (friendsOnly && player.IsFriend || !friendsOnly) {
-                var element = Instantiate(_leaderboardElement, _content);
-                _container.InjectGameObject(element.gameObject);
-                _fullAmount++;
-                element.Fill(current, i, player);
-                _leaderboardElements.Add(player.Id, element);
-                current++;
+                if (_leaderboardElements.ContainsKey(player.Id)) {
+                    // Handle
+                } else {
+                    var element = Instantiate(_leaderboardElement, _content);
+                    _container.InjectGameObject(element.gameObject);
+                    _fullAmount++;
+                    element.Fill(current, i, player);
+                    _leaderboardElements.Add(player.Id, element);
+                    current++;
+                }
             }
             
             if (player.IsMe)
