@@ -89,18 +89,18 @@ public class Tournament : MonoBehaviour {
 
     void Load() {
         Clear();
-        LoadScore();
         LoadCurrentLeaderboard();
     }
 
-    void LoadScore() {
+    void LoadScore(int version) {
         PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest() {
             StatisticNames = new List<string>(){LEADERBOARD_NAME},
         }, result => {
             if (result.Statistics.Count == 0) {
                 _rating.Set(0);
             } else {
-                _rating.Set(result.Statistics[0].Value);
+                var score = result.Statistics.Where(model => model.Version == version).Select(model => model.Value).FirstOrDefault();
+                _rating.Set(score);
             }
         }, err => {
             Err(err.GenerateErrorReport());
@@ -117,6 +117,7 @@ public class Tournament : MonoBehaviour {
             StatisticName = LEADERBOARD_NAME,
             MaxResultsCount = 0
         }, (result) => {
+            LoadScore(result.Version);
             OnCurrentLeaderboardLoaded(result.Version, result.NextReset.HasValue ? result.NextReset.Value : DateTime.MaxValue);
         }, err => {
             Err(err.GenerateErrorReport());
