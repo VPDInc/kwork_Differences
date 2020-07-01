@@ -83,8 +83,9 @@ public class DiffEditor : MonoBehaviour {
     void Awake() {
         FindResources();
     }
-
+    
     void Update() {
+        CheckHotkeys();
         if (Input.GetMouseButtonDown(0)) {
             var mousePos = Input.mousePosition;
             var hit = DiffUtils.RaycastMouse(mousePos);
@@ -150,7 +151,33 @@ public class DiffEditor : MonoBehaviour {
             }
         }
     }
-    
+
+    void CheckHotkeys() {
+        if (Input.GetKeyDown(KeyCode.Space))
+            SaveJson();
+        
+        if (Input.GetKeyDown(KeyCode.N))
+            CreateNew();
+        
+        if (!IsSelected)
+            return;
+
+        if (Input.GetKey(KeyCode.A))
+            Width -= 1;
+        
+        if (Input.GetKey(KeyCode.D))
+            Width += 1;
+        
+        if (Input.GetKey(KeyCode.W))
+            Height += 1;
+        
+        if (Input.GetKey(KeyCode.S))
+            Height -= 1;
+        
+        if (Input.GetKey(KeyCode.Q))
+            Delete();
+    }
+
     #endregion // Unity Messages
 
     void SetWidth(int id, float value) {
@@ -390,9 +417,7 @@ public class DiffEditor : MonoBehaviour {
         data.Orientation = _currentOrientation;
         data.Points = points.ToArray();
 
-        // var path = EditorUtility.SaveFilePanelInProject("Save json", "Diff_", "json", "Save json");
         var path = EditorUtility.SaveFilePanel("Save json", "Assets/Resources/Jsons", "Diff_", "json");
-
 
         data.Id = Path.GetFileNameWithoutExtension(path);
         var imagesPath = string.Empty;
