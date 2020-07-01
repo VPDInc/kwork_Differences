@@ -74,10 +74,15 @@ public class Tournament : MonoBehaviour {
         _login.PlayFabLogged += Load;
     }
     
-    public void Reload() {
+    public void TryReloadTimed() {
         if (Time.time - _lastReload <= _reloadCooldown)
             return;
 
+        _lastReload = Time.time;
+        Load();
+    }
+
+    public void ForceReload() {
         _lastReload = Time.time;
         Load();
     }

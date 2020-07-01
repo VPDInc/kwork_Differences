@@ -40,7 +40,7 @@ public class UITournament : MonoBehaviour {
             var position = _scroll.normalizedPosition.y;
             var step = (1 / (float) _fullAmount);
             var validOffset = step * (ELEMENTS_COUNT_IN_ONE_SCREEN);
-            var isPlayerInsideScreen = position <= MyPositionInScrollView && MyPositionInScrollView <= position + validOffset;
+            var isPlayerInsideScreen = MyPositionInScrollView <= position && position <= MyPositionInScrollView + validOffset;
             return isPlayerInsideScreen;
         }
     }
@@ -48,7 +48,7 @@ public class UITournament : MonoBehaviour {
     float MyPositionInScrollView => 1 - (_myPosition / (float) _fullAmount);
 
     const float UPDATE_TIMER_EVERY_SECONDS = 60;
-    const float ELEMENTS_COUNT_IN_ONE_SCREEN = 7;
+    const float ELEMENTS_COUNT_IN_ONE_SCREEN = 6;
     
     readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string,LeaderboardElement>();
     
@@ -115,7 +115,7 @@ public class UITournament : MonoBehaviour {
         var toStr = delta;
         if (delta < TimeSpan.Zero) {
             toStr = TimeSpan.Zero;
-            _tournament.Reload();
+            _tournament.TryReloadTimed();
         }
         
         _tournamentDuration.text = toStr.ToString(@"d\d\ hh\h\ mm\m");
@@ -140,7 +140,7 @@ public class UITournament : MonoBehaviour {
 
     void SelectMy() {
         var step = (1 / (float) _fullAmount);
-        _scroll.verticalNormalizedPosition = Mathf.Max(MyPositionInScrollView - (step * ELEMENTS_COUNT_IN_ONE_SCREEN), 0);
+        _scroll.verticalNormalizedPosition = Mathf.Clamp01(MyPositionInScrollView + (step * ELEMENTS_COUNT_IN_ONE_SCREEN));
     }
 
     public void OnScrollChanged(Vector2 scroll) {
@@ -149,7 +149,6 @@ public class UITournament : MonoBehaviour {
     }
 
     public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly) {
-        // Fill(_tournament.CurrentPlayers, isFriendsOnly);
         Filter(isFriendsOnly);
     }
 
