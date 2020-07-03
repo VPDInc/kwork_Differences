@@ -46,6 +46,8 @@ namespace EasyMobile
             }
         }
 
+        public string gameId { get; }
+
         public bool isFriend
         {
             get

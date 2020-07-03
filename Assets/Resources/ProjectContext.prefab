@@ -984,6 +984,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4aa2d3e6ce496c241ac323c658aaaf47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _facebookLinkReward: 200
+  _currencyName: Soft
+  _isUsingAnnoyingDebugText: 0
 --- !u!114 &2506588191282252532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1649,7 +1652,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playCost: 10
-  _refillTime: 2.5
+  _refillTime: 0.05
   _refillAmount: 1
 --- !u!114 &7437454038384144567
 MonoBehaviour:

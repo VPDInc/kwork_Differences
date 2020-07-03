@@ -34,6 +34,17 @@ namespace EasyMobile
 
 #if EM_IRONSOURCE
 
+        // ******************************* Rewarded Ad Events ******************************* //
+
+        /// <summary>
+        /// Occurs when a rewarded video ad failed to show.
+        /// </summary>
+        public event Action<IronSourceError> OnRewardedVideoAdShowFailedEvent
+        {
+            add { IronSourceEvents.onRewardedVideoAdShowFailedEvent += value; }
+            remove { IronSourceEvents.onRewardedVideoAdShowFailedEvent -= value; }
+        }
+
         /// <summary>
         /// Occurs when a rewarded video ad is opened.
         /// </summary>
@@ -50,15 +61,6 @@ namespace EasyMobile
         {
             add { IronSourceEvents.onRewardedVideoAdClosedEvent += value; }
             remove { IronSourceEvents.onRewardedVideoAdClosedEvent -= value; }
-        }
-
-        /// <summary>
-        /// Occurs when a rewarded video's availability changed.
-        /// </summary>
-        public event Action<bool> OnRewardedVideoAvailabilityChangedEvent
-        {
-            add { IronSourceEvents.onRewardedVideoAvailabilityChangedEvent += value; }
-            remove { IronSourceEvents.onRewardedVideoAvailabilityChangedEvent -= value; }
         }
 
         /// <summary>
@@ -89,13 +91,24 @@ namespace EasyMobile
         }
 
         /// <summary>
-        /// Occurs when a rewarded video ad failed to show.
+        /// Occurs when a rewarded video ad is clicked.
         /// </summary>
-        public event Action<IronSourceError> OnRewardedVideoAdShowFailedEvent
+        public event Action<IronSourcePlacement> OnRewardedVideoAdClickedEvent
         {
-            add { IronSourceEvents.onRewardedVideoAdShowFailedEvent += value; }
-            remove { IronSourceEvents.onRewardedVideoAdShowFailedEvent -= value; }
+            add { IronSourceEvents.onRewardedVideoAdClickedEvent += value; }
+            remove { IronSourceEvents.onRewardedVideoAdClickedEvent -= value; }
         }
+
+        /// <summary>
+        /// Occurs when a rewarded video's availability changed.
+        /// </summary>
+        public event Action<bool> OnRewardedVideoAvailabilityChangedEvent
+        {
+            add { IronSourceEvents.onRewardedVideoAvailabilityChangedEvent += value; }
+            remove { IronSourceEvents.onRewardedVideoAvailabilityChangedEvent -= value; }
+        }
+
+        // ******************************* Interstitial Ad Events ******************************* //
 
         /// <summary>
         /// Occurs when an interstitial ad is ready.
@@ -107,21 +120,30 @@ namespace EasyMobile
         }
 
         /// <summary>
-        /// Occurs when an interstitial ad rewarded.
-        /// </summary>
-        public event Action OnInterstitialAdRewardedEvent
-        {
-            add { IronSourceEvents.onInterstitialAdRewardedEvent += value; }
-            remove { IronSourceEvents.onInterstitialAdRewardedEvent -= value; }
-        }
-
-        /// <summary>
         /// Occurs when an interstitial ad failed to load.
         /// </summary>
         public event Action<IronSourceError> OnInterstitialAdLoadFailedEvent
         {
             add { IronSourceEvents.onInterstitialAdLoadFailedEvent += value; }
             remove { IronSourceEvents.onInterstitialAdLoadFailedEvent -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when an interstitial ad opened.
+        /// </summary>
+        public event Action OnInterstitialAdOpenedEvent
+        {
+            add { IronSourceEvents.onInterstitialAdOpenedEvent += value; }
+            remove { IronSourceEvents.onInterstitialAdOpenedEvent -= value; }
+        }
+
+        /// <summary>
+        /// Occurs when an interstitial ad closed.
+        /// </summary>
+        public event Action OnInterstitialAdClosedEvent
+        {
+            add { IronSourceEvents.onInterstitialAdClosedEvent += value; }
+            remove { IronSourceEvents.onInterstitialAdClosedEvent -= value; }
         }
 
         /// <summary>
@@ -151,23 +173,7 @@ namespace EasyMobile
             remove { IronSourceEvents.onInterstitialAdClickedEvent -= value; }
         }
 
-        /// <summary>
-        /// Occurs when an interstitial ad opened.
-        /// </summary>
-        public event Action OnInterstitialAdOpenedEvent
-        {
-            add { IronSourceEvents.onInterstitialAdOpenedEvent += value; }
-            remove { IronSourceEvents.onInterstitialAdOpenedEvent -= value; }
-        }
-
-        /// <summary>
-        /// Occurs when an interstitial ad closed.
-        /// </summary>
-        public event Action OnInterstitialAdClosedEvent
-        {
-            add { IronSourceEvents.onInterstitialAdClosedEvent += value; }
-            remove { IronSourceEvents.onInterstitialAdClosedEvent -= value; }
-        }
+        // ******************************* Banner Ad Events ******************************* //
 
         /// <summary>
         /// Occurs when a banner ad loaded.
