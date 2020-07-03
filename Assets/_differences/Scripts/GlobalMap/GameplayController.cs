@@ -30,7 +30,7 @@ public class GameplayController : MonoBehaviour {
 
     public void Load(int levelNum) {
         var levelBalanceData = _levelBalanceLibrary.GetLevelBalanceInfo(levelNum);
-        var levelData = _database.GetData(levelBalanceData.PictureCount, levelBalanceData.PictureCount);
+        var levelData = _database.GetData(levelBalanceData.PictureCount, levelBalanceData.DifferenceCount);
         Initialized?.Invoke(levelNum, levelData);
     }
     
