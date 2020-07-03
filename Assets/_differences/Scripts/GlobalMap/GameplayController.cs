@@ -45,5 +45,19 @@ public class GameplayController : MonoBehaviour {
     void Update() {
         if (Input.GetKeyDown(KeyCode.Space))
             DebugLoadLevel1();
+
+        #if UNITY_EDITOR
+        if (Input.GetKeyDown(KeyCode.F)) {
+            var path = UnityEditor.EditorUtility.OpenFilePanel("Load file", "Assets/Resources/Jsons", "json");
+            if (!System.IO.File.Exists(path)) {
+                return;
+            }
+
+            var jsonString = System.IO.File.ReadAllText(path);
+            var data = DiffUtils.Parse(jsonString);
+            Initialized?.Invoke(0, new []{data});
+            Begin();
+        }
+        #endif
     }
 }
