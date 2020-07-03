@@ -14,6 +14,7 @@ public class GameplayHandler : MonoBehaviour {
     [SerializeField] float _addTimeAfterOver = 25f;
     [SerializeField] int _addTimeCost = 900;
     [SerializeField] StarsEarningConfig _config = default;
+    [SerializeField] UIPictureCountBar _uiPictureCountBar = default;
     
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
@@ -105,6 +106,7 @@ public class GameplayHandler : MonoBehaviour {
         if (_gameplayFillingRoutine != null) 
             StopCoroutine(_gameplayFillingRoutine);
         _gameplayFillingRoutine = StartCoroutine(FillAndStartGameplay());
+        _uiPictureCountBar.AddSegment();
     }
 
     void StopGameplay(bool isWin) {
@@ -118,6 +120,7 @@ public class GameplayHandler : MonoBehaviour {
     void OnBegan() {
         _timer.Launch(_duration);
         _uiGameplay.Show();
+        _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         FillGameplay();
     }
 
