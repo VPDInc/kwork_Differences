@@ -36,7 +36,7 @@ public class UITimer : MonoBehaviour {
     }
     
     void UpdateTimer(float time) {
-        _timerText.text = time.ToString("F0");
+        _timerText.text = TimeSpan.FromSeconds(time).ToString("mm\\:ss");
     }
 
     public void ReduceTime(float reduceTime) {
