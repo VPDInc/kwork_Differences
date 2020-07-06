@@ -3,6 +3,8 @@ using System.Collections;
 
 using Airion.Extensions;
 
+using Doozy.Engine.UI;
+
 using TMPro;
 
 using UnityEngine;
@@ -11,12 +13,15 @@ public class UITimer : MonoBehaviour {
     public event Action Expired;
     
     [SerializeField] TextMeshProUGUI _timerText = default;
-    [SerializeField] UIMissClickWarning _uiMissClickWarningPrefab = default;
+    [SerializeField] UIView _missClickView = default;
+    [SerializeField] TextMeshProUGUI _timeReduceText = default;
 
     AsyncFunc<float> _timerRoutine;
 
     float _timeExpireTimestamp;
     float _timeLeft;
+
+    const string TIME_REDUCE_TEXT = "-{0} sec";
 
     void Awake() {
         _timerRoutine = new AsyncFunc<float>(this, TimerRoutine);
@@ -35,9 +40,8 @@ public class UITimer : MonoBehaviour {
     }
 
     public void ReduceTime(float reduceTime) {
-        var missClick = Instantiate(_uiMissClickWarningPrefab, transform);
-        missClick.SetReducedTimeAndRun(reduceTime);
-        
+        _timeReduceText.text = String.Format(TIME_REDUCE_TEXT, reduceTime);
+        _missClickView.Show();
         _timeExpireTimestamp -= reduceTime;
     }
 
