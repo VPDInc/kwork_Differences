@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Airion.Currency;
 using Airion.Extensions;
 
+using DG.Tweening;
+
 using Doozy.Engine.UI;
 
 using UnityEngine;
@@ -28,6 +30,8 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] UIView _timeExpiredView = default;
     [SerializeField] UIView _loadingView = default;
     [SerializeField] Button _addTimeButton = default;
+    [SerializeField] CanvasGroup _horizontalGroup = default;
+    [SerializeField] CanvasGroup _verticalGroup = default;
 
     [Inject] GameplayHandler _handler = default;
 
@@ -38,11 +42,29 @@ public class UIGameplay : MonoBehaviour {
 
     public void Initialize(Data levelData, (Sprite, Sprite) sprites) {
         _data = levelData;
-        Fill(sprites.Item1, sprites.Item2, _data);
         _points.Clear();
         _points.AddRange(_data.Points);
         _helper.SetPointsAmount(_points.Count);
-        Initialized?.Invoke();
+
+        var image1 = sprites.Item1;
+        var image2 = sprites.Item2;
+        var curr = _horizontalGroup;
+        if (levelData.Orientation == Orientation.Vertical)
+            curr = _verticalGroup;
+
+        var seq = DOTween.Sequence();
+        seq.Append(_verticalGroup.DOFade(0, 0.5f));
+        seq.Join(_horizontalGroup.DOFade(0, 0.5f));
+        seq.AppendCallback(() => {
+            _currentImages = (_image1Hor, _image2Hor);
+            if (levelData.Orientation == Orientation.Vertical) {
+                _currentImages = (_image1Vert, _image2Vert);
+            }
+            _currentImages.Item1.sprite = image1;
+            _currentImages.Item2.sprite = image2;
+        });
+        seq.Append(curr.DOFade(1, 0.5f));
+        seq.AppendCallback(() => Initialized?.Invoke());
     }
     
     public void ShowWaitWindow() {
@@ -114,20 +136,13 @@ public class UIGameplay : MonoBehaviour {
         _timeExpiredView.Hide(isInstance);
     }
     
-    void Fill(Sprite image1, Sprite image2, Data levelData) {
-        _image1Hor.transform.parent.parent.gameObject.SetActive(false);
-        _image1Vert.transform.parent.parent.gameObject.SetActive(false);
-        
-        _currentImages = (_image1Hor, _image2Hor);
-        if (levelData.Orientation == Orientation.Vertical)
-            _currentImages = (_image1Vert, _image2Vert);
-        
-        _currentImages.Item1.transform.parent.parent.gameObject.SetActive(true);
-
-        _currentImages.Item1.sprite = image1;
-        _currentImages.Item2.sprite = image2;
-    }
-
+    // void Fill(Sprite image1, Sprite image2, Data levelData) {
+    //     // _image1Hor.transform.parent.parent.gameObject.SetActive(false);
+    //     // _image1Vert.transform.parent.parent.gameObject.SetActive(false);
+    //   
+    //     // _currentImages.Item1.transform.parent.parent.gameObject.SetActive(true);
+    // }
+    
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
         switch (point.Shape) {
             case Shape.Rectangle:

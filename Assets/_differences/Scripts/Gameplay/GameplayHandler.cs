@@ -23,6 +23,7 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] UIAimTip _aimTip = default;
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] UIStars _uiStars = default;
+    [Inject] UIMiddleScreen _middleScreen = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _points = new List<Point>();
@@ -36,6 +37,7 @@ public class GameplayHandler : MonoBehaviour {
     Currency _soft;
 
     const float SWIPE_DETECTION_LEN = 20;
+    const float WAIT_BETWEEN_PICTURES_CHANGING = 1.5f;
     
     void Start() {
         _timer.Expired += OnTimerExpired;
@@ -83,14 +85,7 @@ public class GameplayHandler : MonoBehaviour {
             }
         }
     }
-
-    void UpdateStars(int amount) {
-        _uiStars.Add(amount);
-        var diff = _pictureResults[_currentPictureResult];
-        diff.StarsCollected += amount;
-        _pictureResults[_currentPictureResult] = diff;
-    }
-
+    
     public void ExitClick() {
         StopGameplay(false);
     }
@@ -101,6 +96,38 @@ public class GameplayHandler : MonoBehaviour {
         _uiGameplay.HideTimeExpired();
         _soft.Spend(_addTimeCost);
     }
+
+    void UpdateStars(int amount) {
+        _uiStars.Add(amount);
+        var diff = _pictureResults[_currentPictureResult];
+        diff.StarsCollected += amount;
+        _pictureResults[_currentPictureResult] = diff;
+    }
+
+    void StopGameplay(bool isWin) {
+        StartCoroutine(Stopping(isWin));
+        IsStarted = false;
+        _timer.Stop();
+    }
+
+    IEnumerator Stopping(bool isWin) {
+        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        _middleScreen.Show(() => {
+            _uiGameplay.Complete();
+            _missClickManager.Reset();
+            _gameplayController.StopLevel(isWin, _pictureResults.ToArray());
+            _middleScreen.Hide();
+        });
+    }
+
+    void OnBegan() {
+        _middleScreen.Show(() => {
+            _timer.Launch(_duration);
+            _uiGameplay.Show();
+            _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
+            FillGameplay();
+        });
+    }
     
     void FillGameplay() {
         if (_gameplayFillingRoutine != null) 
@@ -108,21 +135,44 @@ public class GameplayHandler : MonoBehaviour {
         _gameplayFillingRoutine = StartCoroutine(FillAndStartGameplay());
         _uiPictureCountBar.AddSegment();
     }
-
-    void StopGameplay(bool isWin) {
-        _missClickManager.Reset();
+    
+    IEnumerator FillAndStartGameplay() {
+        _timer.Pause();
         IsStarted = false;
-        _timer.Stop();
-        _uiGameplay.Complete();
-        _gameplayController.StopLevel(isWin, _pictureResults.ToArray());
+        
+        if (!_middleScreen.IsShowing)
+            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        
+        var levelData = _levelsData[_currentPictureResult];
+        _uiGameplay.Clear();
+        _points.Clear();
+
+        if (!IsCurrentSpritesLoaded)
+            _uiGameplay.ShowWaitWindow();
+
+        yield return new WaitWhile(()=> !IsCurrentSpritesLoaded);
+
+        var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
+        levelData.Points = fixedPoints;
+        _points.AddRange(levelData.Points);
+        
+        _uiGameplay.HideWaitWindow();
+
+        _uiGameplay.Initialize(levelData, _loadedSprites[_currentPictureResult]);
+
+        if (_middleScreen.IsShowing) {
+            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+            _middleScreen.Hide(() => {
+                IsStarted = true;
+                _timer.Resume();
+            });
+        } else {
+            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+            IsStarted = true;
+            _timer.Resume();
+        }
     }
 
-    void OnBegan() {
-        _timer.Launch(_duration);
-        _uiGameplay.Show();
-        _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
-        FillGameplay();
-    }
 
     void OnTimerExpired() {
         _uiGameplay.ShowTimeExpired();
@@ -172,31 +222,6 @@ public class GameplayHandler : MonoBehaviour {
     bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
                                    _loadedSprites[_currentPictureResult].Item2 != null;
     
-    IEnumerator FillAndStartGameplay() {
-        _timer.Pause();
-        IsStarted = false;
-        
-        var levelData = _levelsData[_currentPictureResult];
-        _uiGameplay.Clear();
-        _points.Clear();
-
-        if (!IsCurrentSpritesLoaded)
-            _uiGameplay.ShowWaitWindow();
-        
-        yield return new WaitWhile(()=> !IsCurrentSpritesLoaded);
-
-        var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
-        levelData.Points = fixedPoints;
-        _points.AddRange(levelData.Points);
-        
-        _uiGameplay.HideWaitWindow();
-
-        _uiGameplay.Initialize(levelData, _loadedSprites[_currentPictureResult]);
-
-        IsStarted = true;
-        _timer.Resume();
-    }
-
     Point[] FixPoints(Point[] points, (Sprite, Sprite) loadedSprite) {
         var width = loadedSprite.Item1.texture.width;
         var height = loadedSprite.Item1.texture.height;
