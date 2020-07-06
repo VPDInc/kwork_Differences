@@ -171,14 +171,14 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "http://34.82.121.218:4873"
+      "url": "http://35.203.174.220:4873"
     },
     "games.airion.extensions": {
       "version": "1.6.1",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
-      "url": "http://34.82.121.218:4873"
+      "url": "http://35.203.174.220:4873"
     },
     "com.unity.modules.ai": {
       "version": "1.0.0",

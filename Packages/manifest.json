@@ -2,7 +2,7 @@
   "scopedRegistries": [
     {
       "name": "Airion Packages",
-      "url": "http://34.82.121.218:4873/",
+      "url": "http://35.203.174.220:4873/",
       "scopes": [
         "games.airion"
       ]
