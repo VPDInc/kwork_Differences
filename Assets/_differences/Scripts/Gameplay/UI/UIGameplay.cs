@@ -136,13 +136,6 @@ public class UIGameplay : MonoBehaviour {
         _timeExpiredView.Hide(isInstance);
     }
     
-    // void Fill(Sprite image1, Sprite image2, Data levelData) {
-    //     // _image1Hor.transform.parent.parent.gameObject.SetActive(false);
-    //     // _image1Vert.transform.parent.parent.gameObject.SetActive(false);
-    //   
-    //     // _currentImages.Item1.transform.parent.parent.gameObject.SetActive(true);
-    // }
-    
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
         switch (point.Shape) {
             case Shape.Rectangle:
