@@ -90,8 +90,10 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     public void Continue() {
-        _timer.Launch(_addTimeAfterOver);
-        _aimTip.ShowTip();
+        _middleScreen.Hide(() => {
+            _timer.Launch(_addTimeAfterOver);
+            _aimTip.ShowTip();
+        });
     }
 
     void UpdateStars(int amount) {

@@ -57,7 +57,7 @@ public class UITimeIsUp : MonoBehaviour {
     void SwitchToWarn(bool isWarn) {
         _description.text = isWarn ? WARN_DESCRIPTION : NORMAL_DESCRIPTION;
         _warnGroup.SetActive(isWarn);
-        _normalGroup.SetActive(isWarn);
+        _normalGroup.SetActive(!isWarn);
     }
 
     public void OnAddTimeClick() {
