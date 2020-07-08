@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 using Airion.Currency;
 
@@ -8,11 +9,8 @@ using UnityEngine;
 using Zenject;
 
 public class GameplayHandler : MonoBehaviour {
-    public bool IsEnoughToAddTime => _soft.IsEnough(_addTimeCost);
-    
     [SerializeField] float _duration = 10f;
     [SerializeField] float _addTimeAfterOver = 25f;
-    [SerializeField] int _addTimeCost = 900;
     [SerializeField] StarsEarningConfig _config = default;
     [SerializeField] UIPictureCountBar _uiPictureCountBar = default;
     
@@ -24,6 +22,7 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] UIStars _uiStars = default;
     [Inject] UIMiddleScreen _middleScreen = default;
+    [Inject] UITimeIsUp _timeIsUp = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _points = new List<Point>();
@@ -55,9 +54,9 @@ public class GameplayHandler : MonoBehaviour {
     void Update() {
         if (!IsStarted)
             return;
+        
         if (Input.GetMouseButtonDown(0))
             _startPos = Input.mousePosition;
-
 
         var mousePos = Input.mousePosition;
         if (Input.GetMouseButtonUp(0)) {
@@ -86,15 +85,13 @@ public class GameplayHandler : MonoBehaviour {
         }
     }
     
-    public void ExitClick() {
+    public void Exit() {
         StopGameplay(false);
     }
 
-    public void AddTimeClick() {
+    public void Continue() {
         _timer.Launch(_addTimeAfterOver);
         _aimTip.ShowTip();
-        _uiGameplay.HideTimeExpired();
-        _soft.Spend(_addTimeCost);
     }
 
     void UpdateStars(int amount) {
@@ -173,13 +170,13 @@ public class GameplayHandler : MonoBehaviour {
         }
     }
 
-
     void OnTimerExpired() {
-        _uiGameplay.ShowTimeExpired();
+        _middleScreen.Show((() => {
+            _timeIsUp.Show(_addTimeAfterOver, _pictureResults.Sum(res => res.StarsCollected));
+        }));
     }
     
     void OnInitialized(int levelNum, Data[] levelsData) {
-        _uiGameplay.HideTimeExpired(true);
         _levelsData = levelsData;
         
         _pictureResults.Clear();

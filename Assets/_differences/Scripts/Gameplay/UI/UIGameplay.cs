@@ -27,13 +27,9 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] GameObject _circleDiffVisual = default;
     [SerializeField] UIPointsBar _helper = default;
     [SerializeField] UIView _mainView = default;
-    [SerializeField] UIView _timeExpiredView = default;
     [SerializeField] UIView _loadingView = default;
-    [SerializeField] Button _addTimeButton = default;
     [SerializeField] CanvasGroup _horizontalGroup = default;
     [SerializeField] CanvasGroup _verticalGroup = default;
-
-    [Inject] GameplayHandler _handler = default;
 
     Data _data;
     (Image, Image) _currentImages;
@@ -127,15 +123,6 @@ public class UIGameplay : MonoBehaviour {
         return false;
     }
 
-    public void ShowTimeExpired() {
-        _timeExpiredView.Show();
-        _addTimeButton.interactable = _handler.IsEnoughToAddTime;
-    }
-
-    public void HideTimeExpired(bool isInstance = false) {
-        _timeExpiredView.Hide(isInstance);
-    }
-    
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
         switch (point.Shape) {
             case Shape.Rectangle:
