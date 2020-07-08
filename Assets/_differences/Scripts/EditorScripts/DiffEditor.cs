@@ -17,7 +17,7 @@ using System.Collections;
 using UnityEditor;
 
 public class DiffEditor : MonoBehaviour {
-    [SerializeField, ReadOnly, ShowIf(nameof(IsPlaymode))] 
+    [SerializeField, ReadOnly] 
     Orientation _currentOrientation = Orientation.Horizontal;
     
     Vector2 _offset;
@@ -29,7 +29,7 @@ public class DiffEditor : MonoBehaviour {
     readonly List<DiffHandler> _handlers = new List<DiffHandler>();
 
 
-    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 2000)]
+    [ShowInInspector, PropertyRange(0, 2000)]
     float Width {
         set {
             if (_currentSelectedHandler == null)
@@ -40,7 +40,7 @@ public class DiffEditor : MonoBehaviour {
         get => _currentSelectedHandler?.Width ?? 0;
     }
     
-    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 2000)]
+    [ShowInInspector, PropertyRange(0, 2000)]
     float Height {
         set {
             if (_currentSelectedHandler == null)
@@ -51,7 +51,7 @@ public class DiffEditor : MonoBehaviour {
         get => _currentSelectedHandler?.Height ?? 0;
     }
     
-    [ShowInInspector, ShowIf(nameof(IsSelected)), PropertyRange(0, 179)]
+    [ShowInInspector, PropertyRange(0, 179)]
     float Rotation {
         set {
             if (_currentSelectedHandler == null)
@@ -62,7 +62,7 @@ public class DiffEditor : MonoBehaviour {
         get => _currentSelectedHandler?.Rotation ?? 0;
     }
 
-    [ShowInInspector, ShowIf(nameof(IsPlaymode))]
+    [ShowInInspector]
     Shape Shape {
         set {
             _shape = value;
@@ -73,7 +73,7 @@ public class DiffEditor : MonoBehaviour {
         get => _shape;
     }
 
-    [ShowInInspector, ShowIf(nameof(IsPlaymode))]
+    [ShowInInspector]
     Storage Storage { get; set; } = Storage.Addressable;
 
     Shape _shape = Shape.Rectangle;
@@ -200,7 +200,7 @@ public class DiffEditor : MonoBehaviour {
         handlers.ForEach(h => h.SetRotation(value));
     }
     
-    [Button, ShowIf(nameof(IsSelected))]
+    [Button]
     void Delete() {
         var id = _currentSelectedHandler.Id;
         var toDelete = _handlers.Where(h => h.Id == id).ToArray();
