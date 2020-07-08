@@ -92,7 +92,6 @@ public class GameplayHandler : MonoBehaviour {
     public void Continue() {
         _middleScreen.Hide(() => {
             _timer.Launch(_addTimeAfterOver);
-            _aimTip.ShowTip();
         });
     }
 
@@ -173,6 +172,12 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnTimerExpired() {
+        StartCoroutine(ShowTipAndShowTimeIsUpMenu());
+    }
+
+    IEnumerator ShowTipAndShowTimeIsUpMenu() {
+        _aimTip.ShowTip();
+        yield return new WaitForSeconds(1.5f);
         _middleScreen.Show((() => {
             _timeIsUp.Show(_addTimeAfterOver, _pictureResults.Sum(res => res.StarsCollected));
         }));
