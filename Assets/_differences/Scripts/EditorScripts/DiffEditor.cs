@@ -214,8 +214,11 @@ public class DiffEditor : MonoBehaviour {
         UpdateHandlersNum();
     }
     
-    [Button, ShowIf(nameof(IsPlaymode))]
+    [Button]
     void SwitchOrientation() {
+        if (!IsPlaymode)
+            return;
+        
         _currentOrientation = _currentOrientation == Orientation.Horizontal
             ? Orientation.Vertical
             : Orientation.Horizontal;
@@ -300,8 +303,11 @@ public class DiffEditor : MonoBehaviour {
         _config = GetComponentInChildren<EditorConfig>();
     }
 
-    [Button, ShowIf(nameof(IsPlaymode))]
+    [Button]
     void CreateNew() {
+        if (!IsPlaymode)
+            return;
+        
         Clear();
         var images = _config.GetImages(_currentOrientation);
         var spritePath = EditorUtility.OpenFilePanel("Load file", "Assets/_differences/Images", "jpg");
@@ -312,8 +318,11 @@ public class DiffEditor : MonoBehaviour {
         images.Item2.sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath2);
     }
     
-    [Button, ShowIf(nameof(IsPlaymode))]
+    [Button]
     void LoadJson() {
+        if (!IsPlaymode)
+            return;
+        
         Clear();
         
         var path = EditorUtility.OpenFilePanel("Load file", "Assets/Resources/Jsons", "json");
@@ -372,8 +381,11 @@ public class DiffEditor : MonoBehaviour {
         _currentHandlerId++;
     }
 
-    [Button, ShowIf(nameof(IsPlaymode))]
+    [Button]
     void Clear() {
+        if (!IsPlaymode)
+            return;
+
         var images = _config.GetImages(_currentOrientation);
         images.Item1.sprite = null;
         images.Item2.sprite = null;
@@ -383,8 +395,11 @@ public class DiffEditor : MonoBehaviour {
         _currentHandlerId = 0;
     }
     
-    [Button, ShowIf(nameof(IsPlaymode))]
+    [Button]
     void ClearPoints() {
+        if (!IsPlaymode)
+            return;
+        
         var images = _config.GetImages(_currentOrientation);
         images.Item1.transform.DestroyAllChildren();
         images.Item2.transform.DestroyAllChildren();
@@ -392,8 +407,11 @@ public class DiffEditor : MonoBehaviour {
         _currentHandlerId = 0;
     }
     
-    [Button, ShowIf(nameof(IsPlaymode))]
+    [Button]
     void SaveJson() {
+        if (!IsPlaymode)
+            return;
+        
         var data = new Data();
         var points = new List<Point>();
         var uniq = _handlers.DistinctBy(handler => handler.Id);
