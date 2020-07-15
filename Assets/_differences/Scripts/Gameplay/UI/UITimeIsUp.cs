@@ -62,7 +62,7 @@ public class UITimeIsUp : MonoBehaviour {
 
     public void OnAddTimeClick() {
         _soft.Spend(_addTimeCost);
-        _handler.Continue();
+        _handler.ContinueWithTimeBoost();
         _view.Hide();
     }
 
