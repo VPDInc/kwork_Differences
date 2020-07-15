@@ -40,6 +40,7 @@ public class LevelController : MonoBehaviour {
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
+        _allLevels[_lastLevelNum-1].SetAvatar(true);
     }
 
     void OnDestroy() {
@@ -48,12 +49,17 @@ public class LevelController : MonoBehaviour {
     }
 
     void CompleteLevel(int num) {
+        if(_lastLevelNum > 0)
+            _allLevels[_lastLevelNum-1].SetAvatar(false);
         if(num >= _lastLevelNum)
             _lastLevelNum = num + 1;
         var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count-1)];
         level.CompleteLevel();
         _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
+        
+        
+        level.SetAvatar(true);
 
         if(num + 1 < _allLevels.Count)
             _allLevels[num+1].UnlockLevel(false);

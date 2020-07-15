@@ -13,9 +13,14 @@ public class LevelInfo : MonoBehaviour {
     public int LevelNum => _levelNum;
     public int Estimation => _estimation;
 
+    [SerializeField] GameObject _completedCupSprite = default;
+    [SerializeField] GameObject _lockedCupSprite = default;
+    [SerializeField] GameObject _avatar = default;
+    
     [SerializeField] TMP_Text _levelNumLabel = default;
-    [SerializeField] GameObject _activeSprite = default;
-    [SerializeField] SpriteRenderer[] _spritesToHide = default;
+    [SerializeField] GameObject _activeBGSprite = default;
+    [SerializeField] GameObject _completedBGSprite = default;
+    [SerializeField] GameObject _lockedBGSprite = default;
 
     EpisodeInfo _episodeInfo;
     int _levelNum = 0;
@@ -24,11 +29,13 @@ public class LevelInfo : MonoBehaviour {
     bool _isUnlocked = false;
     EventSystem _eventSystem = default;
 
-    const float LOCKED_ALPHA = 0.75f;
-    const float VFX_DURATION = 0.5f;
-
     void Awake() {
         _eventSystem = EventSystem.current;
+        
+        _activeBGSprite.SetActive(false);
+        _completedBGSprite.SetActive(false);
+        _lockedBGSprite.SetActive(true);
+        _avatar.SetActive(false);
     }
 
     public void Init(EpisodeInfo episodeInfo, int levelNum) {
@@ -54,7 +61,10 @@ public class LevelInfo : MonoBehaviour {
 
     public void UnlockLevel(bool isInstant) {
         _isUnlocked = true;
-        _activeSprite.SetActive(true);
+        
+        _activeBGSprite.SetActive(true);
+        _completedBGSprite.SetActive(false);
+        _lockedBGSprite.SetActive(false);
 
         if(!_episodeInfo.IsUnlocked)
             _episodeInfo.UnlockEpisode(isInstant);
@@ -62,24 +72,23 @@ public class LevelInfo : MonoBehaviour {
 
     public void CompleteLevel() {
         _isCompleted = true;
-        _activeSprite.SetActive(false);
+        _activeBGSprite.SetActive(false);
+        _completedBGSprite.SetActive(true);
+        _lockedBGSprite.SetActive(false);
         UnlockVfx(false);
     }
 
+    public void SetAvatar(bool toggle) {
+        _avatar.SetActive(toggle);
+    }
+    
     void UnlockVfx(bool isInstant) {
-        foreach (SpriteRenderer spriteRenderer in _spritesToHide) {
-            spriteRenderer.DOFade(1, isInstant ? 0 : VFX_DURATION);
-        }
+        _completedCupSprite.SetActive(true);
+        _lockedCupSprite.SetActive(false);
     }
 
     void LockVfx(bool isInstant) {
-        foreach (SpriteRenderer spriteRenderer in _spritesToHide) {
-            spriteRenderer.DOFade(LOCKED_ALPHA, isInstant ? 0 : VFX_DURATION);
-        }
+        _completedCupSprite.SetActive(false);
+        _lockedCupSprite.SetActive(true);
     }
-
-    // void OnMouseDown() {
-    //     if(!_isUnlocked || _eventSystem.IsPointerOverGameObject()) return;
-    //     _levelController.OpenPlayView(_levelNum);
-    // }
 }
