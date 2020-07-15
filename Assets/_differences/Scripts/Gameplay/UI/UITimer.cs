@@ -11,8 +11,8 @@ using UnityEngine;
 
 public class UITimer : MonoBehaviour {
     public event Action Expired;
+    public event Action<float> TimerUpdated;
     
-    [SerializeField] TextMeshProUGUI _timerText = default;
     [SerializeField] UIView _missClickView = default;
     [SerializeField] TextMeshProUGUI _timeReduceText = default;
 
@@ -36,7 +36,7 @@ public class UITimer : MonoBehaviour {
     }
     
     void UpdateTimer(float time) {
-        _timerText.text = TimeSpan.FromSeconds(time).ToString("mm\\:ss");
+        TimerUpdated?.Invoke(time);
     }
 
     public void ReduceTime(float reduceTime) {
