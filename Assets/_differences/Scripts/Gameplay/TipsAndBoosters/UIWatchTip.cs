@@ -7,8 +7,8 @@ public class UIWatchTip : Tip {
 
     [SerializeField] float _timeBoost = 45f;
     
-    public override void OnButtonClick() {
-        base.OnButtonClick();
+    protected override bool TryActivate() {
         _timer.AddTime(_timeBoost);
+        return true;
     }
 }

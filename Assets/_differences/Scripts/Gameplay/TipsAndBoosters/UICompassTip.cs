@@ -11,8 +11,7 @@ public class UICompassTip : Tip {
 
     [Inject] UIGameplay _gameplay = default;
     
-    public override void OnButtonClick() {
-        base.OnButtonClick();
+    protected override bool TryActivate() {
         var points = _gameplay.ClosedPoints;
         if (points != null && points.Length > 0) {
             var images = _gameplay.CurrentImages;
@@ -20,7 +19,10 @@ public class UICompassTip : Tip {
             var quarter = GetBetterQuarter(points, size);
             var center = GetQuarterCenter(quarter, size);
             ShowTip(center, images, size);
+            return true;
         }
+
+        return false;
     }
 
     void ShowTip(Vector2 center, (Image, Image) images, Vector2 size) {

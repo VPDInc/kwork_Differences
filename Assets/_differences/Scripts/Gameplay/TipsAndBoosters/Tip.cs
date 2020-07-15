@@ -10,11 +10,14 @@ using Zenject;
 public abstract class Tip : MonoBehaviour {
    [SerializeField] string _currencyId = default;
    [SerializeField] TextMeshProUGUI _amountText = default;
+   [SerializeField] GameObject _plusGroup = default;
+   [SerializeField] GameObject _amountGroup = default;
+   [SerializeField] bool _alwaysOpenStore = default;
 
    [Inject] CurrencyManager _currencyManager = default;
    
    Button _button;
-   protected Currency _currency;
+   Currency _currency;
    
    void Awake() {
       _button = GetComponentInChildren<Button>();
@@ -30,16 +33,31 @@ public abstract class Tip : MonoBehaviour {
       _currency.Updated -= OnCurrencyUpdated;
    }
    
-   public virtual void OnButtonClick() {
-      _currency.Spend(1);
+   public void OnButtonClick() {
+      if (_alwaysOpenStore) {
+         OpenStore();
+      }
+
+      if (_currency.IsEnough(1)) {
+         if (TryActivate()) {
+            _currency.Spend(1);
+         }
+      }
    }
 
-   void SetInteractable(bool isInteractable) {
-      _button.interactable = isInteractable;
+   void OpenStore() {
+      Debug.LogError("No store!");
+   }
+
+   protected abstract bool TryActivate();
+
+   void EnableGroup(bool isEnough) {
+      _plusGroup.SetActive(!isEnough);
+      _amountGroup.SetActive(isEnough);
    }
 
    void UpdateVisual() {
-      SetInteractable(_currency.IsEnough(1));
+      EnableGroup(_currency.IsEnough(1));
       _amountText.text = _currency.Amount.ToString("F0");
    }
    
