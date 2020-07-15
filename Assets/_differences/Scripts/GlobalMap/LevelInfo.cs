@@ -15,6 +15,7 @@ public class LevelInfo : MonoBehaviour {
 
     [SerializeField] GameObject _completedCupSprite = default;
     [SerializeField] GameObject _lockedCupSprite = default;
+    [SerializeField] GameObject _avatar = default;
     
     [SerializeField] TMP_Text _levelNumLabel = default;
     [SerializeField] GameObject _activeBGSprite = default;
@@ -34,6 +35,7 @@ public class LevelInfo : MonoBehaviour {
         _activeBGSprite.SetActive(false);
         _completedBGSprite.SetActive(false);
         _lockedBGSprite.SetActive(true);
+        _avatar.SetActive(false);
     }
 
     public void Init(EpisodeInfo episodeInfo, int levelNum) {
@@ -76,6 +78,10 @@ public class LevelInfo : MonoBehaviour {
         UnlockVfx(false);
     }
 
+    public void SetAvatar(bool toggle) {
+        _avatar.SetActive(toggle);
+    }
+    
     void UnlockVfx(bool isInstant) {
         _completedCupSprite.SetActive(true);
         _lockedCupSprite.SetActive(false);

@@ -23,6 +23,7 @@ public class UICurrencyUpdater : MonoBehaviour {
     [SerializeField] float _updatingDuration = 0.5f;
     [SerializeField] float _scaleChangeDuration = 0.1f;
     [SerializeField] float _scaleUp = 1.5f;
+    [SerializeField] string _postfix = default;
     
     [Inject] CurrencyManager _currencyManager = default;
     
@@ -31,6 +32,7 @@ public class UICurrencyUpdater : MonoBehaviour {
     Tween _shakeTween;
     RectTransform _rectTransform;
     Vector3 _startPos;
+    float _shownAmount;
 
     void Awake() {
         _rectTransform = GetComponent<RectTransform>();
@@ -40,6 +42,7 @@ public class UICurrencyUpdater : MonoBehaviour {
     void Start() {
         _currency = _currencyManager.GetCurrency(_currencyId);
         _startScale = _currencyText.transform.localScale;
+        _shownAmount = _currency.Amount;
         _currency.Updated += OnCurrencyUpdated;
         
         UpdateText(true);
@@ -64,20 +67,21 @@ public class UICurrencyUpdater : MonoBehaviour {
 
     void UpdateText(bool fast = false) {
         DOTween.Kill(this, true);
-        
         if (fast) {
-            _currencyText.text = _currency.Amount.ToString("F0");
+            _shownAmount = _currency.Amount;
+            _currencyText.text = _shownAmount.ToString("F0") + _postfix;
             return;
         }
 
-        var amount = float.Parse(_currencyText.text);
+        var amount = _shownAmount;
         var seq = DOTween.Sequence().SetId(this);
         seq.Append(_currencyText.transform.DOScale(_startScale * _scaleUp, _scaleChangeDuration));
         
         seq.Append(DOTween.To(() => amount, 
                                 (newVal) => {
                                     amount = newVal;
-                                    _currencyText.text = amount.ToString("F0");
+                                    _shownAmount = amount;
+                                    _currencyText.text = _shownAmount.ToString("F0") + _postfix;
                                 }, 
                                 _currency.Amount, 
                                 _updatingDuration));
