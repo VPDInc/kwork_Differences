@@ -54,11 +54,11 @@ public class UIZoomTip : Tip {
         rect.anchoredPosition = pos;
     }
 
-    public override void OnButtonClick() {
-        base.OnButtonClick();
+    protected override bool TryActivate() {
         ZoomIn();
+        return true;
     }
-    
+        
     void OnInitialized() {
         ZoomOut();
     }
