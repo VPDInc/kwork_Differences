@@ -8,6 +8,8 @@ using UnityEngine;
 using Zenject;
 
 public class EnergyController : MonoBehaviour {
+    public int PlayCost => _playCost;
+    
     [SerializeField] int _playCost = 10;
     [SerializeField] float _refillTime = 2.5f;
     [SerializeField] int _refillAmount = 1;

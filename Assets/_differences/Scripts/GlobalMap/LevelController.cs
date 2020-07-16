@@ -10,8 +10,11 @@ using Zenject;
 
 public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
+    public int CompleteRatingReward => _completeRatingReward;
+    public int CompleteCoinReward => _completeCoinReward;
 
     [SerializeField] int _completeCoinReward = 25;
+    [SerializeField] int _completeRatingReward = 150;
 
     [Inject] LeanDragCamera _leanDragCamera = default;
     [Inject] UILevelStartView _levelStartView = default;
@@ -40,7 +43,7 @@ public class LevelController : MonoBehaviour {
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
-        _allLevels[_lastLevelNum-1].SetAvatar(true);
+        _allLevels[(int)Mathf.Clamp(_lastLevelNum-1, 0, Mathf.Infinity)].SetAvatar(true);
     }
 
     void OnDestroy() {
@@ -67,7 +70,7 @@ public class LevelController : MonoBehaviour {
     
     void OnCompleted(GameplayResult gameplayResult) {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
-        var ratingToEarn = gameplayResult.TotalStarsCollected;
+        var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
         _coinCurrency.Earn(coinsToEarn);
         _ratingCurrency.Earn(ratingToEarn);
         _tournament.AddScore(ratingToEarn);

@@ -9,6 +9,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+using Zenject;
+
 public class UIFinishLevelView : MonoBehaviour {
     [Header("UIVisualReferences")] [SerializeField]
     GameObject[] _victoryObjects = default;
@@ -17,13 +19,20 @@ public class UIFinishLevelView : MonoBehaviour {
     [Header("References")] [SerializeField]
     TMP_Text _levelLabel = default;
     [SerializeField] TMP_Text _coinRewardLabel = default;
-    [SerializeField] Transform _infoHolder = default;
+    [SerializeField] TMP_Text _energyRewardLabel = default;
+    [SerializeField] TMP_Text _ratingRewardLabel = default;
+    [SerializeField] Transform _textInfoHolder = default;
 
-    [Header("Prefabs")] [SerializeField] UIPictureResultInfo _pictureResultInfoPrefab = default;
+    [Header("Prefabs")] [SerializeField] RoundInfo _roundInfoPrefab = default;
+
+    [Inject] LevelController _levelController = default;
+    [Inject] EnergyController _energyController = default;
 
     UIView _currentView = default;
 
     const string LEVEL_NAME_PREFIX = "Level ";
+    const string ROUND_NAME_PREFIX = "Round ";
+    const string LEVEL_COMPLETED_PREFIX = "Level completed:";
 
     void Awake() {
         _currentView = GetComponent<UIView>();
@@ -62,17 +71,26 @@ public class UIFinishLevelView : MonoBehaviour {
     void SetCoinsAmount(int coinsAmount) {
         _coinRewardLabel.text = coinsAmount.ToString();
     }
-
-    //DUMMY
-    //TODO: Decide how to get game results
+    
     void Setup(GameplayResult gameplayResult) {
-        _infoHolder.DestroyAllChildren();
+        _textInfoHolder.DestroyAllChildren();
 
         for (int i = 0; i < gameplayResult.PicturesCount; i++) {
-            var info = Instantiate(_pictureResultInfoPrefab, _infoHolder);
-            var differencePoints = gameplayResult.PictureResults[i].DifferencePoints;
-            //TODO: Implement ranking score
-            info.Setup(differencePoints, gameplayResult.PictureResults[i].StarsCollected);
+            var info = Instantiate(_roundInfoPrefab, _textInfoHolder);
+            info.Setup(ROUND_NAME_PREFIX + (i + 1) + ":", gameplayResult.PictureResults[i].StarsCollected.ToString());
         }
+
+        if (gameplayResult.IsCompleted) {
+            var completeInfo = Instantiate(_roundInfoPrefab, _textInfoHolder);
+            completeInfo.Setup(LEVEL_COMPLETED_PREFIX, _levelController.CompleteRatingReward.ToString());
+        }
+        
+        var coinsToEarn = gameplayResult.IsCompleted ? _levelController.CompleteCoinReward : 0;
+        var ratingToEarn = gameplayResult.TotalStarsCollected + (gameplayResult.IsCompleted ?_levelController.CompleteRatingReward : 0);
+        var energyToEarn = gameplayResult.IsCompleted ? _energyController.PlayCost : 0;
+
+        _coinRewardLabel.text = coinsToEarn.ToString();
+        _ratingRewardLabel.text = ratingToEarn.ToString();
+        _energyRewardLabel.text = energyToEarn.ToString();
     }
 }

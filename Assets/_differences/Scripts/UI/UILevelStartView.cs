@@ -22,7 +22,6 @@ public class UILevelStartView : MonoBehaviour {
     [SerializeField] Image _profileIcon = default;
     [SerializeField] Transform _picturesCounterContainer = default;
     [SerializeField] Transform _differencesCounterContainer = default;
-    [SerializeField] PicturePanel _picturePanel = default;
 
     [Header("Prefabs")]
     [SerializeField] GameObject _picturesCounterPrefab = default;
