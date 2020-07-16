@@ -12198,7 +12198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1dc40f7dba39c4317a16aaa1448abc2f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _isDebugEnabled: 1
+  _isDebugEnabled: 0
   _reloadCooldown: 120
 --- !u!1 &1233599105
 GameObject:

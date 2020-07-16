@@ -15,11 +15,16 @@ public class UITimerUpdater : MonoBehaviour {
     const string TIMER_FORMAT = "mm\\:ss";
 
     void Start() {
+        _rotator.SetSpeed(0);
         _timer.TimerUpdated += OnTimerUpdated;
+        _timer.Started += OnResume;
+        _timer.Stopped += OnStop;
     }
 
     void OnDestroy() {
         _timer.TimerUpdated -= OnTimerUpdated;
+        _timer.Started -= OnResume;
+        _timer.Stopped -= OnStop;
     }
 
     void OnStop() {
