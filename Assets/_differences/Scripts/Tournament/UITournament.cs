@@ -30,6 +30,7 @@ public class UITournament : MonoBehaviour {
     [Inject] Tournament _tournament = default;
     [Inject] DiContainer _container = default;
     [Inject] PlayerInfoController _infoController = default;
+    [Inject] UITournamentEnd _endTournament = default;
     
     UIView _view;
     float _lastUpdateTimestamp = 0;
@@ -58,13 +59,13 @@ public class UITournament : MonoBehaviour {
     }
 
     void Start() {
-        _tournament.Filled += OnTournamentFilled;
-        _tournament.FilledLastWinners += OnLastWinnersFilled;
+        _tournament.CurrentFilled += OnTournamentCurrentFilled;
+        _tournament.PrevFilled += OnLastWinnersFilled;
     }
 
     void OnDestroy() {
-        _tournament.Filled -= OnTournamentFilled;
-        _tournament.FilledLastWinners -= OnLastWinnersFilled;
+        _tournament.CurrentFilled -= OnTournamentCurrentFilled;
+        _tournament.PrevFilled -= OnLastWinnersFilled;
     }
     
     void Update() {
@@ -73,7 +74,7 @@ public class UITournament : MonoBehaviour {
         }
     }
 
-    void OnTournamentFilled(LeaderboardPlayer[] players) {
+    void OnTournamentCurrentFilled(LeaderboardPlayer[] players) {
         Fill(players);
     }
 
@@ -142,6 +143,10 @@ public class UITournament : MonoBehaviour {
         }
     }
 
+    public void OnOpenTournamentEndClick() {
+        _endTournament.Show();
+    }
+
     void SelectMy() {
         var step = (1 / (float) _fullAmount);
         _scroll.verticalNormalizedPosition = Mathf.Clamp01(MyPositionInScrollView + (step * ELEMENTS_COUNT_IN_ONE_SCREEN));
@@ -162,7 +167,8 @@ public class UITournament : MonoBehaviour {
         var pos = 0;
         for (int i = 0; i < ordered.Length; i++) {
             var element = ordered[i];
-            if (element.Player.IsFriend && isFriendsOnly || !isFriendsOnly) {
+            var isFriend = (element.Player.IsFriend || element.Player.IsMe);
+            if (isFriend && isFriendsOnly || !isFriendsOnly) {
                 element.gameObject.SetActive(true);
                 element.SetPosition(pos);
                 pos++;
@@ -189,7 +195,7 @@ public class UITournament : MonoBehaviour {
             }
             
             if (i == 1) {
-                _winnerAvatar1.sprite = _infoController.GetRandomIcon();
+                _winnerAvatar2.sprite = _infoController.GetRandomIcon();
                 if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
                     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                         res => {
@@ -199,7 +205,7 @@ public class UITournament : MonoBehaviour {
             }
             
             if (i == 2) {
-                _winnerAvatar1.sprite = _infoController.GetRandomIcon();
+                _winnerAvatar3.sprite = _infoController.GetRandomIcon();
                 if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
                     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                         res => {

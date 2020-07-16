@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: TournamentRewards
   m_EditorClassIdentifier: 
   _rewards: f4010000c80000006400000032000000
+  _lastPlaces: 5

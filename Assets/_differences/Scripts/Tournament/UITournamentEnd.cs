@@ -18,6 +18,7 @@ public class UITournamentEnd : MonoBehaviour {
     [SerializeField] UILeaderboardLastWinner _winner3 = default;
     [SerializeField] LeaderboardElement _leaderboardElement = default;
     [SerializeField] Transform _content = default;
+    [SerializeField] UIView _loadingView = default;
     
     [Inject] Tournament _tournament = default;
     [Inject] PlayerInfoController _infoController = default;
@@ -29,28 +30,52 @@ public class UITournamentEnd : MonoBehaviour {
     UIView _view;
     
     readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string,LeaderboardElement>();
+    readonly List<LeaderboardPlayer> _players = new List<LeaderboardPlayer>();
     
     void Awake() {
         _view = GetComponent<UIView>();
+        _loadingView.Show();
     }
 
     void Start() {
-        _tournament.Completed += OnTournamentFilled;
+        _tournament.PrevFilled += OnTournamentFilled;
+        _tournament.Completed += OnTournamentCompleted;
         _receiveReward.Received += OnRewardReceived;
     }
-    
+
     void OnDestroy() {
-        _tournament.Completed -= OnTournamentFilled;
+        _tournament.PrevFilled -= OnTournamentFilled;
+        _tournament.Completed -= OnTournamentCompleted;
         _receiveReward.Received -= OnRewardReceived;
+    }
+    
+    void OnTournamentCompleted() {
+        _view.Show();
+        for (var index = 0; index < _players.Count; index++) {
+            var player = _players[index];
+            if (player.IsMe) {
+                var reward = _rewards.GetRewardByPlace(index);
+                if (reward > 0) {
+                    _receiveReward.Show(reward);
+                }
+            }
+        }
+    }
+
+    public void Show() {
+        _view.Show();
     }
     
     public void OnExitClick() {
         _view.Hide();
+        _tournament.HandleExit();
     }
 
     void OnTournamentFilled(LeaderboardPlayer[] players) {
         _leaderboardElements.Clear();
         var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
+        _players.Clear();
+        _players.AddRange(orderedPlayers);
         _content.DestroyAllChildren();
 
         for (int i = 0; i < 3; i++) {
@@ -78,14 +103,11 @@ public class UITournamentEnd : MonoBehaviour {
                 _container.InjectGameObject(element.gameObject);
                 element.Fill(i, i, player);
                 _leaderboardElements.Add(player.Id, element);
-                if (player.IsMe) {
-                    _receiveReward.Show(_rewards.GetRewardByPlace(i));
-                }
             }
         }
 
         SetIcons();
-        _view.Show();
+        _loadingView.Hide();
     }
 
     void OnRewardReceived(int reward) {
