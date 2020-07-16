@@ -8,6 +8,8 @@ using UnityEngine;
 using Zenject;
 
 public class EnergyController : MonoBehaviour {
+    public int PlayCost => _playCost;
+    
     [SerializeField] int _playCost = 10;
     [SerializeField] float _refillTime = 2.5f;
     [SerializeField] int _refillAmount = 1;
@@ -38,14 +40,19 @@ public class EnergyController : MonoBehaviour {
         if(result.IsCompleted)
             _energyCurrency.Earn(_playCost);
     }
+    
+    public bool IsCanPlay => _energyCurrency.IsEnough(_playCost);
 
     public bool TryPlay() {
-        var isEnough = _energyCurrency.IsEnough(_playCost);
-        if (isEnough) {
-            _energyCurrency.Spend(_playCost);
+        if (IsCanPlay) {
+            SpendPlayCost();
         }
 
-        return isEnough;
+        return IsCanPlay;
+    }
+
+    public void SpendPlayCost() {
+        _energyCurrency.Spend(_playCost);
     }
 
     void HandlePassedTime() {
