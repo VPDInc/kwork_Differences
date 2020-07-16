@@ -59,12 +59,12 @@ public class UITournament : MonoBehaviour {
 
     void Start() {
         _tournament.CurrentFilled += OnTournamentCurrentFilled;
-        _tournament.LastWinnersFilled += OnLastWinnersFilled;
+        _tournament.PrevFilled += OnLastWinnersFilled;
     }
 
     void OnDestroy() {
         _tournament.CurrentFilled -= OnTournamentCurrentFilled;
-        _tournament.LastWinnersFilled -= OnLastWinnersFilled;
+        _tournament.PrevFilled -= OnLastWinnersFilled;
     }
     
     void Update() {

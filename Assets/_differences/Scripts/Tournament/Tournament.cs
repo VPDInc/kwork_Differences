@@ -16,7 +16,7 @@ using Currency = Airion.Currency.Currency;
 
 public class Tournament : MonoBehaviour {
     public event Action<LeaderboardPlayer[]> CurrentFilled;
-    public event Action<LeaderboardPlayer[]> LastWinnersFilled;
+    public event Action<LeaderboardPlayer[]> PrevFilled;
     // TODO: Make it empty
     public event Action<LeaderboardPlayer[]> Completed;
     
@@ -31,9 +31,7 @@ public class Tournament : MonoBehaviour {
     
     Currency _rating = default;
 
-    readonly List<LeaderboardPlayer> _currentPlayers = new List<LeaderboardPlayer>();
     readonly List<string> _friends = new List<string>();
-    // readonly List<LeaderboardPlayer> _prevPlayers = new List<LeaderboardPlayer>();
 
     const string LEADERBOARD_NAME = "Tournament";
     const string LAST_GENERATED_COHORT_PREFS = "current_saved_cohort";
@@ -43,24 +41,26 @@ public class Tournament : MonoBehaviour {
     
     const int COHORT_SIZE = 50;
 
-    // int _currentLeaderboardVersion = -1;
-    // int _prevLeaderboardVersion = -1;
     float _lastReloadTimestamp = 0;
 
     void Start() {
         _rating = _currencyManager.GetCurrency("Rating");
         
         CurrentFilled += (players) => {
+            Log("Сurrent ================");
+
             foreach (var player in players) {
                 Log(player);
             }
+            
+            Log("/Current ================");
         };
         
         // Completed += () => {
            // Log("Completed");
         // };
         
-        LastWinnersFilled += (players) => {
+        PrevFilled += (players) => {
             Log("Last ================");
             foreach (var player in players) {
                 Log(player);
@@ -121,7 +121,6 @@ public class Tournament : MonoBehaviour {
     }
 
     void Clear() {
-        _currentPlayers.Clear();
         _friends.Clear();
     }
 
@@ -151,8 +150,7 @@ public class Tournament : MonoBehaviour {
         if (lastUsedVersion == resultVersion) {
             if (lastGeneratedCohort.Length >= COHORT_SIZE) {
                 LoadProfiles(lastGeneratedCohort, lastUsedVersion, res => {
-                    _currentPlayers.AddRange(res);
-                    CurrentFilled?.Invoke(_currentPlayers.ToArray());
+                    CurrentFilled?.Invoke(res);
                 });
                 
                 return;
@@ -167,10 +165,9 @@ public class Tournament : MonoBehaviour {
         }
         
         GenerateNewCohort(resultVersion, res => {
-            _currentPlayers.AddRange(res);
             PlayerPrefs.SetInt(LAST_USED_LEADERBOARD_VERSION_PREFS, resultVersion);
-            SaveCohort(_currentPlayers, LAST_GENERATED_COHORT_PREFS);
-            CurrentFilled?.Invoke(_currentPlayers.ToArray());
+            SaveCohort(res.ToList(), LAST_GENERATED_COHORT_PREFS);
+            CurrentFilled?.Invoke(res);
         });
     }
     
@@ -260,28 +257,59 @@ public class Tournament : MonoBehaviour {
     }
 
     void LoadPrevCohort(int currentVersion) {
-        // var prevUsedVersion = Prefs.Load
-        // var prevCohort = Prefs.Load
-        // if (currentVersion - prevUsedVersion == 1) {
-        // if (prevCohort > 0) {
-            // LOAD_PREV_COHORT
-            // PREV_LOADED_EVENT
-            // return;
-        //}
+        var prevUsedVersion = PlayerPrefs.GetInt(PREV_USED_LEADERBOARD_VERSION_PREFS, -1);
+        var prevCohort = PrefsExtensions.GetStringArray(PREV_GENERATED_COHORT_PREFS);
         
-        // var prevVersion = currentVersion - 1;
-        // if (prevVersion >= 0) {
-            // LOAD LEADERBOARD (Prev) with size 50
-            // SAVE PREV COHORT
-            // PREV LOADED EVENT
-            // return;
-        // }
-        
-        // PREV LOADED WITH EMPTY
-    // }
+         if (currentVersion - prevUsedVersion == 1) {
+             if (prevCohort.Length > 0) {
+                 Log("Try load prev cohort");
+                 LoadProfiles(prevCohort, prevUsedVersion, (res) => {
+                     PrevFilled?.Invoke(res);
+                 });
+                 return;
+             }
 
+        }
+
+        var prevVersion = currentVersion - 1;
+        if (prevVersion >= 0) {
+            Log("Try generate prev cohort by version " + prevVersion);
+            LoadLeaderboard(prevVersion, res => {
+                PlayerPrefs.SetInt(PREV_USED_LEADERBOARD_VERSION_PREFS, prevVersion);
+                PrefsExtensions.SetStringArray(PREV_GENERATED_COHORT_PREFS, res.Select(p => p.Id).ToArray());
+                PrevFilled?.Invoke(res);
+            });
+
+            return;
+        }
+
+        PrevFilled?.Invoke(new LeaderboardPlayer[]{ });
     }
-    
+
+    void LoadLeaderboard(int version, Action<LeaderboardPlayer[]> callback) {
+        PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
+                StatisticName = LEADERBOARD_NAME, 
+                MaxResultsCount = 50, 
+                Version = version,
+                ProfileConstraints = new PlayerProfileViewConstraints() {
+                    ShowLinkedAccounts = true,
+                    ShowStatistics = true,
+                    ShowDisplayName = true,
+                }
+            },
+            result => {
+                var players = new List<LeaderboardPlayer>();
+                foreach (var player in result.Leaderboard) {
+                    var accounts = player.Profile.LinkedAccounts;
+                    var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
+                    var id = facebook == null ? string.Empty : facebook.PlatformUserId;
+                    players.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, id));
+                }
+                callback?.Invoke(players.ToArray());
+            }, 
+            err=> Err(err.GenerateErrorReport()));
+    }
+
     void CheckCompletion() {
         // raise if true in load current cohort
         // TODO: CHECK completion by version
@@ -301,6 +329,11 @@ public class Tournament : MonoBehaviour {
         }, err => {
             Err(err.GenerateErrorReport());
         });
+    }
+        
+    [ContextMenu(nameof(DebugAdd10Score))]
+    void DebugAdd10Score() {
+        AddScore(10);
     }
     
     void Err(object message) {
