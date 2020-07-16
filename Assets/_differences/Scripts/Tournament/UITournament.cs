@@ -58,13 +58,13 @@ public class UITournament : MonoBehaviour {
     }
 
     void Start() {
-        _tournament.Filled += OnTournamentFilled;
-        _tournament.FilledLastWinners += OnLastWinnersFilled;
+        _tournament.CurrentFilled += OnTournamentCurrentFilled;
+        _tournament.LastWinnersFilled += OnLastWinnersFilled;
     }
 
     void OnDestroy() {
-        _tournament.Filled -= OnTournamentFilled;
-        _tournament.FilledLastWinners -= OnLastWinnersFilled;
+        _tournament.CurrentFilled -= OnTournamentCurrentFilled;
+        _tournament.LastWinnersFilled -= OnLastWinnersFilled;
     }
     
     void Update() {
@@ -73,7 +73,7 @@ public class UITournament : MonoBehaviour {
         }
     }
 
-    void OnTournamentFilled(LeaderboardPlayer[] players) {
+    void OnTournamentCurrentFilled(LeaderboardPlayer[] players) {
         Fill(players);
     }
 
@@ -162,7 +162,8 @@ public class UITournament : MonoBehaviour {
         var pos = 0;
         for (int i = 0; i < ordered.Length; i++) {
             var element = ordered[i];
-            if (element.Player.IsFriend && isFriendsOnly || !isFriendsOnly) {
+            var isFriend = (element.Player.IsFriend || element.Player.IsMe);
+            if (isFriend && isFriendsOnly || !isFriendsOnly) {
                 element.gameObject.SetActive(true);
                 element.SetPosition(pos);
                 pos++;
