@@ -15,11 +15,11 @@ using Zenject;
 using Currency = Airion.Currency.Currency;
 
 public class Tournament : MonoBehaviour {
-    public event Action<LeaderboardPlayer[]> Filled;
-    public event Action<LeaderboardPlayer[]> FilledLastWinners;
-    public event Action<LeaderboardPlayer[]> Completed;
+    public event Action<LeaderboardPlayer[]> CurrentFilled;
+    public event Action<LeaderboardPlayer[]> PrevFilled;
+    public event Action Completed;
+    
     public DateTime NextReset { get; private set; }
-    public LeaderboardPlayer[] CurrentPlayers => _currentPlayers.ToArray();
 
     [SerializeField] bool _isDebugEnabled = true;
     [SerializeField] float _reloadCooldown = 120;
@@ -30,37 +30,42 @@ public class Tournament : MonoBehaviour {
     
     Currency _rating = default;
 
-    readonly List<LeaderboardPlayer> _currentPlayers = new List<LeaderboardPlayer>();
-    readonly List<LeaderboardPlayer> _prevPlayers = new List<LeaderboardPlayer>();
+    readonly List<string> _friends = new List<string>();
 
     const string LEADERBOARD_NAME = "Tournament";
-    const string CURRENT_SAVED_COHORT_PREFS = "current_saved_cohort";
-    const string PREV_SAVED_COHORT_PREFS = "prev_saved_cohort";
-    const string CURRENT_LEADERBOARD_VERSION_PREFS = "current_leaderboard_version";
-    const string PREV_LEADERBOARD_VERSION_PREFS = "prev_leaderboard_version";
+    const string LAST_GENERATED_COHORT_PREFS = "current_saved_cohort";
+    const string PREV_GENERATED_COHORT_PREFS = "prev_saved_cohort";
+    const string LAST_USED_LEADERBOARD_VERSION_PREFS = "current_leaderboard_version";
+    const string PREV_USED_LEADERBOARD_VERSION_PREFS = "prev_leaderboard_version";
+    const string COMPLETION_VIEWED_PREFS = "completion_window_viewed";
+    
     const int COHORT_SIZE = 50;
 
-    int _currentLeaderboardVersion = -1;
-    int _prevLeaderboardVersion = -1;
-    float _lastReload = 0;
+    float _lastReloadTimestamp = 0;
+
+    bool IsViewed {
+        get => PrefsExtensions.GetBool(COMPLETION_VIEWED_PREFS, true);
+        set => PrefsExtensions.SetBool(COMPLETION_VIEWED_PREFS, value);
+    }
 
     void Start() {
         _rating = _currencyManager.GetCurrency("Rating");
         
-        Filled += (players) => {
-            foreach (var player in players) {
-                Log(player);
-            }
-        };
-        Completed += (players) => {
-            Log("Winners ==============");
-            foreach (var player in players) {
-                Log(player);
-            }
+        CurrentFilled += (players) => {
+            Log("Сurrent ================");
 
-            Log("/Winners ==============");
+            foreach (var player in players) {
+                Log(player);
+            }
+            
+            Log("/Current ================");
         };
-        FilledLastWinners += (players) => {
+        
+        Completed += () => {
+           Log("Completed");
+        };
+        
+        PrevFilled += (players) => {
             Log("Last ================");
             foreach (var player in players) {
                 Log(player);
@@ -74,202 +79,15 @@ public class Tournament : MonoBehaviour {
 
         _info.AccountInfoRecieved += OnInfoReceived;
     }
-
-    void OnInfoReceived(GetAccountInfoResult obj) {
-        Load();
-    }
-
-    public void TryReloadTimed() {
-        if (Time.time - _lastReload <= _reloadCooldown)
-            return;
-
-        _lastReload = Time.time;
-        Load();
-    }
-
-    void Load() {
-        Clear();
-        LoadCurrentLeaderboard();
-    }
-
-    void LoadScore(int version) {
-        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest() {
-            StatisticNames = new List<string>(){LEADERBOARD_NAME},
-        }, result => {
-            if (result.Statistics.Count == 0) {
-                _rating.Set(0);
-            } else {
-                var score = result.Statistics.Where(model => model.Version == version).Select(model => model.Value).FirstOrDefault();
-                _rating.Set(score);
-            }
-        }, err => {
-            Err(err.GenerateErrorReport());
-        });
-    }
-    
-    void Clear() {
-        _currentPlayers.Clear();
-        _prevPlayers.Clear();
-    }
-
-    void LoadCurrentLeaderboard() {
-        PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
-            StatisticName = LEADERBOARD_NAME,
-            MaxResultsCount = 0
-        }, (result) => {
-            LoadScore(result.Version);
-            OnCurrentLeaderboardLoaded(result.Version, result.NextReset.HasValue ? result.NextReset.Value : DateTime.MaxValue);
-        }, err => {
-            Err(err.GenerateErrorReport());
-        });
-    }
-
-    void OnCurrentLeaderboardLoaded(int version, DateTime nextReset) {
-        Log($"Current active leaderboard version: {version}");
-        
-        NextReset = nextReset;
-        
-        _currentLeaderboardVersion = PlayerPrefs.GetInt(CURRENT_LEADERBOARD_VERSION_PREFS, -1);
-        _prevLeaderboardVersion = PlayerPrefs.GetInt(PREV_LEADERBOARD_VERSION_PREFS, -1);
-        var savedIds = PrefsExtensions.GetStringArray(CURRENT_SAVED_COHORT_PREFS);
-        var prevIds = PrefsExtensions.GetStringArray(PREV_SAVED_COHORT_PREFS);
-        
-        if (_currentLeaderboardVersion != version) {
-            if (savedIds.Length > 0) {
-                LoadProfiles(savedIds, _currentLeaderboardVersion, (res) => {
-                    SaveCohort(res.ToList(), PREV_SAVED_COHORT_PREFS);
-                }, res => {
-                    _prevPlayers.AddRange(res);
-                    FilledLastWinners?.Invoke(res);
-                    Completed?.Invoke(res);
-                });
-            }
-
-            PlayerPrefs.SetInt(PREV_LEADERBOARD_VERSION_PREFS, _currentLeaderboardVersion);
-            _prevLeaderboardVersion = _currentLeaderboardVersion;
-            _currentLeaderboardVersion = version;
-            PlayerPrefs.SetInt(CURRENT_LEADERBOARD_VERSION_PREFS, _currentLeaderboardVersion);
-            GenerateNewCohort(_currentLeaderboardVersion);
-            return;
-        }
-
-        if (savedIds.Length <= COHORT_SIZE) {
-            GenerateNewCohort(_currentLeaderboardVersion);
-        } else {
-            LoadProfiles(savedIds, _currentLeaderboardVersion, (res)=> {},(res) => {
-                Filled?.Invoke(res.ToArray());
-            });
-        }
-
-        if (prevIds.Length > 0) {
-            LoadProfiles(prevIds, _prevLeaderboardVersion, (res)=>{},(res) => {
-                FilledLastWinners?.Invoke(res.ToArray());
-            });
-        }
-    }
-
-    void GenerateNewCohort(int version) {
-        AddScoreWithCallback(0, () => {
-            Log("Try to generate new cohort");
-            PlayFabClientAPI.GetLeaderboardAroundPlayer(new GetLeaderboardAroundPlayerRequest() {
-                    StatisticName = LEADERBOARD_NAME, 
-                    MaxResultsCount = 50, 
-                    Version = version,
-                    ProfileConstraints = new PlayerProfileViewConstraints() {
-                        ShowLinkedAccounts = true,
-                        ShowStatistics = true,
-                        ShowDisplayName = true,
-                    }
-                },
-            result => {
-                foreach (var player in result.Leaderboard) {
-                    var accounts = player.Profile.LinkedAccounts;
-                    var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
-                    var id = facebook == null ? string.Empty : facebook.PlatformUserId;
-                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, id));
-                }
-                SaveCohort(_currentPlayers, CURRENT_SAVED_COHORT_PREFS);
-                Filled?.Invoke(_currentPlayers.ToArray());
-                LoadCurrentFriends();
-            }, 
-            err=> Err(err.GenerateErrorReport()));
-        });
-    }
-
-    LeaderboardPlayer Create(string id, string displayName, int score, string facebook, bool isFriend = false) {
-        var player = new LeaderboardPlayer() {
-            DisplayName = displayName,
-            Id = id,
-            Score = score,
-            IsFriend = isFriend,
-            Facebook = facebook,
-            IsMe = _login.PlayerPlayfabId.Equals(id)
-        };
-        return player;
-    }
-    
-    void LoadCurrentFriends() {
-        PlayFabClientAPI.GetFriendLeaderboard(new GetFriendLeaderboardRequest() {
-                StatisticName = LEADERBOARD_NAME,
-                ProfileConstraints = new PlayerProfileViewConstraints() {
-                    ShowLinkedAccounts = true,
-                    ShowStatistics = true,
-                    ShowDisplayName = true,
-                },
-                IncludeFacebookFriends = true
-            },
-            result => {
-                foreach (var player in result.Leaderboard) {
-                    var loaded = false;
-                    
-                    for (int i = 0; i < _currentPlayers.Count; i++) {
-                        var p = _currentPlayers[i];
-                        if (p.Id.Equals(player.PlayFabId)) {
-                            p.IsFriend = true;
-                            _currentPlayers[i] = p;
-                            loaded = true;
-                            break;
-                        }
-                    }
-                    
-                    if (loaded)
-                        continue;
-                    
-                    var accounts = player.Profile.LinkedAccounts;
-                    var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
-                    var id = facebook == null ? string.Empty : facebook.PlatformUserId;
-                    _currentPlayers.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, id, true));
-                }
-                
-                Log("Friends load completed");
-                Filled?.Invoke(_currentPlayers.ToArray());
-            }, err => {Err(err.GenerateErrorReport());});
-    }
-    
-    void SaveCohort(List<LeaderboardPlayer> players, string prefs) {
-        var ids = players.Select(player => player.Id).ToArray();
-        PrefsExtensions.SetStringArray(prefs, ids);
-    }
-    
-    [ContextMenu(nameof(DebugAdd10Score))]
-    void DebugAdd10Score() {
-        AddScore(10);
-    }
     
     public void AddScore(int score) {
-        PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest {
-            Statistics = new List<StatisticUpdate> {
-                new StatisticUpdate {
-                    StatisticName = LEADERBOARD_NAME,
-                    Value = score
-                }
-            }
-        }, result => {
-            Log($"Score updated to {score}"); 
-            Load();
-        }, err => Err(err.GenerateErrorReport()));
+        AddScoreWithCallback(score, Load);
     }
-
+    
+    public void HandleExit() {
+        IsViewed = true;
+    }
+    
     void AddScoreWithCallback(int score, Action callback) {
         PlayFabClientAPI.UpdatePlayerStatistics(new UpdatePlayerStatisticsRequest {
             Statistics = new List<StatisticUpdate> {
@@ -279,12 +97,94 @@ public class Tournament : MonoBehaviour {
                 }
             }
         }, result => {
-            callback?.Invoke();
             Log($"Score updated to {score}"); 
+            callback?.Invoke();
         }, err => Err(err.GenerateErrorReport()));
     }
+
+    public void TryReloadTimed() {
+        if (Time.time - _lastReloadTimestamp <= _reloadCooldown)
+            return;
+
+        _lastReloadTimestamp = Time.time;
+        Load();
+    }
     
-    void LoadProfiles(string[] ids, int version, Action<LeaderboardPlayer[]> callbackWithoutFriends, Action<LeaderboardPlayer[]> callbackWithFriends) {
+    void OnInfoReceived(GetAccountInfoResult obj) => Load();
+
+    void Load() {
+        Clear();
+        LoadFriends(LoadCurrentLeaderboard);
+    }
+
+    void LoadFriends(Action action) {
+        PlayFabClientAPI.GetFriendsList(new GetFriendsListRequest() {
+            IncludeFacebookFriends = true,
+        }, res => {
+            _friends.AddRange(res.Friends.Select(f => f.FriendPlayFabId));
+            action.Invoke();
+        }, fail => {
+            action.Invoke();
+            Err(fail.GenerateErrorReport());   
+        });
+    }
+
+    void Clear() {
+        _friends.Clear();
+    }
+
+    void LoadCurrentLeaderboard() {
+        PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
+            StatisticName = LEADERBOARD_NAME,
+            MaxResultsCount = 0
+        }, (result) => {
+            var version = result.Version;
+            Log($"Current active leaderboard version: {version}");
+            LoadScore(version);
+            var resetTimestamp = result.NextReset.HasValue ? result.NextReset.Value : DateTime.MaxValue;
+            LoadCurrentCohort(version, resetTimestamp);
+            LoadPrevCohort(version);
+        }, err => {
+            Err(err.GenerateErrorReport());
+        });
+    }
+
+    void LoadCurrentCohort(int resultVersion, DateTime resetTimestamp) {
+        NextReset = resetTimestamp;
+        
+        var lastUsedVersion = PlayerPrefs.GetInt(LAST_USED_LEADERBOARD_VERSION_PREFS, -1);
+        var lastGeneratedCohort = PrefsExtensions.GetStringArray(LAST_GENERATED_COHORT_PREFS);
+
+        if (lastUsedVersion == resultVersion) {
+            if (lastGeneratedCohort.Length >= COHORT_SIZE) {
+                LoadProfiles(lastGeneratedCohort, lastUsedVersion, res => {
+                    CurrentFilled?.Invoke(res);
+                });
+                
+                return;
+            }
+            
+        } else {
+            if ((resultVersion - lastUsedVersion == 1) && lastUsedVersion != -1) {
+                PlayerPrefs.SetInt(PREV_USED_LEADERBOARD_VERSION_PREFS, lastUsedVersion);
+                PrefsExtensions.SetStringArray(PREV_GENERATED_COHORT_PREFS, lastGeneratedCohort);
+                IsViewed = false;
+            }
+        }
+        
+        GenerateNewCohort(resultVersion, res => {
+            PlayerPrefs.SetInt(LAST_USED_LEADERBOARD_VERSION_PREFS, resultVersion);
+            SaveCohort(res.ToList(), LAST_GENERATED_COHORT_PREFS);
+            CurrentFilled?.Invoke(res);
+        });
+    }
+    
+    void SaveCohort(List<LeaderboardPlayer> players, string prefs) {
+        var ids = players.Select(player => player.Id).ToArray();
+        PrefsExtensions.SetStringArray(prefs, ids);
+    }
+    
+    void LoadProfiles(string[] ids, int version, Action<LeaderboardPlayer[]> callback) {
         var toLoad = ids.Length;
         var loaded = 0;
         List<LeaderboardPlayer> players = new List<LeaderboardPlayer>();
@@ -304,62 +204,148 @@ public class Tournament : MonoBehaviour {
                 players.Add(Create(result.PlayerProfile.PlayerId, result.PlayerProfile.DisplayName, score, fbId));
                 loaded++;
                 if (loaded >= toLoad) {
-                    callbackWithoutFriends?.Invoke(players.ToArray());
-                    LoadFriends(version, players, res => { callbackWithFriends?.Invoke(res);});
+                    callback?.Invoke(players.ToArray());
                 }
             }, fail => {
                 loaded++;
                 if (loaded >= toLoad) {
-                    callbackWithoutFriends?.Invoke(players.ToArray());
-                    LoadFriends(version, players, res => { callbackWithFriends?.Invoke(res);});
+                    callback?.Invoke(players.ToArray());
                 }
                 Err(fail.GenerateErrorReport());
             });
         }
     }
     
-    void LoadFriends(int version, List<LeaderboardPlayer> players, Action<LeaderboardPlayer[]> callback) {
-        PlayFabClientAPI.GetFriendLeaderboard(new GetFriendLeaderboardRequest() {
-                StatisticName = LEADERBOARD_NAME,
+    LeaderboardPlayer Create(string id, string displayName, int score, string facebook) {
+        var player = new LeaderboardPlayer() {
+            DisplayName = displayName,
+            Id = id,
+            Score = score,
+            IsFriend = _friends.Contains(id),
+            Facebook = facebook,
+            IsMe = _login.PlayerPlayfabId.Equals(id)
+        };
+        return player;
+    }
+    
+    void GenerateNewCohort(int version, Action<LeaderboardPlayer[]> completedCallback) {
+        AddScoreWithCallback(0, () => {
+            Log("Try to generate new cohort");
+            var players = new List<LeaderboardPlayer>();
+            PlayFabClientAPI.GetLeaderboardAroundPlayer(new GetLeaderboardAroundPlayerRequest() {
+                    StatisticName = LEADERBOARD_NAME, 
+                    MaxResultsCount = 50, 
+                    Version = version,
+                    ProfileConstraints = new PlayerProfileViewConstraints() {
+                        ShowLinkedAccounts = true,
+                        ShowStatistics = true,
+                        ShowDisplayName = true,
+                    }
+                },
+                result => {
+                    foreach (var player in result.Leaderboard) {
+                        var accounts = player.Profile.LinkedAccounts;
+                        var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
+                        var id = facebook == null ? string.Empty : facebook.PlatformUserId;
+                        players.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, id));
+                    }
+                    
+                    LoadProfiles(_friends.ToArray(), version, friends => {
+                        foreach (var friend in friends) {
+                            if (!players.Any(p => p.Id.Equals(friend.Id))) {
+                                players.Add(friend);
+                            }
+                        }
+                        
+                        completedCallback?.Invoke(players.ToArray());
+                    });
+                }, 
+                err=> Err(err.GenerateErrorReport()));
+        });
+    }
+
+    void LoadPrevCohort(int currentVersion) {
+        var prevUsedVersion = PlayerPrefs.GetInt(PREV_USED_LEADERBOARD_VERSION_PREFS, -1);
+        var prevCohort = PrefsExtensions.GetStringArray(PREV_GENERATED_COHORT_PREFS);
+        
+         if (currentVersion - prevUsedVersion == 1) {
+             if (prevCohort.Length > 0) {
+                 Log("Try load prev cohort");
+                 LoadProfiles(prevCohort, prevUsedVersion, (res) => {
+                     PrevFilled?.Invoke(res);
+                     CheckCompletion();
+                 });
+                 return;
+             }
+
+        }
+
+        var prevVersion = currentVersion - 1;
+        if (prevVersion >= 0) {
+            Log("Try generate prev cohort by version " + prevVersion);
+            LoadLeaderboard(prevVersion, res => {
+                PlayerPrefs.SetInt(PREV_USED_LEADERBOARD_VERSION_PREFS, prevVersion);
+                PrefsExtensions.SetStringArray(PREV_GENERATED_COHORT_PREFS, res.Select(p => p.Id).ToArray());
+                PrevFilled?.Invoke(res);
+                CheckCompletion();
+            });
+
+            return;
+        }
+
+        PrevFilled?.Invoke(new LeaderboardPlayer[]{ });
+        CheckCompletion();
+    }
+
+    void LoadLeaderboard(int version, Action<LeaderboardPlayer[]> callback) {
+        PlayFabClientAPI.GetLeaderboard(new GetLeaderboardRequest() {
+                StatisticName = LEADERBOARD_NAME, 
+                MaxResultsCount = 50, 
                 Version = version,
                 ProfileConstraints = new PlayerProfileViewConstraints() {
                     ShowLinkedAccounts = true,
                     ShowStatistics = true,
                     ShowDisplayName = true,
-                },
-                IncludeFacebookFriends = true
+                }
             },
             result => {
+                var players = new List<LeaderboardPlayer>();
                 foreach (var player in result.Leaderboard) {
-                    var loaded = false;
-                    
-                    for (int i = 0; i < players.Count; i++) {
-                        var p = players[i];
-                        if (p.Id.Equals(player.PlayFabId)) {
-                            p.IsFriend = true;
-                            players[i] = p;
-                            loaded = true;
-                            break;
-                        }
-                    }
-                    
-                    if (loaded)
-                        continue;
-
                     var accounts = player.Profile.LinkedAccounts;
                     var facebook = accounts.FirstOrDefault(acc => acc.Platform == LoginIdentityProvider.Facebook);
-                    var fbId = facebook == null ? string.Empty : facebook.PlatformUserId;
-                    players.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, fbId, true));
+                    var id = facebook == null ? string.Empty : facebook.PlatformUserId;
+                    players.Add(Create(player.PlayFabId, player.DisplayName, player.StatValue, id));
                 }
-                
-                Log("Friends load completed");
                 callback?.Invoke(players.ToArray());
-            }, err => {
-                callback?.Invoke(players.ToArray());
-                Err(err.GenerateErrorReport());
-            });
+            }, 
+            err=> Err(err.GenerateErrorReport()));
     }
 
+    void CheckCompletion() {
+        if (!IsViewed)
+            Completed?.Invoke();
+    }
+
+    void LoadScore(int version) {
+        PlayFabClientAPI.GetPlayerStatistics(new GetPlayerStatisticsRequest() {
+            StatisticNames = new List<string>(){LEADERBOARD_NAME},
+        }, result => {
+            if (result.Statistics.Count == 0) {
+                _rating.Set(0);
+            } else {
+                var score = result.Statistics.Where(model => model.Version == version).Select(model => model.Value).FirstOrDefault();
+                _rating.Set(score);
+            }
+        }, err => {
+            Err(err.GenerateErrorReport());
+        });
+    }
+        
+    [ContextMenu(nameof(DebugAdd10Score))]
+    void DebugAdd10Score() {
+        AddScore(10);
+    }
+    
     void Err(object message) {
         Debug.LogError($"[{GetType()}] {message}");
     }

@@ -10211,6 +10211,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 905082032}
   m_CullTransparentMesh: 0
+--- !u!1 &977574083 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 94523618972219771, guid: 6f275781efdaa4288b1f7096aedb8735,
+    type: 3}
+  m_PrefabInstance: {fileID: 1394652984621612950}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &977574084 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7662407853763808492, guid: 6f275781efdaa4288b1f7096aedb8735,
+    type: 3}
+  m_PrefabInstance: {fileID: 1394652984621612950}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977574083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7bdde9232b87c41f08a9d8a79abf0d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &977574085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977574083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - {fileID: 977574084}
+  _identifier: 
+  _useSceneContext: 1
+  _context: {fileID: 0}
+  _bindType: 0
+--- !u!114 &983667092 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2387652414166588930, guid: 9636f4381585d46e090f0a4334c8d2ae,
+    type: 3}
+  m_PrefabInstance: {fileID: 1735428197}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1016863742
 GameObject:
   m_ObjectHideFlags: 0
@@ -15261,6 +15309,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0.000061035156
       objectReference: {fileID: 0}
+    - target: {fileID: 7776574829045669147, guid: 9636f4381585d46e090f0a4334c8d2ae,
+        type: 3}
+      propertyPath: m_TargetGraphic
+      value: 
+      objectReference: {fileID: 983667092}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9636f4381585d46e090f0a4334c8d2ae, type: 3}
 --- !u!224 &1735428198 stripped
