@@ -206,7 +206,8 @@ public class GameplayHandler : MonoBehaviour {
             } 
             
             _pictureResults.Add(new PictureResult() {
-                DifferencePoints = points
+                DifferencePoints = points,
+                Orientation = data.Orientation
             });
         }
         
