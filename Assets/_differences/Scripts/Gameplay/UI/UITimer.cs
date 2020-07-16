@@ -11,8 +11,10 @@ using UnityEngine;
 
 public class UITimer : MonoBehaviour {
     public event Action Expired;
+    public event Action<float> TimerUpdated;
+    public event Action Started;
+    public event Action Stopped;
     
-    [SerializeField] TextMeshProUGUI _timerText = default;
     [SerializeField] UIView _missClickView = default;
     [SerializeField] TextMeshProUGUI _timeReduceText = default;
 
@@ -28,15 +30,17 @@ public class UITimer : MonoBehaviour {
     }
 
     public void Launch(float duration) {
+        Started?.Invoke();
         _timerRoutine.Start(duration);
     }
 
     public void Stop() {
+        Stopped?.Invoke();
         _timerRoutine.Stop();
     }
     
     void UpdateTimer(float time) {
-        _timerText.text = TimeSpan.FromSeconds(time).ToString("mm\\:ss");
+        TimerUpdated?.Invoke(time);
     }
 
     public void ReduceTime(float reduceTime) {
@@ -50,11 +54,13 @@ public class UITimer : MonoBehaviour {
     }
 
     public void Pause() {
+        Stopped?.Invoke();
         _timeLeft = _timeExpireTimestamp - Time.time;
         _timerRoutine.Stop();
     }
 
     public void Resume() {
+        Started?.Invoke();
         _timerRoutine.Start(_timeLeft);
     }
     

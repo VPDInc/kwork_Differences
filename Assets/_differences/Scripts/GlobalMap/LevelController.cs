@@ -10,8 +10,11 @@ using Zenject;
 
 public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
+    public int CompleteRatingReward => _completeRatingReward;
+    public int CompleteCoinReward => _completeCoinReward;
 
     [SerializeField] int _completeCoinReward = 25;
+    [SerializeField] int _completeRatingReward = 150;
 
     [Inject] LeanDragCamera _leanDragCamera = default;
     [Inject] UILevelStartView _levelStartView = default;
@@ -40,6 +43,7 @@ public class LevelController : MonoBehaviour {
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
+        _allLevels[(int)Mathf.Clamp(_lastLevelNum-1, 0, Mathf.Infinity)].SetAvatar(true);
     }
 
     void OnDestroy() {
@@ -48,12 +52,17 @@ public class LevelController : MonoBehaviour {
     }
 
     void CompleteLevel(int num) {
+        if(_lastLevelNum > 0)
+            _allLevels[_lastLevelNum-1].SetAvatar(false);
         if(num >= _lastLevelNum)
             _lastLevelNum = num + 1;
         var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count-1)];
         level.CompleteLevel();
         _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
+        
+        
+        level.SetAvatar(true);
 
         if(num + 1 < _allLevels.Count)
             _allLevels[num+1].UnlockLevel(false);
@@ -61,7 +70,7 @@ public class LevelController : MonoBehaviour {
     
     void OnCompleted(GameplayResult gameplayResult) {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
-        var ratingToEarn = gameplayResult.TotalStarsCollected;
+        var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
         _coinCurrency.Earn(coinsToEarn);
         _ratingCurrency.Earn(ratingToEarn);
         _tournament.AddScore(ratingToEarn);
@@ -75,7 +84,7 @@ public class LevelController : MonoBehaviour {
     }
 
     public void OpenLastPlayView() {
-        if(_energyController.TryPlay())
+        if(_energyController.IsCanPlay)
             OpenPlayView(_lastLevelNum);
     }
 
@@ -84,6 +93,7 @@ public class LevelController : MonoBehaviour {
     }
 
     void PlayLevel(int levelNum) {
+        _energyController.SpendPlayCost();
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.Begin();
     }

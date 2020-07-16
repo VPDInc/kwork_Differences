@@ -21,6 +21,7 @@ public struct PictureResult {
     public Sprite Picture;
     public DifferencePoint[] DifferencePoints;
     public int StarsCollected;
+    public Orientation Orientation;
 }
 
 public struct DifferencePoint {

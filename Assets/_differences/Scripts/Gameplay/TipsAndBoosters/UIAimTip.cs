@@ -38,18 +38,16 @@ public class UIAimTip : Tip {
         _notOpenedPoints.AddRange(_gameplay.ClosedPoints);
         _aims.Clear();
     }
-
-    public override void OnButtonClick() {
+    
+    protected override bool TryActivate() {
         var notOpenedPointsSet = _notOpenedPoints.ToHashSet();
         var lastPoints = _gameplay.ClosedPoints.ToHashSet();
         notOpenedPointsSet.IntersectWith(lastPoints);
         if (notOpenedPointsSet.Count == 0)
-            return;
+            return false;
 
-        if (_currency.IsEnough(1)) {
-            _currency.Spend(1);
-            ShowTip();
-        }
+        ShowTip();
+        return true;
     }
 
     public void ShowTip() {

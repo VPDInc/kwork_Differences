@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Airion.Currency;
-
 using UnityEngine;
 
 using Zenject;
@@ -19,13 +17,13 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] GameplayController _gameplayController = default;
     [Inject] MissClickManager _missClickManager = default;
     [Inject] UIAimTip _aimTip = default;
-    [Inject] CurrencyManager _currencyManager = default;
     [Inject] UIStars _uiStars = default;
     [Inject] UIMiddleScreen _middleScreen = default;
     [Inject] UITimeIsUp _timeIsUp = default;
+    [Inject] UIPause _pause = default;
     
     bool IsStarted { get; set; }
-    readonly List<Point> _points = new List<Point>();
+    readonly List<Point> _pointsRemain = new List<Point>();
     readonly List<PictureResult> _pictureResults = new List<PictureResult>();
     Data[] _levelsData;
     int _currentPictureResult = 0;
@@ -33,7 +31,6 @@ public class GameplayHandler : MonoBehaviour {
     (Sprite, Sprite)[] _loadedSprites;
     Coroutine _spriteLoaderRoutine;
     Coroutine _gameplayFillingRoutine;
-    Currency _soft;
 
     const float SWIPE_DETECTION_LEN = 20;
     const float WAIT_BETWEEN_PICTURES_CHANGING = 1.5f;
@@ -42,7 +39,6 @@ public class GameplayHandler : MonoBehaviour {
         _timer.Expired += OnTimerExpired;
         _gameplayController.Began += OnBegan;
         _gameplayController.Initialized += OnInitialized;
-        _soft = _currencyManager.GetCurrency("Soft");
     }
 
     void OnDestroy() {
@@ -67,11 +63,11 @@ public class GameplayHandler : MonoBehaviour {
                 return;
             
             if (_uiGameplay.IsOverlap(mousePos, out var point)) {
-                _points.Remove(point);
+                _pointsRemain.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
                 UpdateStars(_config.StarsPerFoundDifference);
                 
-                if (_points.Count == 0) {
+                if (_pointsRemain.Count == 0) {
                     UpdateStars(_config.StarsPerCompletedPicture);
                     _currentPictureResult++;
                     if (_currentPictureResult == _levelsData.Length)
@@ -84,14 +80,27 @@ public class GameplayHandler : MonoBehaviour {
             }
         }
     }
+
+    public void Pause() {
+        _timer.Pause();
+        _middleScreen.Show(() => {
+            _pause.Show(_pointsRemain.Count);
+        });
+    }
     
     public void Exit() {
         StopGameplay(false);
     }
 
-    public void Continue() {
+    public void ContinueWithTimeBoost() {
         _middleScreen.Hide(() => {
             _timer.Launch(_addTimeAfterOver);
+        });
+    }
+
+    public void Continue() {
+        _middleScreen.Hide(() => {
+            _timer.Resume();
         });
     }
 
@@ -143,7 +152,7 @@ public class GameplayHandler : MonoBehaviour {
         
         var levelData = _levelsData[_currentPictureResult];
         _uiGameplay.Clear();
-        _points.Clear();
+        _pointsRemain.Clear();
 
         if (!IsCurrentSpritesLoaded)
             _uiGameplay.ShowWaitWindow();
@@ -152,7 +161,7 @@ public class GameplayHandler : MonoBehaviour {
 
         var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
         levelData.Points = fixedPoints;
-        _points.AddRange(levelData.Points);
+        _pointsRemain.AddRange(levelData.Points);
         
         _uiGameplay.HideWaitWindow();
 
@@ -197,7 +206,8 @@ public class GameplayHandler : MonoBehaviour {
             } 
             
             _pictureResults.Add(new PictureResult() {
-                DifferencePoints = points
+                DifferencePoints = points,
+                Orientation = data.Orientation
             });
         }
         

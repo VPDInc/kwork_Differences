@@ -17,4 +17,4 @@ MonoBehaviour:
   _decorators:
   - {fileID: 11400000, guid: 2953b3de041bf1746829c14a7981ad3e, type: 2}
   _isEnablePrefsStore: 1
-  _debugAmount: 0
+  _debugAmount: 100
