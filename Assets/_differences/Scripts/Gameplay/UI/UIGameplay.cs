@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Airion.Currency;
 using Airion.Extensions;
@@ -175,7 +176,12 @@ public class UIGameplay : MonoBehaviour {
     }
 
     void SelectDifference(Point point) {
-        _helper.Open(point.Number);
+        var orderedPoints = _data.Points.OrderByDescending(p => p.Height * p.Width).ToArray();
+        for (int i = 0; i < orderedPoints.Length; i++) {
+            if (point.Number == orderedPoints[i].Number)
+                _helper.Open(i);
+        }
+        
         CreateDiffsVisual(point);
     }
     
