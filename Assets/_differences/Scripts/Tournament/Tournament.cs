@@ -187,6 +187,11 @@ public class Tournament : MonoBehaviour {
     void LoadProfiles(string[] ids, int version, Action<LeaderboardPlayer[]> callback) {
         var toLoad = ids.Length;
         var loaded = 0;
+        if (loaded >= toLoad) {
+            callback?.Invoke(new LeaderboardPlayer[]{});
+            return;
+        }
+        
         List<LeaderboardPlayer> players = new List<LeaderboardPlayer>();
         foreach (var id in ids) {
             PlayFabClientAPI.GetPlayerProfile(new GetPlayerProfileRequest() {
