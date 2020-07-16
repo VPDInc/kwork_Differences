@@ -18,6 +18,7 @@ public class UITournamentEnd : MonoBehaviour {
     [SerializeField] UILeaderboardLastWinner _winner3 = default;
     [SerializeField] LeaderboardElement _leaderboardElement = default;
     [SerializeField] Transform _content = default;
+    [SerializeField] UIView _loadingView = default;
     
     [Inject] Tournament _tournament = default;
     [Inject] PlayerInfoController _infoController = default;
@@ -32,6 +33,7 @@ public class UITournamentEnd : MonoBehaviour {
     
     void Awake() {
         _view = GetComponent<UIView>();
+        _loadingView.Show();
     }
 
     void Start() {
@@ -96,6 +98,7 @@ public class UITournamentEnd : MonoBehaviour {
         }
 
         SetIcons();
+        _loadingView.Hide();
     }
 
     void OnRewardReceived(int reward) {

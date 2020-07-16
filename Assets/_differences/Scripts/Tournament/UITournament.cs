@@ -30,6 +30,7 @@ public class UITournament : MonoBehaviour {
     [Inject] Tournament _tournament = default;
     [Inject] DiContainer _container = default;
     [Inject] PlayerInfoController _infoController = default;
+    [Inject] UITournamentEnd _endTournament = default;
     
     UIView _view;
     float _lastUpdateTimestamp = 0;
@@ -142,6 +143,10 @@ public class UITournament : MonoBehaviour {
         }
     }
 
+    public void OnOpenTournamentEndClick() {
+        _endTournament.Show();
+    }
+
     void SelectMy() {
         var step = (1 / (float) _fullAmount);
         _scroll.verticalNormalizedPosition = Mathf.Clamp01(MyPositionInScrollView + (step * ELEMENTS_COUNT_IN_ONE_SCREEN));
@@ -190,7 +195,7 @@ public class UITournament : MonoBehaviour {
             }
             
             if (i == 1) {
-                _winnerAvatar1.sprite = _infoController.GetRandomIcon();
+                _winnerAvatar2.sprite = _infoController.GetRandomIcon();
                 if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
                     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                         res => {
@@ -200,7 +205,7 @@ public class UITournament : MonoBehaviour {
             }
             
             if (i == 2) {
-                _winnerAvatar1.sprite = _infoController.GetRandomIcon();
+                _winnerAvatar3.sprite = _infoController.GetRandomIcon();
                 if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
                     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                         res => {
