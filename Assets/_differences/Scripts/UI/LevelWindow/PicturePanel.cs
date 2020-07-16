@@ -11,8 +11,10 @@ using Zenject;
 
 public class PicturePanel : MonoBehaviour {
     [SerializeField] UIPictureLayout[] _pictureLayout = default;
-    
+
     [Inject] GameplayController _gameplay = default;
+
+    UIPictureLayout _currentLayout = default;
 
     void Start() {
         _gameplay.Initialized += OnInitialized;
@@ -33,16 +35,24 @@ public class PicturePanel : MonoBehaviour {
                 vertical++;
             }
         }
-        
+
         ChooseLayout(horizontal, vertical);
     }
 
     public void ChooseLayout(int horizontal, int vertical) {
         TurnOffLayouts();
-        
-        var layouts = _pictureLayout.Where(x => x.HorizontalCount == horizontal && x.VerticalCount == vertical).ToArray();
-        var layout = layouts.RandomElement();
-        layout.gameObject.SetActive(true);
+
+        var layouts = _pictureLayout.Where(x => x.HorizontalCount == horizontal && x.VerticalCount == vertical)
+                                    .ToArray();
+
+        _currentLayout = layouts.RandomElement();
+        _currentLayout.gameObject.SetActive(true);
+    }
+
+    public void FillByImages(PictureResult[] pictureResults) {
+        foreach (var pictureResult in pictureResults) {
+            _currentLayout.SetPicture(pictureResult.Orientation, pictureResult.Picture);
+        }
     }
 
     void TurnOffLayouts() {

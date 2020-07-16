@@ -22,6 +22,7 @@ public class UIFinishLevelView : MonoBehaviour {
     [SerializeField] TMP_Text _energyRewardLabel = default;
     [SerializeField] TMP_Text _ratingRewardLabel = default;
     [SerializeField] Transform _textInfoHolder = default;
+    [SerializeField] PicturePanel _picturePanel = default;
 
     [Header("Prefabs")] [SerializeField] RoundInfo _roundInfoPrefab = default;
 
@@ -92,5 +93,7 @@ public class UIFinishLevelView : MonoBehaviour {
         _coinRewardLabel.text = coinsToEarn.ToString();
         _ratingRewardLabel.text = ratingToEarn.ToString();
         _energyRewardLabel.text = energyToEarn.ToString();
+        
+        _picturePanel.FillByImages(gameplayResult.PictureResults);
     }
 }
