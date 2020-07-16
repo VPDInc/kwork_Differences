@@ -8,6 +8,7 @@ using Zenject;
 
 public class UITimerUpdater : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _timerText = default;
+    [SerializeField] SimpleRotator _rotator = default;
 
     [Inject] UITimer _timer = default;
 
@@ -19,6 +20,14 @@ public class UITimerUpdater : MonoBehaviour {
 
     void OnDestroy() {
         _timer.TimerUpdated -= OnTimerUpdated;
+    }
+
+    void OnStop() {
+        _rotator.SetSpeed(0);
+    }
+
+    void OnResume() {
+        _rotator.RestoreSpeed();
     }
 
     void OnTimerUpdated(float time) {
