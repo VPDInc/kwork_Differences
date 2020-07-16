@@ -35,17 +35,28 @@ public class UITournamentEnd : MonoBehaviour {
     }
 
     void Start() {
-        _tournament.Completed += OnTournamentFilled;
+        _tournament.PrevFilled += OnTournamentFilled;
+        _tournament.Completed += OnTournamentCompleted;
         _receiveReward.Received += OnRewardReceived;
     }
-    
+
     void OnDestroy() {
-        _tournament.Completed -= OnTournamentFilled;
+        _tournament.PrevFilled -= OnTournamentFilled;
+        _tournament.Completed -= OnTournamentCompleted;
         _receiveReward.Received -= OnRewardReceived;
+    }
+    
+    void OnTournamentCompleted() {
+        _view.Show();
+    }
+
+    public void Show() {
+        _view.Show();
     }
     
     public void OnExitClick() {
         _view.Hide();
+        _tournament.HandleExit();
     }
 
     void OnTournamentFilled(LeaderboardPlayer[] players) {
@@ -85,7 +96,6 @@ public class UITournamentEnd : MonoBehaviour {
         }
 
         SetIcons();
-        _view.Show();
     }
 
     void OnRewardReceived(int reward) {

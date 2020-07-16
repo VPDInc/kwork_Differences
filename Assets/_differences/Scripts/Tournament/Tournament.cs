@@ -17,8 +17,7 @@ using Currency = Airion.Currency.Currency;
 public class Tournament : MonoBehaviour {
     public event Action<LeaderboardPlayer[]> CurrentFilled;
     public event Action<LeaderboardPlayer[]> PrevFilled;
-    // TODO: Make it empty
-    public event Action<LeaderboardPlayer[]> Completed;
+    public event Action Completed;
     
     public DateTime NextReset { get; private set; }
 
@@ -38,10 +37,16 @@ public class Tournament : MonoBehaviour {
     const string PREV_GENERATED_COHORT_PREFS = "prev_saved_cohort";
     const string LAST_USED_LEADERBOARD_VERSION_PREFS = "current_leaderboard_version";
     const string PREV_USED_LEADERBOARD_VERSION_PREFS = "prev_leaderboard_version";
+    const string COMPLETION_VIEWED_PREFS = "completion_window_viewed";
     
     const int COHORT_SIZE = 50;
 
     float _lastReloadTimestamp = 0;
+
+    bool IsViewed {
+        get => PrefsExtensions.GetBool(COMPLETION_VIEWED_PREFS, true);
+        set => PrefsExtensions.SetBool(COMPLETION_VIEWED_PREFS, value);
+    }
 
     void Start() {
         _rating = _currencyManager.GetCurrency("Rating");
@@ -56,9 +61,9 @@ public class Tournament : MonoBehaviour {
             Log("/Current ================");
         };
         
-        // Completed += () => {
-           // Log("Completed");
-        // };
+        Completed += () => {
+           Log("Completed");
+        };
         
         PrevFilled += (players) => {
             Log("Last ================");
@@ -77,6 +82,10 @@ public class Tournament : MonoBehaviour {
     
     public void AddScore(int score) {
         AddScoreWithCallback(score, Load);
+    }
+    
+    public void HandleExit() {
+        IsViewed = true;
     }
     
     void AddScoreWithCallback(int score, Action callback) {
@@ -160,7 +169,7 @@ public class Tournament : MonoBehaviour {
             if ((resultVersion - lastUsedVersion == 1) && lastUsedVersion != -1) {
                 PlayerPrefs.SetInt(PREV_USED_LEADERBOARD_VERSION_PREFS, lastUsedVersion);
                 PrefsExtensions.SetStringArray(PREV_GENERATED_COHORT_PREFS, lastGeneratedCohort);
-                // TODO: Completed event raise = true
+                IsViewed = false;
             }
         }
         
@@ -311,9 +320,8 @@ public class Tournament : MonoBehaviour {
     }
 
     void CheckCompletion() {
-        // raise if true in load current cohort
-        // TODO: CHECK completion by version
-        // raise while not closed window by user
+        if (!IsViewed)
+            Completed?.Invoke();
     }
 
     void LoadScore(int version) {
