@@ -81,7 +81,7 @@ public class LevelController : MonoBehaviour {
     }
 
     public void OpenLastPlayView() {
-        if(_energyController.TryPlay())
+        if(_energyController.IsCanPlay)
             OpenPlayView(_lastLevelNum);
     }
 
@@ -90,6 +90,7 @@ public class LevelController : MonoBehaviour {
     }
 
     void PlayLevel(int levelNum) {
+        _energyController.SpendPlayCost();
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.Begin();
     }

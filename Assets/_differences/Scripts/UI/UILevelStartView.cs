@@ -105,4 +105,9 @@ public class UILevelStartView : MonoBehaviour {
 
         _differencesCountLabel.text = count + DIFFERENCES_COUNTER_POSTFIX;
     }
+
+    public void BreakAndClose() {
+        _timerSequence.Kill();
+        Hide();
+    }
 }
