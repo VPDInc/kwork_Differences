@@ -144,7 +144,6 @@ public class Tournament : MonoBehaviour {
             var resetTimestamp = result.NextReset.HasValue ? result.NextReset.Value : DateTime.MaxValue;
             LoadCurrentCohort(version, resetTimestamp);
             LoadPrevCohort(version);
-            CheckCompletion();
         }, err => {
             Err(err.GenerateErrorReport());
         });
@@ -274,6 +273,7 @@ public class Tournament : MonoBehaviour {
                  Log("Try load prev cohort");
                  LoadProfiles(prevCohort, prevUsedVersion, (res) => {
                      PrevFilled?.Invoke(res);
+                     CheckCompletion();
                  });
                  return;
              }
@@ -287,12 +287,14 @@ public class Tournament : MonoBehaviour {
                 PlayerPrefs.SetInt(PREV_USED_LEADERBOARD_VERSION_PREFS, prevVersion);
                 PrefsExtensions.SetStringArray(PREV_GENERATED_COHORT_PREFS, res.Select(p => p.Id).ToArray());
                 PrevFilled?.Invoke(res);
+                CheckCompletion();
             });
 
             return;
         }
 
         PrevFilled?.Invoke(new LeaderboardPlayer[]{ });
+        CheckCompletion();
     }
 
     void LoadLeaderboard(int version, Action<LeaderboardPlayer[]> callback) {

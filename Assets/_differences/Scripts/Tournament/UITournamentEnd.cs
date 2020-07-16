@@ -30,6 +30,7 @@ public class UITournamentEnd : MonoBehaviour {
     UIView _view;
     
     readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string,LeaderboardElement>();
+    readonly List<LeaderboardPlayer> _players = new List<LeaderboardPlayer>();
     
     void Awake() {
         _view = GetComponent<UIView>();
@@ -50,6 +51,15 @@ public class UITournamentEnd : MonoBehaviour {
     
     void OnTournamentCompleted() {
         _view.Show();
+        for (var index = 0; index < _players.Count; index++) {
+            var player = _players[index];
+            if (player.IsMe) {
+                var reward = _rewards.GetRewardByPlace(index);
+                if (reward > 0) {
+                    _receiveReward.Show(reward);
+                }
+            }
+        }
     }
 
     public void Show() {
@@ -64,6 +74,8 @@ public class UITournamentEnd : MonoBehaviour {
     void OnTournamentFilled(LeaderboardPlayer[] players) {
         _leaderboardElements.Clear();
         var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
+        _players.Clear();
+        _players.AddRange(orderedPlayers);
         _content.DestroyAllChildren();
 
         for (int i = 0; i < 3; i++) {
@@ -91,9 +103,6 @@ public class UITournamentEnd : MonoBehaviour {
                 _container.InjectGameObject(element.gameObject);
                 element.Fill(i, i, player);
                 _leaderboardElements.Add(player.Id, element);
-                if (player.IsMe) {
-                    _receiveReward.Show(_rewards.GetRewardByPlace(i));
-                }
             }
         }
 

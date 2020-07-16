@@ -14,6 +14,7 @@ using Zenject;
 
 using Currency = Airion.Currency.Currency;
 
+[System.Obsolete]
 public class ObsoleteLeaderboard : MonoBehaviour {
     public event Action<LeaderboardPlayer[]> Filled;
     public event Action<LeaderboardPlayer[]> FilledLastWinners;
