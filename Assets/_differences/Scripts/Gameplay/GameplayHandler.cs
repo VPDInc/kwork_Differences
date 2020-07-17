@@ -7,7 +7,7 @@ using UnityEngine;
 using Zenject;
 
 public class GameplayHandler : MonoBehaviour {
-    [SerializeField] float _duration = 10f;
+    [SerializeField] float _timePerOneDifference = 20f;
     [SerializeField] float _addTimeAfterOver = 25f;
     [SerializeField] StarsEarningConfig _config = default;
     [SerializeField] UIPictureCountBar _uiPictureCountBar = default;
@@ -180,7 +180,7 @@ public class GameplayHandler : MonoBehaviour {
         
         _middleScreen.Hide(() => {
             IsStarted = true;
-            _timer.Launch(_duration);
+            _timer.Launch(_timePerOneDifference * fixedPoints.Length);
         });
     }
 
