@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using Airion.Currency;
 using Airion.Extensions;
 
 using DG.Tweening;
@@ -11,8 +10,6 @@ using Doozy.Engine.UI;
 
 using UnityEngine;
 using UnityEngine.UI;
-
-using Zenject;
 
 public class UIGameplay : MonoBehaviour {
     public event Action Initialized;

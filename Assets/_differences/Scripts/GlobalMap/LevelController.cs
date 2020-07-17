@@ -23,6 +23,7 @@ public class LevelController : MonoBehaviour {
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] EnergyController _energyController = default;
     [Inject] Tournament _tournament = default;
+    [Inject] Database _database = default;
 
     Currency _coinCurrency = default;
     Currency _ratingCurrency = default;
@@ -44,6 +45,10 @@ public class LevelController : MonoBehaviour {
         _gameplay.Initialized += OnGameplayInit;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
         _allLevels[(int)Mathf.Clamp(_lastLevelNum-1, 0, Mathf.Infinity)].SetAvatar(true);
+
+        _database.Load(_lastLevelNum);
+        // TODO: Check level loading. It may be wrong
+        _database.Load(_lastLevelNum + 1);
     }
 
     void OnDestroy() {
@@ -75,8 +80,16 @@ public class LevelController : MonoBehaviour {
         _ratingCurrency.Earn(ratingToEarn);
         _tournament.AddScore(ratingToEarn);
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
-        if (gameplayResult.IsCompleted)
+
+        if (gameplayResult.IsCompleted) {
+            // Cause current level num + 1 already loaded and we just need to load level after that
+            // TODO: Check level loading. It may be wrong
+            _database.Load(_lastLevelNum + 2);
             CompleteLevel(_lastLevelNum);
+        } else {
+            // Reload current level with others pictures
+            _database.Load(_lastLevelNum);            
+        }
     }
 
     public void AddLevelToList(IEnumerable<LevelInfo> levelInfos) {
