@@ -117,6 +117,11 @@ PrefabInstance:
       propertyPath: _episodeName
       value: Episode 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492,
+        type: 3}
+      propertyPath: _isUnlocked
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1886897256768957559, guid: d7f671c2977dab44e9e6ea6efd081492,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -171,6 +176,26 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
+        type: 3}
+      propertyPath: m_text
+      value: Episode 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
+        type: 3}
+      propertyPath: m_textInfo.characterCount
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
+        type: 3}
+      propertyPath: m_textInfo.wordCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5952542477592494465, guid: d7f671c2977dab44e9e6ea6efd081492,
+        type: 3}
+      propertyPath: m_Mesh
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}

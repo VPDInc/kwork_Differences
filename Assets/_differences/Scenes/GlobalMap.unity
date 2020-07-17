@@ -16681,6 +16681,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _globalMapContainer: {fileID: 106717388}
+  _episodeInfos:
+  - {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
+  - {fileID: 4917093739532382297, guid: 99c98137fa90b7c40b8ae182d266524d, type: 3}
+  _episodeLength: 19.2
 --- !u!114 &1835200745
 MonoBehaviour:
   m_ObjectHideFlags: 0
