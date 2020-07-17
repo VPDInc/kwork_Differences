@@ -21,6 +21,7 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] UIMiddleScreen _middleScreen = default;
     [Inject] UITimeIsUp _timeIsUp = default;
     [Inject] UIPause _pause = default;
+    [Inject] Database _database = default;
     
     bool IsStarted { get; set; }
     readonly List<Point> _pointsRemain = new List<Point>();
@@ -29,8 +30,7 @@ public class GameplayHandler : MonoBehaviour {
     int _currentPictureResult = 0;
     Vector3 _startPos;
     (Sprite, Sprite)[] _loadedSprites;
-    Coroutine _spriteLoaderRoutine;
-    Coroutine _gameplayFillingRoutine;
+    int _levelNum = 0;
 
     const float SWIPE_DETECTION_LEN = 20;
     const float WAIT_BETWEEN_PICTURES_CHANGING = 1.5f;
@@ -73,7 +73,7 @@ public class GameplayHandler : MonoBehaviour {
                     if (_currentPictureResult == _levelsData.Length)
                         StopGameplay(true);
                     else
-                        FillGameplay();
+                        ChangePictures();
                 }
             } else {
                 _missClickManager.Catch();
@@ -128,56 +128,60 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnBegan() {
-        _middleScreen.Show(() => {
-            _timer.Launch(_duration);
-            _uiGameplay.Show();
-            _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
-            FillGameplay();
-        });
+        _middleScreen.Show(FillStartGameplay);
     }
     
-    void FillGameplay() {
-        if (_gameplayFillingRoutine != null) 
-            StopCoroutine(_gameplayFillingRoutine);
-        _gameplayFillingRoutine = StartCoroutine(FillAndStartGameplay());
+    void FillStartGameplay() {
+        StartCoroutine(FillGameplayRoutine());
         _uiPictureCountBar.AddSegment();
     }
-    
-    IEnumerator FillAndStartGameplay() {
+
+    void ChangePictures() {
+        StartCoroutine(ChangePicturesRoutine());
+    }
+
+    IEnumerator ChangePicturesRoutine() {
         _timer.Pause();
         IsStarted = false;
-        
-        if (!_middleScreen.IsShowing)
-            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
-        
-        var levelData = _levelsData[_currentPictureResult];
         _uiGameplay.Clear();
         _pointsRemain.Clear();
+        var levelData = _levelsData[_currentPictureResult];
+        var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
+        levelData.Points = fixedPoints;
+        _pointsRemain.AddRange(levelData.Points);
+        _uiGameplay.Initialize(levelData, _loadedSprites[_currentPictureResult]);
+        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
+        IsStarted = true;
+        _timer.Resume();
+    }
 
-        if (!IsCurrentSpritesLoaded)
-            _uiGameplay.ShowWaitWindow();
+    IEnumerator FillGameplayRoutine() {
+        IsStarted = false;
+        _uiGameplay.Clear();
+        _pointsRemain.Clear();
+        
+        var levelData = _levelsData[_currentPictureResult];
 
-        yield return new WaitWhile(()=> !IsCurrentSpritesLoaded);
+        yield return new WaitWhile(() => _database.GetLoadingStatus(_levelNum) != Database.LoadingStatus.Success);
+        
+        _loadedSprites = _database.GetPictures(_levelNum);
 
         var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
         levelData.Points = fixedPoints;
         _pointsRemain.AddRange(levelData.Points);
         
-        _uiGameplay.HideWaitWindow();
-
         _uiGameplay.Initialize(levelData, _loadedSprites[_currentPictureResult]);
 
-        if (_middleScreen.IsShowing) {
-            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
-            _middleScreen.Hide(() => {
-                IsStarted = true;
-                _timer.Resume();
-            });
-        } else {
-            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
+        _uiGameplay.Show();
+        
+        yield return new WaitForSeconds(1);
+        
+        _middleScreen.Hide(() => {
             IsStarted = true;
-            _timer.Resume();
-        }
+            _timer.Launch(_duration);
+        });
     }
 
     void OnTimerExpired() {
@@ -193,6 +197,7 @@ public class GameplayHandler : MonoBehaviour {
     }
     
     void OnInitialized(int levelNum, Data[] levelsData) {
+        _levelNum = levelNum;
         _levelsData = levelsData;
         
         _pictureResults.Clear();
@@ -210,32 +215,8 @@ public class GameplayHandler : MonoBehaviour {
                 Orientation = data.Orientation
             });
         }
-        
-        if (_spriteLoaderRoutine != null)
-            StopCoroutine(_spriteLoaderRoutine);
-        _spriteLoaderRoutine = StartCoroutine(LoadSprites());
     }
 
-    IEnumerator LoadSprites() {
-        var loader = new Loader(this);
-        _loadedSprites = new (Sprite, Sprite)[_levelsData.Length];
-        for (var index = 0; index < _levelsData.Length; index++) {
-            var data = _levelsData[index];
-            var path1 = data.Image1Path;
-            var path2 = data.Image2Path;
-            yield return loader.Run(path1, path2, data.Storage);
-            _loadedSprites[index].Item1 = loader.Result.Item1;
-            _loadedSprites[index].Item2 = loader.Result.Item2;
-
-            var diff = _pictureResults[index];
-            diff.Picture = _loadedSprites[index].Item1;
-            _pictureResults[index] = diff;
-        }
-    }
-
-    bool IsCurrentSpritesLoaded => _loadedSprites[_currentPictureResult].Item1 != null &&
-                                   _loadedSprites[_currentPictureResult].Item2 != null;
-    
     Point[] FixPoints(Point[] points, (Sprite, Sprite) loadedSprite) {
         var width = loadedSprite.Item1.texture.width;
         var height = loadedSprite.Item1.texture.height;

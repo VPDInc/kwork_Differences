@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
 using Airion.Extensions;
 
 using UnityEngine;
+
+using Zenject;
 
 public class Database : MonoBehaviour {
     string _dataPath;
@@ -14,6 +17,16 @@ public class Database : MonoBehaviour {
     
     const string SAVE_DATA_PATH = "data.dat";
     const string JSONS_PATH = "Jsons";
+
+    [Inject] LevelBalanceLibrary _library = default;
+    
+    readonly Dictionary<int, LoadingData> _loadingDatas = new Dictionary<int, LoadingData>();
+
+    struct LoadingData {
+        public Data[] Datas;
+        public (Sprite, Sprite)[] Pictures;
+        public LoadingStatus Status;
+    }
     
     void Awake() {
         _dataPath = Path.Combine(Application.persistentDataPath, SAVE_DATA_PATH);
@@ -23,8 +36,78 @@ public class Database : MonoBehaviour {
         LoadCompletedLevels();
         LoadData();
     }
+
+    public enum LoadingStatus {
+        NotStarted,
+        InProgress,
+        Success
+    }
+
+    public void Load(int levelNum) {
+        var balanceInfo = _library.GetLevelBalanceInfo(levelNum);
+        var datas = GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
+        StartLoading(levelNum, datas);
+    }
+
+    void StartLoading(int num, Data[] datas) {
+        if (!_loadingDatas.ContainsKey(num)) {
+            _loadingDatas.Add(num, default);
+        }
+
+        StartCoroutine(Loading(num, datas));
+    }
+
+    IEnumerator Loading(int num, Data[] datas) {
+        var loadingData = new LoadingData() {
+            Datas = datas,
+            Status = LoadingStatus.InProgress,
+            Pictures = new (Sprite, Sprite)[datas.Length]
+        };
+
+        _loadingDatas[num] = loadingData;
+        
+        var loader = new Loader(this);
+        for (var index = 0; index < loadingData.Datas.Length; index++) {
+            var data = loadingData.Datas[index];
+            var path1 = data.Image1Path;
+            var path2 = data.Image2Path;
+            
+            yield return loader.Run(path1, path2, data.Storage);
+            
+            loadingData.Pictures[index].Item1 = loader.Result.Item1;
+            loadingData.Pictures[index].Item2 = loader.Result.Item2;
+        }
+
+        loadingData.Status = LoadingStatus.Success;
+        _loadingDatas[num] = loadingData;
+    }
     
-    public Data[] GetData(int dataAmount, int pointsPerData) {
+    public LoadingStatus GetLoadingStatus(int levelNum) {
+        if (!_loadingDatas.ContainsKey(levelNum))
+            return LoadingStatus.NotStarted;
+
+        return _loadingDatas[levelNum].Status;
+    }
+
+    public Data[] GetData(int levelNum) {
+        if (!_loadingDatas.ContainsKey(levelNum)) {
+            Debug.LogError($"[{GetType()}] Load data '{levelNum}' first!");
+            return null;
+        }
+
+        return _loadingDatas[levelNum].Datas;
+    }
+    
+    public (Sprite, Sprite)[] GetPictures(int levelNum) {
+        if (!_loadingDatas.ContainsKey(levelNum)) {
+            Debug.LogError($"[{GetType()}] Load data '{levelNum}' first!");
+            return null;
+        }
+
+        return _loadingDatas[levelNum].Pictures;
+    }
+    
+    Data[] GetData(int dataAmount, int pointsPerData) {
         var outData = new List<Data>();
         
         for (int i = 0; i < dataAmount; i++) {
@@ -124,5 +207,16 @@ public class Database : MonoBehaviour {
             using (File.Create(_dataPath)) { }
         
         LoadData();
+    }
+
+    public bool LoadSpecificJson(int i) {
+        var path = UnityEditor.EditorUtility.OpenFilePanel("Load file", "Assets/Resources/Jsons", "json");
+        if (!File.Exists(path)) {
+            return false;
+        }
+        var jsonString = File.ReadAllText(path);
+        var data = DiffUtils.Parse(jsonString);
+        StartLoading(i, new [] {data});
+        return true;
     }
 }
