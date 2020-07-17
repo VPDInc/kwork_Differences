@@ -47,7 +47,6 @@ public class LevelController : MonoBehaviour {
         _allLevels[(int)Mathf.Clamp(_lastLevelNum-1, 0, Mathf.Infinity)].SetAvatar(true);
 
         _database.Load(_lastLevelNum);
-        // TODO: Check level loading. It may be wrong
         _database.Load(_lastLevelNum + 1);
     }
 
@@ -83,7 +82,6 @@ public class LevelController : MonoBehaviour {
 
         if (gameplayResult.IsCompleted) {
             // Cause current level num + 1 already loaded and we just need to load level after that
-            // TODO: Check level loading. It may be wrong
             _database.Load(_lastLevelNum + 2);
             CompleteLevel(_lastLevelNum);
         } else {
