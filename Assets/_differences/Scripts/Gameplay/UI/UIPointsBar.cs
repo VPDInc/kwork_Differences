@@ -26,8 +26,6 @@ public class UIPointsBar : MonoBehaviour {
         _back.sizeDelta = new Vector2(_startSize + _delta * (amount - _initialDifferenceSpots), _back.sizeDelta.y);
         for (int i = 0; i < amount; i++) {
             var mark = Instantiate(_markPrefab, _content);
-            // var x = _delta * i - ((_delta * amount * 0.5f) - (_delta * 0.5f)); 
-            // mark.transform.localPosition = new Vector2(x, 0);
             _marks.Add(mark);
         }
     }
