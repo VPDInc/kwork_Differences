@@ -35,6 +35,9 @@ public class MapController : MonoBehaviour {
 
     void Init() {
         _globalMapContainer.transform.DestroyAllChildren();
+        
+        _leanDragCamera.SetMinBounds(new Vector2(_currentOffset, 0));
+        
         var currentEpisodeNum = _levelController.LastEpisodeNum;
         _levelCount = 0;
         foreach (EpisodeInfo episodeInfo in _episodeInfos) {
