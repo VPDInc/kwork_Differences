@@ -12,6 +12,7 @@ public class UIProfileView : MonoBehaviour {
     
     [SerializeField] TMP_Text _versionText = default;
     [SerializeField] TMP_Text _userIdText = default;
+    [SerializeField] TMP_Text _levelText = default;
     
     [SerializeField] GameObject _linkFacebookButton = default;
     [SerializeField] GameObject _facebookLinkedPanel = default;
@@ -19,6 +20,7 @@ public class UIProfileView : MonoBehaviour {
     
     [Inject] PlayFabInfo _playFabInfo = default;
     [Inject] PlayFabFacebook _playFabFacebook = default;
+    [Inject] LevelController _levelController = default;
     
     UIView _currentView = default;
 
@@ -40,6 +42,7 @@ public class UIProfileView : MonoBehaviour {
 
     public void Show(bool instant) {
         _currentView.Show(instant);
+        _levelText.text = "Level " + _levelController.LastLevelNum;
     }
 
     public void Hide(bool instant) {
