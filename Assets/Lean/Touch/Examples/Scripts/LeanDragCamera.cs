@@ -39,6 +39,7 @@ namespace Lean.Touch {
         [SerializeField] Vector2 _maxBounds = default;
         [SerializeField] Vector2 _minSoftBounds = default;
         [SerializeField] Vector2 _maxSoftBounds = default;
+        [SerializeField] Vector2 _softBoundsOffset = default;
         [SerializeField] bool _x = true;
         [SerializeField] bool _y = true;
 
@@ -66,6 +67,16 @@ namespace Lean.Touch {
 
                 transform.localPosition = oldPosition;
             }
+        }
+
+        public void SetMaxBounds(Vector2 bounds) {
+            _maxBounds = bounds;
+            _maxSoftBounds = bounds - _softBoundsOffset;
+        }
+
+        public void SetMinBounds(Vector2 bounds) {
+            _minBounds = bounds;
+            _minSoftBounds = bounds + _softBoundsOffset;
         }
 
         /// <summary>If you've set Use to ManuallyAddedFingers, then you can call this method to manually add a finger.</summary>

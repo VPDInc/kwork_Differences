@@ -1,16 +1,13 @@
-﻿using DG.Tweening;
+﻿using System;
 
 using TMPro;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
-
-using Zenject;
-
-using Random = UnityEngine.Random;
-
 public class LevelInfo : MonoBehaviour {
     public int LevelNum => _levelNum;
+    public EpisodeInfo EpisodeInfo => _episodeInfo;
+
     public int Estimation => _estimation;
 
     [SerializeField] GameObject _completedCupSprite = default;

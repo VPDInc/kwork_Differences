@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Airion.Currency;
 
@@ -10,6 +11,7 @@ using Zenject;
 
 public class LevelController : MonoBehaviour {
     public int LastLevelNum => _lastLevelNum;
+    public int LastEpisodeNum => _lastEpisodeNum;
     public int CompleteRatingReward => _completeRatingReward;
     public int CompleteCoinReward => _completeCoinReward;
 
@@ -29,12 +31,18 @@ public class LevelController : MonoBehaviour {
     Currency _ratingCurrency = default;
     
     int _lastLevelNum = 0;
+    int _lastEpisodeNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     LevelInfo _currentLevel;
     
     const string LAST_LEVEL_ID = "last_level";
+    const string LAST_EPISODE_ID = "last_episode";
     const string COIN_CURRENCY_ID = "Soft";
     const string RATING_CURRENCY_ID = "Rating";
+
+    void Awake() {
+        _lastEpisodeNum = PlayerPrefs.GetInt(LAST_EPISODE_ID, 0);
+    }
 
     void Start() {
         _coinCurrency = _currencyManager.GetCurrency(COIN_CURRENCY_ID);
@@ -64,6 +72,11 @@ public class LevelController : MonoBehaviour {
         level.CompleteLevel();
         _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
+
+        if (_lastEpisodeNum < level.EpisodeInfo.EpisodeNum) {
+            _lastEpisodeNum = level.EpisodeInfo.EpisodeNum;
+            PlayerPrefs.SetInt(LAST_EPISODE_ID, _lastEpisodeNum);
+        }
         
         
         level.SetAvatar(true);

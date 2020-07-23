@@ -6692,6 +6692,7 @@ MonoBehaviour:
   _maxBounds: {x: 19.95, y: 0}
   _minSoftBounds: {x: 0, y: 0}
   _maxSoftBounds: {x: 19.3, y: 0}
+  _softBoundsOffset: {x: 0.65, y: 0}
   _x: 1
   _y: 0
 --- !u!20 &519420031
@@ -16685,6 +16686,7 @@ MonoBehaviour:
   - {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
   - {fileID: 4917093739532382297, guid: 99c98137fa90b7c40b8ae182d266524d, type: 3}
   _episodeLength: 19.2
+  _episodeFrontPrespawnCount: 3
 --- !u!114 &1835200745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19615,6 +19617,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Episode_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492,
+        type: 3}
+      propertyPath: _isUnlocked
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886897256768957559, guid: d7f671c2977dab44e9e6ea6efd081492,
         type: 3}

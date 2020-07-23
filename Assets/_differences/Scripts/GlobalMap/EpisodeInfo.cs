@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using DG.Tweening;
 
@@ -11,6 +12,8 @@ using UnityEngine;
 using Zenject;
 
 public class EpisodeInfo : MonoBehaviour {
+    public static event Action EpisodeUnlocked;
+    public int EpisodeNum => _episodeNum;
     public int LevelCount => _levelCount;
     public bool IsUnlocked => _isUnlocked;
     public List<LevelInfo> Levels => _levels;
@@ -28,10 +31,12 @@ public class EpisodeInfo : MonoBehaviour {
     [Inject] DiContainer _diContainer = default;
 
     List<LevelInfo> _levels = new List<LevelInfo>();
+    int _episodeNum = 0;
 
     const float BLOCK_DISSOLVE_EFFECT_DURATION = 0.5f;
 
-    public void Init(int levelOffset) {
+    public void Init(int levelOffset, int num) {
+        _episodeNum = num;
         PopulateMap(levelOffset);
         if (_isUnlocked) {
             UnlockEpisode(true);

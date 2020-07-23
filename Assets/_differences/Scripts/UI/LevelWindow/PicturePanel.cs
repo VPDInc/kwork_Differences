@@ -50,6 +50,7 @@ public class PicturePanel : MonoBehaviour {
     }
 
     public void FillByImages(PictureResult[] pictureResults) {
+        _currentLayout.Reset();
         foreach (var pictureResult in pictureResults) {
             _currentLayout.SetPicture(pictureResult.Orientation, pictureResult.Picture);
         }
