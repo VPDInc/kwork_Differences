@@ -44,7 +44,13 @@ public class EpisodeInfo : MonoBehaviour {
     }
 
     public void UnlockEpisode(bool isInstant) {
+        if(_isUnlocked) return;
+        
+        _isUnlocked = true;
         _blockerRenderer.DOFade(0, isInstant ? 0 : BLOCK_DISSOLVE_EFFECT_DURATION);
+        if(isInstant) return;
+        
+        EpisodeUnlocked?.Invoke();
     }
 
     void BlockEpisode(bool isInstant) {

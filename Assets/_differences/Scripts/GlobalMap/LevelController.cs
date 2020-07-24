@@ -148,4 +148,9 @@ public class LevelController : MonoBehaviour {
         _levelStartView.StartTimer(()=>PlayLevel(levelNum));
         _levelStartView.Show();
     }
+
+    [ContextMenu("Complete")]
+    void DebugComplete() {
+        CompleteLevel(_lastLevelNum);
+    }
 }

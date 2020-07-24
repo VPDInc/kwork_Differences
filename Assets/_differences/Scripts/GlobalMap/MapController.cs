@@ -49,13 +49,10 @@ public class MapController : MonoBehaviour {
                 AddExtraEpisode();
             }
         }
-        
-        _leanDragCamera.SetMaxBounds(new Vector2(_currentOffset - _episodeLength, 0));
     }
 
     void AddExtraEpisode() {
         var episodeNumToSpawn = (int)Mathf.Repeat(_episodeCount, _episodeInfos.Length);
-        _episodeCount++;
         SpawnEpisode(_episodeInfos[episodeNumToSpawn]);
     }
     
@@ -74,6 +71,7 @@ public class MapController : MonoBehaviour {
         _episodeCount++;
         _levelCount += episode.LevelCount;
         _levelController.AddLevelToList(episode.Levels);
+        _leanDragCamera.SetMaxBounds(new Vector2(_currentOffset - _episodeLength, 0));
     }
 
     void OnDrawGizmosSelected() {
