@@ -11182,7 +11182,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _shareText: Try to find differences!
   _camera: {fileID: 1418737100}
-  _renderTexture: {fileID: 0}
   _horizontalGroup: {fileID: 1118843329}
   _verticalGroup: {fileID: 1082643857}
   _horizontalImage1: {fileID: 453334249}
@@ -12802,7 +12801,6 @@ Transform:
   - {fileID: 1032146221}
   - {fileID: 1095934456}
   - {fileID: 1214989751}
-  - {fileID: 1803337560}
   - {fileID: 1919992364}
   m_Father: {fileID: 0}
   m_RootOrder: 2
@@ -20207,50 +20205,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b94afee8eb632246a77335ad083b7cf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1803337559
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1803337560}
-  - component: {fileID: 1803337561}
-  m_Layer: 0
-  m_Name: FBShare
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1803337560
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803337559}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 1028308347}
-  m_RootOrder: 4
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1803337561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1803337559}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4a1f43fea470d984d8032e319245f412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _shareText: Try to find!
 --- !u!1 &1809123810
 GameObject:
   m_ObjectHideFlags: 0
@@ -21904,7 +21858,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1028308347}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1919992365
 MonoBehaviour:

@@ -13,8 +13,7 @@ using Zenject;
 public class UIShareView : MonoBehaviour {
     [SerializeField] string _shareText = "Try to find differences!";
     [SerializeField] Camera _camera = default;
-    [SerializeField] RenderTexture _renderTexture = default;
-    
+
     [SerializeField] CanvasGroup _horizontalGroup = default;
     [SerializeField] CanvasGroup _verticalGroup = default;
 
@@ -69,8 +68,6 @@ public class UIShareView : MonoBehaviour {
         // The provided file name will be added a ".png" extension automatically
         _camera.Render();
         string path = Sharing.SaveScreenshot("screenshot");
-        // Texture2D texture = Sharing.CaptureScreenshot();
-        // Sharing.ShareTexture2D(texture, "screenshot", _shareText);
         Sharing.ShareImage(path, _shareText);
     }
 
