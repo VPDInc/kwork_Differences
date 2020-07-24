@@ -27,6 +27,9 @@ namespace EasyMobile
         private string mPlayerId = string.Empty;
         private bool mIsFriend = false;
         private UserState mState = UserState.Offline;
+#if UNITY_2019_4_OR_NEWER
+        private string mGameId = string.Empty;
+#endif
 
         #region IUserProfile implementation
 
@@ -46,7 +49,16 @@ namespace EasyMobile
             }
         }
 
-        public string gameId { get; }
+        // The gameId property was introduced since Unity 2019.4.2f1.
+#if UNITY_2019_4_OR_NEWER
+        public string gameId
+        {
+            get
+            {
+                return mGameId;
+            }
+        }
+#endif
 
         public bool isFriend
         {
@@ -68,18 +80,18 @@ namespace EasyMobile
         {
             get
             {
-                #if UNITY_IOS
+#if UNITY_IOS
                 if (!mIsLoadingImage && mImage == null)
                 {
                     mIsLoadingImage = true;
                     LoadImage();
                 }
                 return mImage;
-                #elif UNITY_ANDROID && EM_GPGS
+#elif UNITY_ANDROID && EM_GPGS
                 return mPlayGamesUserProfile.image;
-                #else
+#else
                 return null;
-                #endif
+#endif
             }
         }
 
@@ -148,8 +160,8 @@ namespace EasyMobile
             mState = state;
         }
 
-        #if UNITY_IOS
-        
+#if UNITY_IOS
+
         /// <summary>
         /// The underlying <see cref="EasyMobile.iOS.GameKit.GKPlayer"/> object used to create this instance.
         /// </summary>
@@ -201,9 +213,9 @@ namespace EasyMobile
                     mIsLoadingImage = false;
                 });
         }
-        #endif
+#endif
 
-        #if UNITY_ANDROID && EM_GPGS
+#if UNITY_ANDROID && EM_GPGS
         
         /// <summary>
         /// The underlying GPGS player used to create this instance.
@@ -232,6 +244,6 @@ namespace EasyMobile
             };
         }
 
-        #endif
+#endif
     }
 }

@@ -2,8 +2,6 @@
 
 using Doozy.Engine.UI;
 
-using PlayFab.PfEditor.EditorModels;
-
 using TMPro;
 
 using UnityEngine;

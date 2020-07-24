@@ -209,6 +209,7 @@ public class Database : MonoBehaviour {
         LoadData();
     }
 
+    #if UNITY_EDITOR
     public bool LoadSpecificJson(int i) {
         var path = UnityEditor.EditorUtility.OpenFilePanel("Load file", "Assets/Resources/Jsons", "json");
         if (!File.Exists(path)) {
@@ -219,4 +220,5 @@ public class Database : MonoBehaviour {
         StartLoading(i, new [] {data});
         return true;
     }
+    #endif
 }

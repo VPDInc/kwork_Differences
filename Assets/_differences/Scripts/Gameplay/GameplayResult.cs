@@ -18,7 +18,8 @@ public class GameplayResult {
 }
 
 public struct PictureResult {
-    public Sprite Picture;
+    public Sprite Picture1;
+    public Sprite Picture2;
     public DifferencePoint[] DifferencePoints;
     public int StarsCollected;
     public Orientation Orientation;
