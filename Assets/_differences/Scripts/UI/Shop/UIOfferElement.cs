@@ -20,7 +20,7 @@ public class UIOfferElement : MonoBehaviour {
     public void Setup(string title, string description, string cost, IAPProduct product) {
         _titleText.text = title;
         _descriptionText.text = description;
-        _sellingAmountText.text = _buyAmount.ToString();
+        _sellingAmountText.text = _buyAmount + "<sprite=0>";
         _costText.text = cost;
         _iapProduct = product;
     }
