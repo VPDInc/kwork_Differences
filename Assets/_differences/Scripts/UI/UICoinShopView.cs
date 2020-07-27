@@ -1,45 +1,107 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
+
+using Airion.Currency;
 
 using EasyMobile;
 
 using UnityEngine;
 using UnityEngine.Purchasing;
 
+using Zenject;
+
 public class UICoinShopView : MonoBehaviour {
-    [SerializeField] Transform _offerContainer = default;
-    
-    IAPProduct[] _products;
+    [SerializeField] OfferInfo[] _offerInfos = default;
+
+    [Inject] CurrencyManager _currencyManager = default;
+
+    Currency _softCurrency;
+
+    const string SOFT_CURRENCY_ID = "Soft";
+
+    [Serializable]
+    class OfferInfo {
+        public string Name = default;
+        public int CoinsAmount = default;
+        public UIOfferElement OfferElement = default;
+    }
 
     void Start() {
-        _products = EM_Settings.InAppPurchasing.Products;
+        InAppPurchasing.InitializePurchasing();
+        
+        InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
+
+        _softCurrency = _currencyManager.GetCurrency(SOFT_CURRENCY_ID);
+        
+        SetupOffers();
+    }
+
+    void OnDestroy() {
+        InAppPurchasing.PurchaseCompleted -= PurchaseCompletedHandler;
+        InAppPurchasing.PurchaseFailed -= PurchaseFailedHandler;
+    }
+
+    // Successful purchase handler
+    void PurchaseCompletedHandler(IAPProduct product) {
+        switch (product.Name) {
+            case EM_IAPConstants.Product_Coin_Pack_1:
+                var offerInfo1 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_1));
+                _softCurrency.Earn(offerInfo1.CoinsAmount);
+                break;
+            case EM_IAPConstants.Product_Coin_Pack_2:
+                var offerInfo2 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_2));
+                _softCurrency.Earn(offerInfo2.CoinsAmount);
+                break;
+            case EM_IAPConstants.Product_Coin_Pack_3:
+                var offerInfo3 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_3));
+                _softCurrency.Earn(offerInfo3.CoinsAmount);
+                break;
+            case EM_IAPConstants.Product_Coin_Pack_4:
+                var offerInfo4 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_4));
+                _softCurrency.Earn(offerInfo4.CoinsAmount);
+                break;
+            case EM_IAPConstants.Product_Coin_Pack_5:
+                var offerInfo5 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_5));
+                _softCurrency.Earn(offerInfo5.CoinsAmount);
+                break;
+        }
+    }
+
+    // Failed purchase handler
+    void PurchaseFailedHandler(IAPProduct product) {
+        Debug.LogError("The purchase of product " + product.Name + " has failed.");
     }
 
     void SetupOffers() {
-        var offers = _offerContainer.GetComponentsInChildren<UIOfferElement>();
-
-        foreach (UIOfferElement offer in offers) {
-            var iapProduct = EM_Settings.InAppPurchasing.Products.FirstOrDefault(x => x.Name == offer.Name);
+        foreach (OfferInfo offerInfo in _offerInfos) {
+            var iapProduct = EM_Settings.InAppPurchasing.Products.FirstOrDefault(x => x.Name.Equals(offerInfo.Name));
             ProductMetadata data = InAppPurchasing.GetProductLocalizedData(iapProduct.Name);
-            offer.Setup(data.localizedTitle, data.localizedDescription, data.localizedPriceString, iapProduct);
+
+            var title = data != null ? data.localizedTitle : iapProduct.Name;
+            var description = data != null ? data.localizedDescription : iapProduct.Description;
+            var cost = data != null ? data.localizedPriceString : iapProduct.Price;
+            
+            offerInfo.OfferElement.Setup(title, description, offerInfo.CoinsAmount.ToString(), cost);
         }
     }
 
     public void BuyCoinPack1() {
         InAppPurchasing.Purchase(EM_IAPConstants.Product_Coin_Pack_1);
     }
-    
+
     public void BuyCoinPack2() {
         InAppPurchasing.Purchase(EM_IAPConstants.Product_Coin_Pack_2);
     }
-    
+
     public void BuyCoinPack3() {
         InAppPurchasing.Purchase(EM_IAPConstants.Product_Coin_Pack_3);
     }
-    
+
     public void BuyCoinPack4() {
         InAppPurchasing.Purchase(EM_IAPConstants.Product_Coin_Pack_4);
     }
-    
+
     public void BuyCoinPack5() {
         InAppPurchasing.Purchase(EM_IAPConstants.Product_Coin_Pack_5);
     }
