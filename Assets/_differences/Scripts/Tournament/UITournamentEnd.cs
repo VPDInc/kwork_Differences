@@ -84,9 +84,6 @@ public class UITournamentEnd : MonoBehaviour {
             }
 
             var player = orderedPlayers[i];
-            if (player.IsMe) {
-                _receiveReward.Show(_rewards.GetRewardByPlace(i));
-            }
             
             if (i == 0)
                 _winner1.Fill(i,player);

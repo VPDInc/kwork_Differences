@@ -327,8 +327,9 @@ public class Tournament : MonoBehaviour {
     }
 
     void CheckCompletion() {
-        if (!IsViewed)
+        if (!IsViewed) {
             Completed?.Invoke();
+        }
     }
 
     void LoadScore(int version) {

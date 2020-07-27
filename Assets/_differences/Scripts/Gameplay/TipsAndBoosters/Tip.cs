@@ -36,6 +36,7 @@ public abstract class Tip : MonoBehaviour {
    public void OnButtonClick() {
       if (_alwaysOpenStore) {
          OpenStore();
+         return;
       }
 
       if (_currency.IsEnough(1)) {
