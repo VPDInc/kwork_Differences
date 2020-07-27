@@ -123,8 +123,13 @@ public class GameplayHandler : MonoBehaviour {
             _uiGameplay.Complete();
             _missClickManager.Reset();
             _gameplayController.StopLevel(isWin, _pictureResults.ToArray());
-            _middleScreen.Hide();
+            StartCoroutine(WaitAndHideScreen());
         });
+    }
+
+    IEnumerator WaitAndHideScreen() {
+        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        _middleScreen.Hide();
     }
 
     void OnBegan() {
@@ -142,6 +147,9 @@ public class GameplayHandler : MonoBehaviour {
 
     IEnumerator ChangePicturesRoutine() {
         _timer.Pause();
+        
+        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        
         IsStarted = false;
         _uiGameplay.Clear();
         _pointsRemain.Clear();
@@ -150,7 +158,9 @@ public class GameplayHandler : MonoBehaviour {
         levelData.Points = fixedPoints;
         _pointsRemain.AddRange(levelData.Points);
         _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
+        
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        
         _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         IsStarted = true;
         _timer.Resume();
