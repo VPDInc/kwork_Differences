@@ -29,7 +29,6 @@ public class GameplayHandler : MonoBehaviour {
     Data[] _levelsData;
     int _currentPictureResult = 0;
     Vector3 _startPos;
-    // (Sprite, Sprite)[] _loadedSprites;
     int _levelNum = 0;
 
     const float SWIPE_DETECTION_LEN = 20;
@@ -94,6 +93,7 @@ public class GameplayHandler : MonoBehaviour {
 
     public void ContinueWithTimeBoost() {
         _middleScreen.Hide(() => {
+            IsStarted = true;
             _timer.Launch(_addTimeAfterOver);
         });
     }
@@ -215,6 +215,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     IEnumerator ShowTipAndShowTimeIsUpMenu() {
+        IsStarted = false;
         _aimTip.ShowTip();
         yield return new WaitForSeconds(1.5f);
         _middleScreen.Show((() => {
