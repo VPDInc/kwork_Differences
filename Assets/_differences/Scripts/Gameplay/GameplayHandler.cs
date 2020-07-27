@@ -29,7 +29,7 @@ public class GameplayHandler : MonoBehaviour {
     Data[] _levelsData;
     int _currentPictureResult = 0;
     Vector3 _startPos;
-    (Sprite, Sprite)[] _loadedSprites;
+    // (Sprite, Sprite)[] _loadedSprites;
     int _levelNum = 0;
 
     const float SWIPE_DETECTION_LEN = 20;
@@ -132,7 +132,7 @@ public class GameplayHandler : MonoBehaviour {
     }
     
     void FillStartGameplay() {
-        StartCoroutine(FillGameplayRoutine());
+        StartCoroutine(FillGameplayAndStartRoutine());
         _uiPictureCountBar.AddSegment();
     }
 
@@ -146,32 +146,48 @@ public class GameplayHandler : MonoBehaviour {
         _uiGameplay.Clear();
         _pointsRemain.Clear();
         var levelData = _levelsData[_currentPictureResult];
-        var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
+        var fixedPoints = FixPoints(levelData.Points, _pictureResults[_currentPictureResult].Pictures);
         levelData.Points = fixedPoints;
         _pointsRemain.AddRange(levelData.Points);
-        _uiGameplay.Initialize(levelData, _loadedSprites[_currentPictureResult]);
+        _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
         _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         IsStarted = true;
         _timer.Resume();
     }
 
-    IEnumerator FillGameplayRoutine() {
+    IEnumerator FillGameplayAndStartRoutine() {
         IsStarted = false;
         _uiGameplay.Clear();
         _pointsRemain.Clear();
-        
-        var levelData = _levelsData[_currentPictureResult];
 
         yield return new WaitWhile(() => _database.GetLoadingStatus(_levelNum) != Database.LoadingStatus.Success);
         
-        _loadedSprites = _database.GetPictures(_levelNum);
+        var loadedSprites = _database.GetPictures(_levelNum);
 
-        var fixedPoints = FixPoints(levelData.Points, _loadedSprites[_currentPictureResult]);
+        for (var index = 0; index < _levelsData.Length; index++) {
+            var data = _levelsData[index];
+            var points = new DifferencePoint[data.Points.Length];
+            for (int i = 0; i < data.Points.Length; i++) {
+                points[i].IsOpen = false;
+            }
+
+            _pictureResults.Add(new PictureResult() {
+                DifferencePoints = points,
+                Orientation = data.Orientation,
+                Picture1 = loadedSprites[index].Item1,
+                Picture2 = loadedSprites[index].Item2
+            });
+        }
+
+        var levelData = _levelsData[_currentPictureResult];
+        
+
+        var fixedPoints = FixPoints(levelData.Points, _pictureResults[_currentPictureResult].Pictures);
         levelData.Points = fixedPoints;
         _pointsRemain.AddRange(levelData.Points);
         
-        _uiGameplay.Initialize(levelData, _loadedSprites[_currentPictureResult]);
+        _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
 
         _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         _uiGameplay.Show();
@@ -204,17 +220,6 @@ public class GameplayHandler : MonoBehaviour {
         _uiStars.Reset();
         
         _currentPictureResult = 0;
-        foreach (var data in _levelsData) {
-            var points = new DifferencePoint[data.Points.Length];
-            for (int i = 0; i < data.Points.Length; i++) {
-                points[i].IsOpen = false;
-            } 
-            
-            _pictureResults.Add(new PictureResult() {
-                DifferencePoints = points,
-                Orientation = data.Orientation
-            });
-        }
     }
 
     Point[] FixPoints(Point[] points, (Sprite, Sprite) loadedSprite) {

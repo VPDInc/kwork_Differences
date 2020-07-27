@@ -23,6 +23,7 @@ public struct PictureResult {
     public DifferencePoint[] DifferencePoints;
     public int StarsCollected;
     public Orientation Orientation;
+    public (Sprite, Sprite) Pictures => (Picture1, Picture2);
 }
 
 public struct DifferencePoint {
