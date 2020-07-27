@@ -240,8 +240,8 @@ MonoBehaviour:
     mSimulateAppleAskToBuy: 0
     mInterceptApplePromotionalPurchases: 0
     mEnableAmazonSandboxTesting: 0
-    mValidateAppleReceipt: 1
-    mValidateGooglePlayReceipt: 1
+    mValidateAppleReceipt: 0
+    mValidateGooglePlayReceipt: 0
     mProducts: []
   mNotificationSettings:
     mAutoInit: 1
@@ -335,9 +335,9 @@ MonoBehaviour:
       - mKey: NSContactsUsageDescription
         mValue: '[Your usage description]'
   mIsAdModuleEnable: 0
-  mIsIAPModuleEnable: 0
+  mIsIAPModuleEnable: 1
   mIsGameServiceModuleEnable: 0
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 1
-  mActiveModuleIndex: 7
+  mActiveModuleIndex: 3
   mIsSelectingModule: 0
