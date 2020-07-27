@@ -9,12 +9,15 @@ public class MissClickManager : MonoBehaviour {
     [SerializeField] int _clicksToChangeLevel = 3;
 
     [Inject] UITimer _timer = default;
+    [Inject] VibrationManager _vibrationManager = default;
     
     int _currentLevel = 0;
     float _lastClickDeltaTime = 0;
     int _currentClicksInARow = 0;
     
     public void Catch() {
+        _vibrationManager.VibratePeek();
+        
         _currentClicksInARow++;
 
         if (Time.time - _lastClickDeltaTime >= _clickWarnDeltaSec)
