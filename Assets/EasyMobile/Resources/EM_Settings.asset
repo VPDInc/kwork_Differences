@@ -242,7 +242,42 @@ MonoBehaviour:
     mEnableAmazonSandboxTesting: 0
     mValidateAppleReceipt: 0
     mValidateGooglePlayReceipt: 0
-    mProducts: []
+    mProducts:
+    - _name: Coin Pack 1
+      _type: 0
+      _id: coin_pack_1
+      _price: 
+      _description: 
+      _storeSpecificIds: []
+      _isEditingAdvanced: 1
+    - _name: Coin Pack 2
+      _type: 0
+      _id: coin_pack_2
+      _price: 
+      _description: 
+      _storeSpecificIds: []
+      _isEditingAdvanced: 1
+    - _name: Coin Pack 3
+      _type: 0
+      _id: coin_pack_3
+      _price: 
+      _description: 
+      _storeSpecificIds: []
+      _isEditingAdvanced: 1
+    - _name: Coin Pack 4
+      _type: 0
+      _id: coin_pack_4
+      _price: 
+      _description: 
+      _storeSpecificIds: []
+      _isEditingAdvanced: 1
+    - _name: Coin Pack 5
+      _type: 0
+      _id: coin_pack_5
+      _price: 
+      _description: 
+      _storeSpecificIds: []
+      _isEditingAdvanced: 1
   mNotificationSettings:
     mAutoInit: 1
     mAutoInitDelay: 0
