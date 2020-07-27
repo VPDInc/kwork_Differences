@@ -15,6 +15,7 @@ public class UIZoomTip : Tip {
     [SerializeField] GameObject _timeGroup = default;
     
     [Inject] UIGameplay _gameplay = default;
+    [Inject] UITimer _timer = default;
 
     bool _isUnderZoom = false;
     Vector3 _startPos;
@@ -24,14 +25,38 @@ public class UIZoomTip : Tip {
 
     protected override void Start() {
         base.Start();
-        
+
+        _timer.Started += OnTimerStarted;
+        _timer.Stopped += OnTimerStopped;
         _gameplay.Initialized += OnInitialized;
     }
 
     protected override void OnDestroy() {
         base.OnDestroy();
         
+        _timer.Started -= OnTimerStarted;
+        _timer.Stopped -= OnTimerStopped;
         _gameplay.Initialized -= OnInitialized;
+    }
+    
+    void OnTimerStarted() {
+        if (_last > 0) {
+            _startTimestamp = Time.time - (_durationSec - _last);
+            _isUnderZoom = true;
+            _last = 0;
+        }
+    }
+
+    float _last = 0;
+    
+    void OnTimerStopped() {
+        if (_isUnderZoom) {
+            _last = _durationSec - (Time.time - _startTimestamp);
+            _isUnderZoom = false;
+            return;
+        }
+
+        _last = 0;
     }
 
     void Update() {
