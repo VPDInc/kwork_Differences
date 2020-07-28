@@ -28,7 +28,7 @@ public class Advertisement : Singleton<Advertisement> {
     bool _isAdsDisabled = false;
 
     public enum AdvType {
-        Applovin,
+        Admob,
     }
     
     [Serializable]
