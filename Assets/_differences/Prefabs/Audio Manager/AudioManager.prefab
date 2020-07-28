@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdaa3855c768b4639b026768070bd426, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _audioPlayerPrefab: {fileID: 4150236742686487688, guid: 250b5fc3ac1ef4200a5c0adf2bb3a93b,
+  _audioPlayerPrefab: {fileID: 4150236742686487688, guid: 52d07bca9c8914ccb9a715176cff5452,
     type: 3}
   _preloadedSoundsAmount: 25
 --- !u!114 &1601329275918530939
