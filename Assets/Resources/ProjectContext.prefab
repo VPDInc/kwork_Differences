@@ -198,6 +198,77 @@ MonoBehaviour:
   _useSceneContext: 0
   _context: {fileID: 2341104111116120515}
   _bindType: 0
+--- !u!1 &2154812537311862593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7199071595930451745}
+  - component: {fileID: 5961946383442544131}
+  - component: {fileID: 6811698229573381264}
+  m_Layer: 0
+  m_Name: Advertisement
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7199071595930451745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2154812537311862593}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 2878056673979877160}
+  m_Father: {fileID: 5679670365130544554}
+  m_RootOrder: 13
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5961946383442544131
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2154812537311862593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcf994db06d544ecc812549bec98b3d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _isDontDestroyOnLoad: 0
+  _adapters:
+  - Adapter: {fileID: 3320571359269105230}
+    Type: 0
+  _currentAdvType: 0
+  _startShowingAfterLevel: 2
+  _showAfterClicks: 3
+  _cooldownAfterShowingAnyAd: 30
+--- !u!114 &6811698229573381264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2154812537311862593}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0166d8ff8d905b048b2448179e1f5d11, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _components:
+  - {fileID: 5961946383442544131}
+  _identifier: 
+  _useSceneContext: 0
+  _context: {fileID: 2341104111116120515}
+  _bindType: 0
 --- !u!1 &2224336244500317584
 GameObject:
   m_ObjectHideFlags: 0
@@ -1089,6 +1160,58 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ded0534b298c41f28ec0927aa8aa863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &4748992376012459128
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2878056673979877160}
+  - component: {fileID: 3320571359269105230}
+  m_Layer: 0
+  m_Name: AdmobAdapter
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2878056673979877160
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4748992376012459128}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 7199071595930451745}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3320571359269105230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4748992376012459128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3320154b9e2c240f98e2f1ebd42e4afb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _iosBannerID: ca-app-pub-3940256099942544/2934735716
+  _iosInterstitialID: ca-app-pub-3940256099942544/4411468910
+  _iosRewardedVideoID: ca-app-pub-3940256099942544/1712485313
+  _iosNativeBannerID: ca-app-pub-3940256099942544/3986624511
+  _androidBannerID: ca-app-pub-3940256099942544/6300978111
+  _androidInterstitialID: ca-app-pub-3940256099942544/1033173712
+  _androidRewardedVideoID: ca-app-pub-3940256099942544/5224354917
+  _androidNativeBannerID: ca-app-pub-3940256099942544/2247696110
+  _isDebugEnabled: 1
 --- !u!1 &5187114419070137299
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,6 +1615,7 @@ Transform:
   - {fileID: 8957560745001729318}
   - {fileID: 7852071467377138320}
   - {fileID: 7057389520763306230}
+  - {fileID: 7199071595930451745}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2147,18 +2271,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7e57cd7cc06804ae5867e8ce4aced704, type: 3}
---- !u!4 &7852071467377138320 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 1601329275918530941, guid: 7e57cd7cc06804ae5867e8ce4aced704,
-    type: 3}
-  m_PrefabInstance: {fileID: 8845413934487839725}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &7852071467377138323 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1601329275918530942, guid: 7e57cd7cc06804ae5867e8ce4aced704,
-    type: 3}
-  m_PrefabInstance: {fileID: 8845413934487839725}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7852071467377138321 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1601329275918530940, guid: 7e57cd7cc06804ae5867e8ce4aced704,
@@ -2171,6 +2283,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e1a8621f767c494190a2c1a3529aa32, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!4 &7852071467377138320 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1601329275918530941, guid: 7e57cd7cc06804ae5867e8ce4aced704,
+    type: 3}
+  m_PrefabInstance: {fileID: 8845413934487839725}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &7852071467377138323 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1601329275918530942, guid: 7e57cd7cc06804ae5867e8ce4aced704,
+    type: 3}
+  m_PrefabInstance: {fileID: 8845413934487839725}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8975470028002489235
 PrefabInstance:
   m_ObjectHideFlags: 0
