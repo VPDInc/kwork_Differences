@@ -9,25 +9,30 @@ using Zenject;
 
 public class EnergyController : MonoBehaviour {
     public int PlayCost => _playCost;
+    public bool IsInfinityTimeOn => (DateTime.UtcNow - _infinityEnergyStartTimestamp).TotalHours <= _infinityEnergyDurationHours;
     
     [SerializeField] int _playCost = 10;
     [SerializeField] float _refillTime = 2.5f;
     [SerializeField] int _refillAmount = 1;
+    [SerializeField] int _infinityEnergyDurationHours = 1;
     
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] GameplayController _gameplayController = default;
 
     Currency _energyCurrency = default;
-    
+
     DateTime _nextRefillTimestamp = default;
+    DateTime _infinityEnergyStartTimestamp = default;
 
     const string ENERGY_CURRENCY_ID = "Energy";
     const string LAST_ENERGY_REFILL_TIMESTAMP_ID = "energy_refill_timestamp";
+    const string INFINITY_ENERGY_START_TIMESTAMP_ID = "infinity_energy_start_timestamp";
 
     void Start() {
         _energyCurrency = _currencyManager.GetCurrency(ENERGY_CURRENCY_ID);
         _gameplayController.Completed += OnCompleted;
         HandlePassedTime();
+        LoadInfinityTimestamp();
     }
 
     void Update() {
@@ -52,7 +57,8 @@ public class EnergyController : MonoBehaviour {
     }
 
     public void SpendPlayCost() {
-        _energyCurrency.Spend(_playCost);
+        if(!IsInfinityTimeOn)
+            _energyCurrency.Spend(_playCost);
     }
 
     void HandlePassedTime() {
@@ -75,6 +81,20 @@ public class EnergyController : MonoBehaviour {
     }
 
     void LoadTimestamp() {
-        _nextRefillTimestamp = PrefsExtensions.GetDateTime(LAST_ENERGY_REFILL_TIMESTAMP_ID, DateTime.Now);
+        _nextRefillTimestamp = PrefsExtensions.GetDateTime(LAST_ENERGY_REFILL_TIMESTAMP_ID, DateTime.UtcNow);
+    }
+
+    public void AddInfinityTime() {
+        _infinityEnergyStartTimestamp = DateTime.UtcNow;
+        SaveTimestamp();
+        
+    }
+
+    void SaveInfinityTimestamp() {
+        PrefsExtensions.SetDateTime(INFINITY_ENERGY_START_TIMESTAMP_ID, _infinityEnergyStartTimestamp);
+    }
+
+    void LoadInfinityTimestamp() {
+        _infinityEnergyStartTimestamp = PrefsExtensions.GetDateTime(INFINITY_ENERGY_START_TIMESTAMP_ID);
     }
 }

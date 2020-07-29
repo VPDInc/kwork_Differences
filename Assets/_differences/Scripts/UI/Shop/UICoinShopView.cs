@@ -82,7 +82,7 @@ public class UICoinShopView : MonoBehaviour {
             var description = data != null ? data.localizedDescription : iapProduct.Description;
             var cost = data != null ? data.localizedPriceString : iapProduct.Price;
             
-            offerInfo.OfferElement.Setup(title, description, offerInfo.CoinsAmount.ToString(), cost);
+            offerInfo.OfferElement.Setup(title, description, offerInfo.CoinsAmount + " <sprite=0>", cost);
         }
     }
 

@@ -26,3 +26,6 @@ MonoBehaviour:
   - Tournament
   - TournamentEnd
   - CoinShop
+  - EnergyShop
+  - BoosterShop
+  - PreBoosterShop

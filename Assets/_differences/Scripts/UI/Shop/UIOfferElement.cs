@@ -13,7 +13,7 @@ public class UIOfferElement : MonoBehaviour {
     public void Setup(string title, string description, string buyAmount, string cost) {
         _titleText.text = title;
         _descriptionText.text = description;
-        _sellingAmountText.text = buyAmount + " <sprite=0>";
+        _sellingAmountText.text = buyAmount;
         _costText.text = cost;
     }
 }

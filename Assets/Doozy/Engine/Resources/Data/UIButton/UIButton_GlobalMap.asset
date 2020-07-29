@@ -19,3 +19,6 @@ MonoBehaviour:
   - PlaySelectedLevel
   - OpenProfile
   - OpenSettings
+  - OpenCoinStore
+  - OpenEnergyStore
+  - OpenBoosterStore
