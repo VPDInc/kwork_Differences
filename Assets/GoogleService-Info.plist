@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>518039429797-0s9rctc675f41n18ot42cbdigjjaeunr.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.518039429797-0s9rctc675f41n18ot42cbdigjjaeunr</string>
+	<key>API_KEY</key>
+	<string>AIzaSyD028BhzA6DloWvH34i-QyCqYj7dEzsNlY</string>
+	<key>GCM_SENDER_ID</key>
+	<string>518039429797</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>games.airion.differences</string>
+	<key>PROJECT_ID</key>
+	<string>testproject-184c0</string>
+	<key>STORAGE_BUCKET</key>
+	<string>testproject-184c0.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:518039429797:ios:3cf8c2a1b94f5ff6cd634c</string>
+	<key>DATABASE_URL</key>
+	<string>https://testproject-184c0.firebaseio.com</string>
+</dict>
+</plist>

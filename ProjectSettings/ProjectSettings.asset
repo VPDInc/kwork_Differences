@@ -165,10 +165,11 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
+    Android: games.airion.differences
     iPhone: games.airion.differences
   buildNumber: {}
   AndroidBundleVersionCode: 1
-  AndroidMinSdkVersion: 19
+  AndroidMinSdkVersion: 21
   AndroidTargetSdkVersion: 28
   AndroidPreferredInstallLocation: 1
   aotOptions: 
@@ -244,7 +245,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 1
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{inproject}: user-keystore.keystore'
+  AndroidKeystoreName: '{inproject}: games.airion.differences.keystore'
   AndroidKeyaliasName: differences
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0

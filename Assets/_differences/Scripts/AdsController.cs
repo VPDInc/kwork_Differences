@@ -16,6 +16,7 @@ public class AdsController : MonoBehaviour {
     [SerializeField] string _coinsRewardPrefix = "<sprite=0> ";
 
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] Advertisement _advertisement = default;
 
     Currency _currency = default;
 
@@ -26,17 +27,15 @@ public class AdsController : MonoBehaviour {
     }
 
     public void RequestAd() {
-        //TODO: Add ads logic
-        RecieveReward();
+        _advertisement.ShowRewardedVideo(successCallback:ReceiveReward);
     }
 
-    void RecieveReward() {
+    void ReceiveReward() {
         var popup = UIPopup.GetPopup(_popupName);
         popup.Data.Labels[0].GetComponent<TMP_Text>().text = _titleText;
         popup.Data.Labels[1].GetComponent<TMP_Text>().text = _messageText;
         popup.Data.Labels[2].GetComponent<TMP_Text>().text = _coinsRewardPrefix + _adsCoinReward;
         popup.Show();
-        
         
         _currency.Earn(_adsCoinReward);
     }

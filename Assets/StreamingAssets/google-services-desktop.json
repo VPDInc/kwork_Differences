@@ -1,0 +1,37 @@
+{
+  "client": [
+    {
+      "services": {
+        "appinvite_service": {
+          "status": 1
+        }, 
+        "analytics_service": {
+          "status": 0
+        }
+      }, 
+      "oauth_client": [
+        {
+          "client_id": "518039429797-0s9rctc675f41n18ot42cbdigjjaeunr.apps.googleusercontent.com"
+        }
+      ], 
+      "api_key": [
+        {
+          "current_key": "AIzaSyD028BhzA6DloWvH34i-QyCqYj7dEzsNlY"
+        }
+      ], 
+      "client_info": {
+        "mobilesdk_app_id": "1:518039429797:ios:3cf8c2a1b94f5ff6cd634c", 
+        "android_client_info": {
+          "package_name": "games.airion.differences"
+        }
+      }
+    }
+  ], 
+  "configuration_version": "1", 
+  "project_info": {
+    "storage_bucket": "testproject-184c0.appspot.com", 
+    "project_id": "testproject-184c0", 
+    "firebase_url": "https://testproject-184c0.firebaseio.com", 
+    "project_number": "518039429797"
+  }
+}
