@@ -56,7 +56,7 @@ public class UITournamentEnd : MonoBehaviour {
             if (player.IsMe) {
                 var reward = _rewards.GetRewardByPlace(index);
                 if (reward > 0) {
-                    _receiveReward.Show(reward);
+                    _receiveReward.Show(reward, index);
                 }
             }
         }
@@ -93,15 +93,15 @@ public class UITournamentEnd : MonoBehaviour {
                 _winner3.Fill(i, player);
         }
 
-        if (orderedPlayers.Length > 3) {
-            for (int i = 3; i < orderedPlayers.Length; i++) {
+        // if (orderedPlayers.Length > 3) {
+            for (int i = 0; i < orderedPlayers.Length; i++) {
                 var player = orderedPlayers[i];
                 var element = Instantiate(_leaderboardElement, _content);
                 _container.InjectGameObject(element.gameObject);
                 element.Fill(i, i, player);
                 _leaderboardElements.Add(player.Id, element);
             }
-        }
+        // }
 
         SetIcons();
         _loadingView.Hide();
