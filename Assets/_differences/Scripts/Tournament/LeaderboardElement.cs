@@ -22,9 +22,8 @@ public class LeaderboardElement : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _displayName = default;
     [SerializeField] TextMeshProUGUI _score = default;
     [SerializeField] TextMeshProUGUI _reward = default;
-    [SerializeField] Image _back = default;
-    [SerializeField] Color _backColorIfMe = Color.magenta;
-
+    [SerializeField] GameObject _backIfMe = default;
+    [SerializeField] GameObject _backIfNotMe = default;
     int _index;
 
     [Inject] TournamentRewards _tournamentRewards = default;
@@ -36,9 +35,8 @@ public class LeaderboardElement : MonoBehaviour {
         _score.text = player.Score.ToString();
         Player = player;
         _reward.text = _tournamentRewards.GetRewardByPlace(placeInGlobal).ToString();
-        if (player.IsMe) {
-            _back.color = _backColorIfMe;
-        }
+        _backIfMe.SetActive(player.IsMe);
+        _backIfNotMe.SetActive(!player.IsMe);
     }
 
     public void SetIcon(Sprite icon) {
