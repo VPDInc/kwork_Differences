@@ -12,21 +12,27 @@ using UnityEngine.UI;
 using Zenject;
 
 public class UIReceiveTournamentReward : MonoBehaviour {
-    public event Action<int> Received;
+    public event Action<RewardInfo[]> Received;
 
     [SerializeField] Sprite[] _placeBorders = default;
     [SerializeField] Image _borderImage = default;
-    [SerializeField] TextMeshProUGUI _rewardedAmountText = default;
     [SerializeField] UIView _view = default;
+    [SerializeField] PopupRewardElement _rewardElementPrefab = default;
+    [SerializeField] Transform _rewardHolder = default;
+    [SerializeField] TMP_Text _placeText = default;
 
     [Inject] Tournament _tournament = default;
-    
-    int _amount;
+
+    RewardInfo[] _rewardInfos;
 
     public void Show(RewardInfo[] rewardInfos, int place) {
+        _rewardInfos = rewardInfos;
         _borderImage.sprite = _placeBorders[Mathf.Clamp(place, 0, 3)];
-        // _amount = amount;
-        // _rewardedAmountText.text = amount.ToString();
+        _placeText.text = (place + 1) + " place";
+        foreach (RewardInfo rewardInfo in rewardInfos) {
+            var rewardElement = Instantiate(_rewardElementPrefab, _rewardHolder);
+            rewardElement.Setup(rewardInfo.RewardType, rewardInfo.Amount);
+        }
         _view.Show();
     }
 
@@ -35,7 +41,7 @@ public class UIReceiveTournamentReward : MonoBehaviour {
     }
 
     public void OnReceiveClick() {
-        Received?.Invoke(_amount);
+        Received?.Invoke(_rewardInfos);
         _tournament.HandleExit();
     }
 }

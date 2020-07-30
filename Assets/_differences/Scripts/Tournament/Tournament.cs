@@ -360,4 +360,9 @@ public class Tournament : MonoBehaviour {
         if (_isDebugEnabled)
             Debug.Log($"[{GetType()}] {message}");
     }
+
+    [ContextMenu(nameof(DebugComplete))]
+    void DebugComplete() {
+        Completed?.Invoke();
+    }
 }

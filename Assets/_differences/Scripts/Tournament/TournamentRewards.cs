@@ -11,7 +11,7 @@ public class TournamentRewards : ScriptableObject {
 
     [Serializable]
     class RewardContainer {
-        public RewardInfo[] RewardInfos;
+        public RewardInfo[] RewardInfos = default;
     }
 
     public RewardInfo[] GetRewardByPlace(int place) {

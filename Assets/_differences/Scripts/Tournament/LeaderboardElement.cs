@@ -73,8 +73,6 @@ public class LeaderboardElement : MonoBehaviour {
 
     public void ShowReward() {
         _isPopupOpen = true;
-        // _lastParent = transform.parent;
-        // _popupTransform.SetParent(null);
         _popupRewardHolder.DestroyAllChildren();
         foreach (RewardInfo rewardInfo in _rewardInfos) {
             var rewardElement = Instantiate(_popupRewardElementPrefab, _popupRewardHolder);
@@ -86,7 +84,6 @@ public class LeaderboardElement : MonoBehaviour {
 
     public void HideReward() {
         _isPopupOpen = false;
-        // _popupTransform.SetParent(_lastParent);
         _popupCanvasGroup.DOFade(0, 0.25f);
     }
 }
