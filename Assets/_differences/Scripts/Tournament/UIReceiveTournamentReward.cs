@@ -23,10 +23,10 @@ public class UIReceiveTournamentReward : MonoBehaviour {
     
     int _amount;
 
-    public void Show(int amount, int place) {
+    public void Show(RewardInfo[] rewardInfos, int place) {
         _borderImage.sprite = _placeBorders[Mathf.Clamp(place, 0, 3)];
-        _amount = amount;
-        _rewardedAmountText.text = amount.ToString();
+        // _amount = amount;
+        // _rewardedAmountText.text = amount.ToString();
         _view.Show();
     }
 

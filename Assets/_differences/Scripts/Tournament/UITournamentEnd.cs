@@ -55,7 +55,7 @@ public class UITournamentEnd : MonoBehaviour {
             var player = _players[index];
             if (player.IsMe) {
                 var reward = _rewards.GetRewardByPlace(index);
-                if (reward > 0) {
+                if (reward.Length > 0) {
                     _receiveReward.Show(reward, index);
                 }
             }

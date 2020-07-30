@@ -12,5 +12,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c9963b038fde45aa9b9d8faaf71467a, type: 3}
   m_Name: TournamentRewards
   m_EditorClassIdentifier: 
-  _rewards: f4010000c80000006400000032000000
-  _lastPlaces: 5
+  _rewards:
+  - RewardInfos:
+    - RewardType: 0
+      Amount: 5
+    - RewardType: 1
+      Amount: 5
+    - RewardType: 2
+      Amount: 5
+    - RewardType: 3
+      Amount: 5
+    - RewardType: 4
+      Amount: 500
+  - RewardInfos:
+    - RewardType: 0
+      Amount: 3
+    - RewardType: 1
+      Amount: 3
+    - RewardType: 4
+      Amount: 250
+  - RewardInfos:
+    - RewardType: 0
+      Amount: 2
+    - RewardType: 4
+      Amount: 100
+  - RewardInfos:
+    - RewardType: 4
+      Amount: 50
+  _lastRewardForNextPlaces: 5
