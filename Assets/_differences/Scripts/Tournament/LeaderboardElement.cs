@@ -27,13 +27,11 @@ public class LeaderboardElement : MonoBehaviour {
     [SerializeField] Image _avatar = default;
     [SerializeField] TextMeshProUGUI _displayName = default;
     [SerializeField] TextMeshProUGUI _score = default;
-    [FormerlySerializedAs("_reward"),SerializeField] TextMeshProUGUI _rewardLabel = default;
     [SerializeField] GameObject _backIfMe = default;
     [SerializeField] GameObject _backIfNotMe = default;
     [SerializeField] Image _rewardBox = default;
     [SerializeField] Sprite[] _rewardBoxSprites = default;
     [Header("Popup")] [SerializeField] CanvasGroup _popupCanvasGroup = default;
-    [SerializeField] Transform _popupTransform = default;
     [SerializeField] Transform _popupRewardHolder = default;
     [SerializeField] PopupRewardElement _popupRewardElementPrefab = default;
 
@@ -42,7 +40,6 @@ public class LeaderboardElement : MonoBehaviour {
     int _index;
     RewardInfo[] _rewardInfos;
     Transform _lastParent;
-    bool _isPopupOpen;
 
     void Update() {
         if (Input.GetMouseButtonUp(0)) {
@@ -72,7 +69,6 @@ public class LeaderboardElement : MonoBehaviour {
     }
 
     public void ShowReward() {
-        _isPopupOpen = true;
         _popupRewardHolder.DestroyAllChildren();
         foreach (RewardInfo rewardInfo in _rewardInfos) {
             var rewardElement = Instantiate(_popupRewardElementPrefab, _popupRewardHolder);
@@ -83,7 +79,6 @@ public class LeaderboardElement : MonoBehaviour {
     }
 
     public void HideReward() {
-        _isPopupOpen = false;
         _popupCanvasGroup.DOFade(0, 0.25f);
     }
 }

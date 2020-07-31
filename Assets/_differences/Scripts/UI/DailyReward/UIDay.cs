@@ -22,7 +22,7 @@ public class UIDay : MonoBehaviour {
             _chest.sprite = _openedEmpty;
         }
         
-        _dayNum.text = (info.DayNum + 1).ToString() + " Day";
+        _dayNum.text = "Day " + (info.DayNum + 1).ToString();
         if (info.Additional.HasFlag(AdditionalDaySetting.Today)) {
             _dayNum.text = "Today";
         }
