@@ -7,6 +7,9 @@ public class MissClickManager : MonoBehaviour {
     [SerializeField] float[] _reduceTimeLevels = {10, 20, 30};
     [SerializeField] float _clearingDeltaSec = 20;
     [SerializeField] int _clicksToChangeLevel = 3;
+    [SerializeField] RectTransform _missingIndicatorPrefab = default;
+    [SerializeField] Transform _indicatorContainer = default;
+    [SerializeField] Canvas _activeCanvas = default;
 
     [Inject] UITimer _timer = default;
     [Inject] VibrationManager _vibrationManager = default;
@@ -35,6 +38,12 @@ public class MissClickManager : MonoBehaviour {
         }
 
         _lastClickDeltaTime = Time.time;
+
+        var mousePos = Input.mousePosition;
+        var screenPosition = _activeCanvas.ScreenToCanvasPosition(mousePos);
+        print(screenPosition);
+        var indicator = Instantiate(_missingIndicatorPrefab, _indicatorContainer);
+        indicator.position = screenPosition;
     }
 
     public void Reset() {

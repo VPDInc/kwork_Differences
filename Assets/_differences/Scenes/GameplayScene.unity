@@ -5904,6 +5904,10 @@ MonoBehaviour:
   - 30
   _clearingDeltaSec: 20
   _clicksToChangeLevel: 3
+  _missingIndicatorPrefab: {fileID: 5511579001238079452, guid: aeaf7cac15b62414cbaa87759a08e129,
+    type: 3}
+  _indicatorContainer: {fileID: 1526731826}
+  _activeCanvas: {fileID: 1678742118}
 --- !u!1 &684280184
 GameObject:
   m_ObjectHideFlags: 0
