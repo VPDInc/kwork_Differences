@@ -179,14 +179,12 @@ public class UITournament : MonoBehaviour {
     void Filter(bool isFriendsOnly) {
         var elements = _leaderboardElements.Values;
         var ordered = elements.OrderByDescending(e => e.Player.Score).ToArray();
-        var pos = 0;
+
         for (int i = 0; i < ordered.Length; i++) {
             var element = ordered[i];
             var isFriend = (element.Player.IsFriend || element.Player.IsMe);
             if (isFriend && isFriendsOnly || !isFriendsOnly) {
                 element.gameObject.SetActive(true);
-                element.SetPosition(pos);
-                pos++;
             } else {
                 element.gameObject.SetActive(false);
             }
