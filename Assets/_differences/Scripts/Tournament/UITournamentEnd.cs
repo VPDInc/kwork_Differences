@@ -27,6 +27,7 @@ public class UITournamentEnd : MonoBehaviour {
     [Inject] UIReceiveTournamentReward _receiveReward = default;
     [Inject] TournamentRewards _rewards = default;
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] UITournament _uiTournament = default;
 
     UIView _view;
 
@@ -153,7 +154,7 @@ public class UITournamentEnd : MonoBehaviour {
             if (_winner1.Player.IsMe) {
                 _winner1.PlayerIcon.sprite = _infoController.PlayerIcon;
             } else {
-                _winner1.PlayerIcon.sprite = _infoController.GetRandomIcon();
+                _winner1.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner1.Player.Id);
                 if (!string.IsNullOrWhiteSpace(_winner1.Player.Facebook)) {
                     FB.API($"{_winner1.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                            res => {
@@ -168,7 +169,7 @@ public class UITournamentEnd : MonoBehaviour {
             if (_winner2.Player.IsMe) {
                 _winner2.PlayerIcon.sprite = _infoController.PlayerIcon;
             } else {
-                _winner2.PlayerIcon.sprite = _infoController.GetRandomIcon();
+                _winner2.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner2.Player.Id);
                 if (!string.IsNullOrWhiteSpace(_winner2.Player.Facebook)) {
                     FB.API($"{_winner2.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                            res => {
@@ -183,7 +184,8 @@ public class UITournamentEnd : MonoBehaviour {
             if (_winner3.Player.IsMe) {
                 _winner3.PlayerIcon.sprite = _infoController.PlayerIcon;
             } else {
-                _winner3.PlayerIcon.sprite = _infoController.GetRandomIcon();
+                _winner3.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner3.Player.Id);
+
                 if (!string.IsNullOrWhiteSpace(_winner3.Player.Facebook)) {
                     FB.API($"{_winner3.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                            res => {
@@ -202,7 +204,7 @@ public class UITournamentEnd : MonoBehaviour {
                 continue;
             }
 
-            SetIconTo(id, _infoController.GetRandomIcon());
+            SetIconTo(id, _uiTournament.TryGetAvatarById(id));
 
             if (!string.IsNullOrWhiteSpace(element.Player.Facebook)) {
                 FB.API($"{element.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,

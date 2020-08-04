@@ -110,7 +110,9 @@ public class Tournament : MonoBehaviour {
         Load();
     }
     
-    void OnInfoReceived(GetAccountInfoResult obj) => Load();
+    void OnInfoReceived(GetAccountInfoResult obj) {
+        Load();
+    }
 
     void Load() {
         Clear();
