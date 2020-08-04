@@ -35,18 +35,19 @@ public class UITournament : MonoBehaviour {
     UIView _view;
     float _lastUpdateTimestamp = 0;
     int _myPosition = 0;
-    int _fullAmount = 0;
+    int _fullElementsAmount = 0;
+    
     bool IsMeInsideView {
         get {
             var position = _scroll.normalizedPosition.y;
-            var step = (1 / (float) _fullAmount);
+            var step = (1 / (float) _fullElementsAmount);
             var validOffset = step * (ELEMENTS_COUNT_IN_ONE_SCREEN);
             var isPlayerInsideScreen = MyPositionInScrollView <= position && position <= MyPositionInScrollView + validOffset;
             return isPlayerInsideScreen;
         }
     }
     
-    float MyPositionInScrollView => 1 - (_myPosition / (float) _fullAmount);
+    float MyPositionInScrollView => 1 - (_myPosition / (float) _fullElementsAmount);
 
     const float UPDATE_TIMER_EVERY_SECONDS = 60;
     const float ELEMENTS_COUNT_IN_ONE_SCREEN = 6;
@@ -83,36 +84,52 @@ public class UITournament : MonoBehaviour {
         
         _leaderboardElements.Clear();
         _content.DestroyAllChildren();
-        _fullAmount = 0;
+        _fullElementsAmount = 0;
         _myPosition = 0;
         
         var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
-        var current = 0;
-        for (int i = 0; i < orderedPlayers.Length; i++) {
-            var player = orderedPlayers[i];
-            if (friendsOnly && player.IsFriend || !friendsOnly) {
-                if (_leaderboardElements.ContainsKey(player.Id)) {
-                    // Handle
-                } else {
-                    var element = Instantiate(_leaderboardElement, _content);
-                    _container.InjectGameObject(element.gameObject);
-                    _fullAmount++;
-                    element.Fill(current, i, player);
-                    _leaderboardElements.Add(player.Id, element);
-                    current++;
+        var placeInLeaderboard = 0;
+        var placeInGlobal = 0;
+        
+        if (orderedPlayers.Length > 0)
+            CreateElement(orderedPlayers[0], placeInLeaderboard, placeInGlobal);
+
+        if (orderedPlayers.Length > 1) {
+            for (int i = 1; i < orderedPlayers.Length; i++) {
+                var player = orderedPlayers[i];
+                if (friendsOnly && player.IsFriend || !friendsOnly) {
+                    if (_leaderboardElements.ContainsKey(player.Id)) {
+                        Debug.LogError($"[{GetType()}] already contains element with id {player.Id}", _leaderboardElements[player.Id]);
+                    } else {
+                        placeInLeaderboard++;
+                        
+                        if (orderedPlayers[i-1].Score != player.Score) 
+                            placeInGlobal++;
+                        
+                        CreateElement(player, placeInLeaderboard, placeInGlobal);
+                    }
                 }
+                
+                if (player.IsMe)
+                    _myPosition = placeInLeaderboard;
+                
             }
-            
-            if (player.IsMe)
-                _myPosition = current;
-            
         }
+        
         _loadingView.Hide();
         SelectMy();
         SetIcons();
         
         _toLeadersButton.SetActive(IsMeInsideView);
         _toMyButton.SetActive(!IsMeInsideView);
+    }
+
+    void CreateElement(LeaderboardPlayer player, int placeInLeaderboard, int placeInGlobal) {
+        var element = Instantiate(_leaderboardElement, _content);
+        _container.InjectGameObject(element.gameObject);
+        _fullElementsAmount++;
+        element.Fill(placeInLeaderboard, placeInGlobal, player);
+        _leaderboardElements.Add(player.Id, element);
     }
 
     void UpdateTimer() {
@@ -148,7 +165,7 @@ public class UITournament : MonoBehaviour {
     }
 
     void SelectMy() {
-        var step = (1 / (float) _fullAmount);
+        var step = (1 / (float) _fullElementsAmount);
         _scroll.verticalNormalizedPosition = Mathf.Clamp01(MyPositionInScrollView + (step * ELEMENTS_COUNT_IN_ONE_SCREEN));
     }
 
