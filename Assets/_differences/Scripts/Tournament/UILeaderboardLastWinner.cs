@@ -12,7 +12,7 @@ public class UILeaderboardLastWinner : MonoBehaviour {
    [SerializeField] Image _avatar = default;
    [SerializeField] TextMeshProUGUI _score = default;
 
-   public void Fill(int index, LeaderboardPlayer player) {
+   public void Fill(int place, LeaderboardPlayer player) {
       _avatar.sprite = null;
       _score.text = player.Score.ToString();
       Player = player;

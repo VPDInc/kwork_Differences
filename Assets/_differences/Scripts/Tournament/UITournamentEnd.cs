@@ -80,33 +80,43 @@ public class UITournamentEnd : MonoBehaviour {
         _players.AddRange(orderedPlayers);
         _content.DestroyAllChildren();
 
-        for (int i = 0; i < 3; i++) {
-            if (i >= orderedPlayers.Length) {
-                break;
-            }
+        var placeInLeaderboard = 0;
+        var placeInGlobal = 0;
 
-            var player = orderedPlayers[i];
-
-            if (i == 0)
-                _winner1.Fill(i, player);
-
-            if (i == 1)
-                _winner2.Fill(i, player);
-
-            if (i == 2)
-                _winner3.Fill(i, player);
+        if (orderedPlayers.Length > 0) {
+            var player = orderedPlayers[0];
+            _winner1.Fill(0, player);
+            CreateElement(player, placeInLeaderboard, placeInGlobal);
         }
 
-        for (int i = 0; i < orderedPlayers.Length; i++) {
-            var player = orderedPlayers[i];
-            var element = Instantiate(_leaderboardElement, _content);
-            _container.InjectGameObject(element.gameObject);
-            element.Fill(i, i, player);
-            _leaderboardElements.Add(player.Id, element);
+        if (orderedPlayers.Length > 1) {
+            for (int i = 1; i < orderedPlayers.Length; i++) {
+                var player = orderedPlayers[i];
+
+                if (orderedPlayers[i - 1].Score != player.Score) {
+                    placeInGlobal++;
+                    placeInLeaderboard++;
+                }
+
+                if (i == 1)
+                    _winner2.Fill(placeInGlobal, player);
+
+                if (i == 2)
+                    _winner3.Fill(placeInGlobal, player);
+                
+                CreateElement(player, placeInLeaderboard, placeInGlobal);
+            }
         }
 
         SetIcons();
         _loadingView.Hide();
+    }
+
+    void CreateElement(LeaderboardPlayer player, int placeInLeaderboard, int placeInGlobal) {
+        var element = Instantiate(_leaderboardElement, _content);
+        _container.InjectGameObject(element.gameObject);
+        element.Fill(placeInLeaderboard, placeInGlobal, player);
+        _leaderboardElements.Add(player.Id, element);
     }
 
     void OnRewardReceived(RewardInfo[] rewardInfos) {

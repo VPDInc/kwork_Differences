@@ -97,17 +97,15 @@ public class UITournament : MonoBehaviour {
         if (orderedPlayers.Length > 1) {
             for (int i = 1; i < orderedPlayers.Length; i++) {
                 var player = orderedPlayers[i];
-                if (friendsOnly && player.IsFriend || !friendsOnly) {
-                    if (_leaderboardElements.ContainsKey(player.Id)) {
-                        Debug.LogError($"[{GetType()}] already contains element with id {player.Id}", _leaderboardElements[player.Id]);
-                    } else {
+                if (_leaderboardElements.ContainsKey(player.Id)) {
+                    Debug.LogError($"[{GetType()}] already contains element with id {player.Id}", _leaderboardElements[player.Id]);
+                } else {
+                    if (orderedPlayers[i - 1].Score != player.Score) {
+                        placeInGlobal++;
                         placeInLeaderboard++;
-                        
-                        if (orderedPlayers[i-1].Score != player.Score) 
-                            placeInGlobal++;
-                        
-                        CreateElement(player, placeInLeaderboard, placeInGlobal);
-                    }
+                    } 
+                    
+                    CreateElement(player, placeInLeaderboard, placeInGlobal);
                 }
                 
                 if (player.IsMe)
