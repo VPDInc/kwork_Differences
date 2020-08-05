@@ -47,7 +47,6 @@ public class UIEnergyShop : MonoBehaviour {
             _softCurrency.Spend(_costEnergyPack1);
             _energyCurrency.Earn(_energyAmountPack1);
             Analytic.CurrencySpend(_costEnergyPack1, "energy-bought", "energy-pack-1", _levelController.LastLevelNum);
-            Analytic.EnergyEarn(_energyAmountPack1, "energy-bought", "energy-pack-1");
         }
     }
     
@@ -56,7 +55,6 @@ public class UIEnergyShop : MonoBehaviour {
             _softCurrency.Spend(_costEnergyPack2);
             _energyCurrency.Earn(_energyAmountPack2);
             Analytic.CurrencySpend(_costEnergyPack2, "energy-bought", "energy-pack-2", _levelController.LastLevelNum);
-            Analytic.EnergyEarn(_energyAmountPack2, "energy-bought", "energy-pack-2");
         }
     }
 
@@ -65,7 +63,6 @@ public class UIEnergyShop : MonoBehaviour {
             _softCurrency.Spend(_costInfinityEnergy);
             _energyController.AddInfinityTime();
             Analytic.CurrencySpend(_costEnergyPack2, "energy-bought", "unlimited-pack", _levelController.LastLevelNum);
-            Analytic.EnergyEarn(_energyAmountPack2, "energy-bought", "unlimited-pack");
         }
     }
 

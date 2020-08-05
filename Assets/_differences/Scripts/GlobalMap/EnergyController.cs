@@ -44,7 +44,6 @@ public class EnergyController : MonoBehaviour {
     void OnCompleted(GameplayResult result) {
         if (result.IsCompleted) {
             _energyCurrency.Earn(_playCost);
-            Analytic.EnergyEarn(_playCost, "level-completed", LevelController.GetLastLevelNum().ToString());
         }
     }
     
@@ -61,7 +60,6 @@ public class EnergyController : MonoBehaviour {
     public void SpendPlayCost() {
         if (!IsInfinityTimeOn) {
             _energyCurrency.Spend(_playCost);
-            Analytic.EnergySpend(_playCost, "level-launched", LevelController.GetLastLevelNum().ToString());
         }
     }
 

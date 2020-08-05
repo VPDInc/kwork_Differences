@@ -10,7 +10,7 @@ using UnityEngine;
 
 using Zenject;
 
-public class LevelController : MonoBehaviour {
+public class LevelController : Singleton<LevelController> {
     public int LastLevelNum => _lastLevelNum;
     public int LastEpisodeNum => _lastEpisodeNum;
     public int CompleteRatingReward => _completeRatingReward;
@@ -35,6 +35,12 @@ public class LevelController : MonoBehaviour {
     int _lastEpisodeNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     LevelInfo _currentLevel;
+    float _startLevelTimestamp;
+
+    int Try {
+        get => PlayerPrefs.GetInt("try", 0);
+        set => PlayerPrefs.SetInt("try", value);
+    }
     
     const string LAST_LEVEL_ID = "last_level";
     const string LAST_EPISODE_ID = "last_episode";
@@ -66,11 +72,10 @@ public class LevelController : MonoBehaviour {
     }
     
     public static int GetLastLevelNum() {
-        return 0;
-        // if (Instance == null)
-            // return 0;
+        if (Instance == null)
+            return 0;
 
-        // return Instance.LastLevelNum;
+        return Instance.LastLevelNum;
     }
 
     void CompleteLevel(int num) {
@@ -108,7 +113,10 @@ public class LevelController : MonoBehaviour {
             // Cause current level num + 1 already loaded and we just need to load level after that
             _database.Load(_lastLevelNum + 2);
             CompleteLevel(_lastLevelNum);
+            Analytic.LogComplete(_lastLevelNum, Time.time - _startLevelTimestamp, Try);
+            Try = 0;
         } else {
+            Analytic.LogFail(_lastLevelNum);
             // Reload current level with others pictures
             _database.Load(_lastLevelNum);            
         }
@@ -131,8 +139,11 @@ public class LevelController : MonoBehaviour {
         _energyController.SpendPlayCost();
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.Begin();
+        Analytic.LogStartLevel(levelNum);
+        Try++;
+        _startLevelTimestamp = Time.time;
     }
-
+    
     void SetupLevels() {
         foreach (LevelInfo levelInfo in _allLevels) {
             var levelNum = levelInfo.LevelNum;

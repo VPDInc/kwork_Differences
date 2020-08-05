@@ -22,6 +22,21 @@ public static class Analytic {
         Send(eventName, dictionary);
     }
 
+    public static void LogStartLevel(int level) {
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Start, level.ToString());
+        Send("level_started", ("level", level));
+    }
+
+    public static void LogFail(int level) {
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Fail, level.ToString());        
+        Send("level_failed", ("level", level));
+    }
+    
+    public static void LogComplete(int level, float duration, int tryNum) {
+        GameAnalytics.NewProgressionEvent(GAProgressionStatus.Complete, level.ToString());
+        Send("level_complete", ("level", level), ("duration", duration), ("try", tryNum));
+    }
+
     public static void CurrencyEarn(int amount, string itemType, string item) {
         GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "soft", amount, itemType, item);
         var par = new[] {
@@ -43,30 +58,6 @@ public static class Analytic {
             new Parameter("item-type", itemType), 
             new Parameter("id", item), 
             new Parameter("level", levelNum), 
-        };
-        FirebaseAnalytics.LogEvent("resource-event", par);
-    }
-    
-    public static void EnergyEarn(int amount, string itemType, string item) {
-        GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "energy", amount, itemType, item);
-        var par = new[] {
-            new Parameter("event", "earn"), 
-            new Parameter("currency", "energy"), 
-            new Parameter("amount", amount),
-            new Parameter("item-type", itemType), 
-            new Parameter("id", item), 
-        };
-        FirebaseAnalytics.LogEvent("resource-event", par);
-    }
-    
-    public static void EnergySpend(int amount, string itemType, string item) {
-        GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "energy", amount, itemType, item);
-        var par = new[] {
-            new Parameter("event", "spend"), 
-            new Parameter("currency", "energy"), 
-            new Parameter("amount", amount),
-            new Parameter("item-type", itemType), 
-            new Parameter("id", item), 
         };
         FirebaseAnalytics.LogEvent("resource-event", par);
     }

@@ -137,10 +137,10 @@ public class UITournamentEnd : MonoBehaviour {
                     break;
                 case RewardEnum.Coin:
                     _currencyManager.GetCurrency("Soft").Earn(rewardInfo.Amount);
+                    Analytic.CurrencyEarn(rewardInfo.Amount, "tournament-won", "");
                     break;
                 case RewardEnum.Energy:
                     _currencyManager.GetCurrency("Energy").Earn(rewardInfo.Amount);
-                    Analytic.EnergyEarn(rewardInfo.Amount, "tournament-won", "");
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
