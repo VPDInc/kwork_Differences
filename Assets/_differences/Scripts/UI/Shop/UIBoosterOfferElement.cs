@@ -17,6 +17,7 @@ public class UIBoosterOfferElement : MonoBehaviour {
     [SerializeField] TMP_Text _costLabel = default;
 
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] LevelController _levelController = default;
 
     Currency _coinsCurrency;
     Currency _currency;
@@ -43,7 +44,7 @@ public class UIBoosterOfferElement : MonoBehaviour {
     public void Buy() {
         if (_coinsCurrency.IsEnough(_cost)) {
             _coinsCurrency.Spend(_cost);
-            Analytic.CurrencySpend(_cost, "booster-bought", _currency.name);
+            Analytic.CurrencySpend(_cost, "booster-bought", _currency.name, _levelController.LastLevelNum);
             _currency.Earn(_amountToBuy);
         } else {
             Debug.Log("Not enough coins");

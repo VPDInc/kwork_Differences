@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Airion.Currency;
+using Airion.Extensions;
 
 using Lean.Touch;
 
@@ -41,6 +42,7 @@ public class LevelController : MonoBehaviour {
     const string RATING_CURRENCY_ID = "Rating";
 
     void Awake() {
+        // base.Awake();
         _lastEpisodeNum = PlayerPrefs.GetInt(LAST_EPISODE_ID, 0);
     }
 
@@ -61,6 +63,14 @@ public class LevelController : MonoBehaviour {
     void OnDestroy() {
         _gameplay.Completed -= OnCompleted;
         _gameplay.Initialized -= OnGameplayInit;
+    }
+    
+    public static int GetLastLevelNum() {
+        return 0;
+        // if (Instance == null)
+            // return 0;
+
+        // return Instance.LastLevelNum;
     }
 
     void CompleteLevel(int num) {

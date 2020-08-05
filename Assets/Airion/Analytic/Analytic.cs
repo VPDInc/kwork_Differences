@@ -34,7 +34,7 @@ public static class Analytic {
         FirebaseAnalytics.LogEvent("resource-event", par);
     }
     
-    public static void CurrencySpend(int amount, string itemType, string item) {
+    public static void CurrencySpend(int amount, string itemType, string item, int levelNum) {
         GameAnalytics.NewResourceEvent(GAResourceFlowType.Sink, "soft", amount, itemType, item);
         var par = new[] {
             new Parameter("event", "spend"), 
@@ -42,6 +42,7 @@ public static class Analytic {
             new Parameter("amount", amount),
             new Parameter("item-type", itemType), 
             new Parameter("id", item), 
+            new Parameter("level", levelNum), 
         };
         FirebaseAnalytics.LogEvent("resource-event", par);
     }
