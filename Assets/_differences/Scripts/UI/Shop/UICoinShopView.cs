@@ -56,22 +56,27 @@ public class UICoinShopView : MonoBehaviour {
             case EM_IAPConstants.Product_Coin_Pack_1:
                 var offerInfo1 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_1));
                 _softCurrency.Earn(offerInfo1.CoinsAmount);
+                Analytic.CurrencyEarn(offerInfo1.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_1);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_2:
                 var offerInfo2 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_2));
                 _softCurrency.Earn(offerInfo2.CoinsAmount);
+                Analytic.CurrencyEarn(offerInfo2.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_2);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_3:
                 var offerInfo3 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_3));
                 _softCurrency.Earn(offerInfo3.CoinsAmount);
+                Analytic.CurrencyEarn(offerInfo3.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_3);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_4:
                 var offerInfo4 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_4));
+                Analytic.CurrencyEarn(offerInfo4.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_4);
                 _softCurrency.Earn(offerInfo4.CoinsAmount);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_5:
                 var offerInfo5 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_5));
                 _softCurrency.Earn(offerInfo5.CoinsAmount);
+                Analytic.CurrencyEarn(offerInfo5.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_5);
                 break;
         }
     }

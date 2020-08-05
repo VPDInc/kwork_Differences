@@ -124,6 +124,7 @@ public class PlayFabFacebook : MonoBehaviour {
             _wasLinked = true;
             PrefsExtensions.SetBool(WAS_LINKED_ID, _wasLinked);
             _currency.Earn(_facebookLinkReward);
+            Analytic.CurrencyEarn(_facebookLinkReward, "facebook-linked", "");
         }
 
         FacebookLinked?.Invoke();

@@ -18,6 +18,7 @@ public class EnergyController : MonoBehaviour {
     
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] GameplayController _gameplayController = default;
+    [Inject] LevelController _levelController = default;
 
     Currency _energyCurrency = default;
 
@@ -42,8 +43,10 @@ public class EnergyController : MonoBehaviour {
     }
 
     void OnCompleted(GameplayResult result) {
-        if(result.IsCompleted)
+        if (result.IsCompleted) {
             _energyCurrency.Earn(_playCost);
+            Analytic.EnergyEarn(_playCost, "level-completed", _levelController.LastLevelNum.ToString());
+        }
     }
     
     public bool IsCanPlay => _energyCurrency.IsEnough(_playCost);
@@ -72,6 +75,7 @@ public class EnergyController : MonoBehaviour {
 
     void RestoreEnergy() {
         _energyCurrency.Earn(_refillAmount);
+        Analytic.EnergyEarn(_playCost, "game-launched", "");
         SaveTimestamp();
     }
 

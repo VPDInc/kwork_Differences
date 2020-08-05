@@ -89,6 +89,7 @@ public class LevelController : MonoBehaviour {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
         var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
         _coinCurrency.Earn(coinsToEarn);
+        Analytic.CurrencyEarn(coinsToEarn, "level-completed", LastLevelNum.ToString());
         _ratingCurrency.Earn(ratingToEarn);
         _tournament.AddScore(ratingToEarn);
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);

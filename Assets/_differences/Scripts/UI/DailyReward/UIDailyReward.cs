@@ -68,7 +68,9 @@ namespace Airion.DailyRewards {
         }
         
         void OnRewarded(Reward reward) {
-            _currencyManager.GetCurrency("Soft").Earn(((CurrencyReward)reward).Amount);
+            var amount = ((CurrencyReward) reward).Amount;
+            _currencyManager.GetCurrency("Soft").Earn(amount);
+            Analytic.CurrencyEarn(amount, "daily-rewarded", _dailyRewardsSystem.GetCurrentDayInfo().DayNum.ToString());
         }
     }
 }

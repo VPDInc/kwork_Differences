@@ -43,6 +43,7 @@ public class UIBoosterOfferElement : MonoBehaviour {
     public void Buy() {
         if (_coinsCurrency.IsEnough(_cost)) {
             _coinsCurrency.Spend(_cost);
+            Analytic.CurrencySpend(_cost, "booster-bought", _currency.name);
             _currency.Earn(_amountToBuy);
         } else {
             Debug.Log("Not enough coins");
