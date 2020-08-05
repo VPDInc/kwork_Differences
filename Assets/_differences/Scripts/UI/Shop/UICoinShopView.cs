@@ -84,6 +84,10 @@ public class UICoinShopView : MonoBehaviour {
         }
     }
 
+    public void SendAnalytics() {
+        Analytic.Send("store_opened");
+    }
+
     public void BuyCoinPack1() {
         InAppPurchasing.Purchase(EM_IAPConstants.Product_Coin_Pack_1);
     }
