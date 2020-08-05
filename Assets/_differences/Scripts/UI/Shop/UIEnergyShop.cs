@@ -6,22 +6,16 @@ using Zenject;
 
 public class UIEnergyShop : MonoBehaviour {
     [Header("Pack1")]
-    [SerializeField] string _titlePack1 = "Espresso";
-    [SerializeField] string _descriptionPack1 = "Espresso";
     [SerializeField] int _costEnergyPack1 = 300;
     [SerializeField] int _energyAmountPack1 = 10;
     [SerializeField] UIOfferElement _offerElementPack1 = default;
     
     [Header("Pack2")]
-    [SerializeField] string _titlePack2 = "Cappuccino";
-    [SerializeField] string _descriptionPack2 = "Cappuccino";
     [SerializeField] int _costEnergyPack2 = 850;
     [SerializeField] int _energyAmountPack2 = 30;
     [SerializeField] UIOfferElement _offerElementPack2 = default;
     
     [Header("Pack3")]
-    [SerializeField] string _titlePack3 = "Macchiato";
-    [SerializeField] string _descriptionPack3 = "Macchiato";
     [SerializeField] int _costInfinityEnergy = 3000;
     [SerializeField] UIOfferElement _offerElementPack3 = default;
     
@@ -63,8 +57,8 @@ public class UIEnergyShop : MonoBehaviour {
     }
 
     void SetupOffers() {
-        _offerElementPack1.Setup(_titlePack1, _descriptionPack1, _energyAmountPack1 + " <sprite=0>", _costEnergyPack1+ " <sprite=0>");
-        _offerElementPack2.Setup(_titlePack2, _descriptionPack2, _energyAmountPack2 + " <sprite=0>", _costEnergyPack2+ " <sprite=0>");
-        _offerElementPack3.Setup(_titlePack3, _descriptionPack3, "Unlimited <sprite=0> for 1 hour", _costInfinityEnergy+ " <sprite=0>");
+        _offerElementPack1.Setup("+ " + _energyAmountPack1, _costEnergyPack1+ " <sprite=0>");
+        _offerElementPack2.Setup("+ " + _energyAmountPack2, _costEnergyPack2+ " <sprite=0>");
+        _offerElementPack3.Setup("Unlimited <sprite=0> for 1 hour", _costInfinityEnergy+ " <sprite=0>");
     }
 }

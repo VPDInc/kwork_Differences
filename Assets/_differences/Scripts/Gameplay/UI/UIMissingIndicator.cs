@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class UIMissingIndicator : MonoBehaviour {
-    [SerializeField] float _lifetime;
+    [SerializeField] float _lifetime = default;
     [SerializeField] float _effectDuration = default;
 
     Image _image;

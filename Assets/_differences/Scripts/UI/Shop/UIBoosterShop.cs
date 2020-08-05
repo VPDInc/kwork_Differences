@@ -8,6 +8,8 @@ using Doozy.Engine.UI;
 
 using Sirenix.Utilities;
 
+using TMPro;
+
 using UnityEngine;
 
 using Zenject;
@@ -33,9 +35,11 @@ public class UIBoosterShop : MonoBehaviour {
     [SerializeField] UIBoosterOfferElement _boosterOfferElementPrefab = default;
     [SerializeField] UIBoosterPreofferElement _boosterPreofferElementPrefab = default;
     [SerializeField] BoosterShopInfo[] _shopInfos = default;
+    [SerializeField] Sprite[] _backSprites = default;
     [SerializeField] Transform _preofferContainer = default;
     [SerializeField] Transform _offerContainer = default;
     [SerializeField] UIView _shopView = default;
+    [SerializeField] TMP_Text _shopTitle = default;
 
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] DiContainer _diContainer = default;
@@ -54,16 +58,20 @@ public class UIBoosterShop : MonoBehaviour {
     }
 
     void SetupPreoffers() {
-        _preofferContainer.DestroyAllChildren();
-        foreach (BoosterShopInfo shopInfo in _shopInfos) {
-            var preofferElement = _diContainer.InstantiatePrefab(_boosterPreofferElementPrefab, _preofferContainer).GetComponent<UIBoosterPreofferElement>();
-            preofferElement.Setup(shopInfo.BoosterCurrency, shopInfo.Title, shopInfo.Description, shopInfo.BaseIcon);
+        for (var i = 0; i < _shopInfos.Length; i++) {
+            BoosterShopInfo shopInfo = _shopInfos[i];
+            var preofferElement = _diContainer.InstantiatePrefab(_boosterPreofferElementPrefab, _preofferContainer)
+                                              .GetComponent<UIBoosterPreofferElement>();
+
+            preofferElement.Setup(shopInfo.BoosterCurrency, shopInfo.BaseIcon);
+            preofferElement.SetBackSprite(_backSprites[(int)Mathf.Repeat(i, _backSprites.Length)]);
         }
     }
 
     void OpenShopView(BoosterShopInfo shopInfo) {
         _offerContainer.DestroyAllChildren();
         var currency = _currencyManager.GetCurrency(shopInfo.BoosterCurrency);
+        _shopTitle.text = shopInfo.Description;
         foreach (BoosterInfo boosterInfo in shopInfo.Boosters) {
             var offerElement = _diContainer.InstantiatePrefab(_boosterOfferElementPrefab, _offerContainer).GetComponent<UIBoosterOfferElement>();
             var title = boosterInfo.Title.IsNullOrWhitespace() ? shopInfo.Title : boosterInfo.Title;
