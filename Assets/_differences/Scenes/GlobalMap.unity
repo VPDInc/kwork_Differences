@@ -28362,6 +28362,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef19bdbca80f9114fa4f51daa59273ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isDontDestroyOnLoad: 0
   _completeCoinReward: 25
   _completeRatingReward: 150
 --- !u!1001 &1033665262
@@ -78914,7 +78915,7 @@ MonoBehaviour:
   StartAlpha: 1
   AllowMultipleClicks: 1
   ButtonCategory: GlobalMap
-  ButtonName: OpenBoosterStore
+  ButtonName: OpenCoinStore
   ClickMode: 0
   DeselectButtonAfterClick: 0
   DisableButtonBetweenClicksInterval: 0.2

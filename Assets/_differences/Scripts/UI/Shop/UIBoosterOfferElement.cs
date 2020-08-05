@@ -3,6 +3,8 @@ using System.Collections.Generic;
 
 using Airion.Currency;
 
+using Doozy.Engine;
+
 using TMPro;
 
 using UnityEngine;
@@ -25,6 +27,7 @@ public class UIBoosterOfferElement : MonoBehaviour {
     int _cost;
 
     const string COINS_CURRENCY_ID = "Soft";
+    const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
 
     void Start() {
         _coinsCurrency = _currencyManager.GetCurrency(COINS_CURRENCY_ID);
@@ -47,7 +50,7 @@ public class UIBoosterOfferElement : MonoBehaviour {
             Analytic.CurrencySpend(_cost, "booster-bought", _currency.name, _levelController.LastLevelNum);
             _currency.Earn(_amountToBuy);
         } else {
-            Debug.Log("Not enough coins");
+            GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
     }
 }
