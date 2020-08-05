@@ -4,6 +4,7 @@ using Airion.Currency;
 using Airion.Extensions;
 
 using UnityEngine;
+using UnityEngine.Serialization;
 
 using Zenject;
 
@@ -12,7 +13,7 @@ public class EnergyController : MonoBehaviour {
     public bool IsInfinityTimeOn => (DateTime.UtcNow - _infinityEnergyStartTimestamp).TotalHours <= _infinityEnergyDurationHours;
     
     [SerializeField] int _playCost = 10;
-    [SerializeField] float _refillTime = 2.5f;
+    [FormerlySerializedAs("_refillTime"),SerializeField] float _refillEveryTimeMinutes = 2.5f;
     [SerializeField] int _refillAmount = 1;
     [SerializeField] int _infinityEnergyDurationHours = 1;
     
@@ -60,13 +61,13 @@ public class EnergyController : MonoBehaviour {
     public void SpendPlayCost() {
         if (!IsInfinityTimeOn) {
             _energyCurrency.Spend(_playCost);
-        }
+        } 
     }
 
     void HandlePassedTime() {
         LoadTimestamp();
         var delta = DateTime.UtcNow - _nextRefillTimestamp;
-        var refillsPassed = Mathf.CeilToInt((float)delta.TotalMinutes / _refillTime);
+        var refillsPassed = Mathf.CeilToInt((float)delta.TotalMinutes / _refillEveryTimeMinutes);
         for (int i = 0; i < refillsPassed; i++) {
             RestoreEnergy();
         }
@@ -79,7 +80,7 @@ public class EnergyController : MonoBehaviour {
     }
 
     void SaveTimestamp() {
-        _nextRefillTimestamp = DateTime.UtcNow + TimeSpan.FromMinutes(_refillTime);
+        _nextRefillTimestamp = DateTime.UtcNow + TimeSpan.FromMinutes(_refillEveryTimeMinutes);
         PrefsExtensions.SetDateTime(LAST_ENERGY_REFILL_TIMESTAMP_ID, _nextRefillTimestamp);
     }
 

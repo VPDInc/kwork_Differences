@@ -2,6 +2,7 @@
 
 using Airion.Currency;
 
+using Doozy.Engine;
 using Doozy.Engine.UI;
 
 using TMPro;
@@ -19,7 +20,7 @@ public class UITimeIsUp : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _description = default;
     [SerializeField] TextMeshProUGUI _competitionPoints = default;
     [SerializeField] TextMeshProUGUI _addTimeText = default;
-    
+
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] GameplayHandler _handler = default;
 
@@ -32,20 +33,21 @@ public class UITimeIsUp : MonoBehaviour {
     const string ADD_TIME_FORMAT = "+{0} S";
     const string WARN_DESCRIPTION = "If you give up now, you'll lose competition points";
     const string NORMAL_DESCRIPTION = "Buy some extra time to keep playing";
+    const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
 
     void Start() {
-        _soft = _currencyManager.GetCurrency("Soft");        
+        _soft = _currencyManager.GetCurrency("Soft");
         _view = GetComponent<UIView>();
     }
 
     public void Show(float timeToAdd, int ratingWillBeLost) {
         _view.Show();
-        _addTimeButton.interactable = IsEnoughToAddTime;
+        // _addTimeButton.interactable = IsEnoughToAddTime;
         _isWarn = false;
         Fill(timeToAdd, ratingWillBeLost);
         SwitchToWarn(false);
     }
-    
+
     bool IsEnoughToAddTime => _soft.IsEnough(_addTimeCost);
 
     void Fill(float timeToAdd, int ratingWillBeLost) {
@@ -53,7 +55,7 @@ public class UITimeIsUp : MonoBehaviour {
         _competitionPoints.text = string.Format(COMPETITION_POINTS_FORMAT, ratingWillBeLost);
         _addTimeText.text = string.Format(ADD_TIME_FORMAT, timeToAdd);
     }
-    
+
     void SwitchToWarn(bool isWarn) {
         _description.text = isWarn ? WARN_DESCRIPTION : NORMAL_DESCRIPTION;
         _warnGroup.SetActive(isWarn);
@@ -61,10 +63,14 @@ public class UITimeIsUp : MonoBehaviour {
     }
 
     public void OnAddTimeClick() {
-        _soft.Spend(_addTimeCost);
-        Analytic.CurrencySpend(_addTimeCost, "add-time-on-level-fail", "", LevelController.GetLastLevelNum());
-        _handler.ContinueWithTimeBoost();
-        _view.Hide();
+        if (IsEnoughToAddTime) {
+            _soft.Spend(_addTimeCost);
+            Analytic.CurrencySpend(_addTimeCost, "add-time-on-level-fail", "", LevelController.GetLastLevelNum());
+            _handler.ContinueWithTimeBoost();
+            _view.Hide();
+        } else {
+            GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
+        }
     }
 
     public void OnExitClick() {
@@ -75,7 +81,7 @@ public class UITimeIsUp : MonoBehaviour {
                 return;
             }
         }
-        
+
         _view.Hide();
         _handler.Exit();
     }
