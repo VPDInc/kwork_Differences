@@ -70,7 +70,7 @@ public class GameplayHandler : MonoBehaviour {
                     UpdateStars(_config.StarsPerCompletedPicture);
                     _currentPictureResult++;
                     if (_currentPictureResult == _levelsData.Length)
-                        StopGameplay(true);
+                        StopGameplay(true, true);
                     else
                         ChangePictures();
                 }
@@ -88,7 +88,7 @@ public class GameplayHandler : MonoBehaviour {
     }
     
     public void Exit() {
-        StopGameplay(false);
+        StopGameplay(false, false);
     }
 
     public void ContinueWithTimeBoost() {
@@ -111,14 +111,16 @@ public class GameplayHandler : MonoBehaviour {
         _pictureResults[_currentPictureResult] = diff;
     }
 
-    void StopGameplay(bool isWin) {
-        StartCoroutine(Stopping(isWin));
+    void StopGameplay(bool isWin, bool withDelay) {
+        StartCoroutine(Stopping(isWin, withDelay));
         IsStarted = false;
         _timer.Stop();
     }
 
-    IEnumerator Stopping(bool isWin) {
-        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+    IEnumerator Stopping(bool isWin, bool withDelay) {
+        if (withDelay)
+            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        
         _middleScreen.Show(() => {
             _uiGameplay.Complete();
             _missClickManager.Reset();
@@ -128,7 +130,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     IEnumerator WaitAndHideScreen() {
-        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING * 0.5f);
         _middleScreen.Hide();
     }
 

@@ -11,46 +11,50 @@ public class UIMiddleScreen : MonoBehaviour {
     [SerializeField] RectTransform _rightCurtain = default;
     [SerializeField] AnimationCurve _curve = default;
     
-    float _leftCurtainStartXSize;
-    float _rightCurtainStartXSize;
     Canvas _canvas = default;
     
     const float DURATION = 1;
 
     void Awake() {
-        _leftCurtainStartXSize = _leftCurtain.sizeDelta.x;
-        _rightCurtainStartXSize = _rightCurtain.sizeDelta.x;
         _canvas = GetComponent<Canvas>();
         _canvas.enabled = true;
         
         Switch(false, true);
     }
     
-    [ContextMenu(nameof(Show))]
     public void Show(Action endCallback = null) {
         Switch(true, false, endCallback);
     }
 
-    [ContextMenu(nameof(Hide))]
     public void Hide(Action endCallback = null) {
         Switch(false, false, endCallback);
+    }
+
+    [ContextMenu(nameof(Hide))]
+    void DebugHide() {
+        Switch(false, false);
+    }
+
+    [ContextMenu(nameof(Show))]
+    void DebugShow() {
+        Switch(true, false);
     }
 
     void Switch(bool isShow, bool isFast, Action endCallback = null) {
         IsShowing = isShow;
         _leftCurtain.DOKill();
         _rightCurtain.DOKill();
-        var leftSizeDelta = new Vector2(isShow ? _leftCurtainStartXSize : 0, _leftCurtain.sizeDelta.y);
-        var rightSizeDelta = new Vector2(isShow ? _rightCurtainStartXSize : 0, _rightCurtain.sizeDelta.y);
+        var leftSizeDelta = new Vector3(isShow ? 1 : 0, 1, 1);
+        var rightSizeDelta = new Vector3(isShow ? 1 : 0, 1, 1);
         
         if (isFast) {
-            _leftCurtain.sizeDelta = leftSizeDelta; 
-            _rightCurtain.sizeDelta = rightSizeDelta;
+            _leftCurtain.localScale = leftSizeDelta; 
+            _rightCurtain.localScale = rightSizeDelta;
             endCallback?.Invoke();
             return;
         }
 
-        _leftCurtain.DOSizeDelta(leftSizeDelta, DURATION).SetEase(_curve);
-        _rightCurtain.DOSizeDelta(rightSizeDelta, DURATION).SetEase(_curve).OnComplete(() => {endCallback?.Invoke();});
+        _leftCurtain.DOScale(leftSizeDelta, DURATION).SetEase(_curve);
+        _rightCurtain.DOScale(rightSizeDelta, DURATION).SetEase(_curve).OnComplete(() => {endCallback?.Invoke();});
     }
 }

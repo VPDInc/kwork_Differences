@@ -22,7 +22,8 @@ using Zenject;
 
 public class LeaderboardElement : MonoBehaviour {
     public LeaderboardPlayer Player { get; private set; }
-    
+    public Sprite Avatar => _avatar.sprite;
+
     [SerializeField] TextMeshProUGUI _positionText = default;
     [SerializeField] Image _avatar = default;
     [SerializeField] TextMeshProUGUI _displayName = default;

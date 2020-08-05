@@ -27,6 +27,7 @@ public class UITournamentEnd : MonoBehaviour {
     [Inject] UIReceiveTournamentReward _receiveReward = default;
     [Inject] TournamentRewards _rewards = default;
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] UITournament _uiTournament = default;
 
     UIView _view;
 
@@ -80,33 +81,43 @@ public class UITournamentEnd : MonoBehaviour {
         _players.AddRange(orderedPlayers);
         _content.DestroyAllChildren();
 
-        for (int i = 0; i < 3; i++) {
-            if (i >= orderedPlayers.Length) {
-                break;
-            }
+        var placeInLeaderboard = 0;
+        var placeInGlobal = 0;
 
-            var player = orderedPlayers[i];
-
-            if (i == 0)
-                _winner1.Fill(i, player);
-
-            if (i == 1)
-                _winner2.Fill(i, player);
-
-            if (i == 2)
-                _winner3.Fill(i, player);
+        if (orderedPlayers.Length > 0) {
+            var player = orderedPlayers[0];
+            _winner1.Fill(0, player);
+            CreateElement(player, placeInLeaderboard, placeInGlobal);
         }
 
-        for (int i = 0; i < orderedPlayers.Length; i++) {
-            var player = orderedPlayers[i];
-            var element = Instantiate(_leaderboardElement, _content);
-            _container.InjectGameObject(element.gameObject);
-            element.Fill(i, i, player);
-            _leaderboardElements.Add(player.Id, element);
+        if (orderedPlayers.Length > 1) {
+            for (int i = 1; i < orderedPlayers.Length; i++) {
+                var player = orderedPlayers[i];
+
+                if (orderedPlayers[i - 1].Score != player.Score) {
+                    placeInGlobal++;
+                    placeInLeaderboard++;
+                }
+
+                if (i == 1)
+                    _winner2.Fill(placeInGlobal, player);
+
+                if (i == 2)
+                    _winner3.Fill(placeInGlobal, player);
+                
+                CreateElement(player, placeInLeaderboard, placeInGlobal);
+            }
         }
 
         SetIcons();
         _loadingView.Hide();
+    }
+
+    void CreateElement(LeaderboardPlayer player, int placeInLeaderboard, int placeInGlobal) {
+        var element = Instantiate(_leaderboardElement, _content);
+        _container.InjectGameObject(element.gameObject);
+        element.Fill(placeInLeaderboard, placeInGlobal, player);
+        _leaderboardElements.Add(player.Id, element);
     }
 
     void OnRewardReceived(RewardInfo[] rewardInfos) {
@@ -143,7 +154,7 @@ public class UITournamentEnd : MonoBehaviour {
             if (_winner1.Player.IsMe) {
                 _winner1.PlayerIcon.sprite = _infoController.PlayerIcon;
             } else {
-                _winner1.PlayerIcon.sprite = _infoController.GetRandomIcon();
+                _winner1.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner1.Player.Id);
                 if (!string.IsNullOrWhiteSpace(_winner1.Player.Facebook)) {
                     FB.API($"{_winner1.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                            res => {
@@ -158,7 +169,7 @@ public class UITournamentEnd : MonoBehaviour {
             if (_winner2.Player.IsMe) {
                 _winner2.PlayerIcon.sprite = _infoController.PlayerIcon;
             } else {
-                _winner2.PlayerIcon.sprite = _infoController.GetRandomIcon();
+                _winner2.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner2.Player.Id);
                 if (!string.IsNullOrWhiteSpace(_winner2.Player.Facebook)) {
                     FB.API($"{_winner2.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                            res => {
@@ -173,7 +184,8 @@ public class UITournamentEnd : MonoBehaviour {
             if (_winner3.Player.IsMe) {
                 _winner3.PlayerIcon.sprite = _infoController.PlayerIcon;
             } else {
-                _winner3.PlayerIcon.sprite = _infoController.GetRandomIcon();
+                _winner3.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner3.Player.Id);
+
                 if (!string.IsNullOrWhiteSpace(_winner3.Player.Facebook)) {
                     FB.API($"{_winner3.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
                            res => {
@@ -192,7 +204,7 @@ public class UITournamentEnd : MonoBehaviour {
                 continue;
             }
 
-            SetIconTo(id, _infoController.GetRandomIcon());
+            SetIconTo(id, _uiTournament.TryGetAvatarById(id));
 
             if (!string.IsNullOrWhiteSpace(element.Player.Facebook)) {
                 FB.API($"{element.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
