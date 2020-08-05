@@ -10,6 +10,7 @@ using UnityEngine.Analytics;
 public static class Analytic {
     public static void Send(string eventName) {
         FirebaseAnalytics.LogEvent(eventName);
+        GameAnalytics.NewDesignEvent(eventName);
     }
     
     public static void Send(string eventName, Dictionary<string, object> args) {
