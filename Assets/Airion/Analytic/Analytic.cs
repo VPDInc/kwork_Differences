@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
+using GameAnalyticsSDK;
+
 using UnityEngine.Analytics;
 
 public static class Analytic {
@@ -19,5 +21,10 @@ public static class Analytic {
     }
 
     public static void SendBufferForce() {
+    }
+
+    public static void NewInapp(string currency, int amount, string itemType, string id, string cart) {
+        GameAnalytics.NewBusinessEvent(currency, amount, itemType, id, cart);
+        GameAnalytics.NewBusinessEvent(currency);
     }
 }

@@ -5,6 +5,8 @@ using Airion.Currency;
 
 using EasyMobile;
 
+using GameAnalyticsSDK;
+
 using UnityEngine;
 using UnityEngine.Purchasing;
 
@@ -44,6 +46,12 @@ public class UICoinShopView : MonoBehaviour {
 
     // Successful purchase handler
     void PurchaseCompletedHandler(IAPProduct product) {
+        var unityProduct = InAppPurchasing.GetProduct(product.Name);
+        if (unityProduct != null) {
+            var amount = decimal.ToInt32 (unityProduct.metadata.localizedPrice * 100);
+            Analytic.NewInapp(unityProduct.metadata.isoCurrencyCode, amount, product.Type.ToString(), product.Id, "shop");
+        }
+
         switch (product.Name) {
             case EM_IAPConstants.Product_Coin_Pack_1:
                 var offerInfo1 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_1));
