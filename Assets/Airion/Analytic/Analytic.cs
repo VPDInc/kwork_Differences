@@ -43,10 +43,14 @@ public static class Analytic {
             new Parameter("event", "earn"), 
             new Parameter("currency", "soft"), 
             new Parameter("amount", amount),
-            new Parameter("item-type", itemType), 
+            new Parameter("item_type", itemType), 
             new Parameter("id", item), 
         };
-        FirebaseAnalytics.LogEvent("resource-event", par);
+        FirebaseAnalytics.LogEvent("resource_event", par);
+    }
+
+    public static void DiffFound(int levelNum, string pictureId, int diffNum, int order, float duration) {
+        Send("diff_found", ("level_num", levelNum), ("picture_id", pictureId), ("diffNum", diffNum), ("order", order), ("duration", duration));
     }
     
     public static void CurrencySpend(int amount, string itemType, string item, int levelNum) {
@@ -55,11 +59,11 @@ public static class Analytic {
             new Parameter("event", "spend"), 
             new Parameter("currency", "soft"), 
             new Parameter("amount", amount),
-            new Parameter("item-type", itemType), 
+            new Parameter("item_type", itemType), 
             new Parameter("id", item), 
             new Parameter("level", levelNum), 
         };
-        FirebaseAnalytics.LogEvent("resource-event", par);
+        FirebaseAnalytics.LogEvent("resource_event", par);
     }
 
     public static void SendBufferForce() {
@@ -70,7 +74,7 @@ public static class Analytic {
         var par = new[] {
             new Parameter("currency", currency), 
             new Parameter("amount", amount / 100.0f), 
-            new Parameter("item-type", itemType), 
+            new Parameter("item_type", itemType), 
             new Parameter("id", id),
             new Parameter("cart", cart), 
         };

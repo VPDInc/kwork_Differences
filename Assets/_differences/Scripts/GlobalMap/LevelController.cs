@@ -47,8 +47,8 @@ public class LevelController : Singleton<LevelController> {
     const string COIN_CURRENCY_ID = "Soft";
     const string RATING_CURRENCY_ID = "Rating";
 
-    void Awake() {
-        // base.Awake();
+    protected override void Awake() {
+        base.Awake();
         _lastEpisodeNum = PlayerPrefs.GetInt(LAST_EPISODE_ID, 0);
     }
 
