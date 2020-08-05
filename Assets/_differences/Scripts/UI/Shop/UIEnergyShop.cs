@@ -21,6 +21,7 @@ public class UIEnergyShop : MonoBehaviour {
     
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] EnergyController _energyController = default;
+    [Inject] LevelController _levelController = default;
 
     Currency _energyCurrency;    
     Currency _softCurrency;
@@ -39,6 +40,7 @@ public class UIEnergyShop : MonoBehaviour {
         if (_softCurrency.IsEnough(_costEnergyPack1)) {
             _softCurrency.Spend(_costEnergyPack1);
             _energyCurrency.Earn(_energyAmountPack1);
+            Analytic.CurrencySpend(_costEnergyPack1, "energy-bought", "energy-pack-1", _levelController.LastLevelNum);
         }
     }
     
@@ -46,6 +48,7 @@ public class UIEnergyShop : MonoBehaviour {
         if (_softCurrency.IsEnough(_costEnergyPack2)) {
             _softCurrency.Spend(_costEnergyPack2);
             _energyCurrency.Earn(_energyAmountPack2);
+            Analytic.CurrencySpend(_costEnergyPack2, "energy-bought", "energy-pack-2", _levelController.LastLevelNum);
         }
     }
 
@@ -53,6 +56,7 @@ public class UIEnergyShop : MonoBehaviour {
         if (_softCurrency.IsEnough(_costInfinityEnergy)) {
             _softCurrency.Spend(_costInfinityEnergy);
             _energyController.AddInfinityTime();
+            Analytic.CurrencySpend(_costEnergyPack2, "energy-bought", "unlimited-pack", _levelController.LastLevelNum);
         }
     }
 

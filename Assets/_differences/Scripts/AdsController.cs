@@ -38,5 +38,6 @@ public class AdsController : MonoBehaviour {
         popup.Show();
         
         _currency.Earn(_adsCoinReward);
+        Analytic.CurrencyEarn(_adsCoinReward, "ads-watched", "");
     }
 }

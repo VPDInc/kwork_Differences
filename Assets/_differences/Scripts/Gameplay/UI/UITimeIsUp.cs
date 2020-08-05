@@ -62,6 +62,7 @@ public class UITimeIsUp : MonoBehaviour {
 
     public void OnAddTimeClick() {
         _soft.Spend(_addTimeCost);
+        Analytic.CurrencySpend(_addTimeCost, "add-time-on-level-fail", "", LevelController.GetLastLevelNum());
         _handler.ContinueWithTimeBoost();
         _view.Hide();
     }

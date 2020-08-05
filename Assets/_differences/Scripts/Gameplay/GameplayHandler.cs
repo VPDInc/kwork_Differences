@@ -30,6 +30,7 @@ public class GameplayHandler : MonoBehaviour {
     int _currentPictureResult = 0;
     Vector3 _startPos;
     int _levelNum = 0;
+    float _lastDiffTimestamp;
 
     const float SWIPE_DETECTION_LEN = 20;
     const float WAIT_BETWEEN_PICTURES_CHANGING = 1.5f;
@@ -62,6 +63,10 @@ public class GameplayHandler : MonoBehaviour {
                 return;
             
             if (_uiGameplay.IsOverlap(mousePos, out var point)) {
+                Analytic.DiffFound(LevelController.GetLastLevelNum(), _levelsData[_currentPictureResult].Id, point.Number, _pictureResults[_currentPictureResult].DifferencePoints.Length -  _pointsRemain.Count, Time.time - _lastDiffTimestamp);
+                
+                _lastDiffTimestamp = Time.time;
+                
                 _pointsRemain.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
                 UpdateStars(_config.StarsPerFoundDifference);
@@ -209,6 +214,7 @@ public class GameplayHandler : MonoBehaviour {
         _middleScreen.Hide(() => {
             IsStarted = true;
             _timer.Launch(_timePerOneDifference * fixedPoints.Length);
+            _lastDiffTimestamp = Time.time;
         });
     }
 

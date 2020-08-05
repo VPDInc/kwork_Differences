@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Airion.Currency;
+using Airion.Extensions;
 
 using Lean.Touch;
 
@@ -9,7 +10,7 @@ using UnityEngine;
 
 using Zenject;
 
-public class LevelController : MonoBehaviour {
+public class LevelController : Singleton<LevelController> {
     public int LastLevelNum => _lastLevelNum;
     public int LastEpisodeNum => _lastEpisodeNum;
     public int CompleteRatingReward => _completeRatingReward;
@@ -34,13 +35,20 @@ public class LevelController : MonoBehaviour {
     int _lastEpisodeNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     LevelInfo _currentLevel;
+    float _startLevelTimestamp;
+
+    int Try {
+        get => PlayerPrefs.GetInt("try", 0);
+        set => PlayerPrefs.SetInt("try", value);
+    }
     
     const string LAST_LEVEL_ID = "last_level";
     const string LAST_EPISODE_ID = "last_episode";
     const string COIN_CURRENCY_ID = "Soft";
     const string RATING_CURRENCY_ID = "Rating";
 
-    void Awake() {
+    protected override void Awake() {
+        base.Awake();
         _lastEpisodeNum = PlayerPrefs.GetInt(LAST_EPISODE_ID, 0);
     }
 
@@ -61,6 +69,13 @@ public class LevelController : MonoBehaviour {
     void OnDestroy() {
         _gameplay.Completed -= OnCompleted;
         _gameplay.Initialized -= OnGameplayInit;
+    }
+    
+    public static int GetLastLevelNum() {
+        if (Instance == null)
+            return 0;
+
+        return Instance.LastLevelNum;
     }
 
     void CompleteLevel(int num) {
@@ -89,6 +104,7 @@ public class LevelController : MonoBehaviour {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
         var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
         _coinCurrency.Earn(coinsToEarn);
+        Analytic.CurrencyEarn(coinsToEarn, "level-completed", LastLevelNum.ToString());
         _ratingCurrency.Earn(ratingToEarn);
         _tournament.AddScore(ratingToEarn);
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
@@ -97,7 +113,10 @@ public class LevelController : MonoBehaviour {
             // Cause current level num + 1 already loaded and we just need to load level after that
             _database.Load(_lastLevelNum + 2);
             CompleteLevel(_lastLevelNum);
+            Analytic.LogComplete(_lastLevelNum, Time.time - _startLevelTimestamp, Try);
+            Try = 0;
         } else {
+            Analytic.LogFail(_lastLevelNum);
             // Reload current level with others pictures
             _database.Load(_lastLevelNum);            
         }
@@ -120,8 +139,11 @@ public class LevelController : MonoBehaviour {
         _energyController.SpendPlayCost();
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.Begin();
+        Analytic.LogStartLevel(levelNum);
+        Try++;
+        _startLevelTimestamp = Time.time;
     }
-
+    
     void SetupLevels() {
         foreach (LevelInfo levelInfo in _allLevels) {
             var levelNum = levelInfo.LevelNum;

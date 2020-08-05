@@ -42,8 +42,9 @@ public class EnergyController : MonoBehaviour {
     }
 
     void OnCompleted(GameplayResult result) {
-        if(result.IsCompleted)
+        if (result.IsCompleted) {
             _energyCurrency.Earn(_playCost);
+        }
     }
     
     public bool IsCanPlay => _energyCurrency.IsEnough(_playCost);
@@ -57,8 +58,9 @@ public class EnergyController : MonoBehaviour {
     }
 
     public void SpendPlayCost() {
-        if(!IsInfinityTimeOn)
+        if (!IsInfinityTimeOn) {
             _energyCurrency.Spend(_playCost);
+        }
     }
 
     void HandlePassedTime() {
@@ -72,6 +74,7 @@ public class EnergyController : MonoBehaviour {
 
     void RestoreEnergy() {
         _energyCurrency.Earn(_refillAmount);
+        // Analytic.EnergyEarn(_playCost, "game-launched", "");
         SaveTimestamp();
     }
 
