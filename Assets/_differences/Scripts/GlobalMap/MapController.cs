@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using Airion.Extensions;
 
 using Lean.Touch;
+
+using TMPro;
 
 using UnityEngine;
 
@@ -14,6 +17,7 @@ public class MapController : MonoBehaviour {
     [SerializeField] EpisodeInfo[] _episodeInfos = default;
     [SerializeField] float _episodeLength = 0;
     [SerializeField] int _episodeFrontPrespawnCount = 2;
+    [SerializeField] TMP_Text _episodeNumLabel = default;
 
     [Inject] LevelController _levelController = default;
     [Inject] LeanDragCamera _leanDragCamera = default;
@@ -24,9 +28,15 @@ public class MapController : MonoBehaviour {
     int _episodeCount;
     int _levelCount;
 
+    const string EPISODE_PREFIX = "Episode ";
+
     void Start() {
         EpisodeInfo.EpisodeUnlocked += OnEpisodeUnlocked; 
         Init();
+    }
+
+    void Update() {
+        GetClosestEpisodeNum();
     }
 
     void OnDestroy() {
@@ -49,6 +59,14 @@ public class MapController : MonoBehaviour {
                 AddExtraEpisode();
             }
         }
+    }
+
+    void GetClosestEpisodeNum() {
+        var closestEpisodeToCamera =
+            _existedEpisodeInfos.OrderBy(x => Vector2.SqrMagnitude(x.transform.position -
+                                                                _leanDragCamera.transform.position)).First();
+
+        _episodeNumLabel.text = EPISODE_PREFIX + (closestEpisodeToCamera.EpisodeNum + 1);
     }
 
     void AddExtraEpisode() {

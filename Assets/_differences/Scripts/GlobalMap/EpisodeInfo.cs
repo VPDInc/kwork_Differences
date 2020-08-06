@@ -25,7 +25,6 @@ public class EpisodeInfo : MonoBehaviour {
     [Header("Tech Info")] [SerializeField] PathCreator _pathCreator = default;
     [SerializeField] LevelInfo _levelPrefab = default;
     [SerializeField] Transform _levelHolder = default;
-    [SerializeField] TMP_Text _episodeLabel = default;
     [SerializeField] SpriteRenderer _blockerRenderer = default;
 
     [Inject] DiContainer _diContainer = default;
@@ -58,7 +57,6 @@ public class EpisodeInfo : MonoBehaviour {
     }
 
     void PopulateMap(int levelOffset) {
-        _episodeLabel.text = _episodeName;
         var step = 1f / _levelCount;
         for (int i = 0; i < _levelCount; i++) {
             var level = _diContainer
