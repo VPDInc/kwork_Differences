@@ -26,27 +26,27 @@ MonoBehaviour:
   UserMessagesFailed: 0
   CustomArea: 
   gameKey:
-  - a6aea95282b4c30829735b8b1c7754c1
-  - 8d02fd2649da3381d6aaa19ea27b3770
+  - 4f3b549a9898ce4e0d12227425b3716e
+  - e64c25df2c4570b8b5819a735e7b136f
   secretKey:
-  - 23fe2fd94351657c6f0e72d2f17898cb04073d26
-  - 63f6cd82c1bfcbdef46652287b68c43c3d21dd9e
+  - 6bcbb9e7015a86dcf2867ee80c756dd987ad04f3
+  - d642e21aef4793c840597d9f44d09b6892e0792c
   Build:
   - 0.1
   - 0.1
   SelectedPlatformOrganization:
-  - Airion Games
-  - Airion Games
+  - 
+  - 
   SelectedPlatformStudio:
-  - Airion Games
-  - Airion Games
+  - 
+  - 
   SelectedPlatformGame:
-  - TestProj
-  - TestProj-ios
-  SelectedPlatformGameID: 534f01007bae0100
-  SelectedOrganization: 0100000001000000
-  SelectedStudio: 0100000001000000
-  SelectedGame: 0100000002000000
+  - 
+  - 
+  SelectedPlatformGameID: ffffffffffffffff
+  SelectedOrganization: 0000000000000000
+  SelectedStudio: 0000000000000000
+  SelectedGame: 0000000000000000
   NewVersion: 
   Changes: 
   SignUpOpen: 0

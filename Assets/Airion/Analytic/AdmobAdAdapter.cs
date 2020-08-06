@@ -58,7 +58,10 @@ public class AdmobAdAdapter : AdAdapter {
         }
 
         MobileAds.Initialize(status => {
-            Log($"initialized with status {status}");
+            var map = status.getAdapterStatusMap();
+            foreach (var m in map) {
+                Log($"initialized with status {m.Key} {m.Value.Description} {m.Value.InitializationState}");
+            }
         });
         
         _rewardedAd = CreateAndLoad();
@@ -70,6 +73,7 @@ public class AdmobAdAdapter : AdAdapter {
         AdRequest request = new AdRequest.Builder().Build();
         rewardedAd.OnUserEarnedReward += HandleUserEarnedReward;
         rewardedAd.OnAdClosed += HandleRewardedAdClosed;
+        rewardedAd.OnAdFailedToLoad += OnFailedToLoad;
         rewardedAd.LoadAd(request);
         // Called when an ad request has successfully loaded.
         // _rewardedAd.OnAdLoaded += HandleRewardedAdLoaded;
@@ -82,6 +86,10 @@ public class AdmobAdAdapter : AdAdapter {
         // Called when the user should be rewarded for interacting with the ad.
         // Called when the ad is closed.
         return rewardedAd;
+    }
+
+    void OnFailedToLoad(object sender, AdErrorEventArgs e) {
+        Err("Failed to load: " + e.Message);
     }
 
     void HandleRewardedAdClosed(object sender, EventArgs e) {
