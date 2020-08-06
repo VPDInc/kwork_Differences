@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,6 +8,9 @@ using UnityEngine;
 using Zenject;
 
 public class GameplayHandler : MonoBehaviour {
+    public event Action DifferenceFound;
+    public event Action GameStarted;
+    
     [SerializeField] float _timePerOneDifference = 20f;
     [SerializeField] float _addTimeAfterOver = 25f;
     [SerializeField] StarsEarningConfig _config = default;
@@ -66,6 +70,7 @@ public class GameplayHandler : MonoBehaviour {
                 Analytic.DiffFound(LevelController.GetLastLevelNum(), _levelsData[_currentPictureResult].Id, point.Number, _pictureResults[_currentPictureResult].DifferencePoints.Length -  _pointsRemain.Count, Time.time - _lastDiffTimestamp);
                 
                 _lastDiffTimestamp = Time.time;
+                DifferenceFound?.Invoke();
                 
                 _pointsRemain.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
@@ -215,6 +220,7 @@ public class GameplayHandler : MonoBehaviour {
             IsStarted = true;
             _timer.Launch(_timePerOneDifference * fixedPoints.Length);
             _lastDiffTimestamp = Time.time;
+            GameStarted?.Invoke();
         });
     }
 

@@ -5,10 +5,15 @@ using DG.Tweening;
 using UnityEngine;
 
 public class UIShineBoosterFX : MonoBehaviour {
-    [SerializeField] RectTransform _fxTransform = default;
     [SerializeField] float _topPoint = 1;
     [SerializeField] float _botPoint = -1;
     [SerializeField] float _duration = 0.5f;
+    [SerializeField] float _scaleModifier = 1.1f;
+    RectTransform _fxTransform = default;
+
+    void Awake() {
+        _fxTransform = GetComponent<RectTransform>();
+    }
 
     void OnEnable() {
         Reset();
@@ -19,6 +24,7 @@ public class UIShineBoosterFX : MonoBehaviour {
         var targetPos = _fxTransform.anchoredPosition;
         targetPos.y = _botPoint;
         _fxTransform.DOAnchorPos(targetPos, _duration).SetId(this);
+        _fxTransform.parent.DOScale(_scaleModifier, _duration / 2).SetLoops(2, LoopType.Yoyo);
     }
 
     void Reset() {
