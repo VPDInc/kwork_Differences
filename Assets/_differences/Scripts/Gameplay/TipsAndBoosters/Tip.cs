@@ -1,5 +1,7 @@
 ﻿using Airion.Currency;
 
+using Doozy.Engine;
+
 using TMPro;
 
 using UnityEngine;
@@ -18,6 +20,8 @@ public abstract class Tip : MonoBehaviour {
    
    Button _button;
    Currency _currency;
+
+   const string OPEN_STORE_EVENT_ID = "OpenBoosterStore";
    
    void Awake() {
       _button = GetComponentInChildren<Button>();
@@ -47,7 +51,7 @@ public abstract class Tip : MonoBehaviour {
    }
 
    void OpenStore() {
-      Debug.LogError("No store!");
+      GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
    }
 
    protected abstract bool TryActivate();

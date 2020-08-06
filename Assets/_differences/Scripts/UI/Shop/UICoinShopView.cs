@@ -91,12 +91,14 @@ public class UICoinShopView : MonoBehaviour {
             var iapProduct = EM_Settings.InAppPurchasing.Products.FirstOrDefault(x => x.Name.Equals(offerInfo.Name));
             ProductMetadata data = InAppPurchasing.GetProductLocalizedData(iapProduct.Name);
 
-            var title = data != null ? data.localizedTitle : iapProduct.Name;
-            var description = data != null ? data.localizedDescription : iapProduct.Description;
             var cost = data != null ? data.localizedPriceString : iapProduct.Price;
             
-            offerInfo.OfferElement.Setup(title, description, offerInfo.CoinsAmount + " <sprite=0>", cost);
+            offerInfo.OfferElement.Setup(offerInfo.CoinsAmount + " <sprite=0>", cost);
         }
+    }
+
+    public void SendAnalytics() {
+        Analytic.Send("store_opened");
     }
 
     public void BuyCoinPack1() {

@@ -14,7 +14,7 @@ public class UIEnergyBarUpdater : MonoBehaviour {
     [SerializeField] RectTransform _bar = default;
     [SerializeField] Vector3 _borderPos = default;
     [SerializeField] int _maxCurrencyAmount = default;
-    [SerializeField] GameObject _plusButton = default;
+    // [SerializeField] GameObject _plusButton = default;
 
     [Inject] CurrencyManager _currencyManager = default;
 
@@ -38,7 +38,7 @@ public class UIEnergyBarUpdater : MonoBehaviour {
     void CurrencyOnUpdated(float obj) {
         var relativeCurrencyAmount = _currency.Amount / _maxCurrencyAmount;
         SetBarPos(relativeCurrencyAmount);
-        _plusButton.SetActive(_currency.Amount < _maxCurrencyAmount);
+        // _plusButton.SetActive(_currency.Amount < _maxCurrencyAmount);
     }
 
     void SetBarPos(float percent) {

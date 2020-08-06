@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using Airion.Currency;
 using Airion.Extensions;
 
+using Doozy.Engine;
+
 using Lean.Touch;
 
 using UnityEngine;
@@ -46,6 +48,7 @@ public class LevelController : Singleton<LevelController> {
     const string LAST_EPISODE_ID = "last_episode";
     const string COIN_CURRENCY_ID = "Soft";
     const string RATING_CURRENCY_ID = "Rating";
+    const string OPEN_STORE_EVENT_ID = "OpenEnergyStore";
 
     protected override void Awake() {
         base.Awake();
@@ -127,8 +130,11 @@ public class LevelController : Singleton<LevelController> {
     }
 
     public void OpenLastPlayView() {
-        if(_energyController.IsCanPlay)
+        if (_energyController.IsCanPlay) {
             OpenPlayView(_lastLevelNum);
+        } else {
+            GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
+        }
     }
 
     void OpenPlayView(int levelNum) {

@@ -16,4 +16,9 @@ public class UIOfferElement : MonoBehaviour {
         _sellingAmountText.text = buyAmount;
         _costText.text = cost;
     }
+    
+    public void Setup(string buyAmount, string cost) {
+        _sellingAmountText.text = buyAmount;
+        _costText.text = cost;
+    }
 }

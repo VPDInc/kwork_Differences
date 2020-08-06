@@ -273,7 +273,7 @@ MonoBehaviour:
   m_version: 1
   m_description: 
   m_id: d2bf6373-da0a-44e5-a6ef-1afb386f766c
-  m_lastModified: 132405222394701772
+  m_lastModified: 132411125660714068
 --- !u!114 &2104078939477188434
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -332,10 +332,10 @@ MonoBehaviour:
   m_minimumOutputSocketsCount: 1
   m_graphId: d2bf6373-da0a-44e5-a6ef-1afb386f766c
   m_id: 6e33474c-f410-42f4-96dc-a24171d4e45f
-  m_name: NotEnoughBoosters GameEvent
+  m_name: OpenBoosterStore GameEvent
   m_notes: 
   ErrorNotListeningForAnyGameEvent: 0
-  m_gameEvent: NotEnoughBoosters
+  m_gameEvent: OpenBoosterStore
   ListenFor: 0
   AnyValue: 0
   UIViewTriggerAction: 1
@@ -406,10 +406,10 @@ MonoBehaviour:
   m_minimumOutputSocketsCount: 1
   m_graphId: d2bf6373-da0a-44e5-a6ef-1afb386f766c
   m_id: d043ba45-e5e7-4879-b1c3-dd4983163fa0
-  m_name: NotEnoughEnergy GameEvent
+  m_name: OpenEnergyStore GameEvent
   m_notes: 
   ErrorNotListeningForAnyGameEvent: 0
-  m_gameEvent: NotEnoughEnergy
+  m_gameEvent: OpenEnergyStore
   ListenFor: 0
   AnyValue: 0
   UIViewTriggerAction: 1
@@ -711,10 +711,10 @@ MonoBehaviour:
   m_minimumOutputSocketsCount: 1
   m_graphId: d2bf6373-da0a-44e5-a6ef-1afb386f766c
   m_id: 9e2af4d5-227f-4458-81f6-d6822242e95a
-  m_name: NotEnoughCoins GameEvent
+  m_name: OpenCoinStore GameEvent
   m_notes: 
   ErrorNotListeningForAnyGameEvent: 0
-  m_gameEvent: NotEnoughCoins
+  m_gameEvent: OpenCoinStore
   ListenFor: 0
   AnyValue: 0
   UIViewTriggerAction: 1
