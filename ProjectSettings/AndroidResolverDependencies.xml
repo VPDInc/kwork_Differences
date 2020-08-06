@@ -28,7 +28,7 @@
     <file>Assets/GeneratedLocalRepo/Firebase/m2repository/com/google/firebase/firebase-app-unity/6.15.2/firebase-app-unity-6.15.2.pom</file>
   </files>
   <settings>
-    <setting name="androidAbis" value="arm64-v8a,armeabi-v7a" />
+    <setting name="androidAbis" value="armeabi-v7a" />
     <setting name="bundleId" value="games.airion.differences" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
