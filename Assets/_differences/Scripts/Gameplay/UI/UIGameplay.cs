@@ -15,7 +15,7 @@ public class UIGameplay : MonoBehaviour {
     public event Action Initialized;
     public event Action<Point> PointOpened; 
     public (Image, Image) CurrentImages => _currentImages;
-    public Point[] ClosedPoints => _points.ToArray();
+    public Point[] ClosedPoints => _closedPoints.ToArray();
     
     [SerializeField] Image _image1Hor = default;
     [SerializeField] Image _image2Hor = default;
@@ -32,13 +32,16 @@ public class UIGameplay : MonoBehaviour {
     Data _data;
     (Image, Image) _currentImages;
     
-    readonly List<Point> _points = new List<Point>();
+    readonly List<Point> _closedPoints = new List<Point>();
+    readonly List<Point> _allPoints = new List<Point>();
 
     public void Initialize(Data levelData, (Sprite, Sprite) sprites) {
         _data = levelData;
-        _points.Clear();
-        _points.AddRange(_data.Points);
-        _helper.SetPointsAmount(_points.Count);
+        _closedPoints.Clear();
+        _allPoints.Clear();
+        _allPoints.AddRange(_data.Points);
+        _closedPoints.AddRange(_data.Points);
+        _helper.SetPointsAmount(_allPoints.Count);
 
         var image1 = sprites.Item1;
         var image2 = sprites.Item2;
@@ -83,21 +86,32 @@ public class UIGameplay : MonoBehaviour {
         _image1Vert.transform.DestroyAllChildren();
         _image2Vert.transform.DestroyAllChildren();
     }
+
+    public enum OverlapStatus {
+        Found,
+        Doubled,
+        NotFound
+    }
     
-    public bool IsOverlap(Vector2 mousePos, out Point outPoint) {
+    public OverlapStatus TryOverlap(Vector2 mousePos, out Point outPoint) {
         var raycast = DiffUtils.RaycastMouse(mousePos);
         if (raycast.gameObject != null) {
             var image = raycast.gameObject.GetComponent<Image>();
             if (image != null) {
                 if (DiffUtils.GetPixelFromScreen(mousePos, image, out var pixelPos, out var localPos)) {
-                    for (var index = 0; index < _points.Count; index++) {
-                        var point = _points[index];
+                    for (var index = 0; index < _allPoints.Count; index++) {
+                        var point = _allPoints[index];
                         if (IsPixelInsidePoint(pixelPos, point)) {
-                            SelectDifference(point);
-                            _points.RemoveAt(index);
-                            outPoint = point;
-                            PointOpened?.Invoke(point);
-                            return true;
+                            if (_closedPoints.Any(p => p.Number == point.Number)) {
+                                SelectDifference(point);
+                                _closedPoints.Remove(point);
+                                outPoint = point;
+                                PointOpened?.Invoke(point);
+                                return OverlapStatus.Found;
+                            } else {
+                                outPoint = default;
+                                return OverlapStatus.Doubled;
+                            }
                         }
                     }
                 }
@@ -105,7 +119,7 @@ public class UIGameplay : MonoBehaviour {
         }
 
         outPoint = default;
-        return false;
+        return OverlapStatus.NotFound;
     }
     
     public bool IsOverImage(Vector3 mousePos) {
