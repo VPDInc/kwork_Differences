@@ -5,8 +5,6 @@ using Airion.Currency;
 
 using EasyMobile;
 
-using GameAnalyticsSDK;
-
 using UnityEngine;
 using UnityEngine.Purchasing;
 
