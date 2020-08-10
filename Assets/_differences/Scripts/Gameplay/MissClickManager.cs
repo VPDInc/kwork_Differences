@@ -41,7 +41,6 @@ public class MissClickManager : MonoBehaviour {
 
         var mousePos = Input.mousePosition;
         var screenPosition = _activeCanvas.ScreenToCanvasPosition(mousePos);
-        print(screenPosition);
         var indicator = Instantiate(_missingIndicatorPrefab, _indicatorContainer);
         indicator.position = screenPosition;
     }

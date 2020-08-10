@@ -15,7 +15,8 @@ public class GameplayHandler : MonoBehaviour {
     [SerializeField] float _addTimeAfterOver = 25f;
     [SerializeField] StarsEarningConfig _config = default;
     [SerializeField] UIPictureCountBar _uiPictureCountBar = default;
-    
+    [SerializeField] Canvas _activeCanvas = default;
+
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
     [Inject] GameplayController _gameplayController = default;
@@ -26,7 +27,8 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] UITimeIsUp _timeIsUp = default;
     [Inject] UIPause _pause = default;
     [Inject] Database _database = default;
-    
+    [Inject] UIMedalEarningFX _medalEarningFx = default;
+
     bool IsStarted { get; set; }
     readonly List<Point> _pointsRemain = new List<Point>();
     readonly List<PictureResult> _pictureResults = new List<PictureResult>();
@@ -67,6 +69,9 @@ public class GameplayHandler : MonoBehaviour {
                 return;
             
             if (_uiGameplay.IsOverlap(mousePos, out var point)) {
+                var screenPosition = _activeCanvas.ScreenToCanvasPosition(mousePos);
+                _medalEarningFx.CallEffect(screenPosition, _config.StarsPerFoundDifference);
+
                 Analytic.DiffFound(LevelController.GetLastLevelNum(), _levelsData[_currentPictureResult].Id, point.Number, _pictureResults[_currentPictureResult].DifferencePoints.Length -  _pointsRemain.Count, Time.time - _lastDiffTimestamp);
                 
                 _lastDiffTimestamp = Time.time;
