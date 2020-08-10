@@ -7,6 +7,8 @@ using UnityEngine;
 
 public class UIMedalEarningFX : MonoBehaviour {
     [SerializeField] RectTransform _medalPrefab = default;
+    [SerializeField] UIMedalCounter _medalCounterPrefab = default;
+    [SerializeField] Vector2 _counterOffset = default;
     [SerializeField] RectTransform _target = default;
     [SerializeField] float _delayBetweenMedals = default;
     [SerializeField] float _flyDuration = default;
@@ -14,6 +16,10 @@ public class UIMedalEarningFX : MonoBehaviour {
 
     public void CallEffect(Vector2 position, int count) {
         var seq = DOTween.Sequence();
+
+        var medalCounter = Instantiate(_medalCounterPrefab, transform);
+        medalCounter.transform.position = position + _counterOffset;
+        medalCounter.Setup(count);
 
         for (int i = 0; i < count; i++) {
             var medal = Instantiate(_medalPrefab, transform);

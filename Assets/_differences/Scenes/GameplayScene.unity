@@ -7164,9 +7164,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _medalPrefab: {fileID: 9122974591137667548, guid: 2961c6c8b72a95e40abaa43e82ea909b,
     type: 3}
+  _medalCounterPrefab: {fileID: 7877717483442578770, guid: 809850e0bf929f946b7171ba2793bae4,
+    type: 3}
+  _counterOffset: {x: 150, y: 0}
   _target: {fileID: 417094782}
   _delayBetweenMedals: 0.1
-  _flyDuration: 0.25
+  _flyDuration: 0.3
   _scaleDuration: 0.1
 --- !u!114 &945349245
 MonoBehaviour:
