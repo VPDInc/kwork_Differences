@@ -10,6 +10,7 @@ public struct Data {
     public Orientation Orientation;
     public string Id;
     public Storage Storage;
+    public int PointCount => Points.Length;
 }
 
 [Serializable]
