@@ -67,11 +67,13 @@ public class GameplayHandler : MonoBehaviour {
             
             if (!_uiGameplay.IsOverImage(mousePos))
                 return;
-            
-            if (_uiGameplay.IsOverlap(mousePos, out var point)) {
+
+            var overlapStatus = _uiGameplay.TryOverlap(mousePos, out var point);
+            if (overlapStatus == UIGameplay.OverlapStatus.Found) {
+                
                 var screenPosition = _activeCanvas.ScreenToCanvasPosition(mousePos);
                 _medalEarningFx.CallEffect(screenPosition, _config.StarsPerFoundDifference);
-
+                
                 Analytic.DiffFound(LevelController.GetLastLevelNum(), _levelsData[_currentPictureResult].Id, point.Number, _pictureResults[_currentPictureResult].DifferencePoints.Length -  _pointsRemain.Count, Time.time - _lastDiffTimestamp);
                 
                 _lastDiffTimestamp = Time.time;
@@ -89,7 +91,7 @@ public class GameplayHandler : MonoBehaviour {
                     else
                         ChangePictures();
                 }
-            } else {
+            } else if (overlapStatus == UIGameplay.OverlapStatus.NotFound) {
                 _missClickManager.Catch();
             }
         }

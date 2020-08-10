@@ -2,8 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-
-using Airion.Extensions;
+using System.Linq;
 
 using UnityEngine;
 
@@ -11,15 +10,15 @@ using Zenject;
 
 public class Database : MonoBehaviour {
     string _dataPath;
-    readonly HashSet<string> _completedLevels = new HashSet<string>();
-    readonly Dictionary<int, List<Data>> _data = new Dictionary<int, List<Data>>();
-    readonly Dictionary<int, List<Data>> _openedData = new Dictionary<int, List<Data>>();
+
+    readonly List<Data> _pool = new List<Data>();
+    readonly List<Data> _openedData = new List<Data>(); 
     
     const string SAVE_DATA_PATH = "data.dat";
     const string JSONS_PATH = "Jsons";
 
     [Inject] LevelBalanceLibrary _library = default;
-    
+
     readonly Dictionary<int, LoadingData> _loadingDatas = new Dictionary<int, LoadingData>();
 
     struct LoadingData {
@@ -33,8 +32,7 @@ public class Database : MonoBehaviour {
         if (!File.Exists(_dataPath))
             using (File.Create(_dataPath)) { }
 
-        LoadCompletedLevels();
-        LoadData();
+        LoadAllData();
     }
 
     public enum LoadingStatus {
@@ -48,6 +46,36 @@ public class Database : MonoBehaviour {
         var datas = GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
         StartLoading(levelNum, datas);
     }
+    
+    void LoadAllData() {
+        var completed = LoadClosedLevels();
+        var jsons = Resources.LoadAll<TextAsset>(JSONS_PATH);
+        foreach (var json in jsons) {
+            var data = DiffUtils.Parse(json.text);
+            if (completed.Contains(data.Id)) {
+                _pool.Add(data);
+            } else {
+                _openedData.Add(data);                    
+            } 
+        }
+    }
+    
+    HashSet<string> LoadClosedLevels() {
+        var completedLevels = new HashSet<string>();
+        try {
+            using (StreamReader r = new StreamReader(_dataPath)) {
+                while (r.Peek() >= 0) {
+                    var line = r.ReadLine();
+                    completedLevels.Add(line);
+                }
+            }
+        } catch (Exception e) {
+            Debug.LogError($"[{GetType()}] {e.Message}");
+        }
+
+        return completedLevels;
+    }
+
 
     void StartLoading(int num, Data[] datas) {
         if (!_loadingDatas.ContainsKey(num)) {
@@ -103,90 +131,43 @@ public class Database : MonoBehaviour {
             Debug.LogError($"[{GetType()}] Load data '{levelNum}' first!");
             return null;
         }
-
+        
+        SaveLevels(_loadingDatas[levelNum].Datas);
         return _loadingDatas[levelNum].Pictures;
     }
     
     Data[] GetData(int dataAmount, int pointsPerData) {
         var outData = new List<Data>();
-        
+        if (_openedData.Count < dataAmount) {
+            _openedData.AddRange(_pool);
+            ClearSavedData();
+        }
+
+        var ordered = _openedData.OrderBy(d => Mathf.Abs(pointsPerData - d.PointCount)).ToArray();
         for (int i = 0; i < dataAmount; i++) {
-            if (FindBy(pointsPerData, _openedData, out var data)) {
+            if (i < ordered.Length) {
+                var data = ordered[i];
                 outData.Add(data);
-            } else if (FindBy(pointsPerData, _data, out var nextData)) {
-                outData.Add(nextData);
+                _pool.Add(data);
+                _openedData.Remove(data);
             }
         }
-
         return outData.ToArray();
-    }
-
-    bool FindBy(int pointsPerData, Dictionary<int, List<Data>> dict, out Data outData) {
-        const int UP_LIMIT = 10;
-        var currentAmount = pointsPerData;
-        while (currentAmount <= UP_LIMIT) {
-            if (dict.ContainsKey(currentAmount)) {
-                outData = dict[currentAmount].RandomElement();
-                SaveLevel(outData);
-                return true;
-            }
-            currentAmount++;
-        } 
-        
-        currentAmount = pointsPerData-1;
-        while (currentAmount >= 0) {
-            if (dict.ContainsKey(currentAmount)) {
-                outData = dict[currentAmount].RandomElement();
-                SaveLevel(outData);
-                return true;
-            }
-            currentAmount--;
-        }
-
-        outData = default;
-        return false;
-    }
-
-    void LoadData() {
-        var jsons = Resources.LoadAll<TextAsset>(JSONS_PATH);
-        foreach (var json in jsons) {
-            var data = DiffUtils.Parse(json.text);
-            var pointsAmount = data.Points.Length;
-            if (!_data.ContainsKey(pointsAmount))
-                _data.Add(pointsAmount, new List<Data>());
-            _data[pointsAmount].Add(data);
-
-            if (!_completedLevels.Contains(data.Id)) {
-                if (!_openedData.ContainsKey(pointsAmount))
-                    _openedData.Add(pointsAmount, new List<Data>());
-                _openedData[pointsAmount].Add(data);
-            }
-        }
     }
 
     void SaveLevel(Data data) {
         SaveLevels(new []{data.Id});
     }
-
+    
+    void SaveLevels(IEnumerable<Data> data) {
+        SaveLevels(data.Select(d => d.Id));
+    }
+    
     void SaveLevels(IEnumerable<string> ids) {
         try {
-            using (StreamWriter w = new StreamWriter(_dataPath)) {
+            using (StreamWriter w = File.AppendText(_dataPath)) {
                 foreach (var id in ids) {
-                    _completedLevels.Add(id);
                     w.WriteLine(id);
-                }
-            }
-        } catch (Exception e) {
-            Debug.LogError($"[{GetType()}] {e.Message}");
-        }
-    }
-
-    void LoadCompletedLevels() {
-        try {
-            using (StreamReader r = new StreamReader(_dataPath)) {
-                while (r.Peek() >= 0) {
-                    var line = r.ReadLine();
-                    _completedLevels.Add(line);
                 }
             }
         } catch (Exception e) {
@@ -196,8 +177,6 @@ public class Database : MonoBehaviour {
 
     [ContextMenu("Clear")]
     void ClearLevels() {
-        _completedLevels.Clear();
-        _data.Clear();
         _openedData.Clear();
             
         if (File.Exists(_dataPath))
@@ -205,8 +184,15 @@ public class Database : MonoBehaviour {
         
         if (!File.Exists(_dataPath))
             using (File.Create(_dataPath)) { }
+    }
+
+    void ClearSavedData() {
+        _pool.Clear();
+        if (File.Exists(_dataPath))
+            File.Delete(_dataPath);
         
-        LoadData();
+        if (!File.Exists(_dataPath))
+            using (File.Create(_dataPath)) { }
     }
 
     #if UNITY_EDITOR
