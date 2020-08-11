@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using DG.Tweening;
+
 using UnityEngine;
 
 using Zenject;
@@ -16,6 +18,7 @@ public class GameplayHandler : MonoBehaviour {
     [SerializeField] StarsEarningConfig _config = default;
     [SerializeField] UIPictureCountBar _uiPictureCountBar = default;
     [SerializeField] Canvas _activeCanvas = default;
+    [SerializeField] CanvasGroup _completeGroup = default;
 
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
@@ -81,6 +84,12 @@ public class GameplayHandler : MonoBehaviour {
                 UpdateStars(_config.StarsPerFoundDifference);
                 
                 if (_uiGameplay.ClosedPoints.Length == 0) {
+                    var seq = DOTween.Sequence();
+                    seq.Append(_completeGroup.DOFade(1, WAIT_BETWEEN_PICTURES_CHANGING));
+                    seq.AppendInterval(WAIT_BETWEEN_PICTURES_CHANGING);
+                    seq.Append(_completeGroup.DOFade(0, WAIT_BETWEEN_PICTURES_CHANGING));
+                    
+                    _completeGroup.DOFade(1, WAIT_BETWEEN_PICTURES_CHANGING);
                     UpdateStars(_config.StarsPerCompletedPicture);
                     _currentPictureResult++;
                     if (_currentPictureResult == _levelsData.Length)
