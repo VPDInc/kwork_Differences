@@ -215,20 +215,25 @@ public class GameplayHandler : MonoBehaviour {
         var fixedPoints = FixPoints(levelData.Points, _pictureResults[_currentPictureResult].Pictures);
         levelData.Points = fixedPoints;
         _pointsRemain.AddRange(levelData.Points);
+
         
-        _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
+        // _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
 
         _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         _uiGameplay.Show();
         
+        
+        _uiGameplay.InitializeWithScrolling(_levelsData, _pictureResults.Select(p => (p.Picture1, p.Picture2)).ToArray(),
+            () => {
+                IsStarted = true;
+                _timer.Launch(_timePerOneDifference * fixedPoints.Length);
+                _lastDiffTimestamp = Time.time;
+                GameStarted?.Invoke();
+            });
+        
         yield return new WaitForSeconds(1);
         
-        _middleScreen.Hide(() => {
-            IsStarted = true;
-            _timer.Launch(_timePerOneDifference * fixedPoints.Length);
-            _lastDiffTimestamp = Time.time;
-            GameStarted?.Invoke();
-        });
+        _middleScreen.Hide(() => { });
     }
 
     void OnTimerExpired() {

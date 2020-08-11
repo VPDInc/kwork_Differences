@@ -63,6 +63,55 @@ public class UIGameplay : MonoBehaviour {
         seq.Append(curr.DOFade(1, 0.5f));
         seq.AppendCallback(() => Initialized?.Invoke());
     }
+
+    public void InitializeWithScrolling(Data[] levelData, (Sprite, Sprite)[] sprites, Action callback) {
+        _data = levelData[0];
+        _closedPoints.Clear();
+        _allPoints.Clear();
+        _allPoints.AddRange(_data.Points);
+        _closedPoints.AddRange(_data.Points);
+        _helper.SetPointsAmount(_allPoints.Count);
+        _verticalGroup.alpha = 0;
+        _horizontalGroup.alpha = 0;
+        _currentImages = (_image1Hor, _image2Hor);
+        
+        if (_data.Orientation == Orientation.Vertical) {
+            _currentImages = (_image1Vert, _image2Vert);
+        }
+
+        var seq = DOTween.Sequence();
+
+        for (int i = levelData.Length - 1; i >= 0; i--) {
+            var data = levelData[i];
+            var images = data.Orientation == Orientation.Vertical ? (_image1Vert, _image2Vert) : (_image1Hor, _image2Hor);
+            var group = data.Orientation == Orientation.Vertical ? _verticalGroup : _horizontalGroup;
+            var sprite1 = sprites[i].Item1;
+            var sprite2 = sprites[i].Item2;
+            if (i == levelData.Length - 1) {
+                group.alpha = 1;
+                images.Item1.sprite = sprite1;
+                images.Item2.sprite = sprite2;
+                seq.AppendInterval(1.5f);
+            } else {
+                seq.AppendInterval(0.3f);
+                seq.Append(_horizontalGroup.DOFade(0, 0.3f));
+                seq.Join(_verticalGroup.DOFade(0, 0.3f));
+                seq.AppendCallback(() => {
+                    images.Item1.sprite = sprite1;
+                    images.Item2.sprite = sprite2;
+                });
+                seq.AppendInterval(0.1f);
+                seq.Append(group.DOFade(1, 0.3f));
+            }
+        }
+
+        
+        seq.AppendCallback(() => {
+            callback?.Invoke();
+            Initialized?.Invoke();
+        });
+
+    }
     
     public void ShowWaitWindow() {
         _loadingView.Show();
