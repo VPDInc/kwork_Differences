@@ -70,8 +70,8 @@ public class UIAimTip : Tip {
     }
     
     void CreateAims(Point point) {
-        var leftEffect = Instantiate(_aimEffectTrailEffect);
-        var rightEffect = Instantiate(_aimEffectTrailEffect);
+        // var leftEffect = Instantiate(_aimEffectTrailEffect);
+        // var rightEffect = Instantiate(_aimEffectTrailEffect);
         
         var handler = Instantiate(_aimPrefab);
         handler.Id = point.Number;
