@@ -154,7 +154,6 @@ public class GameplayHandler : MonoBehaviour {
     
     void FillStartGameplay() {
         StartCoroutine(FillGameplayAndStartRoutine());
-        _uiPictureCountBar.AddSegment();
     }
 
     void ChangePictures() {
@@ -170,10 +169,10 @@ public class GameplayHandler : MonoBehaviour {
         _uiGameplay.Clear();
         var levelData = _levelsData[_currentPictureResult];
         _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
+        _uiPictureCountBar.AddSegment();        
         
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
         
-        _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         IsStarted = true;
         _timer.Resume();
     }
@@ -209,6 +208,7 @@ public class GameplayHandler : MonoBehaviour {
                 IsStarted = true;
                 _timer.Launch(_timePerOneDifference * _levelsData[_currentPictureResult].Points.Length);
                 _lastDiffTimestamp = Time.time;
+                _uiPictureCountBar.AddSegment();
                 GameStarted?.Invoke();
             });
         
