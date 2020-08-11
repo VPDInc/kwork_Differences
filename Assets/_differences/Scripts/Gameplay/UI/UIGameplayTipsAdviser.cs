@@ -11,8 +11,6 @@ public class UIGameplayTipsAdviser : MonoBehaviour {
     [SerializeField] float _delayAfterLastDifference = 10;
 
     [Inject] GameplayHandler _gameplayHandler = default;
-    
-    bool _isShown;
 
     void Start() {
         _gameplayHandler.DifferenceFound += OnDifferenceFound;
@@ -34,7 +32,6 @@ public class UIGameplayTipsAdviser : MonoBehaviour {
 
     void PlanFx() {
         DOTween.Kill(this);
-        _isShown = false;
         var bonusToShine = _boosterFxes.RandomElement();
         var seq = DOTween.Sequence().SetId(this);
         seq.AppendInterval(_delayAfterLastDifference);

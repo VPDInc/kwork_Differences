@@ -16,6 +16,7 @@
     }
   ],
   "dependencies": {
+    "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
     "com.google.external-dependency-manager": "1.2.156",
     "com.google.firebase.analytics": "6.15.2",
     "com.unity.2d.animation": "3.2.2",
