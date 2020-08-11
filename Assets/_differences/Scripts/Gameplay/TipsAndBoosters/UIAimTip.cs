@@ -3,6 +3,8 @@ using System.Linq;
 
 using Airion.Extensions;
 
+using DG.Tweening;
+
 using Sirenix.Utilities;
 
 using UnityEngine;
@@ -12,7 +14,7 @@ using Zenject;
 
 public class UIAimTip : Tip {
     [SerializeField] AimVisual _aimPrefab = default;
-    [SerializeField] RectTransform _aimEffectTrailEffect = default;
+    [SerializeField] UIAimTrailEffect _aimEffectTrailEffect = default;
 
     [Inject] UIGameplay _gameplay = default;
 
@@ -70,8 +72,8 @@ public class UIAimTip : Tip {
     }
     
     void CreateAims(Point point) {
-        // var leftEffect = Instantiate(_aimEffectTrailEffect);
-        // var rightEffect = Instantiate(_aimEffectTrailEffect);
+        var leftEffect = Instantiate(_aimEffectTrailEffect, transform);
+        var rightEffect = Instantiate(_aimEffectTrailEffect, transform);
         
         var handler = Instantiate(_aimPrefab);
         handler.Id = point.Number;
@@ -81,10 +83,11 @@ public class UIAimTip : Tip {
         var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item1, image1Rect);
         handlerRect.SetParent(_currentImages.Item1.transform, false);
         handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, _currentImages.Item1.sprite), 
-            DiffUtils.PixelHeightToRect(point.Height, image1Rect, _currentImages.Item1.sprite));
+                                            DiffUtils.PixelHeightToRect(point.Height, image1Rect, _currentImages.Item1.sprite));
         handlerRect.localPosition = pos;
         handler.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
-        
+        leftEffect.Setup(handler.transform.position);
+
         var handler2 = Instantiate(_aimPrefab);
         handler2.Id = point.Number;
         _aims.Add(handler2);
@@ -97,6 +100,7 @@ public class UIAimTip : Tip {
             DiffUtils.PixelHeightToRect(point.Height, image2Rect, _currentImages.Item2.sprite));
         handlerRect2.localPosition = pos2;
         handler2.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
+        rightEffect.Setup(handler2.transform.position);
     }
 
     void OnPointOpened(Point point) {
