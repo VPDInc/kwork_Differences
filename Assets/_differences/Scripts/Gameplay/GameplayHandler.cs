@@ -30,7 +30,6 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] UIMedalEarningFX _medalEarningFx = default;
 
     bool IsStarted { get; set; }
-    readonly List<Point> _pointsRemain = new List<Point>();
     readonly List<PictureResult> _pictureResults = new List<PictureResult>();
     Data[] _levelsData;
     int _currentPictureResult = 0;
@@ -70,20 +69,18 @@ public class GameplayHandler : MonoBehaviour {
 
             var overlapStatus = _uiGameplay.TryOverlap(mousePos, out var point);
             if (overlapStatus == UIGameplay.OverlapStatus.Found) {
-                
                 var screenPosition = _activeCanvas.ScreenToCanvasPosition(mousePos);
                 _medalEarningFx.CallEffect(screenPosition, _config.StarsPerFoundDifference);
                 
-                Analytic.DiffFound(LevelController.GetLastLevelNum(), _levelsData[_currentPictureResult].Id, point.Number, _pictureResults[_currentPictureResult].DifferencePoints.Length -  _pointsRemain.Count, Time.time - _lastDiffTimestamp);
+                Analytic.DiffFound(LevelController.GetLastLevelNum(), _levelsData[_currentPictureResult].Id, point.Number, _pictureResults[_currentPictureResult].DifferencePoints.Length -  _uiGameplay.ClosedPoints.Length, Time.time - _lastDiffTimestamp);
                 
                 _lastDiffTimestamp = Time.time;
                 DifferenceFound?.Invoke();
                 
-                _pointsRemain.Remove(point);
                 _pictureResults[_currentPictureResult].DifferencePoints[point.Number].IsOpen = true;
                 UpdateStars(_config.StarsPerFoundDifference);
                 
-                if (_pointsRemain.Count == 0) {
+                if (_uiGameplay.ClosedPoints.Length == 0) {
                     UpdateStars(_config.StarsPerCompletedPicture);
                     _currentPictureResult++;
                     if (_currentPictureResult == _levelsData.Length)
@@ -100,7 +97,7 @@ public class GameplayHandler : MonoBehaviour {
     public void Pause() {
         _timer.Pause();
         _middleScreen.Show(() => {
-            _pause.Show(_pointsRemain.Count);
+            _pause.Show(_uiGameplay.ClosedPoints.Length);
         });
     }
     
@@ -171,11 +168,7 @@ public class GameplayHandler : MonoBehaviour {
         
         IsStarted = false;
         _uiGameplay.Clear();
-        _pointsRemain.Clear();
         var levelData = _levelsData[_currentPictureResult];
-        var fixedPoints = FixPoints(levelData.Points, _pictureResults[_currentPictureResult].Pictures);
-        levelData.Points = fixedPoints;
-        _pointsRemain.AddRange(levelData.Points);
         _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
         
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
@@ -188,7 +181,6 @@ public class GameplayHandler : MonoBehaviour {
     IEnumerator FillGameplayAndStartRoutine() {
         IsStarted = false;
         _uiGameplay.Clear();
-        _pointsRemain.Clear();
 
         yield return new WaitWhile(() => _database.GetLoadingStatus(_levelNum) != Database.LoadingStatus.Success);
         
@@ -209,24 +201,13 @@ public class GameplayHandler : MonoBehaviour {
             });
         }
 
-        var levelData = _levelsData[_currentPictureResult];
-        
-
-        var fixedPoints = FixPoints(levelData.Points, _pictureResults[_currentPictureResult].Pictures);
-        levelData.Points = fixedPoints;
-        _pointsRemain.AddRange(levelData.Points);
-
-        
-        // _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
-
         _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         _uiGameplay.Show();
         
-        
-        _uiGameplay.InitializeWithScrolling(_levelsData, _pictureResults.Select(p => (p.Picture1, p.Picture2)).ToArray(),
+        _uiGameplay.InitializeWithScrolling(_levelsData, _pictureResults.Select(p => p.Pictures).ToArray(),
             () => {
                 IsStarted = true;
-                _timer.Launch(_timePerOneDifference * fixedPoints.Length);
+                _timer.Launch(_timePerOneDifference * _levelsData[_currentPictureResult].Points.Length);
                 _lastDiffTimestamp = Time.time;
                 GameStarted?.Invoke();
             });
@@ -257,16 +238,5 @@ public class GameplayHandler : MonoBehaviour {
         _uiStars.Reset();
         
         _currentPictureResult = 0;
-    }
-
-    Point[] FixPoints(Point[] points, (Sprite, Sprite) loadedSprite) {
-        var width = loadedSprite.Item1.texture.width;
-        var height = loadedSprite.Item1.texture.height;
-        var fixedPoints = new Point[points.Length];
-        for (int i = 0; i < points.Length; i++) {
-            fixedPoints[i] = DiffUtils.FixPointRelative(points[i], width, height);
-        }
-
-        return fixedPoints;
     }
 }

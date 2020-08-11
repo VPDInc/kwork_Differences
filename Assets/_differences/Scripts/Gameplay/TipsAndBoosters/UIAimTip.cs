@@ -92,7 +92,7 @@ public class UIAimTip : Tip {
         var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item2,
             _currentImages.Item2.GetComponent<RectTransform>());
         handlerRect2.SetParent(_currentImages.Item2.transform, false);
-        var image2Rect = _currentImages.Item1.GetComponent<RectTransform>();
+        var image2Rect = _currentImages.Item2.GetComponent<RectTransform>();
         handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, _currentImages.Item2.sprite), 
             DiffUtils.PixelHeightToRect(point.Height, image2Rect, _currentImages.Item2.sprite));
         handlerRect2.localPosition = pos2;
