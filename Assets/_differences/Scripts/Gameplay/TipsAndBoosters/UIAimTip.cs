@@ -12,6 +12,7 @@ using Zenject;
 
 public class UIAimTip : Tip {
     [SerializeField] AimVisual _aimPrefab = default;
+    [SerializeField] RectTransform _aimEffectTrailEffect = default;
 
     [Inject] UIGameplay _gameplay = default;
 
@@ -69,6 +70,9 @@ public class UIAimTip : Tip {
     }
     
     void CreateAims(Point point) {
+        var leftEffect = Instantiate(_aimEffectTrailEffect);
+        var rightEffect = Instantiate(_aimEffectTrailEffect);
+        
         var handler = Instantiate(_aimPrefab);
         handler.Id = point.Number;
         _aims.Add(handler);

@@ -18,8 +18,7 @@ public class EpisodeInfo : MonoBehaviour {
     public bool IsUnlocked => _isUnlocked;
     public List<LevelInfo> Levels => _levels;
     
-    [Header("Episode Info")] [SerializeField]
-    string _episodeName = "Episode";
+    [Header("Episode Info")]
     [SerializeField] int _levelCount = 10;
     [SerializeField] bool _isUnlocked = false;
     [Header("Tech Info")] [SerializeField] PathCreator _pathCreator = default;
