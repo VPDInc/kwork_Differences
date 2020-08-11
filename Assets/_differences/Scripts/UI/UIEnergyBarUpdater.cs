@@ -14,12 +14,15 @@ public class UIEnergyBarUpdater : MonoBehaviour {
     [SerializeField] RectTransform _bar = default;
     [SerializeField] Vector3 _borderPos = default;
     [SerializeField] int _maxCurrencyAmount = default;
-    // [SerializeField] GameObject _plusButton = default;
+    [SerializeField] GameObject _energyLabel = default;
+    [SerializeField] GameObject _infinityLabel = default;
 
     [Inject] CurrencyManager _currencyManager = default;
+    [Inject] EnergyController _energyController = default;
 
     Vector3 _startRectPos;
     Currency _currency;
+    bool _isInfinity;
 
     const string CURRENCY_NAME = "Energy";
 
@@ -31,14 +34,36 @@ public class UIEnergyBarUpdater : MonoBehaviour {
         CurrencyOnUpdated(0);
     }
 
+    void Update() {
+        var isInfinity = _energyController.IsInfinityTimeOn;
+        if(isInfinity == _isInfinity) return;
+        if (isInfinity) {
+            HandleInfinityOn();
+        } else {
+            HandleInfinityOff();
+        }
+    }
+
     void OnDestroy() {
         _currency.Updated -= CurrencyOnUpdated;
     }
 
+    void HandleInfinityOn() {
+        _infinityLabel.SetActive(true);
+        _energyLabel.SetActive(false);
+        SetBarPos(1);
+    }
+    
+    void HandleInfinityOff() {
+        _infinityLabel.SetActive(false);
+        _energyLabel.SetActive(true);
+        CurrencyOnUpdated(0);
+    }
+
     void CurrencyOnUpdated(float obj) {
+        if(_isInfinity) return;
         var relativeCurrencyAmount = _currency.Amount / _maxCurrencyAmount;
         SetBarPos(relativeCurrencyAmount);
-        // _plusButton.SetActive(_currency.Amount < _maxCurrencyAmount);
     }
 
     void SetBarPos(float percent) {

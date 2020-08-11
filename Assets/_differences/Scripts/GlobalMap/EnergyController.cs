@@ -48,7 +48,7 @@ public class EnergyController : MonoBehaviour {
         }
     }
     
-    public bool IsCanPlay => _energyCurrency.IsEnough(_playCost);
+    public bool IsCanPlay => _energyCurrency.IsEnough(_playCost) || IsInfinityTimeOn;
 
     public bool TryPlay() {
         if (IsCanPlay) {
@@ -90,7 +90,7 @@ public class EnergyController : MonoBehaviour {
 
     public void AddInfinityTime() {
         _infinityEnergyStartTimestamp = DateTime.UtcNow;
-        SaveTimestamp();
+        SaveInfinityTimestamp();
         
     }
 
