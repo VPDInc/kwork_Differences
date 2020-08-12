@@ -14,7 +14,7 @@ using UnityEngine.UI;
 public class UIGameplay : MonoBehaviour {
     public event Action Initialized;
     public event Action<Point> PointOpened; 
-    public (Image, Image) CurrentImages => _currentImages;
+    public (Image, Image) CurrentImages => _currentSetter.GetImages();
     public Point[] ClosedPoints => _closedPoints.ToArray();
     
     [SerializeField] Image _image1Hor = default;
@@ -26,11 +26,15 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] UIPointsBar _helper = default;
     [SerializeField] UIView _mainView = default;
     [SerializeField] UIView _loadingView = default;
-    [SerializeField] CanvasGroup _horizontalGroup = default;
-    [SerializeField] CanvasGroup _verticalGroup = default;
+    [SerializeField] ImageSetter _horizontal = default;
+    [SerializeField] ImageSetter _vertical = default;
+
+    // [SerializeField] CanvasGroup _horizontalGroup = default;
+    // [SerializeField] CanvasGroup _verticalGroup = default;
 
     Data _data;
-    (Image, Image) _currentImages;
+    ImageSetter _currentSetter;
+    // (Image, Image) _currentImages;
     
     readonly List<Point> _closedPoints = new List<Point>();
     readonly List<Point> _allPoints = new List<Point>();
@@ -46,22 +50,25 @@ public class UIGameplay : MonoBehaviour {
 
         var image1 = sprites.Item1;
         var image2 = sprites.Item2;
-        var curr = _horizontalGroup;
+
+        var curr = _horizontal;
         if (levelData.Orientation == Orientation.Vertical)
-            curr = _verticalGroup;
+            curr = _vertical;
 
         var seq = DOTween.Sequence();
-        seq.Append(_verticalGroup.DOFade(0, 0.5f));
-        seq.Join(_horizontalGroup.DOFade(0, 0.5f));
+        seq.Append(_currentSetter.Group.DOFade(0, 0.5f));
+        // seq.Join(_horizontalGroup.DOFade(0, 0.5f));
         seq.AppendCallback(() => {
-            _currentImages = (_image1Hor, _image2Hor);
-            if (levelData.Orientation == Orientation.Vertical) {
-                _currentImages = (_image1Vert, _image2Vert);
-            }
-            _currentImages.Item1.sprite = image1;
-            _currentImages.Item2.sprite = image2;
+            _currentSetter = levelData.Orientation == Orientation.Vertical ? _vertical : _horizontal;
+            _currentSetter.Set(image1, image2);
+            // _currentImages = (_image1Hor, _image2Hor);
+            // if (levelData.Orientation == Orientation.Vertical) {
+                // _currentImages = (_image1Vert, _image2Vert);
+            // }
+            // _currentImages.Item1.sprite = image1;
+            // _currentImages.Item2.sprite = image2;
         });
-        seq.Append(curr.DOFade(1, 0.5f));
+        seq.Append(curr.Group.DOFade(1, 0.5f));
         seq.AppendCallback(() => Initialized?.Invoke());
     }
 
@@ -74,38 +81,42 @@ public class UIGameplay : MonoBehaviour {
         _closedPoints.AddRange(_data.Points);
         _helper.SetPointsAmount(_allPoints.Count);
         
+        _horizontal.Hide(true);
+        _vertical.Hide(true);
+        _currentSetter = _data.Orientation == Orientation.Vertical ? _vertical : _horizontal;
+
+        // _verticalGroup.alpha = 0;
+        // _horizontalGroup.alpha = 0;
         
-        _verticalGroup.alpha = 0;
-        _horizontalGroup.alpha = 0;
-        
-        _currentImages = (_image1Hor, _image2Hor);
-        if (_data.Orientation == Orientation.Vertical) {
-            _currentImages = (_image1Vert, _image2Vert);
-        }
+        // _currentImages = (_image1Hor, _image2Hor);
+        // if (_data.Orientation == Orientation.Vertical) {
+            // _currentImages = (_image1Vert, _image2Vert);
+        // }
 
         var seq = DOTween.Sequence();
 
         for (int i = levelData.Length - 1; i >= 0; i--) {
             var data = levelData[i];
             var images = data.Orientation == Orientation.Vertical ? (_image1Vert, _image2Vert) : (_image1Hor, _image2Hor);
-            var group = data.Orientation == Orientation.Vertical ? _verticalGroup : _horizontalGroup;
+            var group = data.Orientation == Orientation.Vertical ? _vertical : _horizontal;
+
             var sprite1 = sprites[i].Item1;
             var sprite2 = sprites[i].Item2;
             if (i == levelData.Length - 1) {
-                group.alpha = 1;
+                group.Show(true);
                 images.Item1.sprite = sprite1;
                 images.Item2.sprite = sprite2;
                 seq.AppendInterval(1.5f);
             } else {
                 seq.AppendInterval(0.3f);
-                seq.Append(_horizontalGroup.DOFade(0, 0.3f));
-                seq.Join(_verticalGroup.DOFade(0, 0.3f));
+                seq.Append(_horizontal.Group.DOFade(0, 0.3f));
+                seq.Join(_vertical.Group.DOFade(0, 0.3f));
                 seq.AppendCallback(() => {
                     images.Item1.sprite = sprite1;
                     images.Item2.sprite = sprite2;
                 });
                 seq.AppendInterval(0.1f);
-                seq.Append(group.DOFade(1, 0.3f));
+                seq.Append(group.Group.DOFade(1, 0.3f));
             }
         }
         
@@ -188,7 +199,7 @@ public class UIGameplay : MonoBehaviour {
     public bool IsOverImage(Vector3 mousePos) {
         var raycast = DiffUtils.RaycastMouse(mousePos);
         if (raycast.gameObject != null) {
-            var images = _currentImages;
+            var images = _currentSetter.GetImages();
             if (raycast.gameObject.Equals(images.Item1.gameObject))
                 return true;
             if (raycast.gameObject.Equals(images.Item2.gameObject))
@@ -273,22 +284,24 @@ public class UIGameplay : MonoBehaviour {
         }
         var handler = Instantiate(diffPrefab);
         var handlerRect = handler.GetComponent<RectTransform>();
-        var image1Rect = _currentImages.Item1.GetComponent<RectTransform>();
-        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item1, image1Rect);
-        handlerRect.SetParent(_currentImages.Item1.transform, false);
-        handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, _currentImages.Item1.sprite), 
-            DiffUtils.PixelHeightToRect(point.Height, image1Rect, _currentImages.Item1.sprite));
+        var images = _currentSetter.GetImages();
+            
+        var image1Rect = images.Item1.GetComponent<RectTransform>();
+        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item1, image1Rect);
+        handlerRect.SetParent(images.Item1.transform, false);
+        handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, images.Item1.sprite), 
+            DiffUtils.PixelHeightToRect(point.Height, image1Rect, images.Item1.sprite));
         handlerRect.localPosition = pos;
         handler.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
         
         var handler2 = Instantiate(diffPrefab);
         var handlerRect2 = handler2.GetComponent<RectTransform>();
-        var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item2,
-            _currentImages.Item2.GetComponent<RectTransform>());
-        handlerRect2.SetParent(_currentImages.Item2.transform, false);
-        var image2Rect = _currentImages.Item2.GetComponent<RectTransform>();
-        handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, _currentImages.Item2.sprite), 
-            DiffUtils.PixelHeightToRect(point.Height, image2Rect, _currentImages.Item2.sprite));
+        var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item2,
+            images.Item2.GetComponent<RectTransform>());
+        handlerRect2.SetParent(images.Item2.transform, false);
+        var image2Rect = images.Item2.GetComponent<RectTransform>();
+        handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, images.Item2.sprite), 
+            DiffUtils.PixelHeightToRect(point.Height, image2Rect, images.Item2.sprite));
         handlerRect2.localPosition = pos2;
         handler2.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
     }
