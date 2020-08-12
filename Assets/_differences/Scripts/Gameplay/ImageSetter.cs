@@ -1,14 +1,23 @@
-﻿using DG.Tweening;
+﻿using System;
+
+using DG.Tweening;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ImageSetter : MonoBehaviour {
     public CanvasGroup Group => _group;
+    public RectTransform Rect => _rect;
     
     [SerializeField] Image _image1 = default;
     [SerializeField] Image _image2 = default;
     [SerializeField] CanvasGroup _group = default;
+
+    RectTransform _rect;
+
+    void Awake() {
+        _rect = GetComponent<RectTransform>();
+    }
 
     public void Set(Sprite sp1, Sprite sp2) {
         _image1.sprite = sp1;

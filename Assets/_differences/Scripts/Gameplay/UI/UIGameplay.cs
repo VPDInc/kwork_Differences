@@ -29,17 +29,13 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] ImageSetter _horizontal = default;
     [SerializeField] ImageSetter _vertical = default;
 
-    // [SerializeField] CanvasGroup _horizontalGroup = default;
-    // [SerializeField] CanvasGroup _verticalGroup = default;
-
     Data _data;
     ImageSetter _currentSetter;
-    // (Image, Image) _currentImages;
     
     readonly List<Point> _closedPoints = new List<Point>();
     readonly List<Point> _allPoints = new List<Point>();
 
-    public void Initialize(Data levelData, (Sprite, Sprite) sprites) {
+    public void SwitchData(Data levelData, (Sprite, Sprite) sprites) {
         _data = levelData;
         _data.Points = FixPoints(_data.Points, (sprites.Item1, sprites.Item2));
         _closedPoints.Clear();
@@ -57,22 +53,15 @@ public class UIGameplay : MonoBehaviour {
 
         var seq = DOTween.Sequence();
         seq.Append(_currentSetter.Group.DOFade(0, 0.5f));
-        // seq.Join(_horizontalGroup.DOFade(0, 0.5f));
         seq.AppendCallback(() => {
             _currentSetter = levelData.Orientation == Orientation.Vertical ? _vertical : _horizontal;
             _currentSetter.Set(image1, image2);
-            // _currentImages = (_image1Hor, _image2Hor);
-            // if (levelData.Orientation == Orientation.Vertical) {
-                // _currentImages = (_image1Vert, _image2Vert);
-            // }
-            // _currentImages.Item1.sprite = image1;
-            // _currentImages.Item2.sprite = image2;
         });
         seq.Append(curr.Group.DOFade(1, 0.5f));
         seq.AppendCallback(() => Initialized?.Invoke());
     }
 
-    public void InitializeWithScrolling(Data[] levelData, (Sprite, Sprite)[] sprites, Action callback) {
+    public void StartWithData(Data[] levelData, (Sprite, Sprite)[] sprites, Action callback) {
         _data = levelData[0];
         _data.Points = FixPoints(_data.Points, (sprites[0].Item1, sprites[0].Item2));
         _closedPoints.Clear();
@@ -85,41 +74,51 @@ public class UIGameplay : MonoBehaviour {
         _vertical.Hide(true);
         _currentSetter = _data.Orientation == Orientation.Vertical ? _vertical : _horizontal;
 
-        // _verticalGroup.alpha = 0;
-        // _horizontalGroup.alpha = 0;
+        var setters = new List<ImageSetter>();
+
+        var startPos = _currentSetter.Rect.anchoredPosition.x;
+        var offset = _currentSetter.Rect.rect.width;
         
-        // _currentImages = (_image1Hor, _image2Hor);
-        // if (_data.Orientation == Orientation.Vertical) {
-            // _currentImages = (_image1Vert, _image2Vert);
-        // }
+        var scaleMult = 0.95f;
+        var scaleMovingDuration = 0.2f;
+        var movingDuration = 0.5f;
+        
+        if (levelData.Length > 1) {
+            for (int i = levelData.Length - 1; i >= 0; i--) {
+                var data = levelData[i];
+                ImageSetter setter;
+                if (i == 0) {
+                    setter = _currentSetter;
+                } else {
+                    var select = data.Orientation == Orientation.Vertical ? _vertical : _horizontal;
+                    setter = Instantiate(select, select.transform.parent);
+                }
 
-        var seq = DOTween.Sequence();
-
-        for (int i = levelData.Length - 1; i >= 0; i--) {
-            var data = levelData[i];
-            var images = data.Orientation == Orientation.Vertical ? (_image1Vert, _image2Vert) : (_image1Hor, _image2Hor);
-            var group = data.Orientation == Orientation.Vertical ? _vertical : _horizontal;
-
-            var sprite1 = sprites[i].Item1;
-            var sprite2 = sprites[i].Item2;
-            if (i == levelData.Length - 1) {
-                group.Show(true);
-                images.Item1.sprite = sprite1;
-                images.Item2.sprite = sprite2;
-                seq.AppendInterval(1.5f);
-            } else {
-                seq.AppendInterval(0.3f);
-                seq.Append(_horizontal.Group.DOFade(0, 0.3f));
-                seq.Join(_vertical.Group.DOFade(0, 0.3f));
-                seq.AppendCallback(() => {
-                    images.Item1.sprite = sprite1;
-                    images.Item2.sprite = sprite2;
-                });
-                seq.AppendInterval(0.1f);
-                seq.Append(group.Group.DOFade(1, 0.3f));
+                setter.Set(sprites[i].Item1, sprites[i].Item2);
+                setter.Show(true);
+                setters.Add(setter);
+                if (i < levelData.Length - 1) {
+                    setter.Rect.DOAnchorPosX(startPos - offset, 0);
+                    setter.transform.DOScale(scaleMult, 0);
+                }
             }
         }
-        
+
+        var seq = DOTween.Sequence();
+        seq.AppendInterval(1.5f);
+        if (setters.Count > 1) {
+            for (int i = 0; i < setters.Count - 1; i++) {
+                var index = i;
+                var obj = setters[index];
+                var nextObj = setters[index + 1];
+                seq.Append(obj.transform.DOScale(scaleMult, scaleMovingDuration));
+                seq.Append(obj.Rect.DOAnchorPosX(startPos + offset, movingDuration).SetEase(Ease.Linear)).OnComplete(()=>Destroy(obj.gameObject));
+                seq.Join(nextObj.Rect.DOAnchorPosX(startPos, movingDuration).SetEase(Ease.Linear));
+                seq.Append(nextObj.transform.DOScale(1, scaleMovingDuration));
+                seq.AppendInterval(0.3f);
+            }
+        }
+
         seq.AppendCallback(() => {
             Initialized?.Invoke();
             callback?.Invoke();
