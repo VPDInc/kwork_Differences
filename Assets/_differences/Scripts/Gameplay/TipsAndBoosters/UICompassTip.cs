@@ -8,6 +8,7 @@ using Zenject;
 
 public class UICompassTip : Tip {
     [SerializeField] CompassVisual _compassVisualPrefab = default;
+    [SerializeField] UIAimTrailEffect _aimEffectTrailEffect = default;
 
     [Inject] UIGameplay _gameplay = default;
     
@@ -31,6 +32,8 @@ public class UICompassTip : Tip {
     }
     
     void CreateTip(Vector2 center, Image image, Vector2 size) {
+        var effect = Instantiate(_aimEffectTrailEffect, transform);
+
         var halfSize = size * 0.5f;
         var handler = Instantiate(_compassVisualPrefab);
         handler.Show();
@@ -41,6 +44,7 @@ public class UICompassTip : Tip {
         handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(halfSize.x, imageRect, image.sprite), 
             DiffUtils.PixelHeightToRect(halfSize.y, imageRect, image.sprite));
         handlerRect.localPosition = pos;
+        effect.Setup(handler.transform.position);
     }
 
     Vector2 GetQuarterCenter(int quarter, Vector2 size) {

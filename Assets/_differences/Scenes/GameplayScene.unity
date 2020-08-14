@@ -23355,5 +23355,11 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 8297872650518582158, guid: d7fcb983a2fbb4431800f6d5009c40bf,
+        type: 3}
+      propertyPath: _aimEffectTrailEffect
+      value: 
+      objectReference: {fileID: 3964921415186400942, guid: a35da156772f1294ea9439b037e8b307,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7fcb983a2fbb4431800f6d5009c40bf, type: 3}
