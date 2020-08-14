@@ -177,7 +177,7 @@ public class GameplayHandler : MonoBehaviour {
         IsStarted = false;
         _uiGameplay.Clear();
         var levelData = _levelsData[_currentPictureResult];
-        _uiGameplay.Initialize(levelData, _pictureResults[_currentPictureResult].Pictures);
+        _uiGameplay.SwitchData(levelData, _pictureResults[_currentPictureResult].Pictures);
         _uiPictureCountBar.AddSegment();        
         
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
@@ -212,7 +212,7 @@ public class GameplayHandler : MonoBehaviour {
         _uiPictureCountBar.SetSegmentAmount(_levelsData.Length);
         _uiGameplay.Show();
         
-        _uiGameplay.InitializeWithScrolling(_levelsData, _pictureResults.Select(p => p.Pictures).ToArray(),
+        _uiGameplay.StartWithData(_levelsData, _pictureResults.Select(p => p.Pictures).ToArray(),
             () => {
                 IsStarted = true;
                 _timer.Launch(_timePerOneDifference * _levelsData[_currentPictureResult].Points.Length);
