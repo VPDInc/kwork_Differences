@@ -3,7 +3,7 @@
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 
-public class UIAimTrailEffect : MonoBehaviour {
+public class UITrailEffect : MonoBehaviour {
     [SerializeField] float _moveDuration = 0.5f;
     [SerializeField] float _scaleDuration = 0.2f;
 

@@ -22862,6 +22862,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3964921415186400942, guid: a35da156772f1294ea9439b037e8b307,
         type: 3}
+    - target: {fileID: 3931698156120715770, guid: c30b49179220144cbb22c51e72d2385b,
+        type: 3}
+      propertyPath: _effectTrailEffect
+      value: 
+      objectReference: {fileID: 3964921415186400942, guid: a35da156772f1294ea9439b037e8b307,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c30b49179220144cbb22c51e72d2385b, type: 3}
 --- !u!114 &3931698156121636771 stripped
@@ -23112,6 +23118,17 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 7383385669073241558, guid: e76c3c9056289428bab80cf596d0eca3,
+        type: 3}
+      propertyPath: _trail
+      value: 
+      objectReference: {fileID: 3964921415186400942, guid: a35da156772f1294ea9439b037e8b307,
+        type: 3}
+    - target: {fileID: 7383385669073241558, guid: e76c3c9056289428bab80cf596d0eca3,
+        type: 3}
+      propertyPath: _watchesTarget
+      value: 
+      objectReference: {fileID: 8062569907961423937}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e76c3c9056289428bab80cf596d0eca3, type: 3}
 --- !u!1001 &8062569907961423936
@@ -23238,6 +23255,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: effca698173d841c38e457103741f4a2, type: 3}
+--- !u!224 &8062569907961423937 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8062569909261087172, guid: effca698173d841c38e457103741f4a2,
+    type: 3}
+  m_PrefabInstance: {fileID: 8062569907961423936}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &8297872651555659940
 PrefabInstance:
   m_ObjectHideFlags: 0
