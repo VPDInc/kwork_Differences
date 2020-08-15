@@ -8,7 +8,7 @@ using Zenject;
 
 public class UICompassTip : Tip {
     [SerializeField] CompassVisual _compassVisualPrefab = default;
-    [SerializeField] UIAimTrailEffect _aimEffectTrailEffect = default;
+    [SerializeField] UITrailEffect _aimEffectTrailEffect = default;
 
     [Inject] UIGameplay _gameplay = default;
     

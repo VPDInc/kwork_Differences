@@ -83,24 +83,22 @@ public class UIGameplay : MonoBehaviour {
         var scaleMovingDuration = 0.2f;
         var movingDuration = 0.5f;
         
-        if (levelData.Length > 1) {
-            for (int i = levelData.Length - 1; i >= 0; i--) {
-                var data = levelData[i];
-                ImageSetter setter;
-                if (i == 0) {
-                    setter = _currentSetter;
-                } else {
-                    var select = data.Orientation == Orientation.Vertical ? _vertical : _horizontal;
-                    setter = Instantiate(select, select.transform.parent);
-                }
+        for (int i = levelData.Length - 1; i >= 0; i--) {
+            var data = levelData[i];
+            ImageSetter setter;
+            if (i == 0) {
+                setter = _currentSetter;
+            } else {
+                var select = data.Orientation == Orientation.Vertical ? _vertical : _horizontal;
+                setter = Instantiate(select, select.transform.parent);
+            }
 
-                setter.Set(sprites[i].Item1, sprites[i].Item2);
-                setter.Show(true);
-                setters.Add(setter);
-                if (i < levelData.Length - 1) {
-                    setter.Rect.DOAnchorPosX(startPos - offset, 0);
-                    setter.transform.DOScale(scaleMult, 0);
-                }
+            setter.Set(sprites[i].Item1, sprites[i].Item2);
+            setter.Show(true);
+            setters.Add(setter);
+            if (i < levelData.Length - 1) {
+                setter.Rect.DOAnchorPosX(startPos - offset, 0);
+                setter.transform.DOScale(scaleMult, 0);
             }
         }
 
