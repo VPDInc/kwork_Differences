@@ -2,9 +2,12 @@
 
 using Airion.Extensions;
 
+using DG.Tweening;
+
 using TMPro;
 
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIPictureCountBar : MonoBehaviour {
     [SerializeField] int _initialPicturesSpots = 0;
@@ -25,6 +28,7 @@ public class UIPictureCountBar : MonoBehaviour {
     public void SetSegmentAmount(int amount) {
         _maxPoints = amount;
         _currentPoints = 0;
+        DOTween.Kill(this);
         _content.DestroyAllChildren();
 
         if (amount == 1) {
@@ -49,7 +53,9 @@ public class UIPictureCountBar : MonoBehaviour {
             segmentPrefab = _centerPointPrefab;
         }
 
-        Instantiate(segmentPrefab, _content);
+        var segment = Instantiate(segmentPrefab, _content).GetComponent<Image>();
+        segment.fillAmount = 0;
+        segment.DOFillAmount(1, 1).SetId(this);
         _currentPoints++;
     }
 }
