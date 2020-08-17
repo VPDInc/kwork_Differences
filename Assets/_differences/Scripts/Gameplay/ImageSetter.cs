@@ -1,12 +1,10 @@
-﻿using System;
-
-using DG.Tweening;
+﻿using DG.Tweening;
 
 using UnityEngine;
 using UnityEngine.UI;
 
 public class ImageSetter : MonoBehaviour {
-    public CanvasGroup Group => _group;
+    // public CanvasGroup Group => _group;
     public RectTransform Rect => _rect;
     
     [SerializeField] Image _image1 = default;
@@ -31,22 +29,26 @@ public class ImageSetter : MonoBehaviour {
     public (Image, Image) GetImages() {
         return (_image1, _image2);
     }
-
+    
     public void Show(bool fast = false) {
+        _group.blocksRaycasts = true;
+
         if (fast) {
             _group.alpha = 1;
             return;
         }
 
-        _group.DOFade(1, 1);
+        _group.DOFade(1, 0.5f);
     }
 
     public void Hide(bool fast = false) {
+        _group.blocksRaycasts = false;
+        
         if (fast) {
             _group.alpha = 0;
             return;
         }
-
-        _group.DOFade(0, 1);
+        
+        _group.DOFade(0, 0.5f);
     }
 }

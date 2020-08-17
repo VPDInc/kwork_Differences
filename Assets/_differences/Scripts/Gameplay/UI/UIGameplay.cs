@@ -52,12 +52,14 @@ public class UIGameplay : MonoBehaviour {
             curr = _vertical;
 
         var seq = DOTween.Sequence();
-        seq.Append(_currentSetter.Group.DOFade(0, 0.5f));
+        seq.AppendCallback(()=>_currentSetter.Hide());
+        seq.AppendInterval(0.5f);
         seq.AppendCallback(() => {
             _currentSetter = levelData.Orientation == Orientation.Vertical ? _vertical : _horizontal;
             _currentSetter.Set(image1, image2);
         });
-        seq.Append(curr.Group.DOFade(1, 0.5f));
+        seq.AppendCallback(()=>curr.Show());
+        seq.AppendInterval(0.5f);
         seq.AppendCallback(() => Initialized?.Invoke());
     }
 
@@ -197,6 +199,7 @@ public class UIGameplay : MonoBehaviour {
         var raycast = DiffUtils.RaycastMouse(mousePos);
         if (raycast.gameObject != null) {
             var images = _currentSetter.GetImages();
+
             if (raycast.gameObject.Equals(images.Item1.gameObject))
                 return true;
             if (raycast.gameObject.Equals(images.Item2.gameObject))
