@@ -17,7 +17,8 @@ public abstract class Tip : MonoBehaviour {
    [SerializeField] bool _alwaysOpenStore = default;
 
    [Inject] CurrencyManager _currencyManager = default;
-   
+   [Inject] GameplayHandler _gameplayHandler = default;
+    
    Button _button;
    Currency _currency;
 
@@ -47,6 +48,9 @@ public abstract class Tip : MonoBehaviour {
          if (TryActivate()) {
             _currency.Spend(1);
          }
+      } else {
+         _gameplayHandler.Pause();
+         OpenStore();
       }
    }
 
