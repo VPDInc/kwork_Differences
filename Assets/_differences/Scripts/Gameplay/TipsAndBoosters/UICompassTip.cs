@@ -11,8 +11,13 @@ public class UICompassTip : Tip {
     [SerializeField] UITrailEffect _aimEffectTrailEffect = default;
 
     [Inject] UIGameplay _gameplay = default;
+
+    CompassVisual _visual;
     
     protected override bool TryActivate() {
+        if (_visual != null)
+            return false;
+        
         var points = _gameplay.ClosedPoints;
         if (points != null && points.Length > 0) {
             var images = _gameplay.CurrentImages;
@@ -35,16 +40,16 @@ public class UICompassTip : Tip {
         var effect = Instantiate(_aimEffectTrailEffect, transform);
 
         var halfSize = size * 0.5f;
-        var handler = Instantiate(_compassVisualPrefab);
-        handler.Show();
-        var handlerRect = handler.GetComponent<RectTransform>();
+        _visual = Instantiate(_compassVisualPrefab);
+        _visual.Show();
+        var handlerRect = _visual.GetComponent<RectTransform>();
         var imageRect = image.GetComponent<RectTransform>();
         var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(center, image, imageRect);
         handlerRect.SetParent(image.transform, false);
         handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(halfSize.x, imageRect, image.sprite), 
             DiffUtils.PixelHeightToRect(halfSize.y, imageRect, image.sprite));
         handlerRect.localPosition = pos;
-        effect.Setup(handler.transform.position);
+        effect.Setup(_visual.transform.position);
     }
 
     Vector2 GetQuarterCenter(int quarter, Vector2 size) {
