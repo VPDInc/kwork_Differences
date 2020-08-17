@@ -14,7 +14,7 @@ using UnityEngine;
 
 using Zenject;
 
-public class UIBoosterShop : MonoBehaviour {
+public class UIBoosterShop : Singleton<UIBoosterShop> {
     [Serializable]
     class BoosterShopInfo {
         public string Title = default;
@@ -46,6 +46,10 @@ public class UIBoosterShop : MonoBehaviour {
 
     void Start() {
         SetupPreoffers();
+    }
+
+    public static void OpenShop(string boosterCurrency) {
+        Instance.OpenShopView(boosterCurrency);
     }
 
     public void OpenShopView(string boosterCurrency) {
