@@ -17,11 +17,10 @@ public abstract class Tip : MonoBehaviour {
    [SerializeField] bool _alwaysOpenStore = default;
 
    [Inject] CurrencyManager _currencyManager = default;
-   
+   [Inject] GameplayHandler _gameplayHandler = default;
+    
    Button _button;
    Currency _currency;
-
-   const string OPEN_STORE_EVENT_ID = "OpenBoosterStore";
    
    void Awake() {
       _button = GetComponentInChildren<Button>();
@@ -47,11 +46,14 @@ public abstract class Tip : MonoBehaviour {
          if (TryActivate()) {
             _currency.Spend(1);
          }
+      } else {
+         _gameplayHandler.Pause();
+         OpenStore();
       }
    }
 
    void OpenStore() {
-      GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
+      UIBoosterShop.OpenShop(_currencyId);
    }
 
    protected abstract bool TryActivate();
