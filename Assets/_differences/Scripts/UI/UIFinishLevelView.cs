@@ -2,12 +2,13 @@
 
 using Airion.Extensions;
 
+using DG.Tweening;
+
 using Doozy.Engine.UI;
 
 using TMPro;
 
 using UnityEngine;
-using UnityEngine.UI;
 
 using Zenject;
 
@@ -26,6 +27,19 @@ public class UIFinishLevelView : MonoBehaviour {
 
     [Header("Prefabs")] [SerializeField] RoundInfo _roundInfoPrefab = default;
 
+    [Header("Rect References")] [SerializeField]
+    RectTransform _medalStartTransform = default;
+    [SerializeField] RectTransform _energyStartTransform = default;
+    [SerializeField] RectTransform _coinsStartTransform = default;
+    [SerializeField] RectTransform _medalEndTransform = default;
+    [SerializeField] RectTransform _energyEndTransform = default;
+    [SerializeField] RectTransform _coinsEndTransform = default;
+    [SerializeField] UITrailEffect _medalFlyingPrefab = default;
+    [SerializeField] UITrailEffect _energyFlyingPrefab = default;
+    [SerializeField] UITrailEffect _coinsFlyingPrefab = default;
+    [SerializeField] float _pauseBetweenSpawns = 1f;
+    [SerializeField] float _amountDivider = 5;
+
     [Inject] LevelController _levelController = default;
     [Inject] EnergyController _energyController = default;
 
@@ -38,13 +52,16 @@ public class UIFinishLevelView : MonoBehaviour {
     void Awake() {
         _currentView = GetComponent<UIView>();
     }
-    
+
     public void Show(int levelNum, GameplayResult gameplayResult, int coinReward) {
         SetupVictory(gameplayResult.IsCompleted);
         Show();
         SetLevelName(levelNum);
         SetCoinsAmount(coinReward);
         Setup(gameplayResult);
+
+        if (gameplayResult.IsCompleted)
+            SetupFlyingCurrencies(gameplayResult.TotalStarsCollected, _energyController.PlayCost, coinReward);
     }
 
     void SetupVictory(bool isVictory) {
@@ -55,6 +72,36 @@ public class UIFinishLevelView : MonoBehaviour {
         foreach (GameObject loseObject in _loseObjects) {
             loseObject.SetActive(!isVictory);
         }
+    }
+
+    void SetupFlyingCurrencies(int medalAmount, int energyAmount, int coinsAmount) {
+        var seq = DOTween.Sequence();
+        seq.AppendInterval(2);
+        seq.AppendCallback(() => {
+                               // var pauseBetweenSpawn = _pauseBetweenSpawns / medalAmount;
+                               for (int i = 0; i < medalAmount / _amountDivider; i++) {
+                                   var medalFx = Instantiate(_medalFlyingPrefab, _medalStartTransform);
+                                   medalFx.Setup(_medalEndTransform.position, _pauseBetweenSpawns * i);
+                               }
+                           });
+
+        // seq.AppendInterval(_pauseBetweenSpawns);
+        seq.AppendCallback(() => {
+                               // var pauseBetweenSpawn = _pauseBetweenSpawns / energyAmount;
+                               for (int i = 0; i < energyAmount / _amountDivider; i++) {
+                                   var energyFx = Instantiate(_energyFlyingPrefab, _energyStartTransform);
+                                   energyFx.Setup(_energyEndTransform.position, _pauseBetweenSpawns * i);
+                               }
+                           });
+
+        // seq.AppendInterval(_pauseBetweenSpawns);
+        seq.AppendCallback(() => {
+                               // var pauseBetweenSpawn = _pauseBetweenSpawns / coinsAmount;
+                               for (int i = 0; i < coinsAmount / _amountDivider; i++) {
+                                   var coinFx = Instantiate(_coinsFlyingPrefab, _coinsStartTransform);
+                                   coinFx.Setup(_coinsEndTransform.position, _pauseBetweenSpawns * i);
+                               }
+                           });
     }
 
     void Show() {
@@ -72,7 +119,7 @@ public class UIFinishLevelView : MonoBehaviour {
     void SetCoinsAmount(int coinsAmount) {
         _coinRewardLabel.text = coinsAmount.ToString();
     }
-    
+
     void Setup(GameplayResult gameplayResult) {
         _textInfoHolder.DestroyAllChildren();
 
@@ -85,15 +132,17 @@ public class UIFinishLevelView : MonoBehaviour {
             var completeInfo = Instantiate(_roundInfoPrefab, _textInfoHolder);
             completeInfo.Setup(LEVEL_COMPLETED_PREFIX, _levelController.CompleteRatingReward.ToString());
         }
-        
+
         var coinsToEarn = gameplayResult.IsCompleted ? _levelController.CompleteCoinReward : 0;
-        var ratingToEarn = gameplayResult.TotalStarsCollected + (gameplayResult.IsCompleted ?_levelController.CompleteRatingReward : 0);
+        var ratingToEarn = gameplayResult.TotalStarsCollected +
+                           (gameplayResult.IsCompleted ? _levelController.CompleteRatingReward : 0);
+
         var energyToEarn = gameplayResult.IsCompleted ? _energyController.PlayCost : 0;
 
         _coinRewardLabel.text = coinsToEarn.ToString();
         _ratingRewardLabel.text = ratingToEarn.ToString();
         _energyRewardLabel.text = energyToEarn.ToString();
-        
+
         _picturePanel.FillByImages(gameplayResult.PictureResults);
     }
 }
