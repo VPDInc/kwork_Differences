@@ -49,12 +49,14 @@ public class UIEnergyBarUpdater : MonoBehaviour {
     }
 
     void HandleInfinityOn() {
+        _isInfinity = true;
         _infinityLabel.SetActive(true);
         _energyLabel.SetActive(false);
         SetBarPos(1);
     }
     
     void HandleInfinityOff() {
+        _isInfinity = false;
         _infinityLabel.SetActive(false);
         _energyLabel.SetActive(true);
         CurrencyOnUpdated(0);
