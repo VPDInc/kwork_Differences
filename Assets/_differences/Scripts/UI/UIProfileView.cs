@@ -29,7 +29,8 @@ public class UIProfileView : MonoBehaviour {
     }
 
     void Start() {
-        UpdateInfo();
+        if (_playFabInfo.AccountInfo != null)
+            UpdateInfo();
         
         _playFabFacebook.FacebookLinked += UpdateInfo;
         _playFabFacebook.FacebookUnlinked += UpdateInfo;
