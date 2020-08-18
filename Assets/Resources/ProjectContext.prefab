@@ -1932,7 +1932,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playCost: 10
-  _refillEveryTimeMinutes: 0.5
+  _refillEveryTimeMinutes: 2.5
   _refillAmount: 1
   _infinityEnergyDurationHours: 1
 --- !u!114 &7437454038384144567
