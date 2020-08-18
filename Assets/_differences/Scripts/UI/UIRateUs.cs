@@ -1,6 +1,4 @@
-﻿using System;
-
-using Airion.Extensions;
+﻿using Airion.Extensions;
 
 using DG.Tweening;
 
@@ -47,6 +45,8 @@ public class UIRateUs : MonoBehaviour {
     }
 
     void HideGroup(bool fast = false) {
+        _group.DOKill();
+        
         if (fast) {
             _group.alpha = 0;
             return;
