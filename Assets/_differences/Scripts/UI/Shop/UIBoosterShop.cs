@@ -40,6 +40,7 @@ public class UIBoosterShop : Singleton<UIBoosterShop> {
     [SerializeField] Transform _offerContainer = default;
     [SerializeField] UIView _shopView = default;
     [SerializeField] TMP_Text _shopTitle = default;
+    [SerializeField] Transform _fxStartTransform = default;
 
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] DiContainer _diContainer = default;
@@ -80,7 +81,7 @@ public class UIBoosterShop : Singleton<UIBoosterShop> {
             var offerElement = _diContainer.InstantiatePrefab(_boosterOfferElementPrefab, _offerContainer).GetComponent<UIBoosterOfferElement>();
             var title = boosterInfo.Title.IsNullOrWhitespace() ? shopInfo.Title : boosterInfo.Title;
             var icon = boosterInfo.Icon ? boosterInfo.Icon : shopInfo.BaseIcon;
-            offerElement.Setup(currency, title, icon, boosterInfo.Amount, boosterInfo.Cost);
+            offerElement.Setup(currency, title, icon, boosterInfo.Amount, boosterInfo.Cost, _fxStartTransform);
         }
         
         _shopView.Show();

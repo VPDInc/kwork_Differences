@@ -63,7 +63,7 @@ public class LevelController : Singleton<LevelController> {
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;
         _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
-        _allLevels[(int)Mathf.Clamp(_lastLevelNum-1, 0, Mathf.Infinity)].SetAvatar(true);
+        _allLevels[(int)Mathf.Clamp(_lastLevelNum, 0, Mathf.Infinity)].SetAvatar(true);
 
         _database.Load(_lastLevelNum);
         _database.Load(_lastLevelNum + 1);
@@ -83,7 +83,7 @@ public class LevelController : Singleton<LevelController> {
 
     void CompleteLevel(int num) {
         if(_lastLevelNum > 0)
-            _allLevels[_lastLevelNum-1].SetAvatar(false);
+            _allLevels[_lastLevelNum].SetAvatar(false);
         if(num >= _lastLevelNum)
             _lastLevelNum = num + 1;
         var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count-1)];

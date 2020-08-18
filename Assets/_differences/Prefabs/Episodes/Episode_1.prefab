@@ -300,12 +300,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc9dddf33e1e5c43a5f8c3ed3ca84a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _episodeName: Episode 1
-  _levelCount: 10
+  _levelCount: 15
   _isUnlocked: 0
   _pathCreator: {fileID: 1886897255540913776}
   _levelPrefab: {fileID: 9214194669215386860, guid: 9a37d3ed3bf8a294b8ca95ed442e4dc2,
     type: 3}
   _levelHolder: {fileID: 1886897255622103930}
-  _episodeLabel: {fileID: 0}
   _blockerRenderer: {fileID: 3780371828287483791}
