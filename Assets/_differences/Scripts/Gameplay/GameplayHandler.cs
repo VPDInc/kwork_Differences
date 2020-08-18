@@ -12,6 +12,8 @@ using Zenject;
 public class GameplayHandler : MonoBehaviour {
     public event Action DifferenceFound;
     public event Action GameStarted;
+    public event Action PictureChangingStarted;
+    public event Action GameEnded;
     
     [SerializeField] float _timePerOneDifference = 20f;
     [SerializeField] float _addTimeAfterOver = 25f;
@@ -135,6 +137,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void StopGameplay(bool isWin, bool withDelay) {
+        GameEnded?.Invoke();
         StartCoroutine(Stopping(isWin, withDelay));
         IsStarted = false;
         _timer.Stop();
@@ -170,6 +173,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     IEnumerator ChangePicturesRoutine() {
+        PictureChangingStarted?.Invoke();
         _timer.Pause();
         
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);

@@ -17,7 +17,7 @@ public abstract class Tip : MonoBehaviour {
    [SerializeField] bool _alwaysOpenStore = default;
 
    [Inject] CurrencyManager _currencyManager = default;
-   [Inject] GameplayHandler _gameplayHandler = default;
+   [Inject] protected GameplayHandler _gameplayHandler = default;
     
    Button _button;
    Currency _currency;

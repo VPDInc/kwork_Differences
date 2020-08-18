@@ -1,4 +1,6 @@
-﻿using DG.Tweening;
+﻿using System;
+
+using DG.Tweening;
 
 using TMPro;
 
@@ -22,6 +24,7 @@ public class UIZoomTip : Tip {
     float _startDistance = 0;
     float _currentZoom = 0;
     float _startTimestamp = 0;
+    float _last = 0;
 
     protected override void Start() {
         base.Start();
@@ -29,6 +32,8 @@ public class UIZoomTip : Tip {
         _timer.Started += OnTimerStarted;
         _timer.Stopped += OnTimerStopped;
         _gameplay.Initialized += OnInitialized;
+        _gameplayHandler.GameEnded += OnGameEnded;
+        _gameplayHandler.PictureChangingStarted += OnPictureChanged;
     }
 
     protected override void OnDestroy() {
@@ -37,6 +42,8 @@ public class UIZoomTip : Tip {
         _timer.Started -= OnTimerStarted;
         _timer.Stopped -= OnTimerStopped;
         _gameplay.Initialized -= OnInitialized;
+        _gameplayHandler.GameEnded -= OnGameEnded;
+        _gameplayHandler.PictureChangingStarted -= OnPictureChanged;
     }
     
     void OnTimerStarted() {
@@ -46,8 +53,6 @@ public class UIZoomTip : Tip {
             _last = 0;
         }
     }
-
-    float _last = 0;
     
     void OnTimerStopped() {
         if (_isUnderZoom) {
@@ -57,6 +62,16 @@ public class UIZoomTip : Tip {
         }
 
         _last = 0;
+    }
+    
+    void OnPictureChanged() {
+        if (_isUnderZoom)
+            ZoomOut();
+    }
+
+    void OnGameEnded() {
+        if (_isUnderZoom)
+            ZoomOut();
     }
 
     void Update() {
