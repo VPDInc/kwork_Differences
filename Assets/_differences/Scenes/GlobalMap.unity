@@ -158,7 +158,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -105}
+  m_AnchoredPosition: {x: 0, y: -104.999756}
   m_SizeDelta: {x: -0.0007324219, y: -385.3506}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &6674728
@@ -28908,7 +28908,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Unlink
+  m_text: Sign Out
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 0c147d87e23e543579fcbd0b80e0c723, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: d2e3a2d8c5db76e44a597130352d8b87, type: 2}
@@ -29226,7 +29226,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -105}
+  m_AnchoredPosition: {x: 0, y: -104.999756}
   m_SizeDelta: {x: -0.0007324219, y: -385.3506}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &908705628
@@ -31355,7 +31355,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -105}
+  m_AnchoredPosition: {x: 0, y: -104.999756}
   m_SizeDelta: {x: -0.0007324219, y: -385.3506}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1048882555
@@ -40509,7 +40509,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: + <sprite=0>  250
+  m_text: + <sprite=0>  200
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 274e44e5a76014df69cf6d388ee56b5b, type: 2}
   m_sharedMaterial: {fileID: 1221673775404061871, guid: 274e44e5a76014df69cf6d388ee56b5b,
@@ -40537,7 +40537,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 32.75
+  m_fontSize: 32.3
   m_fontSizeBase: 14
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -45568,6 +45568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64b19d38b3a7e2a4eba5ec329487acbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _isDontDestroyOnLoad: 0
   _boosterOfferElementPrefab: {fileID: 1637164413827792659, guid: b71eccbf4a7473d44811ac89a11a001b,
     type: 3}
   _boosterPreofferElementPrefab: {fileID: 7699178858440553886, guid: f62a66aea7be10346a0c87135712fa39,
@@ -56182,7 +56183,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -105}
+  m_AnchoredPosition: {x: 0, y: -104.999756}
   m_SizeDelta: {x: -0.0007324219, y: -385.3506}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1869619815
