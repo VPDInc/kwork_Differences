@@ -15,9 +15,13 @@ public class UIShineEffectHandler : MonoBehaviour {
     }
 
     void Start() {
-        var seq = DOTween.Sequence().SetLoops(-1, LoopType.Restart);
+        var seq = DOTween.Sequence().SetLoops(-1, LoopType.Restart).SetId(this);
         seq.AppendCallback(() => { _shineEffect.YOffset = 1; });
         seq.AppendInterval(_delayBetweenShines);
         seq.Append(DOTween.To(() => _shineEffect.YOffset, x => _shineEffect.YOffset = x, -1, _fxDuration));
+    }
+
+    void OnDestroy() {
+        DOTween.Kill(this);
     }
 }
