@@ -1792,7 +1792,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1096825310}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -13703,6 +13703,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7933198123410234906, guid: b71eccbf4a7473d44811ac89a11a001b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8806033679187847469, guid: b71eccbf4a7473d44811ac89a11a001b,
         type: 3}
       propertyPath: m_Enabled
@@ -20340,6 +20345,12 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 527052746}
   m_CullTransparentMesh: 0
+--- !u!224 &529194729 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6174886434683170413, guid: 796090f54d363c345b7e5333e1537704,
+    type: 3}
+  m_PrefabInstance: {fileID: 6174886434507158545}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &552533450
 GameObject:
   m_ObjectHideFlags: 0
@@ -23937,6 +23948,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: BoosterOfferElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 7933198123410234906, guid: b71eccbf4a7473d44811ac89a11a001b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b71eccbf4a7473d44811ac89a11a001b, type: 3}
@@ -33016,6 +33032,11 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7933198123410234906, guid: b71eccbf4a7473d44811ac89a11a001b,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8806033679187847469, guid: b71eccbf4a7473d44811ac89a11a001b,
         type: 3}
       propertyPath: m_Enabled
@@ -39943,7 +39964,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 286656581}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -62122,6 +62143,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rewardedAmountText: {fileID: 999926166}
   _view: {fileID: 2054858790}
+  _uiTrailEffectPrefab: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
+    type: 3}
+  _fxStartTransform: {fileID: 1907554935}
+  _fxTargetTransform: {fileID: 529194729}
+  _amountDivider: 1
+  _pauseBetweenSpawns: 0.02
 --- !u!114 &2054858795
 MonoBehaviour:
   m_ObjectHideFlags: 0
