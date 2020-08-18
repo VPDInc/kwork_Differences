@@ -12,6 +12,10 @@ using Zenject;
 
 public class UICoinShopView : MonoBehaviour {
     [SerializeField] OfferInfo[] _offerInfos = default;
+    [SerializeField] UITrailEffect _uiTrailEffectPrefab = default;
+    [SerializeField] float _amountDivider = 5;
+    [SerializeField] float _pauseBetweenSpawns = 0.02f;
+    [SerializeField] RectTransform _targetTransform = default;
 
     [Inject] CurrencyManager _currencyManager = default;
 
@@ -42,6 +46,13 @@ public class UICoinShopView : MonoBehaviour {
         InAppPurchasing.PurchaseFailed -= PurchaseFailedHandler;
     }
 
+    void SetupTrailEffect(int coinsAmount, Transform startTransform, RectTransform targetTransform) {
+        for (int i = 0; i < coinsAmount / _amountDivider; i++) {
+            var coinFx = Instantiate(_uiTrailEffectPrefab, startTransform);
+            coinFx.Setup(targetTransform.position, _pauseBetweenSpawns * i);
+        }
+    }
+
     // Successful purchase handler
     void PurchaseCompletedHandler(IAPProduct product) {
         var unityProduct = InAppPurchasing.GetProduct(product.Name);
@@ -54,26 +65,31 @@ public class UICoinShopView : MonoBehaviour {
             case EM_IAPConstants.Product_Coin_Pack_1:
                 var offerInfo1 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_1));
                 _softCurrency.Earn(offerInfo1.CoinsAmount);
+                SetupTrailEffect(1000, offerInfo1.OfferElement.transform, _targetTransform);
                 Analytic.CurrencyEarn(offerInfo1.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_1);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_2:
                 var offerInfo2 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_2));
                 _softCurrency.Earn(offerInfo2.CoinsAmount);
+                SetupTrailEffect(1000, offerInfo2.OfferElement.transform, _targetTransform);
                 Analytic.CurrencyEarn(offerInfo2.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_2);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_3:
                 var offerInfo3 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_3));
                 _softCurrency.Earn(offerInfo3.CoinsAmount);
+                SetupTrailEffect(1000, offerInfo3.OfferElement.transform, _targetTransform);
                 Analytic.CurrencyEarn(offerInfo3.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_3);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_4:
                 var offerInfo4 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_4));
+                SetupTrailEffect(1000, offerInfo4.OfferElement.transform, _targetTransform);
                 Analytic.CurrencyEarn(offerInfo4.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_4);
                 _softCurrency.Earn(offerInfo4.CoinsAmount);
                 break;
             case EM_IAPConstants.Product_Coin_Pack_5:
                 var offerInfo5 = _offerInfos.FirstOrDefault(x => x.Name.Equals(EM_IAPConstants.Product_Coin_Pack_5));
                 _softCurrency.Earn(offerInfo5.CoinsAmount);
+                SetupTrailEffect(1000, offerInfo5.OfferElement.transform, _targetTransform);
                 Analytic.CurrencyEarn(offerInfo5.CoinsAmount, "pack-bought", EM_IAPConstants.Product_Coin_Pack_5);
                 break;
         }
