@@ -18,7 +18,7 @@ public class UIReceiveReward : MonoBehaviour {
     [SerializeField] UITrailEffect _uiTrailEffectPrefab = default;
     [SerializeField] RectTransform _fxStartTransform = default;
     [SerializeField] RectTransform _fxTargetTransform = default;
-    [SerializeField] float _amountDivider = 5;
+    [SerializeField] int _coinsFxAmount = 10;
     [SerializeField] float _pauseBetweenSpawns = 0.02f;
 
     int _rewardAmount;
@@ -34,12 +34,12 @@ public class UIReceiveReward : MonoBehaviour {
     }
 
     public void OnReceiveClick() {
-        SetupTrailEffect(_rewardAmount);
+        SetupTrailEffect(_coinsFxAmount);
         Received?.Invoke();
     }
 
     void SetupTrailEffect(int coinsAmount) {
-        for (int i = 0; i < coinsAmount / _amountDivider; i++) {
+        for (int i = 0; i < coinsAmount; i++) {
             var coinFx = Instantiate(_uiTrailEffectPrefab, _fxStartTransform);
             coinFx.Setup(_fxTargetTransform.position, _pauseBetweenSpawns * i);
         }
