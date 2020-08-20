@@ -70,13 +70,15 @@ namespace Lean.Touch {
         }
 
         public void SetMaxBounds(Vector2 bounds) {
-            _maxBounds = bounds;
-            _maxSoftBounds = bounds - _softBoundsOffset;
+            _maxSoftBounds = bounds;
+            _maxBounds = bounds + _softBoundsOffset;
         }
 
         public void SetMinBounds(Vector2 bounds) {
-            _minBounds = bounds;
-            _minSoftBounds = bounds + _softBoundsOffset;
+            // _minBounds = bounds;
+            // _minSoftBounds = bounds + _softBoundsOffset;
+            _minSoftBounds = bounds;
+            _minBounds = bounds - _softBoundsOffset;
         }
 
         /// <summary>If you've set Use to ManuallyAddedFingers, then you can call this method to manually add a finger.</summary>
