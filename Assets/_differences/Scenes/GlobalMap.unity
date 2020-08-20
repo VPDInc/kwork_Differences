@@ -12730,7 +12730,7 @@ PrefabInstance:
     - target: {fileID: 3862360465449522647, guid: 9bca5740dd5c24f3592c1932616b3a20,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 169
+      value: 152
       objectReference: {fileID: 0}
     - target: {fileID: 3862360465449522647, guid: 9bca5740dd5c24f3592c1932616b3a20,
         type: 3}
@@ -47706,6 +47706,21 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6189642108261670447, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -59169,6 +59184,21 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0.5
       objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6189642108261670447, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
         type: 3}
       propertyPath: m_textInfo.characterCount
@@ -69353,6 +69383,21 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5849602026934608375, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6189642108261670447, guid: 0e3a51e76ff4c6b43bd4ad3e74d10446,
         type: 3}
