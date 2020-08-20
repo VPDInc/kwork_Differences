@@ -33,6 +33,7 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] UIPause _pause = default;
     [Inject] Database _database = default;
     [Inject] UIMedalEarningFX _medalEarningFx = default;
+    [Inject] ThemeController _themeController = default;
 
     bool IsStarted { get; set; }
     readonly List<PictureResult> _pictureResults = new List<PictureResult>();
@@ -157,10 +158,13 @@ public class GameplayHandler : MonoBehaviour {
 
     IEnumerator WaitAndHideScreen() {
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING * 0.5f);
-        _middleScreen.Hide();
+        _middleScreen.Hide(() => {
+            _themeController.PlayMainTheme();
+        });
     }
 
     void OnBegan() {
+        _themeController.StopTheme();
         _middleScreen.Show(FillStartGameplay);
     }
     
@@ -193,7 +197,7 @@ public class GameplayHandler : MonoBehaviour {
     IEnumerator FillGameplayAndStartRoutine() {
         IsStarted = false;
         _uiGameplay.Clear();
-
+        
         yield return new WaitWhile(() => _database.GetLoadingStatus(_levelNum) != Database.LoadingStatus.Success);
         
         var loadedSprites = _database.GetPictures(_levelNum);
@@ -227,7 +231,9 @@ public class GameplayHandler : MonoBehaviour {
         
         yield return new WaitForSeconds(1);
         
-        _middleScreen.Hide(() => { });
+        _middleScreen.Hide(() => {
+            _themeController.PlayGameplayTheme();
+        });
     }
 
     void OnTimerExpired() {
