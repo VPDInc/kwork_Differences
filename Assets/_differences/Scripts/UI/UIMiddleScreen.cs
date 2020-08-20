@@ -1,8 +1,12 @@
 ﻿using System;
 
+using Airion.Audio;
+
 using DG.Tweening;
 
 using UnityEngine;
+
+using Zenject;
 
 public class UIMiddleScreen : MonoBehaviour {
     public bool IsShowing { get; private set; } = false;
@@ -10,6 +14,8 @@ public class UIMiddleScreen : MonoBehaviour {
     [SerializeField] RectTransform _leftCurtain = default;
     [SerializeField] RectTransform _rightCurtain = default;
     [SerializeField] AnimationCurve _curve = default;
+
+    [Inject] AudioManager _audioManager = default;
     
     Canvas _canvas = default;
     
@@ -53,6 +59,8 @@ public class UIMiddleScreen : MonoBehaviour {
             endCallback?.Invoke();
             return;
         }
+
+        _audioManager.PlayOnce("curtains");
 
         _leftCurtain.DOScale(leftSizeDelta, DURATION).SetEase(_curve);
         _rightCurtain.DOScale(rightSizeDelta, DURATION).SetEase(_curve).OnComplete(() => {endCallback?.Invoke();});

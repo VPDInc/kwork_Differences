@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
+using Airion.Audio;
+
 using DG.Tweening;
 
 using UnityEngine;
@@ -34,6 +36,7 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] Database _database = default;
     [Inject] UIMedalEarningFX _medalEarningFx = default;
     [Inject] ThemeController _themeController = default;
+    [Inject] AudioManager _audioManager = default;
 
     bool IsStarted { get; set; }
     readonly List<PictureResult> _pictureResults = new List<PictureResult>();
@@ -95,6 +98,7 @@ public class GameplayHandler : MonoBehaviour {
                     _completeGroup.DOFade(1, WAIT_BETWEEN_PICTURES_CHANGING);
                     UpdateStars(_config.StarsPerCompletedPicture);
                     _currentPictureResult++;
+                    _audioManager.PlayOnce("win");
                     if (_currentPictureResult == _levelsData.Length)
                         StopGameplay(true, true);
                     else
