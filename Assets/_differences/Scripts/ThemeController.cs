@@ -3,10 +3,13 @@
 using DG.Tweening;
 
 using UnityEngine;
+using UnityEngine.Audio;
 
 using Zenject;
 
 public class ThemeController : MonoBehaviour {
+    [SerializeField] AudioMixerGroup _mixer = default;
+    
     [Inject] AudioManager _audioManager = default;
 
     const string MENU_THEME_ID = "menu-theme";
@@ -40,6 +43,7 @@ public class ThemeController : MonoBehaviour {
 
         seq.AppendCallback(() => {
             _managedPlayer = _audioManager.TryGetSoundManaged(themeID);
+            _managedPlayer.OverrideMixer(_mixer);
             _managedPlayer.SmoothPlay(0, true, 0.5f);
         });
     }

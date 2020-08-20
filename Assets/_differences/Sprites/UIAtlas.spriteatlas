@@ -57,7 +57,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: e6d3f26f71791204fb92327980b6e6c4, type: 3}
     - {fileID: 102900000, guid: 25619b6fa6d56cf48a1b54d8ae11366c, type: 3}
     - {fileID: 102900000, guid: 05ae9efb2d029ed439e51843a47d1c33, type: 3}
-    totalSpriteSurfaceArea: 44956087
+    totalSpriteSurfaceArea: 55212259
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -72,6 +72,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 88e161c04370c6b44891f7713ad5988f, type: 3}
   - {fileID: 21300000, guid: 53e90ec056325514e896c15d23f01ba4, type: 3}
   - {fileID: 21300000, guid: 1e84dad0ba9134fe0a1d3345d8fa9c73, type: 3}
+  - {fileID: 21300000, guid: ed7a2ee067af76246af8f3887efc6462, type: 3}
   - {fileID: 21300000, guid: 18b9f201b29996940ac960c70758a44e, type: 3}
   - {fileID: 21300000, guid: cf01bc110d12b2347b5fe40634f7762b, type: 3}
   - {fileID: 21300000, guid: 14623421f715b4a73a842a54e6de1bc7, type: 3}
@@ -118,6 +119,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1d0c02f3298a03f47ad742d823e446a5, type: 3}
   - {fileID: 21300000, guid: 4d83c5149beab054e9440aa34bf4587f, type: 3}
   - {fileID: 21300000, guid: 3cf93354d67318b4c8f53981658c2f41, type: 3}
+  - {fileID: 21300000, guid: 02c663845ca7c1c4fb6dedb4f078cfc8, type: 3}
   - {fileID: 21300000, guid: 3bc15484acb51b74cb6e5a0e23f2eeae, type: 3}
   - {fileID: 21300000, guid: 221ca584bb725c34499466aba3d14491, type: 3}
   - {fileID: 21300000, guid: e4928d94de27afc4bb187f787fe95ce1, type: 3}
@@ -131,6 +133,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: f691de25b05fe5c4097764f87efc6d02, type: 3}
   - {fileID: 21300000, guid: 639df44518d8b2c439b8f8e90a238c7c, type: 3}
   - {fileID: 21300000, guid: 128f36557d5beb04b9a72d274f96cd2d, type: 3}
+  - {fileID: 21300000, guid: c13c9265f081849a4a247cb27baec71f, type: 3}
   - {fileID: 21300000, guid: c7772a659d2f6e34a81df1554ba7d0de, type: 3}
   - {fileID: 21300000, guid: c92f8c65a15ef7249a158ae625dce370, type: 3}
   - {fileID: 21300000, guid: cf0595850e2f8ad4db1674224fd40ce9, type: 3}
@@ -186,6 +189,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1c4d7d59a6d98db4f9e2301f2eab0236, type: 3}
   - {fileID: 21300000, guid: 24f1cd59d7fd3ef45874e65a510d521a, type: 3}
   - {fileID: 21300000, guid: 56defe69e2cab4e92ae942e58640885f, type: 3}
+  - {fileID: 21300000, guid: a8ac03790f936f14cbc5ec68914f8c30, type: 3}
   - {fileID: 21300000, guid: edd16299f046542a1a2f6b4d91345724, type: 3}
   - {fileID: 21300000, guid: d2552bd968c24454da0c25a39623c49c, type: 3}
   - {fileID: 21300000, guid: d8e2ddf9483c97f45aa97f0e7caf75f8, type: 3}
@@ -282,6 +286,7 @@ SpriteAtlas:
   - card1
   - 17
   - substrate
+  - blackout
   - 1
   - frame1
   - +
@@ -328,6 +333,7 @@ SpriteAtlas:
   - horizontal_substrate
   - substrate_rules
   - coins
+  - "\u043E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E"
   - Medal
   - 2
   - separator2
@@ -341,6 +347,7 @@ SpriteAtlas:
   - main_opened_box
   - 2
   - compass
+  - Mocup
   - vertical_picture
   - 27
   - rays
@@ -396,6 +403,7 @@ SpriteAtlas:
   - 28
   - 31
   - music
+  - blackout
   - chestFull
   - energy
   - 1
