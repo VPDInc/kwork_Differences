@@ -1,4 +1,5 @@
-﻿using Airion.Currency;
+﻿using Airion.Audio;
+using Airion.Currency;
 
 using Doozy.Engine;
 
@@ -18,6 +19,7 @@ public abstract class Tip : MonoBehaviour {
 
    [Inject] CurrencyManager _currencyManager = default;
    [Inject] protected GameplayHandler _gameplayHandler = default;
+   [Inject] AudioManager _audioManager = default;
     
    Button _button;
    Currency _currency;
@@ -44,6 +46,7 @@ public abstract class Tip : MonoBehaviour {
 
       if (_currency.IsEnough(1)) {
          if (TryActivate()) {
+            _audioManager.PlayOnce("booster");
             _currency.Spend(1);
          }
       } else {

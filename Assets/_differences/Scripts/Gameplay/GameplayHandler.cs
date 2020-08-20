@@ -78,6 +78,7 @@ public class GameplayHandler : MonoBehaviour {
 
             var overlapStatus = _uiGameplay.TryOverlap(mousePos, out var point);
             if (overlapStatus == UIGameplay.OverlapStatus.Found) {
+                _audioManager.PlayOnce("diff-found");
                 var screenPosition = _activeCanvas.ScreenToCanvasPosition(mousePos);
                 _medalEarningFx.CallEffect(screenPosition, _config.StarsPerFoundDifference);
                 
