@@ -56,7 +56,7 @@ SpriteAtlas:
     - {fileID: 102900000, guid: c6278e15355325c4492c8fd6ba416ca5, type: 3}
     - {fileID: 2800000, guid: e6d3f26f71791204fb92327980b6e6c4, type: 3}
     - {fileID: 102900000, guid: 25619b6fa6d56cf48a1b54d8ae11366c, type: 3}
-    totalSpriteSurfaceArea: 49737016
+    totalSpriteSurfaceArea: 52334019
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -110,6 +110,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 1d0c02f3298a03f47ad742d823e446a5, type: 3}
   - {fileID: 21300000, guid: 4d83c5149beab054e9440aa34bf4587f, type: 3}
   - {fileID: 21300000, guid: 3cf93354d67318b4c8f53981658c2f41, type: 3}
+  - {fileID: 21300000, guid: 02c663845ca7c1c4fb6dedb4f078cfc8, type: 3}
   - {fileID: 21300000, guid: 3bc15484acb51b74cb6e5a0e23f2eeae, type: 3}
   - {fileID: 21300000, guid: 221ca584bb725c34499466aba3d14491, type: 3}
   - {fileID: 21300000, guid: e4928d94de27afc4bb187f787fe95ce1, type: 3}
@@ -117,6 +118,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: b24750d4afbfc694eacef3612f05a83d, type: 3}
   - {fileID: 21300000, guid: eec061d4903a97542a6480df7e72c6cc, type: 3}
   - {fileID: 21300000, guid: 9dacf8d4c3f7caf4dac396ed49ea7ae8, type: 3}
+  - {fileID: 21300000, guid: 45ef0af4120914116b6bf48fec5ef90b, type: 3}
   - {fileID: 21300000, guid: 2451d21513a08574fbc553cebe172514, type: 3}
   - {fileID: 21300000, guid: 7eeb5825be16b8e439a4aefff0f42435, type: 3}
   - {fileID: 21300000, guid: f691de25b05fe5c4097764f87efc6d02, type: 3}
@@ -203,7 +205,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: cbafa39c88998514eb29c01fc92febd3, type: 3}
   - {fileID: 21300000, guid: abd5cbfc24d17e54b9a179015e2127a6, type: 3}
   - {fileID: 21300000, guid: 466fcb0d23fadb74681aadc7b2518655, type: 3}
-  - {fileID: 21300000, guid: c796301df4327492cab906fc1c77a8b4, type: 3}
   - {fileID: 21300000, guid: bad4331dfef551248ab883b96a2d193e, type: 3}
   - {fileID: 21300000, guid: f7520b2d9e6864c31b337f16a686331c, type: 3}
   - {fileID: 21300000, guid: 2300863dbb57f1048863f89ebf365268, type: 3}
@@ -291,6 +292,7 @@ SpriteAtlas:
   - horizontal_substrate
   - substrate_rules
   - coins
+  - "\u043E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E"
   - Medal
   - 2
   - separator2
@@ -298,6 +300,7 @@ SpriteAtlas:
   - goblet
   - field2
   - substrate
+  - medals
   - clock
   - energy
   - main_opened_box
@@ -384,7 +387,6 @@ SpriteAtlas:
   - selected_photo
   - popcorn2
   - red_button
-  - coins10
   - +
   - 1
   - arrow_for_leaders_button
