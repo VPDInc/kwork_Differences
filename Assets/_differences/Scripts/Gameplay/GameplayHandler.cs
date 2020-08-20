@@ -106,6 +106,7 @@ public class GameplayHandler : MonoBehaviour {
                 }
             } else if (overlapStatus == UIGameplay.OverlapStatus.NotFound) {
                 _missClickManager.Catch();
+                _audioManager.PlayOnce("error");
             }
         }
     }

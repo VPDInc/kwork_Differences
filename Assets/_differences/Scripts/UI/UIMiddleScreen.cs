@@ -9,7 +9,7 @@ using UnityEngine;
 using Zenject;
 
 public class UIMiddleScreen : MonoBehaviour {
-    public bool IsShowing { get; private set; } = false;
+    public bool IsShowing { get; private set; } = true;
 
     [SerializeField] RectTransform _leftCurtain = default;
     [SerializeField] RectTransform _rightCurtain = default;
@@ -47,6 +47,11 @@ public class UIMiddleScreen : MonoBehaviour {
     }
 
     void Switch(bool isShow, bool isFast, Action endCallback = null) {
+        if (IsShowing == isShow) {
+            endCallback?.Invoke();
+            return;
+        }
+        
         IsShowing = isShow;
         _leftCurtain.DOKill();
         _rightCurtain.DOKill();
@@ -60,7 +65,8 @@ public class UIMiddleScreen : MonoBehaviour {
             return;
         }
 
-        _audioManager.PlayOnce("curtains");
+        // _audioManager.PlayOnce("curtains");
+        _audioManager.PlayOnce("del");
 
         _leftCurtain.DOScale(leftSizeDelta, DURATION).SetEase(_curve);
         _rightCurtain.DOScale(rightSizeDelta, DURATION).SetEase(_curve).OnComplete(() => {endCallback?.Invoke();});
