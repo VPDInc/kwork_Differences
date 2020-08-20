@@ -37,7 +37,7 @@ SpriteAtlas:
       m_BuildTarget: iPhone
       m_MaxTextureSize: 2048
       m_ResizeAlgorithm: 0
-      m_TextureFormat: 65
+      m_TextureFormat: 64
       m_TextureCompression: 1
       m_CompressionQuality: 50
       m_CrunchedCompression: 0
@@ -55,7 +55,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 4b5c532f480da4954a1d703331c3846f, type: 3}
-    totalSpriteSurfaceArea: 325397048
+    totalSpriteSurfaceArea: 204998006
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
