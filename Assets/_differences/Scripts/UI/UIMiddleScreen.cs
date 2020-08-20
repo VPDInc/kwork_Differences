@@ -65,8 +65,8 @@ public class UIMiddleScreen : MonoBehaviour {
             return;
         }
 
-        // _audioManager.PlayOnce("curtains");
-        _audioManager.PlayOnce("del");
+        _audioManager.PlayOnce("curtains");
+        // _audioManager.PlayOnce("del");
 
         _leftCurtain.DOScale(leftSizeDelta, DURATION).SetEase(_curve);
         _rightCurtain.DOScale(rightSizeDelta, DURATION).SetEase(_curve).OnComplete(() => {endCallback?.Invoke();});
