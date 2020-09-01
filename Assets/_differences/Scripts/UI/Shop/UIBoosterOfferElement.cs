@@ -20,8 +20,8 @@ public class UIBoosterOfferElement : MonoBehaviour {
     [SerializeField] Image _backIcon = default;
     
     [SerializeField] UITrailEffect _uiTrailEffectPrefab = default;
-    [SerializeField] float _amountDivider = 5;
     [SerializeField] float _pauseBetweenSpawns = 0.02f;
+    [SerializeField] int _coinFxAmount = 10;
 
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] LevelController _levelController = default;
@@ -57,7 +57,7 @@ public class UIBoosterOfferElement : MonoBehaviour {
             _coinsCurrency.Spend(_cost);
             Analytic.CurrencySpend(_cost, "booster-bought", _currency.name, _levelController.LastLevelNum);
             _currency.Earn(_amountToBuy);
-            SetupTrailEffect(100);
+            SetupTrailEffect();
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
@@ -67,8 +67,8 @@ public class UIBoosterOfferElement : MonoBehaviour {
         _backIcon.sprite = back;
     }
     
-    void SetupTrailEffect(int coinsAmount) {
-        for (int i = 0; i < coinsAmount / _amountDivider; i++) {
+    void SetupTrailEffect() {
+        for (int i = 0; i < _coinFxAmount; i++) {
             var coinFx = Instantiate(_uiTrailEffectPrefab, _fxStartTransform);
             coinFx.Setup(transform.position, _pauseBetweenSpawns * i);
         }
