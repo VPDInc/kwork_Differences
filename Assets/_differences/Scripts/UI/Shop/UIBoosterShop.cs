@@ -77,13 +77,17 @@ public class UIBoosterShop : Singleton<UIBoosterShop> {
         _offerContainer.DestroyAllChildren();
         var currency = _currencyManager.GetCurrency(shopInfo.BoosterCurrency);
         _shopTitle.text = shopInfo.Description;
-        foreach (BoosterInfo boosterInfo in shopInfo.Boosters) {
-            var offerElement = _diContainer.InstantiatePrefab(_boosterOfferElementPrefab, _offerContainer).GetComponent<UIBoosterOfferElement>();
+        for (var i = 0; i < shopInfo.Boosters.Length; i++) {
+            BoosterInfo boosterInfo = shopInfo.Boosters[i];
+            var offerElement = _diContainer.InstantiatePrefab(_boosterOfferElementPrefab, _offerContainer)
+                                           .GetComponent<UIBoosterOfferElement>();
+
+            offerElement.SetBackSprite(_backSprites[(int) Mathf.Repeat(i, _backSprites.Length)]);
             var title = boosterInfo.Title.IsNullOrWhitespace() ? shopInfo.Title : boosterInfo.Title;
             var icon = boosterInfo.Icon ? boosterInfo.Icon : shopInfo.BaseIcon;
             offerElement.Setup(currency, title, icon, boosterInfo.Amount, boosterInfo.Cost, _fxStartTransform);
         }
-        
+
         _shopView.Show();
     }
 }

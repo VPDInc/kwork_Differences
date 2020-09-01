@@ -17,6 +17,7 @@ public class UIBoosterOfferElement : MonoBehaviour {
     [SerializeField] Image _icon = default;
     [SerializeField] TMP_Text _amountLabel = default;
     [SerializeField] TMP_Text _costLabel = default;
+    [SerializeField] Image _backIcon = default;
     
     [SerializeField] UITrailEffect _uiTrailEffectPrefab = default;
     [SerializeField] float _amountDivider = 5;
@@ -60,6 +61,10 @@ public class UIBoosterOfferElement : MonoBehaviour {
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
+    }
+    
+    public void SetBackSprite(Sprite back) {
+        _backIcon.sprite = back;
     }
     
     void SetupTrailEffect(int coinsAmount) {
