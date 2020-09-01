@@ -82,7 +82,7 @@ public class LevelController : Singleton<LevelController> {
     }
 
     void CompleteLevel(int num) {
-        if(_lastLevelNum > 0)
+        // if(_lastLevelNum > 0)
             _allLevels[_lastLevelNum].SetAvatar(false);
         if(num >= _lastLevelNum)
             _lastLevelNum = num + 1;
@@ -97,7 +97,7 @@ public class LevelController : Singleton<LevelController> {
         }
         
         
-        level.SetAvatar(true);
+        _allLevels[_lastLevelNum].SetAvatar(true);
 
         if(num + 1 < _allLevels.Count)
             _allLevels[num+1].UnlockLevel(false);
