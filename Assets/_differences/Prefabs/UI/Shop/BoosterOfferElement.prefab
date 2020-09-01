@@ -225,6 +225,7 @@ MonoBehaviour:
   _icon: {fileID: 1108037975255478881}
   _amountLabel: {fileID: 2204268338599229996}
   _costLabel: {fileID: 6491808229998662583}
+  _backIcon: {fileID: 388070122861767491}
   _uiTrailEffectPrefab: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
     type: 3}
   _amountDivider: 5

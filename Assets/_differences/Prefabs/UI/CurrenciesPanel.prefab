@@ -264,7 +264,7 @@ MonoBehaviour:
   StartAlpha: 1
   AllowMultipleClicks: 1
   ButtonCategory: GlobalMap
-  ButtonName: OpenEnergyStore
+  ButtonName: OpenBoosterStore
   ClickMode: 0
   DeselectButtonAfterClick: 0
   DisableButtonBetweenClicksInterval: 0.2
