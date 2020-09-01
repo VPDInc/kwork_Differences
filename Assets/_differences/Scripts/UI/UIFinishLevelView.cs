@@ -27,6 +27,7 @@ public class UIFinishLevelView : MonoBehaviour {
     [SerializeField] TMP_Text _ratingRewardLabel = default;
     [SerializeField] Transform _textInfoHolder = default;
     [SerializeField] PicturePanel _picturePanel = default;
+    [SerializeField] ParticleSystem _particleSystem = default;
 
     [Header("Prefabs")] [SerializeField] RoundInfo _roundInfoPrefab = default;
 
@@ -66,6 +67,7 @@ public class UIFinishLevelView : MonoBehaviour {
         if (gameplayResult.IsCompleted) {
             SetupFlyingCurrencies(gameplayResult.TotalStarsCollected, _energyController.PlayCost, coinReward);
             StartCoroutine(TryRequestReateUs());
+            _particleSystem.Play();
         }
     }
 
