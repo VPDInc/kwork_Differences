@@ -58,7 +58,7 @@ public class UITimerUpdater : MonoBehaviour {
         DOTween.To(() => _lastTime, x => {
             _lastTime = x;
             _timerText.text = TimeSpan.FromSeconds(_lastTime).ToString(TIMER_FORMAT);
-        }, time, 0.35f).SetId(this);
+        }, time, 0.5f).SetEase(Ease.Linear).SetId(this);
     }
 
     void HandleBlink(float time) {
