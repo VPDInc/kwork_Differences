@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>518039429797-0s9rctc675f41n18ot42cbdigjjaeunr.apps.googleusercontent.com</string>
+	<string>518039429797-j7uplmn3gdpvdmje6n0l42f7449d46jb.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.518039429797-0s9rctc675f41n18ot42cbdigjjaeunr</string>
+	<string>com.googleusercontent.apps.518039429797-j7uplmn3gdpvdmje6n0l42f7449d46jb</string>
 	<key>API_KEY</key>
 	<string>AIzaSyD028BhzA6DloWvH34i-QyCqYj7dEzsNlY</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>games.airion.differences</string>
+	<string>com.medianagames.findscapes</string>
 	<key>PROJECT_ID</key>
 	<string>testproject-184c0</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:518039429797:ios:3cf8c2a1b94f5ff6cd634c</string>
+	<string>1:518039429797:ios:8385ac3ca85625decd634c</string>
 	<key>DATABASE_URL</key>
 	<string>https://testproject-184c0.firebaseio.com</string>
 </dict>

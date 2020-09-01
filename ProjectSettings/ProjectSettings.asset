@@ -168,8 +168,8 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: games.airion.differences
-    iPhone: games.airion.differences
+    Android: com.medianagames.findscapes
+    iPhone: com.medianagames.findscapes
   buildNumber: {}
   AndroidBundleVersionCode: 1
   AndroidMinSdkVersion: 19

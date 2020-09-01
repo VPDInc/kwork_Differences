@@ -326,7 +326,7 @@ MonoBehaviour:
       mRateButtonText: Rate Now!
       mCancelButtonText: Cancel
       mFeedbackButtonText: Send Feedback
-    mMinimumAcceptedStars: 4
+    mMinimumAcceptedStars: 1
     mSupportEmail: 
     mIosAppId: 
     mAnnualCap: 12
@@ -374,5 +374,5 @@ MonoBehaviour:
   mIsGameServiceModuleEnable: 0
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 1
-  mActiveModuleIndex: 3
+  mActiveModuleIndex: 8
   mIsSelectingModule: 0
