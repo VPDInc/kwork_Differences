@@ -354,11 +354,8 @@ public class DiffEditor : MonoBehaviour {
         images.Item1.sprite = loader.Result.Item1;
         images.Item2.sprite = loader.Result.Item2;
 
-        var width = images.Item1.sprite.texture.width;
-        var height = images.Item1.sprite.texture.height;
-        
         foreach (var point in data.Points) {
-            CreateHandlerFromPoint(DiffUtils.FixPointRelative(point, width, height));
+            CreateHandlerFromPoint(DiffUtils.FixPointRelative(point, images.Item1.sprite));
         }
     }
 

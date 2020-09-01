@@ -17,7 +17,7 @@ public static class DiffUtils {
             return default;
         }
         
-        var locationRelativeToImage01 = new Vector2(imageCoord.x / image.sprite.texture.width, imageCoord.y / image.sprite.texture.height);
+        var locationRelativeToImage01 = new Vector2(imageCoord.x / image.sprite.rect.width, imageCoord.y / image.sprite.rect.height);
         var imageAspectRatio = image.sprite.rect.height / image.sprite.rect.width;
         var rectAspectRatio = imageRect.rect.height / imageRect.rect.width;
         var imageRectInLocalScreenCoordinates = new Rect();
@@ -77,8 +77,8 @@ public static class DiffUtils {
                 locationRelativeToImageInScreenCoordinates.x / imageRectInLocalScreenCoordinates.width,
                 locationRelativeToImageInScreenCoordinates.y / imageRectInLocalScreenCoordinates.height);
         
-            var imageCoord = new Vector2(locationRelativeToImage01.x * image.sprite.texture.width, 
-                locationRelativeToImage01.y * image.sprite.texture.height);
+            var imageCoord = new Vector2(locationRelativeToImage01.x * image.sprite.rect.width, 
+                locationRelativeToImage01.y * image.sprite.rect.height);
 
             localSpace = pos;
             pixelsSpace = imageCoord;
@@ -104,18 +104,18 @@ public static class DiffUtils {
     }
 
     public static float PixelHeightToRect(float pixel, RectTransform rect, Sprite sprite) {
-        return pixel * (rect.rect.height / sprite.texture.height);
+        return pixel * (rect.rect.height / sprite.rect.height);
     }
     
     public static float PixelWidthToRect(float pixel, RectTransform rect, Sprite sprite) {
-        return pixel * (rect.rect.width / sprite.texture.width);
+        return pixel * (rect.rect.width / sprite.rect.width);
     }
     
-    public static Point FixPointRelative(Point point, int realWidth, int realHeight) {
+    public static Point FixPointRelative(Point point, Sprite sprite) {
         return new Point() {
-            Center = new Vector2(point.Center.x * realWidth, point.Center.y * realHeight),
-            Height = point.Height * realHeight,
-            Width = point.Width * realWidth,
+            Center = new Vector2(point.Center.x * sprite.rect.width, point.Center.y * sprite.rect.height),
+            Height = point.Height * sprite.rect.height,
+            Width = point.Width * sprite.rect.width,
             Number = point.Number,
             Rotation = point.Rotation,
             Shape = point.Shape

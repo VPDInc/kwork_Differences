@@ -127,11 +127,9 @@ public class UIGameplay : MonoBehaviour {
     }
     
     Point[] FixPoints(Point[] points, (Sprite, Sprite) loadedSprite) {
-        var width = loadedSprite.Item1.texture.width;
-        var height = loadedSprite.Item1.texture.height;
         var fixedPoints = new Point[points.Length];
         for (int i = 0; i < points.Length; i++) {
-            fixedPoints[i] = DiffUtils.FixPointRelative(points[i], width, height);
+            fixedPoints[i] = DiffUtils.FixPointRelative(points[i], loadedSprite.Item1);
         }
 
         return fixedPoints;
@@ -282,27 +280,22 @@ public class UIGameplay : MonoBehaviour {
             default:
                 throw new ArgumentOutOfRangeException();
         }
-        var handler = Instantiate(diffPrefab);
-        var handlerRect = handler.GetComponent<RectTransform>();
+        
         var images = _currentSetter.GetImages();
             
-        var image1Rect = images.Item1.GetComponent<RectTransform>();
-        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item1, image1Rect);
-        handlerRect.SetParent(images.Item1.transform, false);
-        handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, images.Item1.sprite), 
-            DiffUtils.PixelHeightToRect(point.Height, image1Rect, images.Item1.sprite));
+       CreateDiff(diffPrefab, images.Item1, point);
+       CreateDiff(diffPrefab, images.Item2, point);
+    }
+
+    void CreateDiff(GameObject diffPrefab, Image image, Point point) {
+        var handler = Instantiate(diffPrefab);
+        var handlerRect = handler.GetComponent<RectTransform>();
+        var imageRect = image.GetComponent<RectTransform>();
+        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, image, imageRect);
+        handlerRect.SetParent(image.transform, false);
+        handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, imageRect, image.sprite), 
+            DiffUtils.PixelHeightToRect(point.Height, imageRect, image.sprite));
         handlerRect.localPosition = pos;
         handler.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
-        
-        var handler2 = Instantiate(diffPrefab);
-        var handlerRect2 = handler2.GetComponent<RectTransform>();
-        var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, images.Item2,
-            images.Item2.GetComponent<RectTransform>());
-        handlerRect2.SetParent(images.Item2.transform, false);
-        var image2Rect = images.Item2.GetComponent<RectTransform>();
-        handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, images.Item2.sprite), 
-            DiffUtils.PixelHeightToRect(point.Height, image2Rect, images.Item2.sprite));
-        handlerRect2.localPosition = pos2;
-        handler2.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
     }
 }

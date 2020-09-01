@@ -72,35 +72,24 @@ public class UIAimTip : Tip {
     }
     
     void CreateAims(Point point) {
-        var leftEffect = Instantiate(_effectTrailEffect, transform);
-        var rightEffect = Instantiate(_effectTrailEffect, transform);
-        
+        CreateAim(point, _currentImages.Item1);
+        CreateAim(point, _currentImages.Item2);
+    }
+
+    void CreateAim(Point point, Image image) {
+        var effect = Instantiate(_effectTrailEffect, transform);
         var handler = Instantiate(_aimPrefab);
         handler.Id = point.Number;
         _aims.Add(handler);
         var handlerRect = handler.GetComponent<RectTransform>();
-         var image1Rect = _currentImages.Item1.GetComponent<RectTransform>();
-        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item1, image1Rect);
-        handlerRect.SetParent(_currentImages.Item1.transform, false);
-        handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image1Rect, _currentImages.Item1.sprite), 
-                                            DiffUtils.PixelHeightToRect(point.Height, image1Rect, _currentImages.Item1.sprite));
+        var imageRect = image.GetComponent<RectTransform>();
+        var pos = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, image, imageRect);
+        handlerRect.SetParent(image.transform, false);
+        handlerRect.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, imageRect, image.sprite), 
+                                            DiffUtils.PixelHeightToRect(point.Height, imageRect, image.sprite));
         handlerRect.localPosition = pos;
         handler.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
-        leftEffect.Setup(handler.transform.position);
-
-        var handler2 = Instantiate(_aimPrefab);
-        handler2.Id = point.Number;
-        _aims.Add(handler2);
-        var handlerRect2 = handler2.GetComponent<RectTransform>();
-        var pos2 = DiffUtils.GetRectSpaceCoordinateFromPixel(point.Center, _currentImages.Item2,
-            _currentImages.Item2.GetComponent<RectTransform>());
-        handlerRect2.SetParent(_currentImages.Item2.transform, false);
-        var image2Rect = _currentImages.Item2.GetComponent<RectTransform>();
-        handlerRect2.sizeDelta = new Vector2(DiffUtils.PixelWidthToRect(point.Width, image2Rect, _currentImages.Item2.sprite), 
-            DiffUtils.PixelHeightToRect(point.Height, image2Rect, _currentImages.Item2.sprite));
-        handlerRect2.localPosition = pos2;
-        handler2.transform.rotation = Quaternion.Euler(0,0, point.Rotation);
-        rightEffect.Setup(handler2.transform.position);
+        effect.Setup(handler.transform.position);
     }
 
     void OnPointOpened(Point point) {
