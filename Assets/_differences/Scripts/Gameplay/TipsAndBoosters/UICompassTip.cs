@@ -21,7 +21,7 @@ public class UICompassTip : Tip {
         var points = _gameplay.ClosedPoints;
         if (points != null && points.Length > 0) {
             var images = _gameplay.CurrentImages;
-            var size = new Vector2(images.Item1.sprite.texture.width, images.Item1.sprite.texture.height);
+            var size = new Vector2(images.Item1.sprite.rect.width, images.Item1.sprite.rect.height);
             var quarter = GetBetterQuarter(points, size);
             var center = GetQuarterCenter(quarter, size);
             ShowTip(center, images, size);
