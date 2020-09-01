@@ -1,4 +1,6 @@
 ﻿using System;
+
+using Airion.Audio;
 using Airion.Extensions;
 
 using DG.Tweening;
@@ -28,6 +30,8 @@ public class UILevelStartView : MonoBehaviour {
     [SerializeField] GameObject _differencesCounterPrefab = default;
 
     [Header("Settings")] [SerializeField] int _secondsTillStart = 3;
+
+    [Inject] AudioManager _audioManager = default;
     
 
     int _currentTimer = 0;
@@ -76,6 +80,7 @@ public class UILevelStartView : MonoBehaviour {
             _timerSequence.AppendCallback(() => {
                                               _currentTimer--;
                                               _timerLabel.text = TIMER_PREFIX + _currentTimer;
+                                              _audioManager.PlayOnce("tick");
                                           });
         }
 
