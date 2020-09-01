@@ -4,6 +4,9 @@ using TMPro;
 
 using UnityEngine;
 using UnityEngine.EventSystems;
+
+using Zenject;
+
 public class LevelInfo : MonoBehaviour {
     public int LevelNum => _levelNum;
     public EpisodeInfo EpisodeInfo => _episodeInfo;
@@ -18,6 +21,8 @@ public class LevelInfo : MonoBehaviour {
     [SerializeField] GameObject _activeBGSprite = default;
     [SerializeField] GameObject _completedBGSprite = default;
     [SerializeField] GameObject _lockedBGSprite = default;
+
+    [Inject] UIProfileView _uiProfileView = default;
 
     EpisodeInfo _episodeInfo;
     int _levelNum = 0;
@@ -73,6 +78,10 @@ public class LevelInfo : MonoBehaviour {
         _completedBGSprite.SetActive(true);
         _lockedBGSprite.SetActive(false);
         UnlockVfx(false);
+    }
+
+    public void OnProfileClick() {
+        _uiProfileView.Show(false);
     }
 
     public void SetAvatar(bool toggle) {

@@ -53,12 +53,12 @@ public class LevelController : Singleton<LevelController> {
     protected override void Awake() {
         base.Awake();
         _lastEpisodeNum = PlayerPrefs.GetInt(LAST_EPISODE_ID, 0);
+        LoadLastLevel();
     }
 
     void Start() {
         _coinCurrency = _currencyManager.GetCurrency(COIN_CURRENCY_ID);
         _ratingCurrency = _currencyManager.GetCurrency(RATING_CURRENCY_ID);
-        LoadLastLevel();
         SetupLevels();
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;

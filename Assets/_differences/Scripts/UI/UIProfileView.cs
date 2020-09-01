@@ -43,7 +43,7 @@ public class UIProfileView : MonoBehaviour {
 
     public void Show(bool instant) {
         _currentView.Show(instant);
-        _levelText.text = "Level " + _levelController.LastLevelNum;
+        _levelText.text = "Level " + (_levelController.LastLevelNum + 1);
     }
 
     public void Hide(bool instant) {
