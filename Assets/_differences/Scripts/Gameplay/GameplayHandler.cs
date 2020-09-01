@@ -242,7 +242,7 @@ public class GameplayHandler : MonoBehaviour {
     IEnumerator ShowTipAndShowTimeIsUpMenu() {
         IsStarted = false;
         _aimTip.ShowTip();
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3);
         _middleScreen.Show((() => {
             _timeIsUp.Show(_addTimeAfterOver, _pictureResults.Sum(res => res.StarsCollected));
         }));
