@@ -127,11 +127,9 @@ public class UIGameplay : MonoBehaviour {
     }
     
     Point[] FixPoints(Point[] points, (Sprite, Sprite) loadedSprite) {
-        var width = loadedSprite.Item1.texture.width;
-        var height = loadedSprite.Item1.texture.height;
         var fixedPoints = new Point[points.Length];
         for (int i = 0; i < points.Length; i++) {
-            fixedPoints[i] = DiffUtils.FixPointRelative(points[i], width, height);
+            fixedPoints[i] = DiffUtils.FixPointRelative(points[i], loadedSprite.Item1);
         }
 
         return fixedPoints;
