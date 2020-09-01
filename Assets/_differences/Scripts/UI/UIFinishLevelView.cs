@@ -1,10 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 
 using Airion.Extensions;
 
 using DG.Tweening;
 
 using Doozy.Engine.UI;
+
+using EasyMobile;
 
 using TMPro;
 
@@ -60,8 +63,10 @@ public class UIFinishLevelView : MonoBehaviour {
         SetCoinsAmount(coinReward);
         Setup(gameplayResult);
 
-        if (gameplayResult.IsCompleted)
+        if (gameplayResult.IsCompleted) {
             SetupFlyingCurrencies(gameplayResult.TotalStarsCollected, _energyController.PlayCost, coinReward);
+            StartCoroutine(TryRequestReateUs());
+        }
     }
 
     void SetupVictory(bool isVictory) {
@@ -71,6 +76,16 @@ public class UIFinishLevelView : MonoBehaviour {
 
         foreach (GameObject loseObject in _loseObjects) {
             loseObject.SetActive(!isVictory);
+        }
+    }
+
+    IEnumerator TryRequestReateUs() {
+        yield return new WaitForSeconds(2);
+        if (!StoreReview.IsRatingRequestDisabled()) {
+            if (_levelController.LastEpisodeNum >= 3) {
+                if (StoreReview.CanRequestRating())
+                    StoreReview.RequestRating();
+            }
         }
     }
 

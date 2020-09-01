@@ -326,13 +326,13 @@ MonoBehaviour:
       mRateButtonText: Rate Now!
       mCancelButtonText: Cancel
       mFeedbackButtonText: Send Feedback
-    mMinimumAcceptedStars: 4
+    mMinimumAcceptedStars: 1
     mSupportEmail: 
-    mIosAppId: 
+    mIosAppId: 1530032494
     mAnnualCap: 12
-    mDelayAfterInstallation: 10
-    mCoolingOffPeriod: 10
-    mIgnoreContraintsInDevelopment: 0
+    mDelayAfterInstallation: 0
+    mCoolingOffPeriod: 1
+    mIgnoreContraintsInDevelopment: 1
   mSharingSettings:
     mAndroidPermissions:
     - mElementName: uses-permission
@@ -374,5 +374,5 @@ MonoBehaviour:
   mIsGameServiceModuleEnable: 0
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 1
-  mActiveModuleIndex: 3
+  mActiveModuleIndex: 8
   mIsSelectingModule: 0

@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:518039429797:android:58c13df8b9e2dc7ccd634c",
+        "mobilesdk_app_id": "1:518039429797:android:490807e051248916cd634c",
         "android_client_info": {
-          "package_name": "games.airion.differences"
+          "package_name": "com.medianagames.findscapes"
         }
       },
       "oauth_client": [
