@@ -1,6 +1,7 @@
 ﻿using Airion.Currency;
 
 using Doozy.Engine;
+using Doozy.Engine.UI;
 
 using UnityEngine;
 
@@ -31,6 +32,7 @@ public class UIEnergyShop : MonoBehaviour {
     const string ENERGY_CURRENCY_ID = "Energy";
     const string SOFT_CURRENCY_ID = "Soft";
     const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
+    const string MAX_ENERGY_POPUP_NAME = "MaxEnergy";
 
     void Start() {
         _energyCurrency = _currencyManager.GetCurrency(ENERGY_CURRENCY_ID);
@@ -40,6 +42,11 @@ public class UIEnergyShop : MonoBehaviour {
     }
 
     public void BuyEnergyPack1() {
+        if (_energyController.IsEnergyMaxed) {
+            ShowMaxEnergyPopup();
+            return;
+        }
+        
         if (_softCurrency.IsEnough(_costEnergyPack1)) {
             _softCurrency.Spend(_costEnergyPack1);
             _energyCurrency.Earn(_energyAmountPack1);
@@ -50,6 +57,11 @@ public class UIEnergyShop : MonoBehaviour {
     }
     
     public void BuyEnergyPack2() {
+        if (_energyController.IsEnergyMaxed) {
+            ShowMaxEnergyPopup();
+            return;
+        }
+        
         if (_softCurrency.IsEnough(_costEnergyPack2)) {
             _softCurrency.Spend(_costEnergyPack2);
             _energyCurrency.Earn(_energyAmountPack2);
@@ -60,6 +72,11 @@ public class UIEnergyShop : MonoBehaviour {
     }
 
     public void BuyUnlimitedEnergy() {
+        if (_energyController.IsInfinityTimeOn) {
+            ShowMaxEnergyPopup();
+            return;
+        }
+        
         if (_softCurrency.IsEnough(_costInfinityEnergy)) {
             _softCurrency.Spend(_costInfinityEnergy);
             _energyController.AddInfinityTime();
@@ -67,6 +84,11 @@ public class UIEnergyShop : MonoBehaviour {
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
+    }
+
+    void ShowMaxEnergyPopup() {
+        var popup = UIPopup.GetPopup(MAX_ENERGY_POPUP_NAME);
+        popup.Show();
     }
 
     void SetupOffers() {
