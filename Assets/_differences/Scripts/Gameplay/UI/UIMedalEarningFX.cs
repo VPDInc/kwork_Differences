@@ -5,6 +5,8 @@ using DG.Tweening;
 
 using UnityEngine;
 
+using Zenject;
+
 public class UIMedalEarningFX : MonoBehaviour {
     [SerializeField] RectTransform _medalPrefab = default;
     [SerializeField] UIMedalCounter _medalCounterPrefab = default;
@@ -13,6 +15,8 @@ public class UIMedalEarningFX : MonoBehaviour {
     [SerializeField] float _delayBetweenMedals = default;
     [SerializeField] float _flyDuration = default;
     [SerializeField] float _scaleDuration = default;
+    
+    [Inject] UIStars _uiStars = default;
 
     public void CallEffect(Vector2 position, int count) {
         var seq = DOTween.Sequence();
@@ -28,7 +32,9 @@ public class UIMedalEarningFX : MonoBehaviour {
             seq.Insert(_delayBetweenMedals * (i + 1), medal.DOMove(_target.position, _flyDuration).SetEase(Ease.Linear)
                             .OnComplete(() => medal.DOScale(0, _scaleDuration)
                                                    .OnComplete(() => Destroy(medal.gameObject))));
-            
+            seq.AppendCallback(() => {
+                _uiStars.Add(1);
+            });
         }
     }
 }

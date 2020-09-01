@@ -5,8 +5,6 @@ using System.Linq;
 
 using Airion.Audio;
 
-using DG.Tweening;
-
 using UnityEngine;
 
 using Zenject;
@@ -22,14 +20,12 @@ public class GameplayHandler : MonoBehaviour {
     [SerializeField] StarsEarningConfig _config = default;
     [SerializeField] UIPictureCountBar _uiPictureCountBar = default;
     [SerializeField] Canvas _activeCanvas = default;
-    [SerializeField] CanvasGroup _completeGroup = default;
 
     [Inject] UITimer _timer = default;
     [Inject] UIGameplay _uiGameplay = default;
     [Inject] GameplayController _gameplayController = default;
     [Inject] MissClickManager _missClickManager = default;
     [Inject] UIAimTip _aimTip = default;
-    [Inject] UIStars _uiStars = default;
     [Inject] UIMiddleScreen _middleScreen = default;
     [Inject] UITimeIsUp _timeIsUp = default;
     [Inject] UIPause _pause = default;
@@ -37,6 +33,8 @@ public class GameplayHandler : MonoBehaviour {
     [Inject] UIMedalEarningFX _medalEarningFx = default;
     [Inject] ThemeController _themeController = default;
     [Inject] AudioManager _audioManager = default;
+    [Inject] UICompleteView _completeView = default;
+    [Inject] UIStars _uiStars = default;
 
     bool IsStarted { get; set; }
     readonly List<PictureResult> _pictureResults = new List<PictureResult>();
@@ -91,12 +89,8 @@ public class GameplayHandler : MonoBehaviour {
                 UpdateStars(_config.StarsPerFoundDifference);
                 
                 if (_uiGameplay.ClosedPoints.Length == 0) {
-                    var seq = DOTween.Sequence();
-                    seq.Append(_completeGroup.DOFade(1, WAIT_BETWEEN_PICTURES_CHANGING));
-                    seq.AppendInterval(WAIT_BETWEEN_PICTURES_CHANGING);
-                    seq.Append(_completeGroup.DOFade(0, WAIT_BETWEEN_PICTURES_CHANGING));
-                    
-                    _completeGroup.DOFade(1, WAIT_BETWEEN_PICTURES_CHANGING);
+                    _completeView.Show(_config.StarsPerCompletedPicture);
+          
                     UpdateStars(_config.StarsPerCompletedPicture);
                     _currentPictureResult++;
                     _audioManager.PlayOnce("win");
@@ -137,7 +131,6 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void UpdateStars(int amount) {
-        _uiStars.Add(amount);
         var diff = _pictureResults[_currentPictureResult];
         diff.StarsCollected += amount;
         _pictureResults[_currentPictureResult] = diff;
@@ -152,7 +145,7 @@ public class GameplayHandler : MonoBehaviour {
 
     IEnumerator Stopping(bool isWin, bool withDelay) {
         if (withDelay)
-            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
+            yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING * 2);
         
         _middleScreen.Show(() => {
             _uiGameplay.Complete();
@@ -163,7 +156,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     IEnumerator WaitAndHideScreen() {
-        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING * 0.5f);
+        yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
         _middleScreen.Hide(() => {
             _themeController.PlayMainTheme();
         });
