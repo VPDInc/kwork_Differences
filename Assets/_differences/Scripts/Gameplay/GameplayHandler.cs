@@ -236,6 +236,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     void OnTimerExpired() {
+        _audioManager.PlayOnce("alarm");
         StartCoroutine(ShowTipAndShowTimeIsUpMenu());
     }
 
