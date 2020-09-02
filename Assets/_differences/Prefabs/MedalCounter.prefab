@@ -313,5 +313,5 @@ MonoBehaviour:
   _label: {fileID: 6026031661718387332}
   _canvasGroup: {fileID: 6148255680211894836}
   _fxShowDuration: 0.25
-  _fxPauseDuration: 0.25
+  _fxPauseDuration: 0.35
   _fxHideDuration: 0.5

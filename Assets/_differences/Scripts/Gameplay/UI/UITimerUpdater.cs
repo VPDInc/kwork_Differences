@@ -1,5 +1,7 @@
 ﻿using System;
 
+using Airion.Audio;
+
 using DG.Tweening;
 
 using TMPro;
@@ -15,6 +17,7 @@ public class UITimerUpdater : MonoBehaviour {
     [SerializeField] Color _blinkColor = Color.red;
 
     [Inject] UITimer _timer = default;
+    [Inject] AudioManager _audioManager = default;
 
     bool _isCritical = false;
     Color _startColor;
@@ -54,11 +57,19 @@ public class UITimerUpdater : MonoBehaviour {
         if (TimeSpan.FromSeconds(time).Seconds == TimeSpan.FromSeconds(_lastTime).Seconds)
             return;
 
-        DOTween.Kill(this);
-        DOTween.To(() => _lastTime, x => {
-            _lastTime = x;
-            _timerText.text = TimeSpan.FromSeconds(_lastTime).ToString(TIMER_FORMAT);
-        }, time, 0.5f).SetEase(Ease.Linear).SetId(this);
+        if (TimeSpan.FromSeconds(_lastTime).Seconds - TimeSpan.FromSeconds(time).Seconds == 1) {
+            _timerText.text =  TimeSpan.FromSeconds(time).ToString(TIMER_FORMAT);
+            if (_isCritical)
+                _audioManager.PlayOnce("tick");
+        } else {
+            DOTween.Kill(this);
+            var startTime = _lastTime;
+            DOTween.To(() => startTime, x => {
+                _timerText.text = TimeSpan.FromSeconds(x).ToString(TIMER_FORMAT);
+            }, time, 0.8f).SetEase(Ease.Linear).SetId(this);
+        }
+
+        _lastTime = time;
     }
 
     void HandleBlink(float time) {
