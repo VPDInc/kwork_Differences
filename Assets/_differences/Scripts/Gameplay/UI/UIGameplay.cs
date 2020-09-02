@@ -28,6 +28,7 @@ public class UIGameplay : MonoBehaviour {
     [SerializeField] UIView _loadingView = default;
     [SerializeField] ImageSetter _horizontal = default;
     [SerializeField] ImageSetter _vertical = default;
+    [SerializeField] float _touchRadius = 100f;
 
     Data _data;
     ImageSetter _currentSetter;
@@ -170,19 +171,26 @@ public class UIGameplay : MonoBehaviour {
             var image = raycast.gameObject.GetComponent<Image>();
             if (image != null) {
                 if (DiffUtils.GetPixelFromScreen(mousePos, image, out var pixelPos, out var localPos)) {
+                    var overlappedPoints = new List<Point>();
                     for (var index = 0; index < _allPoints.Count; index++) {
                         var point = _allPoints[index];
                         if (IsPixelInsidePoint(pixelPos, point)) {
-                            if (_closedPoints.Any(p => p.Number == point.Number)) {
-                                SelectDifference(point);
-                                _closedPoints.Remove(point);
-                                outPoint = point;
-                                PointOpened?.Invoke(point);
-                                return OverlapStatus.Found;
-                            } else {
-                                outPoint = default;
-                                return OverlapStatus.Doubled;
-                            }
+                            overlappedPoints.Add(point);
+                        }
+                    }
+
+                    if (overlappedPoints.Count > 0) {
+                        var ordered = overlappedPoints.OrderBy(p => Vector2.Distance(p.Center, pixelPos));
+                        var nearest = ordered.First();
+                        if (_closedPoints.Any(p => p.Number == nearest.Number)) {
+                            SelectDifference(nearest);
+                            _closedPoints.Remove(nearest);
+                            outPoint = nearest;
+                            PointOpened?.Invoke(nearest);
+                            return OverlapStatus.Found;
+                        } else {
+                            outPoint = default;
+                            return OverlapStatus.Doubled;
                         }
                     }
                 }
@@ -208,54 +216,7 @@ public class UIGameplay : MonoBehaviour {
     }
 
     bool IsPixelInsidePoint(Vector2 pixel, Point point) {
-        switch (point.Shape) {
-            case Shape.Rectangle:
-                return TestRectangle(pixel, point);
-            case Shape.Circle:
-                return TestEllipse(pixel, point.Center, point.Width, point.Height, point.Rotation);
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
-    bool TestRectangle(Vector2 pixel, Point point) {
-        var rect = new Rect(Vector2.zero, new Vector2(point.Width, point.Height));
-        rect.center = point.Center;
-        return Contains(rect, point.Rotation, pixel);
-    }
-
-    bool Contains(Rect rect, float rectAngle, Vector2 point) {
-        // rotate around rectangle center by -rectAngle
-        var s = Mathf.Sin(-rectAngle * Mathf.Deg2Rad);
-        var c = Mathf.Cos(-rectAngle * Mathf.Deg2Rad);
-
-        // set origin to rect center
-        var newPoint = point - rect.center;
-        // rotate
-        newPoint = new Vector2(newPoint.x * c - newPoint.y * s, newPoint.x * s + newPoint.y * c);
-        // put origin back
-        newPoint = newPoint + rect.center;
-
-        // check if our transformed point is in the rectangle, which is no longer
-        // rotated relative to the point
-
-        return newPoint.x >= rect.xMin && newPoint.x <= rect.xMax && newPoint.y >= rect.yMin && newPoint.y <= rect.yMax;
-    }
-
-    bool TestEllipse(Vector2 point, Vector2 center, float width, float height, float angle) {
-        // #tests if a point[xp,yp] is within
-        // #boundaries defined by the ellipse
-        // #of center[x,y], diameter d D, and tilted at angle
-        var cosa = Mathf.Cos(angle * Mathf.Deg2Rad);
-        var sina = Mathf.Sin(angle * Mathf.Deg2Rad);
-        var widthD = (width * 0.5f) * (width * 0.5f);
-        var heightD = (height * 0.5f) * (height * 0.5f);
-
-        var a = Mathf.Pow(cosa * (point.x - center.x) + sina * (point.y - center.y), 2);
-        var b = Mathf.Pow(sina * (point.x - center.x) - cosa * (point.y - center.y), 2);
-        var ellipse = (a / widthD) + (b / heightD);
-
-        return ellipse <= 1;
+        return CollisionUtils.TestCircleRect(pixel, _touchRadius, point.Center, point.Width, point.Height, point.Rotation);
     }
 
     void SelectDifference(Point point) {

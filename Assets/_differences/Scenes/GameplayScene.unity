@@ -15872,6 +15872,7 @@ MonoBehaviour:
   _loadingView: {fileID: 134137771}
   _horizontal: {fileID: 1505482243}
   _vertical: {fileID: 412959456}
+  _touchRadius: 25
 --- !u!114 &1526731834
 MonoBehaviour:
   m_ObjectHideFlags: 0
