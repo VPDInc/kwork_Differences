@@ -33,6 +33,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: CoinTrailEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 164438001184666750, guid: 9fadbaf57484a684caf768c96a918c34,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3822344273060951225, guid: 9fadbaf57484a684caf768c96a918c34,
         type: 3}
       propertyPath: _moveDuration

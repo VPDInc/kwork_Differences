@@ -39,6 +39,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: EnergyTrailEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 3225814783834386353, guid: 59db20aae036b4e4e8a3f46846b40658,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4885541031381892707, guid: 59db20aae036b4e4e8a3f46846b40658,
         type: 3}
       propertyPath: m_LocalPosition.x
