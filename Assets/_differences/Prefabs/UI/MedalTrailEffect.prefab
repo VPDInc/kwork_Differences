@@ -33,6 +33,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: MedalTrailEffect
       objectReference: {fileID: 0}
+    - target: {fileID: 19625895331513961, guid: a35da156772f1294ea9439b037e8b307,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 4299191996231966998, guid: a35da156772f1294ea9439b037e8b307,
         type: 3}
       propertyPath: m_Sprite

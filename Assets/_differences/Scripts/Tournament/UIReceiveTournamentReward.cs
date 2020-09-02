@@ -20,6 +20,7 @@ public class UIReceiveTournamentReward : MonoBehaviour {
     [SerializeField] PopupRewardElement _rewardElementPrefab = default;
     [SerializeField] Transform _rewardHolder = default;
     [SerializeField] TMP_Text _placeText = default;
+    [SerializeField] ParticleSystem _particles = default;
 
     [Inject] Tournament _tournament = default;
 
@@ -34,6 +35,7 @@ public class UIReceiveTournamentReward : MonoBehaviour {
             rewardElement.Setup(rewardInfo.RewardType, rewardInfo.Amount);
         }
         _view.Show();
+        _particles.Play();
     }
 
     public void Hide() {
