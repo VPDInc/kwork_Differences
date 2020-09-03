@@ -14203,7 +14203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77794d6e94179f541a70b30a9a58cebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _url: 
+  _url: https://www.medianagames.com/privacy/index.html
 --- !u!114 &284053351
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -42542,7 +42542,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77794d6e94179f541a70b30a9a58cebe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _url: 
+  _url: https://www.medianagames.com/terms/index.html
 --- !u!114 &1266076987
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -55178,7 +55178,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0.0005541114, y: 0}
+  m_AnchoredPosition: {x: -0.0005416845, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1761570379
@@ -62283,7 +62283,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.0008895709, y: 0}
+  m_AnchoredPosition: {x: -0.00081500044, y: 0}
   m_SizeDelta: {x: 0, y: 832}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1942416868
