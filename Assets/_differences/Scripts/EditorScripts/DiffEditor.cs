@@ -115,8 +115,8 @@ public class DiffEditor : MonoBehaviour {
                         return;
                     
                     if (DiffUtils.GetPixelFromScreen(mousePos, image,out var imageCoords, out var localPoint)) {
-                        var imageWidth = image.sprite.texture.width;
-                        var imageHeight = image.sprite.texture.height;
+                        var imageWidth = image.sprite.rect.width;
+                        var imageHeight = image.sprite.rect.height;
                         var isInWidthBounds = 0 <= imageCoords.x && imageCoords.x <= imageWidth;
                         var isInHeightBounds = 0 <= imageCoords.y && imageCoords.y <= imageHeight;
 
@@ -414,8 +414,8 @@ public class DiffEditor : MonoBehaviour {
         var uniq = _handlers.DistinctBy(handler => handler.Id);
         
         var images = _config.GetImages(_currentOrientation);
-        var imageWidth = images.Item1.sprite.texture.width;
-        var imageHeight = images.Item1.sprite.texture.height;
+        var imageWidth = images.Item1.sprite.rect.width;
+        var imageHeight = images.Item1.sprite.rect.height;
         
         foreach (var handler in uniq.ToArray()) {
             points.Add(new Point() {
