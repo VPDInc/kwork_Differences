@@ -20,6 +20,6 @@ public class PopupRewardElement : MonoBehaviour {
     public void Setup(RewardEnum rewardType, int count) {
         var info = _rewardInfos.FirstOrDefault(x => x.RewardType == rewardType);
         _icon.sprite = info.Icon;
-        _countText.text = "x " + count;
+        _countText.text = count.ToString();
     }
 }
