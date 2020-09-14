@@ -54,9 +54,14 @@ public class LeaderboardElement : MonoBehaviour {
         _displayName.text = player.DisplayName;
         _score.text = player.Score.ToString();
         Player = player;
-        _rewardInfos = _tournamentRewards.GetRewardByPlace(placeInGlobal);
+        
+        if (player.Score > 0)
+            _rewardInfos = _tournamentRewards.GetRewardByPlace(placeInGlobal);
+        
+        _rewardBox.gameObject.SetActive(_rewardInfos != null);
         var clampedPlace = Mathf.Clamp(placeInGlobal, 0, _rewardBoxSprites.Length - 1);
         _rewardBox.sprite = _rewardBoxSprites[clampedPlace];
+        
         _backIfMe.SetActive(player.IsMe);
         _backIfNotMe.SetActive(!player.IsMe);
     }
