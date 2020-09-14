@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ZoomCurrency
   m_EditorClassIdentifier: 
   _type: Zoom
-  _defaultAmount: 10
+  _defaultAmount: 2
   _decorators:
   - {fileID: 11400000, guid: 2953b3de041bf1746829c14a7981ad3e, type: 2}
   _isEnablePrefsStore: 1
