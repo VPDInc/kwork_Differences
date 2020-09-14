@@ -41,9 +41,10 @@ public class LeaderboardElement : MonoBehaviour {
     int _index;
     RewardInfo[] _rewardInfos;
     Transform _lastParent;
+    bool _isShowed = false;
 
-    void Update() {
-        if (Input.GetMouseButtonUp(0)) {
+    void LateUpdate() {
+        if (Input.GetMouseButtonDown(0) && _isShowed) {
             HideReward();
         }
     }
@@ -81,10 +82,13 @@ public class LeaderboardElement : MonoBehaviour {
             rewardElement.Setup(rewardInfo.RewardType, rewardInfo.Amount);
         }
         
-        _popupCanvasGroup.DOFade(1, 0.25f);
+        _popupCanvasGroup.DOFade(1, 0.25f).OnComplete(() => {
+            _isShowed = true;
+        });
     }
 
     public void HideReward() {
         _popupCanvasGroup.DOFade(0, 0.25f);
+        _isShowed = false;
     }
 }

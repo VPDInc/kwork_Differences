@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PlayFabEditorPrefsSO
   m_EditorClassIdentifier: 
   DevAccountEmail: me@airion.games
-  DevAccountToken: g7hj16pwuyew4e11gh3ow1xnyzm4x9hb5wp58rn1f9sf8q95xu16ruzdo6uiejoy6bqrm9okbm3ekrcerhfxgc7qxnwj9cnumf3g3wed3n5wbxg3s757bcxha7qxbuqe8capt7rxfr5gc5wujd9zfyztje75qg3i41qcmebue4mz5jxepmb1ddb6j5h3gsxmmuzswupd
+  DevAccountToken: iftacgqi9itd7xhf414bexkk5sbknhpt1h3mjxrco4osy8osff7ud5mjrhqe6ectaqaei8snftwsqnqrrdejd1bxcwdgftpuf8a7rg3xy1xsqqh96obui38pnaqigf6uuijg9np7s6k4kywr3s5iiimst3kjc3asfdd7tum7t45a3z7hs65txwk4dd4y71e6pgs381ye
   SelectedStudio: 
   SdkPath: Assets/PlayFabSDK
   EdExPath: 
