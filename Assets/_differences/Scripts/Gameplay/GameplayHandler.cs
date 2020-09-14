@@ -44,7 +44,7 @@ public class GameplayHandler : MonoBehaviour {
     int _levelNum = 0;
     float _lastDiffTimestamp;
 
-    const float SWIPE_DETECTION_LEN = 20;
+    const float SWIPE_DETECTION_LEN = 40;
     const float WAIT_BETWEEN_PICTURES_CHANGING = 1.5f;
     
     void Start() {
