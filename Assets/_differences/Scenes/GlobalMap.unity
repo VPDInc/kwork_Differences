@@ -38512,7 +38512,7 @@ MonoBehaviour:
     Boosters:
     - Title: 
       Amount: 1
-      Cost: 300
+      Cost: 400
       Icon: {fileID: 0}
     - Title: 
       Amount: 5
