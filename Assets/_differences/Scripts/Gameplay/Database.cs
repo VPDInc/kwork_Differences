@@ -9,17 +9,16 @@ using UnityEngine;
 using Zenject;
 
 public class Database : MonoBehaviour {
+    [Inject] LevelBalanceLibrary _library = default;
+    
     string _dataPath;
 
     readonly List<Data> _pool = new List<Data>();
     readonly List<Data> _openedData = new List<Data>(); 
+    readonly Dictionary<int, LoadingData> _loadingDatas = new Dictionary<int, LoadingData>();
     
     const string SAVE_DATA_PATH = "data.dat";
     const string JSONS_PATH = "Jsons";
-
-    [Inject] LevelBalanceLibrary _library = default;
-
-    readonly Dictionary<int, LoadingData> _loadingDatas = new Dictionary<int, LoadingData>();
 
     struct LoadingData {
         public Data[] Datas;
@@ -137,21 +136,31 @@ public class Database : MonoBehaviour {
     }
     
     Data[] GetData(int dataAmount, int pointsPerData) {
+        var opened = _openedData.Where(d => d.PointCount == pointsPerData).ToArray();
+        
         var outData = new List<Data>();
-        if (_openedData.Count < dataAmount) {
+        // if cant find enough data in opened pool just load completed pool as well 
+        if (opened.Length < dataAmount) {
             _openedData.AddRange(_pool);
             ClearSavedData();
+            opened = _openedData.Where(d => d.PointCount == pointsPerData).ToArray();
         }
-
-        var ordered = _openedData.OrderBy(d => Mathf.Abs(pointsPerData - d.PointCount)).ToArray();
+        
+        // if still not enough data find nearest levels
+        if (opened.Length < dataAmount) {
+            opened = _openedData.OrderBy(d => Mathf.Abs(pointsPerData - d.PointCount)).ToArray();
+        }
+        
         for (int i = 0; i < dataAmount; i++) {
-            if (i < ordered.Length) {
-                var data = ordered[i];
+            // can be still not enough data. Just skip it
+            if (i < opened.Length) {
+                var data = opened[i];
                 outData.Add(data);
                 _pool.Add(data);
                 _openedData.Remove(data);
             }
         }
+        
         return outData.ToArray();
     }
 
