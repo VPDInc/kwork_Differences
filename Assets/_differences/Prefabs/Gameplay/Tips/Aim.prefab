@@ -472,7 +472,11 @@ MonoBehaviour:
   _plusGroup: {fileID: 3931698154968280746}
   _amountGroup: {fileID: 3931698155954674206}
   _alwaysOpenStore: 0
-  _aimPrefab: {fileID: -5015259583568727708, guid: 65fc9042429a64e4a98ab88277300f7f,
+  _aimPrefabRect: {fileID: -5015259583568727708, guid: 65fc9042429a64e4a98ab88277300f7f,
+    type: 3}
+  _aimPrefabCircle: {fileID: 6359830872830591299, guid: 51e1ff675fa79462685bf0425cc0eeaf,
+    type: 3}
+  _effectTrailEffect: {fileID: 3964921415186400942, guid: a35da156772f1294ea9439b037e8b307,
     type: 3}
 --- !u!1 &3931698156418784681
 GameObject:
@@ -3026,7 +3030,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd862a6558f1d3b41809620acc960074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fxTransform: {fileID: 0}
   _topPoint: 214
   _botPoint: -214
   _duration: 0.5
+  _scaleModifier: 1.1

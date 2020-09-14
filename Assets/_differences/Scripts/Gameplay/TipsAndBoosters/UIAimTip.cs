@@ -13,7 +13,9 @@ using UnityEngine.UI;
 using Zenject;
 
 public class UIAimTip : Tip {
-    [SerializeField] AimVisual _aimPrefab = default;
+    [SerializeField] AimVisual _aimPrefabRect = default;
+    [SerializeField] AimVisual _aimPrefabCircle = default;
+
     [SerializeField] UITrailEffect _effectTrailEffect = default;
 
     [Inject] UIGameplay _gameplay = default;
@@ -78,7 +80,8 @@ public class UIAimTip : Tip {
 
     void CreateAim(Point point, Image image) {
         var effect = Instantiate(_effectTrailEffect, transform);
-        var handler = Instantiate(_aimPrefab);
+        var prefab = point.Shape == Shape.Rectangle ? _aimPrefabRect : _aimPrefabCircle;
+        var handler = Instantiate(prefab);
         handler.Id = point.Number;
         _aims.Add(handler);
         var handlerRect = handler.GetComponent<RectTransform>();
