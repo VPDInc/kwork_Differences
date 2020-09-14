@@ -31,19 +31,26 @@ public class UICoinShopView : MonoBehaviour {
     }
 
     void Start() {
-        InAppPurchasing.InitializePurchasing();
-        
         InAppPurchasing.PurchaseCompleted += PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed += PurchaseFailedHandler;
-
+        InAppPurchasing.InitializeSucceeded += OnInitHandler;
+        
         _softCurrency = _currencyManager.GetCurrency(SOFT_CURRENCY_ID);
         
-        SetupOffers();
+        InAppPurchasing.InitializePurchasing();
+        
+        if (InAppPurchasing.IsInitialized())
+            SetupOffers();
     }
 
     void OnDestroy() {
         InAppPurchasing.PurchaseCompleted -= PurchaseCompletedHandler;
         InAppPurchasing.PurchaseFailed -= PurchaseFailedHandler;
+        InAppPurchasing.InitializeSucceeded -= OnInitHandler;
+    }
+
+    void OnInitHandler() {
+        SetupOffers();
     }
 
     void SetupTrailEffect(int coinsAmount, Transform startTransform, RectTransform targetTransform) {

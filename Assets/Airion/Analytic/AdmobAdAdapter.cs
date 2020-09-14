@@ -61,13 +61,15 @@ public class AdmobAdAdapter : AdAdapter {
             var map = status.getAdapterStatusMap();
             foreach (var m in map) {
                 Log($"initialized with status {m.Key} {m.Value.Description} {m.Value.InitializationState}");
+                _rewardedAd = CreateAndLoad();
             }
         });
         
-        _rewardedAd = CreateAndLoad();
     }
 
     RewardedAd CreateAndLoad() {
+        Log("Try to load rewarded ad");
+        
         var rewardedAd = new RewardedAd(_rewardedVideoID);
         
         AdRequest request = new AdRequest.Builder().Build();
