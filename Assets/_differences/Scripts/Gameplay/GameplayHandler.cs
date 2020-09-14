@@ -109,7 +109,9 @@ public class GameplayHandler : MonoBehaviour {
     public void Pause() {
         _timer.Pause();
         _middleScreen.Show(() => {
-            _pause.Show(_uiGameplay.ClosedPoints.Length);
+            var totalPoints = _levelsData.Sum(d => d.PointCount);
+            var opened = _pictureResults.Sum(r => r.DifferencePoints.Sum(d => d.IsOpen ? 1 : 0));
+            _pause.Show(totalPoints - opened);
         });
     }
     
