@@ -2335,7 +2335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce1b41b92369f460b9dd49fb5dc723a5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timePerOneDifference: 16
+  _timePerOneDifference: 30
   _addTimeAfterOver: 25
   _config: {fileID: 11400000, guid: 9258a026e876e40da9be508016937eb0, type: 2}
   _uiPictureCountBar: {fileID: 1790927311}
