@@ -40378,6 +40378,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b88d97414396aa649a7c67a12d551b09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _uiTrailEffectPrefab: {fileID: 3822344273060951225, guid: 9fadbaf57484a684caf768c96a918c34,
+    type: 3}
+  _fxTarget: {fileID: 1265922118}
+  _pauseBetweenSpawns: 0.02
+  _fxAmount: 10
   _costEnergyPack1: 300
   _energyAmountPack1: 10
   _offerElementPack1: {fileID: 1689475390}
@@ -42473,6 +42478,12 @@ MonoBehaviour:
 --- !u!1 &1265922117 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6174886434944088303, guid: 796090f54d363c345b7e5333e1537704,
+    type: 3}
+  m_PrefabInstance: {fileID: 602327192}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &1265922118 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6174886434944088302, guid: 796090f54d363c345b7e5333e1537704,
     type: 3}
   m_PrefabInstance: {fileID: 602327192}
   m_PrefabAsset: {fileID: 0}
@@ -62283,7 +62294,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -0.000943128, y: 0}
+  m_AnchoredPosition: {x: 0.00064237387, y: 0}
   m_SizeDelta: {x: 0, y: 832}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1942416868
@@ -66681,7 +66692,7 @@ MonoBehaviour:
         AudioClip: {fileID: 0}
         OutputAudioMixerGroup: {fileID: 0}
     PresetCategory: Fade
-    PresetName: FoldVertical
+    PresetName: OutNormal
   HideProgressor: {fileID: 0}
   LoopBehavior:
     Animation:
