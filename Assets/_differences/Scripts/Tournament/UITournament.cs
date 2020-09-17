@@ -26,7 +26,8 @@ public class UITournament : MonoBehaviour {
     [SerializeField] ScrollRect _scroll = default;
     [SerializeField] GameObject _toMyButton = default;
     [SerializeField] GameObject _toLeadersButton = default;
-
+    [SerializeField] UIView _helpView = default;
+    
     [Inject] Tournament _tournament = default;
     [Inject] DiContainer _container = default;
     [Inject] PlayerInfoController _infoController = default;
@@ -72,6 +73,12 @@ public class UITournament : MonoBehaviour {
     void Update() {
         if (Time.time - _lastUpdateTimestamp >= UPDATE_TIMER_EVERY_SECONDS) {
             UpdateTimer();
+        }
+
+        if (Input.GetMouseButtonDown(0)) {
+            if (_helpView.IsVisible && !_helpView.IsShowing) {
+                _helpView.Hide();
+            }
         }
     }
 

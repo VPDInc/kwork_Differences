@@ -72122,7 +72122,7 @@ MonoBehaviour:
     ButtonAnimationType: 0
     DeselectButton: 0
     DisableInterval: 0
-    Enabled: 1
+    Enabled: 0
     LoadSelectedPresetAtRuntime: 0
     OnTrigger:
       AnimatorEvents: []
@@ -77639,6 +77639,7 @@ MonoBehaviour:
   _scroll: {fileID: 1302979808367933722}
   _toMyButton: {fileID: 1302979806885175666}
   _toLeadersButton: {fileID: 4885136617675152400}
+  _helpView: {fileID: 8067587669944663968}
 --- !u!114 &1302979807048824262
 MonoBehaviour:
   m_ObjectHideFlags: 0
