@@ -676,6 +676,7 @@ PlayerSettings:
   ps4ShareFilePath: 
   ps4ShareOverlayImagePath: 
   ps4PrivacyGuardImagePath: 
+  ps4ExtraSceSysFile: 
   ps4NPtitleDatPath: 
   ps4RemotePlayKeyAssignment: -1
   ps4RemotePlayKeyMappingDir: 
@@ -718,6 +719,8 @@ PlayerSettings:
   ps4disableAutoHideSplash: 0
   ps4videoRecordingFeaturesUsed: 0
   ps4contentSearchFeaturesUsed: 0
+  ps4CompatibilityPS5: 0
+  ps4GPU800MHz: 1
   ps4attribEyeToEyeDistanceSettingVR: 0
   ps4IncludedModules: []
   ps4attribVROutputEnabled: 0
@@ -752,6 +755,7 @@ PlayerSettings:
     27: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     28: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     29: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
+    30: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
   platformArchitecture: {}
   scriptingBackend:
     Android: 1

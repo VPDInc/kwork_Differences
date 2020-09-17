@@ -9,6 +9,9 @@ using UnityEngine;
 using Zenject;
 
 public class Database : MonoBehaviour {
+    [SerializeField] int _firstLevels = 5;
+    [SerializeField] string[] _firstIds = default;
+    
     [Inject] LevelBalanceLibrary _library = default;
     
     string _dataPath;
@@ -41,11 +44,17 @@ public class Database : MonoBehaviour {
     }
 
     public void Load(int levelNum) {
+        Data[] datas = null;
         var balanceInfo = _library.GetLevelBalanceInfo(levelNum);
-        var datas = GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
+        if (levelNum <= _firstLevels) {
+            datas = GetSimplifiedData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
+        } else {
+            datas = GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
+        }
+        
         StartLoading(levelNum, datas);
     }
-    
+
     void LoadAllData() {
         var completed = LoadClosedLevels();
         var jsons = Resources.LoadAll<TextAsset>(JSONS_PATH);
@@ -133,6 +142,35 @@ public class Database : MonoBehaviour {
         
         SaveLevels(_loadingDatas[levelNum].Datas);
         return _loadingDatas[levelNum].Pictures;
+    }
+    
+    Data[] GetSimplifiedData(int dataAmount, int pointsPerData) {
+        var opened = _openedData.Where(d => _firstIds.Contains(d.Id)).ToArray();
+        
+        var outData = new List<Data>();
+        // if cant find enough data in opened pool just load completed pool as well 
+        if (opened.Length < dataAmount) {
+            _openedData.AddRange(_pool);
+            ClearSavedData();
+            opened = _openedData.Where(d => _firstIds.Contains(d.Id)).ToArray();
+        }
+        
+        // if still not enough data find nearest levels
+        if (opened.Length < dataAmount) {
+            opened = _openedData.OrderBy(d => Mathf.Abs(pointsPerData - d.PointCount)).ToArray();
+        }
+        
+        for (int i = 0; i < dataAmount; i++) {
+            // can be still not enough data. Just skip it
+            if (i < opened.Length) {
+                var data = opened[i];
+                outData.Add(data);
+                _pool.Add(data);
+                _openedData.Remove(data);
+            }
+        }
+        
+        return outData.ToArray();
     }
     
     Data[] GetData(int dataAmount, int pointsPerData) {
