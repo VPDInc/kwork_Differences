@@ -124,7 +124,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.1.1
+  bundleVersion: 0.2
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -172,7 +172,7 @@ PlayerSettings:
     iPhone: com.medianagames.findscapes
   buildNumber:
     iPhone: 1
-  AndroidBundleVersionCode: 1
+  AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 29
   AndroidPreferredInstallLocation: 1
@@ -257,7 +257,7 @@ PlayerSettings:
   AndroidEnableTango: 0
   androidEnableBanner: 1
   androidUseLowAccuracyLocation: 0
-  androidUseCustomKeystore: 1
+  androidUseCustomKeystore: 0
   m_AndroidBanners:
   - width: 320
     height: 180
@@ -755,7 +755,7 @@ PlayerSettings:
     27: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     28: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     29: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
-    30: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP
+    30: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP;dUI_MANAGER;dUI_TextMeshPro
   platformArchitecture: {}
   scriptingBackend:
     Android: 1

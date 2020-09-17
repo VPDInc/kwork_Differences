@@ -116,9 +116,16 @@ public class UIZoomTip : Tip {
         var touch2 = Input.GetTouch(1);
 
         if (touch1.phase == TouchPhase.Began || touch2.phase == TouchPhase.Began) {
-            _startDistance = Vector3.Distance(touch1.position, touch2.position);
+            var delta = touch1.position - touch2.position;
+            delta.x /= (float)Screen.width;
+            delta.x /= (float)Screen.height;
+            _startDistance = delta.magnitude;
         } else {
-            var currentDistance = Vector2.Distance(touch1.position, touch2.position);
+            // var currentDistance = Vector2.Distance(touch1.position, touch2.position);
+            var delta = touch1.position - touch2.position;
+            delta.x /= (float)Screen.width;
+            delta.x /= (float)Screen.height;
+            var currentDistance = delta.magnitude;
             var distanceDelta = currentDistance - _startDistance;
             _startDistance = currentDistance;
             Zoom(distanceDelta * _sensitivity);

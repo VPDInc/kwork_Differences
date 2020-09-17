@@ -88,10 +88,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd862a6558f1d3b41809620acc960074, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _fxTransform: {fileID: 0}
   _topPoint: 214
   _botPoint: -214
   _duration: 0.5
+  _scaleModifier: 1.1
 --- !u!114 &440606963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -520,7 +520,7 @@ MonoBehaviour:
   _amountGroup: {fileID: 5288893063229386818}
   _alwaysOpenStore: 0
   _scaleIncreaseFactor: 2
-  _sensitivity: 0.01
+  _sensitivity: 0.05
   _durationSec: 20
   _timeText: {fileID: 7951684243110149877}
   _timeGroup: {fileID: 2200700772212315765}
