@@ -756,7 +756,8 @@ PlayerSettings:
     28: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     29: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     30: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP;dUI_MANAGER;dUI_TextMeshPro
-  platformArchitecture: {}
+  platformArchitecture:
+    iPhone: 1
   scriptingBackend:
     Android: 1
   il2cppCompilerConfiguration: {}
