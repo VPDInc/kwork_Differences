@@ -11,10 +11,14 @@ using Zenject;
 
 public class PicturePanel : MonoBehaviour {
     [SerializeField] UIPictureLayout[] _pictureLayout = default;
+    [SerializeField] Sprite _horizontalDummy = default;
+    [SerializeField] Sprite _verticalDummy = default;
 
     [Inject] GameplayController _gameplay = default;
 
     UIPictureLayout _currentLayout = default;
+    public Sprite HorizontalDummy => _horizontalDummy;
+    public Sprite VerticalDummy => _verticalDummy;
 
     void Start() {
         _gameplay.Initialized += OnInitialized;
@@ -52,7 +56,7 @@ public class PicturePanel : MonoBehaviour {
     public void FillByImages(PictureResult[] pictureResults) {
         _currentLayout.Reset();
         foreach (var pictureResult in pictureResults) {
-            _currentLayout.SetPicture(pictureResult.Orientation, pictureResult.Picture1);
+            _currentLayout.SetPicture(pictureResult.Orientation, pictureResult.Picture1, pictureResult.IsCompleted);
         }
     }
 
