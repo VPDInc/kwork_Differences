@@ -40319,6 +40319,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _soundName: click
+--- !u!224 &1097822145 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6174886434944088302, guid: 796090f54d363c345b7e5333e1537704,
+    type: 3}
+  m_PrefabInstance: {fileID: 693963746}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1117112827
 GameObject:
   m_ObjectHideFlags: 0
@@ -61523,6 +61529,12 @@ MonoBehaviour:
   _differencesCounterPrefab: {fileID: 1031182575015982816, guid: 90a40c7066934d04f942f4fdcda8270d,
     type: 3}
   _secondsTillStart: 3
+  _uiTrailEffectPrefab: {fileID: 3822344273060951225, guid: 9fadbaf57484a684caf768c96a918c34,
+    type: 3}
+  _fxStart: {fileID: 1097822145}
+  _fxTarget: {fileID: 263420874}
+  _pauseBetweenSpawns: 0.02
+  _fxAmount: 5
 --- !u!114 &1916572165
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -67042,7 +67054,7 @@ MonoBehaviour:
     type: 3}
   _fxStartTransform: {fileID: 1907554935}
   _fxTargetTransform: {fileID: 529194729}
-  _coinsFxAmount: 10
+  _coinsFxAmount: 5
   _pauseBetweenSpawns: 0.02
 --- !u!114 &2054858795
 MonoBehaviour:
