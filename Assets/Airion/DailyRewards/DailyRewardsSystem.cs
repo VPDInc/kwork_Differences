@@ -20,7 +20,7 @@ namespace Airion.DailyRewards {
       [SerializeField] Reward[] _rewards = default;
       [SerializeField] bool _isDebugEnabled = true;
 
-      DateTime Now => _isDebugEnabled ? _debugNowDateTime : DateTime.Now;
+      DateTime Now => _isDebugEnabled ? _debugNowDateTime : DateTime.Today;
       int _currentDay = 0;
       DateTime _lastOpenTimestamp;
       DateTime _debugNowDateTime;
@@ -33,7 +33,7 @@ namespace Airion.DailyRewards {
       const string IS_OPENED_TODAY_PREFS = "is_opened_today";
       
       IEnumerator Start() {
-         _debugNowDateTime = DateTime.Now;
+         _debugNowDateTime = DateTime.Today;
          yield return new WaitForEndOfFrame();
          Initialize();
       }

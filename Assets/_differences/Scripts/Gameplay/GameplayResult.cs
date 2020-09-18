@@ -24,6 +24,7 @@ public struct PictureResult {
     public int StarsCollected;
     public Orientation Orientation;
     public (Sprite, Sprite) Pictures => (Picture1, Picture2);
+    public bool IsCompleted => DifferencePoints.All(p => p.IsOpen);
 }
 
 public struct DifferencePoint {

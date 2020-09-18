@@ -67465,8 +67465,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.2760688, y: 0.49611998}
   m_AnchorMax: {x: 0.36067116, y: 0.5946284}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -100, y: 15}
+  m_SizeDelta: {x: -35.660805, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2093285360
 MonoBehaviour:
@@ -68137,7 +68137,7 @@ MonoBehaviour:
     ButtonAnimationType: 0
     DeselectButton: 0
     DisableInterval: 0
-    Enabled: 1
+    Enabled: 0
     LoadSelectedPresetAtRuntime: 0
     OnTrigger:
       AnimatorEvents: []
@@ -85715,6 +85715,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1978258333019933189, guid: 7ad3a1f4fd993459aa09565004e1c7f7,
+        type: 3}
+      propertyPath: _isDebugEnabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1978258333019933195, guid: 7ad3a1f4fd993459aa09565004e1c7f7,
         type: 3}
       propertyPath: m_Name
@@ -91741,13 +91746,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.003921569}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 1a4e7f9d317f7f34280286c28ec68409, type: 3}
+  m_Sprite: {fileID: 0}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1

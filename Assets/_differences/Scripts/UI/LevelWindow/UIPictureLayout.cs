@@ -13,12 +13,18 @@ public class UIPictureLayout : MonoBehaviour {
     int _currentHorizontalPictures = 0;
     int _currentVerticalPictures = 0;
 
-    public void SetPicture(Orientation orientation, Sprite sprite) {
+    PicturePanel _panel;
+
+    void Awake() {
+        _panel = GetComponentInParent<PicturePanel>();
+    }
+
+    public void SetPicture(Orientation orientation, Sprite sprite, bool isCompleted) {
         if (orientation == Orientation.Horizontal) {
-            _horizontalPictures[_currentHorizontalPictures].sprite = sprite;
+            _horizontalPictures[_currentHorizontalPictures].sprite = isCompleted ? sprite : _panel.HorizontalDummy;
             _currentHorizontalPictures++;
         } else {
-            _verticalPictures[_currentVerticalPictures].sprite = sprite;
+            _verticalPictures[_currentVerticalPictures].sprite = isCompleted ? sprite : _panel.VerticalDummy;
             _currentVerticalPictures++;
         }
     }
