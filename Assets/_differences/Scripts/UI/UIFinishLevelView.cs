@@ -66,7 +66,7 @@ public class UIFinishLevelView : MonoBehaviour {
 
         if (gameplayResult.IsCompleted) {
             SetupFlyingCurrencies(gameplayResult.TotalStarsCollected, _energyController.PlayCost, coinReward);
-            StartCoroutine(TryRequestReateUs());
+            StartCoroutine(TryRequestRateUs());
             _particleSystem.Play();
         }
     }
@@ -81,10 +81,10 @@ public class UIFinishLevelView : MonoBehaviour {
         }
     }
 
-    IEnumerator TryRequestReateUs() {
+    IEnumerator TryRequestRateUs() {
         yield return new WaitForSeconds(2);
         if (!StoreReview.IsRatingRequestDisabled()) {
-            if (_levelController.LastEpisodeNum >= 3) {
+            if (_levelController.LastLevelNum >= 3) {
                 if (StoreReview.CanRequestRating())
                     StoreReview.RequestRating();
             }
