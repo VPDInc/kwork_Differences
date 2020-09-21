@@ -77582,6 +77582,7 @@ GameObject:
   - component: {fileID: 1302979807048824260}
   - component: {fileID: 1489201239}
   - component: {fileID: 1302979807048824254}
+  - component: {fileID: 1302979807048824255}
   m_Layer: 5
   m_Name: View - Tournament
   m_TagString: Untagged
@@ -77624,10 +77625,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _components:
   - {fileID: 1302979807048824260}
+  - {fileID: 1302979807048824255}
   _identifier: 
   _useSceneContext: 1
   _context: {fileID: 0}
   _bindType: 0
+--- !u!114 &1302979807048824255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302979807048824252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f857bffa4189c4bff88aec0d6133e1a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1302979807048824260
 MonoBehaviour:
   m_ObjectHideFlags: 0
