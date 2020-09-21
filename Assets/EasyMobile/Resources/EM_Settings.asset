@@ -327,11 +327,11 @@ MonoBehaviour:
       mCancelButtonText: Cancel
       mFeedbackButtonText: Send Feedback
     mMinimumAcceptedStars: 1
-    mSupportEmail: 
+    mSupportEmail: medianagames@gmail.com
     mIosAppId: 1530032494
     mAnnualCap: 12
     mDelayAfterInstallation: 0
-    mCoolingOffPeriod: 1
+    mCoolingOffPeriod: 0
     mIgnoreContraintsInDevelopment: 1
   mSharingSettings:
     mAndroidPermissions:
@@ -374,5 +374,5 @@ MonoBehaviour:
   mIsGameServiceModuleEnable: 0
   mIsNotificationModuleEnable: 0
   mIsSharingModuleEnable: 1
-  mActiveModuleIndex: 3
+  mActiveModuleIndex: 8
   mIsSelectingModule: 0
