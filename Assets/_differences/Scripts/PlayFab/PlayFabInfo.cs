@@ -23,6 +23,9 @@ public class PlayFabInfo : MonoBehaviour {
         _playFabLogin.PlayFabLogged += GetAccountInfo;
         _playFabFacebook.FacebookLinked += OnFacebookLinked;
         _playFabFacebook.FacebookUnlinked += OnFacebookUnlinked;
+        
+        if (_playFabLogin.IsLogged)
+            GetAccountInfo();
     }
 
     void OnDestroy() {
@@ -61,6 +64,7 @@ public class PlayFabInfo : MonoBehaviour {
 
     #region GetAccountInfo
     void GetAccountInfo() {
+        Debug.Log("Try get account info");
         var accountInfoRequest = new GetAccountInfoRequest();
         PlayFabClientAPI.GetAccountInfo(accountInfoRequest, AccountRequestSuccess, AccountRequestError);
     }
