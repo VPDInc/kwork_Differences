@@ -104,13 +104,12 @@ public class LevelController : Singleton<LevelController> {
     
     void OnCompleted(GameplayResult gameplayResult) {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
-        var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
         _coinCurrency.Earn(coinsToEarn);
         Analytic.CurrencyEarn(coinsToEarn, "level-completed", LastLevelNum.ToString());
-        _ratingCurrency.Earn(ratingToEarn);
-        _tournament.AddScore(ratingToEarn);
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
         if (gameplayResult.IsCompleted) {
+            var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
+            _tournament.AddScore(ratingToEarn);
             // Cause current level num + 1 already loaded and we just need to load level after that
             _database.Load(_lastLevelNum + 2);
             CompleteLevel(_lastLevelNum);

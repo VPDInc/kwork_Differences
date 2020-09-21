@@ -15,6 +15,7 @@ public class UIZoomTip : Tip {
     [SerializeField] float _durationSec = 20;
     [SerializeField] TextMeshProUGUI _timeText = default;
     [SerializeField] GameObject _timeGroup = default;
+    [SerializeField] float _movingSensitivity = 1.3f;
     
     [Inject] UIGameplay _gameplay = default;
     [Inject] UITimer _timer = default;
@@ -101,7 +102,7 @@ public class UIZoomTip : Tip {
         }
         
         if (Input.GetMouseButton(0)) {
-            var delta = Input.mousePosition - _startPos;
+            var delta = (Input.mousePosition - _startPos);
             var images = _gameplay.CurrentImages;
 
             Move(images.Item1, delta);
@@ -163,7 +164,7 @@ public class UIZoomTip : Tip {
         var widthLimit = rect.rect.width * (_currentZoom - 1) * 0.5f;
         var heightLimit = rect.rect.height * (_currentZoom - 1) * 0.5f;
         
-        pos += new Vector2(delta.x, delta.y);
+        pos += new Vector2(delta.x, delta.y) * _movingSensitivity;
         pos.x = Mathf.Clamp(pos.x, -widthLimit, widthLimit);
         pos.y = Mathf.Clamp(pos.y, -heightLimit, heightLimit);
 

@@ -524,6 +524,7 @@ MonoBehaviour:
   _durationSec: 20
   _timeText: {fileID: 7951684243110149877}
   _timeGroup: {fileID: 2200700772212315765}
+  _movingSensitivity: 1.8
 --- !u!1 &5288893063967366677
 GameObject:
   m_ObjectHideFlags: 0
