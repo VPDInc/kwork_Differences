@@ -3020,8 +3020,8 @@ MonoBehaviour:
     type: 3}
   _coinsFlyingPrefab: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
     type: 3}
-  _pauseBetweenSpawns: 0.02
-  _amountDivider: 5
+  _pauseBetweenSpawns: 0.1
+  _fxAmount: 3
 --- !u!222 &73155808
 CanvasRenderer:
   m_ObjectHideFlags: 0

@@ -128,5 +128,16 @@ PrefabInstance:
       propertyPath: m_PixelsPerUnitMultiplier
       value: 0.01
       objectReference: {fileID: 0}
+    - target: {fileID: 5724613263765724733, guid: 65fc9042429a64e4a98ab88277300f7f,
+        type: 3}
+      propertyPath: m_PixelsPerUnitMultiplier
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 5724613263765724733, guid: 65fc9042429a64e4a98ab88277300f7f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 010b17080e38b8b40b00f91223e7dcd6,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 65fc9042429a64e4a98ab88277300f7f, type: 3}

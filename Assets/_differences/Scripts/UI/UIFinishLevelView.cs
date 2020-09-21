@@ -42,7 +42,7 @@ public class UIFinishLevelView : MonoBehaviour {
     [SerializeField] UITrailEffect _energyFlyingPrefab = default;
     [SerializeField] UITrailEffect _coinsFlyingPrefab = default;
     [SerializeField] float _pauseBetweenSpawns = 1f;
-    [SerializeField] float _amountDivider = 5;
+    [SerializeField] float _fxAmount = 5;
 
     [Inject] LevelController _levelController = default;
     [Inject] EnergyController _energyController = default;
@@ -93,10 +93,10 @@ public class UIFinishLevelView : MonoBehaviour {
 
     void SetupFlyingCurrencies(int medalAmount, int energyAmount, int coinsAmount) {
         var seq = DOTween.Sequence();
-        seq.AppendInterval(2);
+        seq.AppendInterval(3);
         seq.AppendCallback(() => {
                                // var pauseBetweenSpawn = _pauseBetweenSpawns / medalAmount;
-                               for (int i = 0; i < medalAmount / _amountDivider; i++) {
+                               for (int i = 0; i < _fxAmount; i++) {
                                    var medalFx = Instantiate(_medalFlyingPrefab, _medalStartTransform);
                                    medalFx.Setup(_medalEndTransform.position, _pauseBetweenSpawns * i);
                                }
@@ -105,7 +105,7 @@ public class UIFinishLevelView : MonoBehaviour {
         // seq.AppendInterval(_pauseBetweenSpawns);
         seq.AppendCallback(() => {
                                // var pauseBetweenSpawn = _pauseBetweenSpawns / energyAmount;
-                               for (int i = 0; i < energyAmount / _amountDivider; i++) {
+                               for (int i = 0; i < _fxAmount; i++) {
                                    var energyFx = Instantiate(_energyFlyingPrefab, _energyStartTransform);
                                    energyFx.Setup(_energyEndTransform.position, _pauseBetweenSpawns * i);
                                }
@@ -114,7 +114,7 @@ public class UIFinishLevelView : MonoBehaviour {
         // seq.AppendInterval(_pauseBetweenSpawns);
         seq.AppendCallback(() => {
                                // var pauseBetweenSpawn = _pauseBetweenSpawns / coinsAmount;
-                               for (int i = 0; i < coinsAmount / _amountDivider; i++) {
+                               for (int i = 0; i < _fxAmount; i++) {
                                    var coinFx = Instantiate(_coinsFlyingPrefab, _coinsStartTransform);
                                    coinFx.Setup(_coinsEndTransform.position, _pauseBetweenSpawns * i);
                                }
