@@ -78217,6 +78217,7 @@ GameObject:
   - component: {fileID: 1302979807048824260}
   - component: {fileID: 1489201239}
   - component: {fileID: 1302979807048824254}
+  - component: {fileID: 1302979807048824255}
   m_Layer: 5
   m_Name: View - Tournament
   m_TagString: Untagged
@@ -78259,10 +78260,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _components:
   - {fileID: 1302979807048824260}
+  - {fileID: 1302979807048824255}
   _identifier: 
   _useSceneContext: 1
   _context: {fileID: 0}
   _bindType: 0
+--- !u!114 &1302979807048824255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1302979807048824252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f857bffa4189c4bff88aec0d6133e1a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1302979807048824260
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78287,6 +78301,8 @@ MonoBehaviour:
   _toMyButton: {fileID: 1302979806885175666}
   _toLeadersButton: {fileID: 4885136617675152400}
   _helpView: {fileID: 8067587669944663968}
+  _viewport: {fileID: 1302979807959928435}
+  _arrow: {fileID: 1833445390}
 --- !u!114 &1302979807048824262
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78732,7 +78748,7 @@ MonoBehaviour:
   m_spriteAsset: {fileID: 0}
   m_tintAllSprites: 0
   m_StyleSheet: {fileID: 0}
-  m_TextStyleHashCode: 0
+  m_TextStyleHashCode: -1183493901
   m_overrideHtmlColors: 0
   m_faceColor:
     serializedVersion: 2
@@ -78744,9 +78760,9 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 0
-  m_HorizontalAlignment: 1
-  m_VerticalAlignment: 256
-  m_textAlignment: 514
+  m_HorizontalAlignment: 2
+  m_VerticalAlignment: 512
+  m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
   m_lineSpacing: 0
