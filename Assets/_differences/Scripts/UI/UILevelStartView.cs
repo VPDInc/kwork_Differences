@@ -90,7 +90,7 @@ public class UILevelStartView : MonoBehaviour {
         _timerSequence.AppendCallback(() => {
                                           SetupTrailEffect(_fxStart, _fxTarget);
                                       });
-        _timerSequence.AppendInterval(0.8f + _fxAmount * _pauseBetweenSpawns);
+        _timerSequence.AppendInterval(1 + _fxAmount * _pauseBetweenSpawns);
         _timerSequence.AppendCallback(() => {
                                           Hide();
                                           action?.Invoke();
