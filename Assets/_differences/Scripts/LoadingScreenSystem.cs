@@ -81,13 +81,16 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        while (!_playFabLogin.IsLogged && !_playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated) {
+        bool IsReady() => _playFabLogin.IsLogged && _playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated;
+
+        while (!IsReady()) {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
             yield return null;
         }
         
         _bar.SetProgress(1);
     }
+    
 
     void AsyncOnCompleted(AsyncOperation obj) {
         GameEventMessage.SendEvent(GAME_LOADED_EVENT_NAME);
