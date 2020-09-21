@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6174886434791152401}
   - component: {fileID: 6174886434791152366}
   - component: {fileID: 6174886434791152367}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BarMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -117,7 +117,8 @@ GameObject:
   - component: {fileID: 6174886434944088339}
   - component: {fileID: 6174886434944088341}
   - component: {fileID: 6174886434944088338}
-  m_Layer: 0
+  - component: {fileID: 792899300}
+  m_Layer: 5
   m_Name: EnergyBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2538,6 +2539,19 @@ MonoBehaviour:
   TargetLabel: 0
   TextLabel: {fileID: 0}
   TextMeshProLabel: {fileID: 0}
+--- !u!114 &792899300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6174886434944088303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86d0c9d1ea0c45468917c151ce8994d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _soundName: click
 --- !u!1 &6174886435026807655
 GameObject:
   m_ObjectHideFlags: 0
@@ -2549,7 +2563,7 @@ GameObject:
   - component: {fileID: 6174886435026807654}
   - component: {fileID: 6174886435026807659}
   - component: {fileID: 6174886435026807656}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: InfinityText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2572,7 +2586,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20.34, y: 8.8}
+  m_AnchoredPosition: {x: 20.339996, y: 8.799999}
   m_SizeDelta: {x: -124.052086, y: -46.999893}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6174886435026807659
@@ -2683,7 +2697,7 @@ GameObject:
   - component: {fileID: 6174886435438087828}
   - component: {fileID: 6174886435438087829}
   - component: {fileID: 6174886435438087826}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LabelText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2706,7 +2720,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20.34, y: 0.49993896}
+  m_AnchoredPosition: {x: 20.339996, y: 0.49993896}
   m_SizeDelta: {x: -124.05157, y: -46.999893}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6174886435438087828
@@ -2841,7 +2855,7 @@ GameObject:
   - component: {fileID: 6174886435489480768}
   - component: {fileID: 6174886435489480770}
   - component: {fileID: 6174886435489480771}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Heart
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5240,6 +5254,19 @@ MonoBehaviour:
   TargetLabel: 0
   TextLabel: {fileID: 0}
   TextMeshProLabel: {fileID: 0}
+--- !u!114 &1891536273
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6174886435505321391}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86d0c9d1ea0c45468917c151ce8994d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _soundName: click
 --- !u!1 &6174886435567885381
 GameObject:
   m_ObjectHideFlags: 0
@@ -5252,7 +5279,8 @@ GameObject:
   - component: {fileID: 6174886435567885385}
   - component: {fileID: 6174886435567885382}
   - component: {fileID: 6174886435567885383}
-  m_Layer: 0
+  - component: {fileID: 169287584}
+  m_Layer: 5
   m_Name: PlusButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5369,6 +5397,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &169287584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6174886435567885381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86d0c9d1ea0c45468917c151ce8994d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _soundName: click
 --- !u!1 &6174886435954760130
 GameObject:
   m_ObjectHideFlags: 0
@@ -5381,7 +5422,7 @@ GameObject:
   - component: {fileID: 6174886435954760134}
   - component: {fileID: 6174886435954760135}
   - component: {fileID: 6174886435954760132}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5468,7 +5509,8 @@ GameObject:
   - component: {fileID: 6174886436109607007}
   - component: {fileID: 6174886436109607004}
   - component: {fileID: 6174886436109607005}
-  m_Layer: 0
+  - component: {fileID: 1789974775}
+  m_Layer: 5
   m_Name: PlusButton (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5585,6 +5627,19 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &1789974775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6174886436109607003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b86d0c9d1ea0c45468917c151ce8994d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _soundName: click
 --- !u!1 &7730573383260366899
 GameObject:
   m_ObjectHideFlags: 0
@@ -5594,7 +5649,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6078076417744480082}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: CurrenciesPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5633,6 +5688,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: UISoft
+      objectReference: {fileID: 0}
+    - target: {fileID: 2151290243784277896, guid: de84cac34306a43a2911422fcb01b48f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2151290243784277897, guid: de84cac34306a43a2911422fcb01b48f,
         type: 3}
@@ -5692,7 +5752,7 @@ PrefabInstance:
     - target: {fileID: 2151290243784277897, guid: de84cac34306a43a2911422fcb01b48f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -217
+      value: -260
       objectReference: {fileID: 0}
     - target: {fileID: 2151290243784277897, guid: de84cac34306a43a2911422fcb01b48f,
         type: 3}
@@ -5838,7 +5898,7 @@ PrefabInstance:
     - target: {fileID: 2151290245075788874, guid: de84cac34306a43a2911422fcb01b48f,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 28.4
+      value: 28.400002
       objectReference: {fileID: 0}
     - target: {fileID: 2151290245075788874, guid: de84cac34306a43a2911422fcb01b48f,
         type: 3}
@@ -5879,6 +5939,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2151290245075788877, guid: de84cac34306a43a2911422fcb01b48f,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: de84cac34306a43a2911422fcb01b48f, type: 3}
