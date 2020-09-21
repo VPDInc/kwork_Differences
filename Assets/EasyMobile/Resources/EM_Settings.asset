@@ -331,7 +331,7 @@ MonoBehaviour:
     mIosAppId: 1530032494
     mAnnualCap: 12
     mDelayAfterInstallation: 0
-    mCoolingOffPeriod: 0
+    mCoolingOffPeriod: 1
     mIgnoreContraintsInDevelopment: 1
   mSharingSettings:
     mAndroidPermissions:
