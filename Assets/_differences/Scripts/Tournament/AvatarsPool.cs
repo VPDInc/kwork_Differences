@@ -15,21 +15,6 @@ public class AvatarsPool : MonoBehaviour {
 
     public void SetAvatarAsync(LeaderboardPlayer player, Action<Sprite> callback) {
         StartCoroutine(SetAvatarAsyncRoutine(player, callback));
-        // if (_avatarsPool.ContainsKey(player.Id)) {
-        //     var status = _avatarsPool[player.Id];
-        //     if (!status.Item1) {
-        //         StartCoroutine(WaitAndFill())
-        //     } else {
-        //         callback?.Invoke(status.Item2);
-        //     }
-        // }
-        // _winnerAvatar1.sprite = TryGetAvatarById(winner.Id);
-        // if (!string.IsNullOrWhiteSpace(winner.Facebook)) {
-        //     FB.API($"{winner.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
-        //         res => {
-        //             _winnerAvatar1.sprite = Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2());
-        //         });
-        // } 
     }
 
     IEnumerator SetAvatarAsyncRoutine(LeaderboardPlayer player, Action<Sprite> callback) {

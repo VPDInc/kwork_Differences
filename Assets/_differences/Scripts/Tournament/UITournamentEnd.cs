@@ -7,8 +7,6 @@ using Airion.Extensions;
 
 using Doozy.Engine.UI;
 
-using Facebook.Unity;
-
 using UnityEngine;
 
 using Zenject;
@@ -22,7 +20,6 @@ public class UITournamentEnd : MonoBehaviour {
     [SerializeField] UIView _loadingView = default;
 
     [Inject] Tournament _tournament = default;
-    [Inject] PlayerInfoController _infoController = default;
     [Inject] DiContainer _container = default;
     [Inject] UIReceiveTournamentReward _receiveReward = default;
     [Inject] TournamentRewards _rewards = default;
@@ -155,77 +152,19 @@ public class UITournamentEnd : MonoBehaviour {
     void SetIcons() {
         if (_winner1.Player != null) {
             _avatarsPool.SetAvatarAsync(_winner1.Player, (sprite) => { _winner1.PlayerIcon.sprite = sprite;});
-            // if (_winner1.Player.IsMe) {
-            //     _winner1.PlayerIcon.sprite = _infoController.PlayerIcon;
-            // } else {
-            //     _winner1.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner1.Player.Id);
-            //     if (!string.IsNullOrWhiteSpace(_winner1.Player.Facebook)) {
-            //         FB.API($"{_winner1.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
-            //                res => {
-            //                    _winner1.PlayerIcon.sprite =
-            //                        Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2());
-            //                });
-            //     }
-            // }
         }
 
         if (_winner2.Player != null) {
             _avatarsPool.SetAvatarAsync(_winner2.Player, (sprite) => { _winner2.PlayerIcon.sprite = sprite;});
-
-            // if (_winner2.Player.IsMe) {
-            //     _winner2.PlayerIcon.sprite = _infoController.PlayerIcon;
-            // } else {
-            //     _winner2.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner2.Player.Id);
-            //     if (!string.IsNullOrWhiteSpace(_winner2.Player.Facebook)) {
-            //         FB.API($"{_winner2.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
-            //                res => {
-            //                    _winner2.PlayerIcon.sprite =
-            //                        Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2());
-            //                });
-            //     }
-            // }
         }
 
         if (_winner3.Player != null) {
             _avatarsPool.SetAvatarAsync(_winner3.Player, (sprite) => { _winner3.PlayerIcon.sprite = sprite;});
-
-            // if (_winner3.Player.IsMe) {
-            //     _winner3.PlayerIcon.sprite = _infoController.PlayerIcon;
-            // } else {
-            //     _winner3.PlayerIcon.sprite = _uiTournament.TryGetAvatarById(_winner3.Player.Id);
-            //
-            //     if (!string.IsNullOrWhiteSpace(_winner3.Player.Facebook)) {
-            //         FB.API($"{_winner3.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
-            //                res => {
-            //                    _winner3.PlayerIcon.sprite =
-            //                        Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2());
-            //                });
-            //     }
-            // }
         }
 
         foreach (var pair in _leaderboardElements) {
             var element = pair.Value;
             _avatarsPool.SetAvatarAsync(element.Player, element.SetIcon);
-            // var id = element.Player.Id;
-            // if (element.Player.IsMe) {
-            //     SetIconTo(id, _infoController.PlayerIcon);
-            //     continue;
-            // }
-            //
-            // SetIconTo(id, _uiTournament.TryGetAvatarById(id));
-            //
-            // if (!string.IsNullOrWhiteSpace(element.Player.Facebook)) {
-            //     FB.API($"{element.Player.Facebook}/picture?type=square&height=200&width=200", HttpMethod.GET,
-            //            res => { SetIconTo(id, Sprite.Create(res.Texture, new Rect(0, 0, 200, 200), new Vector2())); });
-            // }
         }
-
-        // void SetIconTo(string id, Sprite icon) {
-        //     if (_leaderboardElements.ContainsKey(id)) {
-        //         var element = _leaderboardElements[id];
-        //         element.SetIcon(icon);
-        //     }
-        // }
     }
 }
