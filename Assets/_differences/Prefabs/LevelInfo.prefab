@@ -792,6 +792,7 @@ MonoBehaviour:
   _activeBGSprite: {fileID: 6235553532139155780}
   _completedBGSprite: {fileID: 798007262803890081}
   _lockedBGSprite: {fileID: 546099077936687237}
+  _avatarCanvas: {fileID: 6080112902216924486}
 --- !u!58 &4413295246147460187
 CircleCollider2D:
   m_ObjectHideFlags: 0

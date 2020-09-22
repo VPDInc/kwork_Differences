@@ -22,7 +22,10 @@ public class LevelInfo : MonoBehaviour {
     [SerializeField] GameObject _completedBGSprite = default;
     [SerializeField] GameObject _lockedBGSprite = default;
 
+    [SerializeField] Canvas _avatarCanvas = default;
+
     [Inject] UIProfileView _uiProfileView = default;
+    [Inject] Camera _camera = default;
 
     EpisodeInfo _episodeInfo;
     int _levelNum = 0;
@@ -41,6 +44,7 @@ public class LevelInfo : MonoBehaviour {
     }
 
     public void Init(EpisodeInfo episodeInfo, int levelNum) {
+        _avatarCanvas.worldCamera = _camera;
         _episodeInfo = episodeInfo;
         
         _levelNum = levelNum;
