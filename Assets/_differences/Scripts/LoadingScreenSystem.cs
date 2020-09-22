@@ -57,7 +57,6 @@ public class LoadingScreenSystem : MonoBehaviour {
     }
 
     void OnDestroy() {
-        _async.completed -= AsyncOnCompleted;
         _playFabInfo.AccountInfoRecieved -= OnAccountInfoRecieved;
         _playFabFacebook.FacebookLogged -= ProcessToGame;
         _playFabFacebook.FacebookLinked -= ProcessToGame;
@@ -66,30 +65,25 @@ public class LoadingScreenSystem : MonoBehaviour {
     IEnumerator Loading(int sceneNo) {
         yield return new WaitForSeconds(0.5f);
         _async = SceneManager.LoadSceneAsync(sceneNo, LoadSceneMode.Additive);
-        _async.completed += AsyncOnCompleted;
         _async.allowSceneActivation = false;
         _bar.SetProgress(0);
 
-        while (_async.isDone == false) {
+        while (_async.progress < 0.9f) {
             var progress = Mathf.Clamp01(_async.progress / 1.5f);
             _bar.SetProgress(progress);
-            
-            if (_async.progress == 0.9f) {
-                _async.allowSceneActivation = true;
-            }
             
             yield return null;
         }
 
-        while (!_playFabLogin.IsLogged && !_playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated) {
+        bool IsReady() => _playFabLogin.IsLogged && _playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated;
+
+        while (!IsReady()) {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
             yield return null;
         }
         
+        _async.allowSceneActivation = true;
         _bar.SetProgress(1);
-    }
-
-    void AsyncOnCompleted(AsyncOperation obj) {
         GameEventMessage.SendEvent(GAME_LOADED_EVENT_NAME);
     }
 
