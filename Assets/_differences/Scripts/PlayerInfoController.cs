@@ -152,6 +152,9 @@ public class PlayerInfoController : MonoBehaviour {
         if (result.Error == null) {
             IDictionary dict = Facebook.MiniJSON.Json.Deserialize(result.RawResult) as IDictionary;
             _facebookName = dict["first_name"].ToString();
+            if (_facebookName.Length > 15) {
+                _facebookName = _facebookName.Substring(0, 15);
+            }
             _isFacebookNameAvailable = true;
             InfoUpdated?.Invoke();
             SaveName();

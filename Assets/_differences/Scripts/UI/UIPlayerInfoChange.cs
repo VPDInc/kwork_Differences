@@ -20,6 +20,7 @@ public class UIPlayerInfoChange : MonoBehaviour {
     [SerializeField] UI_InfiniteScroll _uiInfiniteScroll = default;
     [SerializeField] Image _selectedProfileIcon = default;
     [SerializeField] ScrollRect _scrollRect = default;
+    [SerializeField] Button _saveButton = default;
 
     [Inject] PlayerInfoController _playerInfoController = default;
 
@@ -47,6 +48,13 @@ public class UIPlayerInfoChange : MonoBehaviour {
         var closestPicture = GetClosestPicture();
         
         SnapTo(closestPicture.GetComponent<RectTransform>(), false);
+    }
+
+    public void EndEdit(string str) {
+        _saveButton.interactable = str.Length >= 3;
+        if (_inputField.text.Length > 15) {
+            _inputField.text = _inputField.text.Substring(0, 15);
+        }
     }
     
     public void HandleScroll() {
