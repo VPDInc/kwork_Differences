@@ -13750,8 +13750,9 @@ MonoBehaviour:
   _topPoint: 214
   _botPoint: -214
   _duration: 0.75
+  _isScaleChanging: 0
   _scaleModifier: 1.1
-  _scaleBeats: 3
+  _scaleBeats: 0
   _scaleTarget: {fileID: 274382468}
   _isAutoPlay: 1
   _delayBounds: {x: 15, y: 25}
@@ -56602,6 +56603,7 @@ MonoBehaviour:
   _topPoint: 214
   _botPoint: -214
   _duration: 0.75
+  _isScaleChanging: 1
   _scaleModifier: 1.1
   _scaleBeats: 3
   _scaleTarget: {fileID: 5382664927511648151}

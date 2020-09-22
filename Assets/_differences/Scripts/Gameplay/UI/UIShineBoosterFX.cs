@@ -12,9 +12,10 @@ public class UIShineBoosterFX : MonoBehaviour {
     [SerializeField] float _topPoint = 1;
     [SerializeField] float _botPoint = -1;
     [SerializeField] float _duration = 0.5f;
-    [SerializeField] float _scaleModifier = 1.1f;
-    [SerializeField] int _scaleBeats = 1;
-    [SerializeField] Transform _scaleTarget = default;
+    [SerializeField] bool _isScaleChanging = true;
+    [SerializeField, ShowIf(nameof(_isScaleChanging))] float _scaleModifier = 1.1f;
+    [SerializeField, ShowIf(nameof(_isScaleChanging))] int _scaleBeats = 1;
+    [SerializeField, ShowIf(nameof(_isScaleChanging))] Transform _scaleTarget = default;
     [SerializeField] bool _isAutoPlay = false;
     [SerializeField, ShowIf(nameof(_isAutoPlay))] Vector2 _delayBounds = default;
     
@@ -45,7 +46,8 @@ public class UIShineBoosterFX : MonoBehaviour {
         var targetPos = _fxTransform.anchoredPosition;
         targetPos.y = _botPoint;
         _fxTransform.DOAnchorPos(targetPos, _duration).SetId(this);
-        _scaleTarget.DOScale(_scaleModifier, _duration / 2).SetLoops(2 * _scaleBeats, LoopType.Yoyo);
+        if(_isScaleChanging)
+            _scaleTarget.DOScale(_scaleModifier, _duration / 2).SetLoops(2 * _scaleBeats, LoopType.Yoyo);
     }
 
     void Reset() {
