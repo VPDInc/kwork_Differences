@@ -3011,7 +3011,7 @@ MonoBehaviour:
   _medalStartTransform: {fileID: 2092277726}
   _energyStartTransform: {fileID: 944592536}
   _coinsStartTransform: {fileID: 2078118323}
-  _medalEndTransform: {fileID: 243821036}
+  _medalEndTransform: {fileID: 274382469}
   _energyEndTransform: {fileID: 782828480}
   _coinsEndTransform: {fileID: 185833260}
   _medalFlyingPrefab: {fileID: 1983809061157793654, guid: 59db20aae036b4e4e8a3f46846b40658,
@@ -13221,6 +13221,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 3862360465449522646, guid: 9bca5740dd5c24f3592c1932616b3a20,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3862360465449522647, guid: 9bca5740dd5c24f3592c1932616b3a20,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13333,12 +13338,6 @@ PrefabInstance:
 --- !u!224 &243821035 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3862360465449522647, guid: 9bca5740dd5c24f3592c1932616b3a20,
-    type: 3}
-  m_PrefabInstance: {fileID: 243821034}
-  m_PrefabAsset: {fileID: 0}
---- !u!224 &243821036 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3862360465081938748, guid: 9bca5740dd5c24f3592c1932616b3a20,
     type: 3}
   m_PrefabInstance: {fileID: 243821034}
   m_PrefabAsset: {fileID: 0}
@@ -13876,6 +13875,12 @@ PrefabInstance:
 --- !u!224 &274382468 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3862360465449522647, guid: 9bca5740dd5c24f3592c1932616b3a20,
+    type: 3}
+  m_PrefabInstance: {fileID: 274382467}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &274382469 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3862360465081938748, guid: 9bca5740dd5c24f3592c1932616b3a20,
     type: 3}
   m_PrefabInstance: {fileID: 274382467}
   m_PrefabAsset: {fileID: 0}
