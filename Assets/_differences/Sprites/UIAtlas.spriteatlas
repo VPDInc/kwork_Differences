@@ -55,7 +55,6 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 7441b4d66290f774f8819458823c081b, type: 3}
-    - {fileID: 2800000, guid: a9c67857792624b44a20681e08ebaf51, type: 3}
     - {fileID: 102900000, guid: d8a6ac4ddd1592847ac0f8d2633cf292, type: 3}
     - {fileID: 102900000, guid: 92e9e69621bba914baeada0d7ab858f4, type: 3}
     - {fileID: 102900000, guid: 4fb404c1e2da64699a3e117c56ae495c, type: 3}
@@ -69,7 +68,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: e6d3f26f71791204fb92327980b6e6c4, type: 3}
     - {fileID: 102900000, guid: 25619b6fa6d56cf48a1b54d8ae11366c, type: 3}
     - {fileID: 102900000, guid: 05ae9efb2d029ed439e51843a47d1c33, type: 3}
-    totalSpriteSurfaceArea: 44213905
+    totalSpriteSurfaceArea: 42140305
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -176,7 +175,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 4d3bba270bed59b4cbaf2beb888584b5, type: 3}
   - {fileID: 21300000, guid: 861ace27a34b37e42a9e4df4a7e7553c, type: 3}
   - {fileID: 21300000, guid: da239d475d424447f9354a0d02015aa4, type: 3}
-  - {fileID: 21300000, guid: a9c67857792624b44a20681e08ebaf51, type: 3}
   - {fileID: 21300000, guid: b7ee5867540914d54963749b261a8872, type: 3}
   - {fileID: 21300000, guid: cfb2fe878a1284d1f894181a26cb2d63, type: 3}
   - {fileID: 21300000, guid: 01ef42a7767752f42b520d75e249590b, type: 3}
@@ -385,7 +383,6 @@ SpriteAtlas:
   - avatar_frame
   - settings
   - button
-  - Clouds
   - coin_for_button
   - sound
   - another_photo
