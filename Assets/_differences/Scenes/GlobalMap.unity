@@ -31198,8 +31198,8 @@ MonoBehaviour:
     OfferElement: {fileID: 181917360}
   _uiTrailEffectPrefab: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
     type: 3}
-  _amountDivider: 100
-  _pauseBetweenSpawns: 0.02
+  _fxAmount: 5
+  _pauseBetweenSpawns: 0.1
   _targetTransform: {fileID: 1194808644}
 --- !u!114 &633649249
 MonoBehaviour:
@@ -41432,8 +41432,8 @@ MonoBehaviour:
   _uiTrailEffectPrefab: {fileID: 3822344273060951225, guid: 9fadbaf57484a684caf768c96a918c34,
     type: 3}
   _fxTarget: {fileID: 1265922118}
-  _pauseBetweenSpawns: 0.02
-  _fxAmount: 10
+  _pauseBetweenSpawns: 0.1
+  _fxAmount: 3
   _costEnergyPack1: 300
   _energyAmountPack1: 10
   _offerElementPack1: {fileID: 1689475390}
@@ -87525,40 +87525,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 106717389}
     m_Modifications:
-    - target: {fileID: 1578021625746176039, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886897255540913782, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886897255622103931, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886897256768957553, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1886897256768957556, guid: d7f671c2977dab44e9e6ea6efd081492,
         type: 3}
       propertyPath: m_Name
       value: Episode_1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886897256768957556, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: _isUnlocked
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1886897256768957559, guid: d7f671c2977dab44e9e6ea6efd081492,
         type: 3}
@@ -87614,41 +87584,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_textInfo.characterCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_textInfo.spaceCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_textInfo.wordCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_textInfo.lineCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5821538068970217110, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_textInfo.pageCount
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5952542477592494465, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_Mesh
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 7729928408135927051, guid: d7f671c2977dab44e9e6ea6efd081492,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
