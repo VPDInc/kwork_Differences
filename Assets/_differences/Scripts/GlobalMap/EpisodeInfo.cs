@@ -24,14 +24,13 @@ public class EpisodeInfo : MonoBehaviour {
     [Header("Tech Info")] [SerializeField] PathCreator _pathCreator = default;
     [SerializeField] LevelInfo _levelPrefab = default;
     [SerializeField] Transform _levelHolder = default;
-    [SerializeField] SpriteRenderer _blockerRenderer = default;
+    [SerializeField] Transform _blockerRenderer = default;
 
     [Inject] DiContainer _diContainer = default;
 
     List<LevelInfo> _levels = new List<LevelInfo>();
     int _episodeNum = 0;
 
-    const float BLOCK_DISSOLVE_EFFECT_DURATION = 0.5f;
 
     public void Init(int levelOffset, int num) {
         _episodeNum = num;
@@ -45,14 +44,26 @@ public class EpisodeInfo : MonoBehaviour {
         if(_isUnlocked) return;
         
         _isUnlocked = true;
-        _blockerRenderer.DOFade(0, isInstant ? 0 : BLOCK_DISSOLVE_EFFECT_DURATION);
+        Fade(isInstant);
+        // _blockerRenderer.DOFade(0, isInstant ? 0 : BLOCK_DISSOLVE_EFFECT_DURATION);
         if(isInstant) return;
         
         EpisodeUnlocked?.Invoke();
     }
 
-    void BlockEpisode(bool isInstant) {
-        _blockerRenderer.DOFade(1, isInstant ? 0 : BLOCK_DISSOLVE_EFFECT_DURATION);
+    // void BlockEpisode(bool isInstant) {
+    //     Fade(isInstant);
+    //     // _blockerRenderer.DOFade(1, isInstant ? 0 : BLOCK_DISSOLVE_EFFECT_DURATION);
+    // }
+
+    void Fade(bool isInstant) {
+        var clouds = _blockerRenderer.GetComponentsInChildren<CloudAnimation>();
+        Array.ForEach(clouds, cloud => cloud.Hide(isInstant));
+    }
+
+    [ContextMenu("Unlock")]
+    void DebugUnlock() {
+        UnlockEpisode(false);
     }
 
     void PopulateMap(int levelOffset) {
