@@ -1,6 +1,7 @@
 ﻿using System;
 
 using Airion.DailyRewards;
+using Airion.Extensions;
 
 using Doozy.Engine.UI;
 
@@ -27,6 +28,7 @@ public class UIReceiveTournamentReward : MonoBehaviour {
     RewardInfo[] _rewardInfos;
 
     public void Show(RewardInfo[] rewardInfos, int place) {
+        _rewardHolder.DestroyAllChildren();
         _rewardInfos = rewardInfos;
         _borderImage.sprite = _placeBorders[Mathf.Clamp(place, 0, 3)];
         _placeText.text = (place + 1) + " place";
