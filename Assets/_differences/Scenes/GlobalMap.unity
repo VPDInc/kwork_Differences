@@ -13698,7 +13698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614c2fcf292ab9b468621ec3f702c141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetResolution: {x: 1920, y: 1080}
+  _targetResolution: {x: 2436, y: 1011250}
   _targetSize: 5
 --- !u!4 &272657241
 Transform:
@@ -19877,7 +19877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -8.68, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 272657241}
@@ -19916,7 +19916,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614c2fcf292ab9b468621ec3f702c141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetResolution: {x: 1920, y: 1080}
+  _targetResolution: {x: 2436, y: 1125}
   _targetSize: 5
 --- !u!1 &527052746
 GameObject:
@@ -56678,7 +56678,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 614c2fcf292ab9b468621ec3f702c141, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _targetResolution: {x: 1920, y: 1080}
+  _targetResolution: {x: 2436, y: 1125}
   _targetSize: 5
 --- !u!20 &1791983427
 Camera:
@@ -57660,7 +57660,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000061035156, y: 0}
+  m_AnchoredPosition: {x: 0.00048828125, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1825060487
@@ -58039,6 +58039,7 @@ MonoBehaviour:
   _episodeLength: 40.33
   _episodeFrontPrespawnCount: 3
   _episodeNumLabel: {fileID: 828452635}
+  _startCameraOffset: {x: -8.68, y: 0}
 --- !u!114 &1835200745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93012,10 +93013,15 @@ PrefabInstance:
       propertyPath: m_textInfo.pageCount
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4917093738346211934, guid: 99c98137fa90b7c40b8ae182d266524d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.6635895
+      objectReference: {fileID: 0}
     - target: {fileID: 4917093739532382296, guid: 99c98137fa90b7c40b8ae182d266524d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.2
+      value: 40.4
       objectReference: {fileID: 0}
     - target: {fileID: 4917093739532382296, guid: 99c98137fa90b7c40b8ae182d266524d,
         type: 3}

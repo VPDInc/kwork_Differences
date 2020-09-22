@@ -18,6 +18,7 @@ public class MapController : MonoBehaviour {
     [SerializeField] float _episodeLength = 0;
     [SerializeField] int _episodeFrontPrespawnCount = 2;
     [SerializeField] TMP_Text _episodeNumLabel = default;
+    [SerializeField] Vector2 _startCameraOffset = default;
 
     [Inject] LevelController _levelController = default;
     [Inject] LeanDragCamera _leanDragCamera = default;
@@ -46,7 +47,7 @@ public class MapController : MonoBehaviour {
     void Init() {
         _globalMapContainer.transform.DestroyAllChildren();
         
-        _leanDragCamera.SetMinBounds(new Vector2(_currentOffset, 0));
+        _leanDragCamera.SetMinBounds(_startCameraOffset);
         
         var currentEpisodeNum = _levelController.LastEpisodeNum;
         _levelCount = 0;
@@ -89,7 +90,7 @@ public class MapController : MonoBehaviour {
         _episodeCount++;
         _levelCount += episode.LevelCount;
         _levelController.AddLevelToList(episode.Levels);
-        _leanDragCamera.SetMaxBounds(new Vector2(_currentOffset - _episodeLength, 0));
+        _leanDragCamera.SetMaxBounds(new Vector2(_currentOffset - _episodeLength - _startCameraOffset.x, 0));
     }
 
     void OnDrawGizmosSelected() {
