@@ -58036,7 +58036,7 @@ MonoBehaviour:
   _episodeInfos:
   - {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
   - {fileID: 4917093739532382297, guid: 99c98137fa90b7c40b8ae182d266524d, type: 3}
-  _episodeLength: 19.2
+  _episodeLength: 40.33
   _episodeFrontPrespawnCount: 3
   _episodeNumLabel: {fileID: 828452635}
 --- !u!114 &1835200745
