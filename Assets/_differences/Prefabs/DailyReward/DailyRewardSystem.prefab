@@ -44,13 +44,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8232b1aa4cfd343aaa4d20b16642fb8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _daysCount: 5
+  _daysCount: 7
   _rewards:
   - {fileID: 11400000, guid: ef3f1d6d473854043acf34ec240f7363, type: 2}
   - {fileID: 11400000, guid: 720c219a3655a4a908e39f9d4d73cd5b, type: 2}
   - {fileID: 11400000, guid: 5d1c1dc5ba55d42bdb8d91559d5ef315, type: 2}
   - {fileID: 11400000, guid: 076604b6d4f244e239e1f1285366ea37, type: 2}
   - {fileID: 11400000, guid: fb0173e06f3a34a5899b8cabdfbee09b, type: 2}
+  - {fileID: 11400000, guid: 33267593554224053a6845e5f5cef08c, type: 2}
+  - {fileID: 11400000, guid: ba93da0e7f4b14f7d905d08e97e004f8, type: 2}
   _isDebugEnabled: 0
 --- !u!114 &1978258333019933190
 MonoBehaviour:

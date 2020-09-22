@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833de325d60a64244a90bc3a8d72a5f9, type: 3}
   m_Name: RewardDay2
   m_EditorClassIdentifier: 
-  _amount: 100
+  _amount: 300
