@@ -1171,7 +1171,7 @@ MonoBehaviour:
   _androidInterstitialID: ca-app-pub-2707190310479018/5336461354
   _androidRewardedVideoID: ca-app-pub-2707190310479018/5336461354
   _androidNativeBannerID: ca-app-pub-2707190310479018/5336461354
-  _isDebugEnabled: 1
+  _isDebugEnabled: 0
 --- !u!1 &5187114419070137299
 GameObject:
   m_ObjectHideFlags: 0
