@@ -17,8 +17,8 @@ PlayerSettings:
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
-  m_ShowUnitySplashScreen: 1
-  m_ShowUnitySplashLogo: 1
+  m_ShowUnitySplashScreen: 0
+  m_ShowUnitySplashLogo: 0
   m_SplashScreenOverlayOpacity: 1
   m_SplashScreenAnimation: 1
   m_SplashScreenLogoStyle: 1
@@ -171,7 +171,7 @@ PlayerSettings:
     Android: com.medianagames.findscapes
     iPhone: com.medianagames.findscapes
   buildNumber:
-    iPhone: 1
+    iPhone: 4
   AndroidBundleVersionCode: 2
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 29
@@ -756,7 +756,8 @@ PlayerSettings:
     28: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     29: dUI_MANAGER;EASY_MOBILE;EASY_MOBILE_PRO;dUI_TextMeshPro;EM_UIAP
     30: EASY_MOBILE;EASY_MOBILE_PRO;EM_UIAP;dUI_MANAGER;dUI_TextMeshPro
-  platformArchitecture: {}
+  platformArchitecture:
+    iPhone: 1
   scriptingBackend:
     Android: 0
   il2cppCompilerConfiguration: {}
