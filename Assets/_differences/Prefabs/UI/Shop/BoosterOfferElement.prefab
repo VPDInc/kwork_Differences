@@ -173,8 +173,8 @@ MonoBehaviour:
   _backIcon: {fileID: 388070122861767491}
   _uiTrailEffectPrefab: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
     type: 3}
-  _pauseBetweenSpawns: 0.02
-  _coinFxAmount: 10
+  _pauseBetweenSpawns: 0.1
+  _coinFxAmount: 3
 --- !u!1 &5606167770069888234
 GameObject:
   m_ObjectHideFlags: 0
