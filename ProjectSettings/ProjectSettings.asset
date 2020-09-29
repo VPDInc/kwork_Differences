@@ -124,7 +124,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 0.3
+  bundleVersion: 0.4
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -171,8 +171,8 @@ PlayerSettings:
     Android: com.medianagames.findscapes
     iPhone: com.medianagames.findscapes
   buildNumber:
-    iPhone: 4
-  AndroidBundleVersionCode: 3
+    iPhone: 5
+  AndroidBundleVersionCode: 5
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 29
   AndroidPreferredInstallLocation: 1
@@ -249,7 +249,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{inproject}: games.airion.differences.keystore'
+  AndroidKeystoreName: '{inproject}: release.keystore'
   AndroidKeyaliasName: differences
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
