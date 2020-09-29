@@ -186,9 +186,9 @@ public class UITournament : MonoBehaviour {
         _toMyButton.SetActive(!IsMeInsideView);
         if (!IsMeInsideView) {
             if (MyPositionInScrollView < _scroll.normalizedPosition.y) {
-                _arrow.transform.rotation = Quaternion.Euler(0,0,0);
-            } else {
                 _arrow.transform.rotation = Quaternion.Euler(0,0,180);
+            } else {
+                _arrow.transform.rotation = Quaternion.Euler(0,0,0);
             }
         }
     }

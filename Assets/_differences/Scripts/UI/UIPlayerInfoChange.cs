@@ -52,11 +52,17 @@ public class UIPlayerInfoChange : MonoBehaviour {
 
     public void EndEdit(string str) {
         _saveButton.interactable = str.Length >= 3;
-        if (_inputField.text.Length > 15) {
-            _inputField.text = _inputField.text.Substring(0, 15);
+        if (str.Length > 15) {
+            _inputField.text = str.Substring(0, 15);
         }
     }
-    
+
+    public void OnEditChanged(string str) {
+        if (str.Length > 15) {
+            _inputField.text = str.Substring(0, 15);
+        }
+    }
+
     public void HandleScroll() {
         var closestPicture = GetClosestPicture();
         _selectedProfileIcon.sprite = closestPicture.Sprite;
