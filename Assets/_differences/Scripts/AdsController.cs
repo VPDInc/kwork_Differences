@@ -17,6 +17,7 @@ public class AdsController : MonoBehaviour {
 
     [Inject] CurrencyManager _currencyManager = default;
     [Inject] Advertisement _advertisement = default;
+    [Inject] AdsPopup _adsPopup = default;
 
     Currency _currency = default;
 
@@ -31,12 +32,7 @@ public class AdsController : MonoBehaviour {
     }
 
     void ReceiveReward() {
-        var popup = UIPopup.GetPopup(_popupName);
-        popup.Data.Labels[0].GetComponent<TMP_Text>().text = _titleText;
-        popup.Data.Labels[1].GetComponent<TMP_Text>().text = _messageText;
-        popup.Data.Labels[2].GetComponent<TMP_Text>().text = _coinsRewardPrefix + _adsCoinReward;
-        popup.Show();
-        
+        _adsPopup.Open(_titleText, _messageText, _coinsRewardPrefix + _adsCoinReward);
         _currency.Earn(_adsCoinReward);
         Analytic.CurrencyEarn(_adsCoinReward, "ads-watched", "");
     }
