@@ -97,6 +97,7 @@ public class AdmobAdAdapter : AdAdapter {
     void HandleRewardedAdClosed(object sender, EventArgs e) {
         Log("Handled close reward");
         _rewardedAd = CreateAndLoad();
+        _completeRewarded?.Invoke();
     }
 
     void HandleUserEarnedReward(object sender, Reward e) {
@@ -160,6 +161,7 @@ public class AdmobAdAdapter : AdAdapter {
         
         if (_rewardedAd.IsLoaded()) {
             _rewardedAd.Show();
+            _videoStartedCallback?.Invoke();
             Log("Rewarded is ready");
             return true;
         }
