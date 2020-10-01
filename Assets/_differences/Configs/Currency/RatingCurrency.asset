@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 40d6030e07e224b5699039e0a60dc522, type: 3}
+  m_Name: RatingCurrency
+  m_EditorClassIdentifier: 
+  _type: Rating
+  _defaultAmount: 0
+  _decorators:
+  - {fileID: 11400000, guid: 488cb14704969dd488a60d9ad8f8708e, type: 2}
+  - {fileID: 11400000, guid: b4ae4f0bfa42846b28c8ca6e19f59b6a, type: 2}
+  _isEnablePrefsStore: 0
+  _debugAmount: 5

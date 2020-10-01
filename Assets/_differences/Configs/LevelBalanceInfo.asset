@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9107e9ea1c83b4d4eb9f7be6f7110f0c, type: 3}
+  m_Name: LevelBalanceInfo
+  m_EditorClassIdentifier: 
+  _associatedSheet: 18UG0Qh1AmI8oxMm748NVtsaXjTPWjGWQRh52-mY-oSI
+  _associatedWorksheet: Levels
+  _repeatAfter: 10
+  LevelBalanceInfos:
+  - PictureCount: 2
+    DifferenceCount: 5
+  - PictureCount: 2
+    DifferenceCount: 5
+  - PictureCount: 3
+    DifferenceCount: 5
+  - PictureCount: 3
+    DifferenceCount: 5
+  - PictureCount: 2
+    DifferenceCount: 5
+  - PictureCount: 2
+    DifferenceCount: 6
+  - PictureCount: 2
+    DifferenceCount: 7
+  - PictureCount: 2
+    DifferenceCount: 8
+  - PictureCount: 3
+    DifferenceCount: 6
+  - PictureCount: 3
+    DifferenceCount: 7
+  - PictureCount: 3
+    DifferenceCount: 8
+  - PictureCount: 2
+    DifferenceCount: 6
+  - PictureCount: 2
+    DifferenceCount: 7
+  - PictureCount: 2
+    DifferenceCount: 8
+  - PictureCount: 2
+    DifferenceCount: 6
+  - PictureCount: 2
+    DifferenceCount: 7
+  - PictureCount: 2
+    DifferenceCount: 8
+  - PictureCount: 2
+    DifferenceCount: 9
+  - PictureCount: 3
+    DifferenceCount: 8
+  - PictureCount: 3
+    DifferenceCount: 9
+  - PictureCount: 3
+    DifferenceCount: 10
+  - PictureCount: 2
+    DifferenceCount: 8
+  - PictureCount: 2
+    DifferenceCount: 9
+  - PictureCount: 2
+    DifferenceCount: 10
+  - PictureCount: 3
+    DifferenceCount: 6
+  - PictureCount: 3
+    DifferenceCount: 7
+  - PictureCount: 3
+    DifferenceCount: 8
+  - PictureCount: 2
+    DifferenceCount: 7
+  - PictureCount: 2
+    DifferenceCount: 8
+  - PictureCount: 2
+    DifferenceCount: 7

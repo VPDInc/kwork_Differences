@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c9963b038fde45aa9b9d8faaf71467a, type: 3}
+  m_Name: TournamentRewards
+  m_EditorClassIdentifier: 
+  _rewards:
+  - RewardInfos:
+    - RewardType: 4
+      Amount: 30000
+    - RewardType: 5
+      Amount: 30
+    - RewardType: 0
+      Amount: 10
+    - RewardType: 1
+      Amount: 10
+    - RewardType: 2
+      Amount: 10
+    - RewardType: 3
+      Amount: 10
+  - RewardInfos:
+    - RewardType: 4
+      Amount: 20000
+    - RewardType: 5
+      Amount: 30
+    - RewardType: 0
+      Amount: 5
+    - RewardType: 1
+      Amount: 5
+    - RewardType: 2
+      Amount: 5
+    - RewardType: 3
+      Amount: 5
+  - RewardInfos:
+    - RewardType: 4
+      Amount: 10000
+    - RewardType: 5
+      Amount: 30
+    - RewardType: 0
+      Amount: 1
+    - RewardType: 1
+      Amount: 1
+    - RewardType: 2
+      Amount: 1
+    - RewardType: 3
+      Amount: 1
+  - RewardInfos:
+    - RewardType: 4
+      Amount: 5000
+    - RewardType: 5
+      Amount: 30
+  _lastRewardForNextPlaces: 5
