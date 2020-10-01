@@ -231,6 +231,7 @@ MonoBehaviour:
   _startShowingAfterLevel: 2
   _showAfterClicks: 3
   _cooldownAfterShowingAnyAd: 30
+  _mainMixer: {fileID: 24100000, guid: 7538f819f158541298d92421b325ffe9, type: 2}
 --- !u!114 &6811698229573381264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2660,7 +2661,7 @@ PrefabInstance:
     - target: {fileID: 1601329275918530940, guid: 7e57cd7cc06804ae5867e8ce4aced704,
         type: 3}
       propertyPath: _sounds.Array.data[3].Clips.Array.data[0].Volume
-      value: 0.3
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 1601329275918530940, guid: 7e57cd7cc06804ae5867e8ce4aced704,
         type: 3}
@@ -2680,7 +2681,7 @@ PrefabInstance:
     - target: {fileID: 1601329275918530940, guid: 7e57cd7cc06804ae5867e8ce4aced704,
         type: 3}
       propertyPath: _sounds.Array.data[3].Clips.Array.data[1].Volume
-      value: 0.3
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 1601329275918530940, guid: 7e57cd7cc06804ae5867e8ce4aced704,
         type: 3}

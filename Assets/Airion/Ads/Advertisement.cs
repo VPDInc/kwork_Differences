@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Airion.Extensions;
 
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Advertisement : Singleton<Advertisement> {
     public bool IsAdvertisementEnabled => !_isAdsBought;
@@ -125,6 +126,11 @@ public class Advertisement : Singleton<Advertisement> {
             {"connection", Application.internetReachability != NetworkReachability.NotReachable}
         });
     }
+    
+    const float LOW_VOLUME = -80;
+    const float MAX_VOLUME = 0;
+    [SerializeField] AudioMixer _mainMixer = default;
+
 
     public void ShowRewardedVideo(Action successCallback = null, Action failCallback = null, Action completionCallback = null, string inGamePlacement = "") {
         if (IsEditor) {
@@ -157,7 +163,12 @@ public class Advertisement : Singleton<Advertisement> {
                 {"connection", Application.internetReachability != NetworkReachability.NotReachable}
             });
             failCallback?.Invoke();
-        }, completionCallback, () => {
+        }, ()=> {
+            _mainMixer.SetFloat("MasterVolume", MAX_VOLUME);
+            completionCallback?.Invoke();
+        }, () => {
+            _mainMixer.SetFloat("MasterVolume", LOW_VOLUME);
+
             Analytic.Send("video_ads_started", new Dictionary<string, object>() {
                 {"ad_type", "rewarded"},
                 {"placement", inGamePlacement},

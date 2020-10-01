@@ -1,4 +1,6 @@
-﻿using Airion.Audio;
+﻿using System;
+
+using Airion.Audio;
 
 using DG.Tweening;
 
@@ -9,7 +11,7 @@ using Zenject;
 
 public class ThemeController : MonoBehaviour {
     [SerializeField] AudioMixerGroup _mixer = default;
-    
+
     [Inject] AudioManager _audioManager = default;
 
     const string MENU_THEME_ID = "menu-theme";
@@ -20,6 +22,9 @@ public class ThemeController : MonoBehaviour {
     void Start() {
         PlayMainTheme();
     }
+    
+    const float LOW_VOLUME = -80;
+    const float MAX_VOLUME = 0;
 
     public void PlayMainTheme() {
         SwitchTheme(MENU_THEME_ID);
