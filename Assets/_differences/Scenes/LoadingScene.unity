@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 79974238}
   - component: {fileID: 79974237}
   - component: {fileID: 79974236}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Connecting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -222,7 +222,7 @@ GameObject:
   - component: {fileID: 100403420}
   - component: {fileID: 100403422}
   - component: {fileID: 100403421}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,6 +285,95 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 100403419}
   m_CullTransparentMesh: 0
+--- !u!1 &149336238
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 149336241}
+  - component: {fileID: 149336240}
+  - component: {fileID: 149336239}
+  m_Layer: 5
+  m_Name: UICamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &149336239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149336238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 614c2fcf292ab9b468621ec3f702c141, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _targetResolution: {x: 2688, y: 1242}
+  _targetSize: 5
+--- !u!20 &149336240
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149336238}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 3
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 1
+  orthographic size: 5
+  m_Depth: 10
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 32
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 0
+  m_HDR: 1
+  m_AllowMSAA: 0
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 0
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
+--- !u!4 &149336241
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149336238}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -8.68, y: 0, z: -10}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &182232145
 GameObject:
   m_ObjectHideFlags: 0
@@ -299,7 +388,7 @@ GameObject:
   - component: {fileID: 182232149}
   - component: {fileID: 182232147}
   - component: {fileID: 182232148}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LoginAppleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -454,7 +543,7 @@ GameObject:
   - component: {fileID: 337775231}
   - component: {fileID: 337775233}
   - component: {fileID: 337775232}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -644,8 +733,8 @@ Canvas:
   m_GameObject: {fileID: 376392040}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 2
+  m_Camera: {fileID: 149336240}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -664,8 +753,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 376392040}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.0105676325, y: 0.0105676325, z: 0.0105676325}
   m_Children:
   - {fileID: 3325482209632919366}
   - {fileID: 2094103491}
@@ -677,9 +766,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -8.68, y: 0}
+  m_SizeDelta: {x: 2048, y: 946.2857}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &530103363
 GameObject:
   m_ObjectHideFlags: 0
@@ -691,7 +780,7 @@ GameObject:
   - component: {fileID: 530103364}
   - component: {fileID: 530103366}
   - component: {fileID: 530103365}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -824,7 +913,7 @@ GameObject:
   m_Component:
   - component: {fileID: 537198007}
   - component: {fileID: 537198008}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TMP SubMeshUI [LiberationSans SDF Material + LiberationSans SDF Atlas]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -869,7 +958,7 @@ GameObject:
   - component: {fileID: 574413509}
   - component: {fileID: 574413511}
   - component: {fileID: 574413510}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1003,7 +1092,7 @@ GameObject:
   - component: {fileID: 602252109}
   - component: {fileID: 602252111}
   - component: {fileID: 602252110}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1137,7 +1226,7 @@ GameObject:
   - component: {fileID: 720954993}
   - component: {fileID: 720954995}
   - component: {fileID: 720954994}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1284,7 +1373,7 @@ GameObject:
   - component: {fileID: 858239361}
   - component: {fileID: 858239360}
   - component: {fileID: 858239359}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LoginAppleButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1442,7 +1531,7 @@ GameObject:
   - component: {fileID: 859415444}
   - component: {fileID: 859415443}
   - component: {fileID: 859415441}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LoginFacebookButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1585,7 +1674,7 @@ GameObject:
   - component: {fileID: 868296642}
   - component: {fileID: 868296644}
   - component: {fileID: 868296643}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1718,7 +1807,7 @@ GameObject:
   - component: {fileID: 892687717}
   - component: {fileID: 892687719}
   - component: {fileID: 892687718}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1848,8 +1937,8 @@ Canvas:
   m_GameObject: {fileID: 1001918058}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 2
+  m_Camera: {fileID: 149336240}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -1868,8 +1957,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001918058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.0105676325, y: 0.0105676325, z: 0.0105676325}
   m_Children:
   - {fileID: 1395971142}
   - {fileID: 100403420}
@@ -1878,9 +1967,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -8.68, y: 0}
+  m_SizeDelta: {x: 2048, y: 946.2857}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &1042553272
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,7 +1981,7 @@ GameObject:
   - component: {fileID: 1042553273}
   - component: {fileID: 1042553275}
   - component: {fileID: 1042553274}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1969,7 +2058,7 @@ GameObject:
   - component: {fileID: 1104077076}
   - component: {fileID: 1104077075}
   - component: {fileID: 1104077074}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PlayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2111,7 +2200,7 @@ GameObject:
   - component: {fileID: 1194656933}
   - component: {fileID: 1194656935}
   - component: {fileID: 1194656934}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2244,7 +2333,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1220956541}
   - component: {fileID: 1220956542}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TMP SubMeshUI [LiberationSans SDF Material + LiberationSans SDF Atlas]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2289,7 +2378,7 @@ GameObject:
   - component: {fileID: 1244562157}
   - component: {fileID: 1244562159}
   - component: {fileID: 1244562158}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Title
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2363,7 +2452,7 @@ GameObject:
   - component: {fileID: 1284456470}
   - component: {fileID: 1284456472}
   - component: {fileID: 1284456471}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2497,7 +2586,7 @@ GameObject:
   - component: {fileID: 1318980163}
   - component: {fileID: 1318980165}
   - component: {fileID: 1318980164}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2620,7 +2709,7 @@ GameObject:
   - component: {fileID: 1354123365}
   - component: {fileID: 1354123367}
   - component: {fileID: 1354123366}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2878,7 +2967,7 @@ GameObject:
   - component: {fileID: 1474294942}
   - component: {fileID: 1474294941}
   - component: {fileID: 1474294940}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Login
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3416,7 +3505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1474608743}
   - component: {fileID: 1474608744}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TMP SubMeshUI [LiberationSans SDF Material + LiberationSans SDF Atlas]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3464,7 +3553,7 @@ GameObject:
   - component: {fileID: 1554253447}
   - component: {fileID: 1554253446}
   - component: {fileID: 1554253445}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LoginFacebookButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3623,7 +3712,7 @@ GameObject:
   - component: {fileID: 1709627428}
   - component: {fileID: 1709627427}
   - component: {fileID: 1709627426}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Connecting
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4160,7 +4249,7 @@ GameObject:
   - component: {fileID: 1722732959}
   - component: {fileID: 1722732961}
   - component: {fileID: 1722732960}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4234,7 +4323,7 @@ GameObject:
   - component: {fileID: 1723379666}
   - component: {fileID: 1723379668}
   - component: {fileID: 1723379667}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4308,7 +4397,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1744460839}
   - component: {fileID: 1744460840}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TMP SubMeshUI [LiberationSans SDF Material + LiberationSans SDF Atlas]
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4353,7 +4442,7 @@ GameObject:
   - component: {fileID: 1782236588}
   - component: {fileID: 1782236590}
   - component: {fileID: 1782236589}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4430,7 +4519,7 @@ GameObject:
   - component: {fileID: 1821998048}
   - component: {fileID: 1821998046}
   - component: {fileID: 1821998047}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - PopUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5031,7 +5120,7 @@ GameObject:
   - component: {fileID: 1948416670}
   - component: {fileID: 1948416669}
   - component: {fileID: 1948416668}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Close
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5159,7 +5248,7 @@ GameObject:
   - component: {fileID: 1959745490}
   - component: {fileID: 1959745492}
   - component: {fileID: 1959745491}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: BG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5233,7 +5322,7 @@ GameObject:
   - component: {fileID: 2031649490}
   - component: {fileID: 2031649492}
   - component: {fileID: 2031649491}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Version
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5367,7 +5456,7 @@ GameObject:
   - component: {fileID: 2094103491}
   - component: {fileID: 2094103493}
   - component: {fileID: 2094103492}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: FG
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5444,7 +5533,7 @@ GameObject:
   - component: {fileID: 2095414926}
   - component: {fileID: 2095414925}
   - component: {fileID: 2095414924}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Main
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6004,7 +6093,7 @@ GameObject:
   - component: {fileID: 3325482208597662976}
   - component: {fileID: 3325482208597662990}
   - component: {fileID: 3325482208597662991}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6086,7 +6175,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3325482208613259845}
   - component: {fileID: 3325482208613259844}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Progress Target Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6146,7 +6235,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.66000366, y: 1.52}
+  m_AnchoredPosition: {x: 0.66000366, y: 1.5200005}
   m_SizeDelta: {x: -25.319153, y: -3.0462646}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &3325482208694405566
@@ -6160,7 +6249,7 @@ GameObject:
   - component: {fileID: 3325482208694405565}
   - component: {fileID: 3325482208694405563}
   - component: {fileID: 3325482208694405564}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6197,7 +6286,7 @@ GameObject:
   - component: {fileID: 3325482208806550256}
   - component: {fileID: 3325482208806550270}
   - component: {fileID: 3325482208806550271}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP) (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6428,7 +6517,7 @@ GameObject:
   - component: {fileID: 3325482208970886094}
   - component: {fileID: 3325482208970886092}
   - component: {fileID: 3325482208970886093}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6478,7 +6567,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3325482209030077969}
   - component: {fileID: 3325482209030077968}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Progress Target TextMeshPro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6545,7 +6634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3325482209351884612}
   - component: {fileID: 3325482209351884611}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Progressor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7088,7 +7177,7 @@ GameObject:
   - component: {fileID: 3325482209632919362}
   - component: {fileID: 3325482209632919363}
   - component: {fileID: 3325482209632919364}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: View - Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7103,8 +7192,8 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3325482210142326325}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 90}
+  m_LocalScale: {x: 0.008884447, y: 0.008884447, z: 0.008884447}
   m_Children:
   - {fileID: 2095414922}
   m_Father: {fileID: 0}
@@ -7112,9 +7201,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -8.68, y: 0}
+  m_SizeDelta: {x: 2436, y: 1125.5625}
+  m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &3325482210142326321
 Canvas:
   m_ObjectHideFlags: 0
@@ -7124,8 +7213,8 @@ Canvas:
   m_GameObject: {fileID: 3325482210142326325}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 2
+  m_Camera: {fileID: 149336240}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -7208,7 +7297,7 @@ GameObject:
   - component: {fileID: 3325482210142326322}
   - component: {fileID: 3325482210142326323}
   - component: {fileID: 3325482210142326324}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: MiddleCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
