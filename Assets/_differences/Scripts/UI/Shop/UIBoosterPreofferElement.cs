@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using TMPro;
+
+using UnityEngine;
 using UnityEngine.UI;
 
 public class UIBoosterPreofferElement : MonoBehaviour {
+    [SerializeField] TMP_Text _title = default;
     [SerializeField] Image _icon = default;
     [SerializeField] Image _backIcon = default;
     [SerializeField] UICurrencyUpdater _uiCurrencyUpdater = default;
@@ -13,7 +16,8 @@ public class UIBoosterPreofferElement : MonoBehaviour {
         _uiBoosterShop = GetComponentInParent<UIBoosterShop>();
     }
 
-    public void Setup(string currencyId, Sprite baseIcon) {
+    public void Setup(string currencyId, Sprite baseIcon, string title) {
+        _title.text = title;
         _currencyId = currencyId;
         _icon.sprite = baseIcon;
         _uiCurrencyUpdater.Setup(currencyId);

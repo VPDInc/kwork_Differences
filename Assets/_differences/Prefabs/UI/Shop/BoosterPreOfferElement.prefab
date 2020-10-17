@@ -373,6 +373,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 87b87cbbd52d6b445941b4d3d3a9b363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _title: {fileID: 3428220416999600723}
   _icon: {fileID: 5350891600767448085}
   _backIcon: {fileID: 388070122861767491}
   _uiCurrencyUpdater: {fileID: 3366702514866466052}

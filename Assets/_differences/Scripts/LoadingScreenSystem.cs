@@ -27,6 +27,7 @@ public class LoadingScreenSystem : MonoBehaviour {
     [Inject] PlayFabLogin _playFabLogin = default;
     [Inject] PlayFabInfo _playFabInfo = default;
     [Inject] PlayFabFacebook _playFabFacebook = default;
+    [Inject] AppleLogin _appleLogin = default;
 
     AsyncOperation _async;
 
@@ -45,6 +46,7 @@ public class LoadingScreenSystem : MonoBehaviour {
         _playFabInfo.AccountInfoRecieved += OnAccountInfoRecieved;
         _playFabFacebook.FacebookLogged += ProcessToGame;
         _playFabFacebook.FacebookLinked += ProcessToGame;
+        _appleLogin.Logged += ProcessToGame;
         
         StartLoading(_sceneToLoad);
         _bar.SetProgress(0);
@@ -60,6 +62,7 @@ public class LoadingScreenSystem : MonoBehaviour {
         _playFabInfo.AccountInfoRecieved -= OnAccountInfoRecieved;
         _playFabFacebook.FacebookLogged -= ProcessToGame;
         _playFabFacebook.FacebookLinked -= ProcessToGame;
+        _appleLogin.Logged -= ProcessToGame;
     }
 
     IEnumerator Loading(int sceneNo) {
@@ -75,7 +78,7 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        bool IsReady() => _playFabLogin.IsLogged && _playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated;
+        bool IsReady() => _playFabLogin.IsLogged && _playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated && (_appleLogin.IsInitialized || Application.isEditor);
 
         while (!IsReady()) {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
