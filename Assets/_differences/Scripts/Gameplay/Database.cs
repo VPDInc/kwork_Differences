@@ -155,11 +155,6 @@ public class Database : MonoBehaviour {
             opened = _openedData.Where(d => _firstIds.Contains(d.Id)).ToArray();
         }
         
-        // if still not enough data find nearest levels
-        if (opened.Length < dataAmount) {
-            opened = _openedData.OrderBy(d => Mathf.Abs(pointsPerData - d.PointCount)).ToArray();
-        }
-        
         for (int i = 0; i < dataAmount; i++) {
             // can be still not enough data. Just skip it
             if (i < opened.Length) {
@@ -175,20 +170,15 @@ public class Database : MonoBehaviour {
     
     Data[] GetData(int dataAmount, int pointsPerData) {
         var opened = _openedData.Where(d => d.PointCount == pointsPerData).ToArray();
-        
-        var outData = new List<Data>();
         // if cant find enough data in opened pool just load completed pool as well 
         if (opened.Length < dataAmount) {
             _openedData.AddRange(_pool);
             ClearSavedData();
             opened = _openedData.Where(d => d.PointCount == pointsPerData).ToArray();
         }
-        
-        // if still not enough data find nearest levels
-        if (opened.Length < dataAmount) {
-            opened = _openedData.OrderBy(d => Mathf.Abs(pointsPerData - d.PointCount)).ToArray();
-        }
-        
+
+        var outData = new List<Data>();
+
         for (int i = 0; i < dataAmount; i++) {
             // can be still not enough data. Just skip it
             if (i < opened.Length) {
