@@ -16,11 +16,15 @@ public class UIProfileView : MonoBehaviour {
     
     [SerializeField] GameObject _linkFacebookButton = default;
     [SerializeField] GameObject _facebookLinkedPanel = default;
+    
+    [SerializeField] GameObject _linkAppleButton = default;
+
     [SerializeField] GameObject _editButton = default;
     
     [Inject] PlayFabInfo _playFabInfo = default;
     [Inject] PlayFabFacebook _playFabFacebook = default;
     [Inject] LevelController _levelController = default;
+    [Inject] AppleLogin _appleLogin = default;
     
     UIView _currentView = default;
 
@@ -34,11 +38,13 @@ public class UIProfileView : MonoBehaviour {
         
         _playFabFacebook.FacebookLinked += UpdateInfo;
         _playFabFacebook.FacebookUnlinked += UpdateInfo;
+        _appleLogin.Logged += UpdateInfo;
     }
 
     void OnDestroy() {
         _playFabFacebook.FacebookLinked -= UpdateInfo;
         _playFabFacebook.FacebookUnlinked -= UpdateInfo;
+        _appleLogin.Logged -= UpdateInfo;
     }
 
     public void Show(bool instant) {
@@ -56,6 +62,9 @@ public class UIProfileView : MonoBehaviour {
         
         _linkFacebookButton.SetActive(!_playFabInfo.IsFacebookLinked);
         _facebookLinkedPanel.SetActive(_playFabInfo.IsFacebookLinked);
+        
+        _linkAppleButton.SetActive(!_appleLogin.IsLogged);
+
         _editButton.SetActive(!_playFabInfo.IsFacebookLinked);
     }
 }

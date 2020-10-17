@@ -14,7 +14,7 @@ using Zenject;
 public class EpisodeInfo : MonoBehaviour {
     public static event Action EpisodeUnlocked;
     public int EpisodeNum => _episodeNum;
-    public int LevelCount => _levelCount;
+    public int LevelCount => _levels.Count;
     public bool IsUnlocked => _isUnlocked;
     public List<LevelInfo> Levels => _levels;
     
@@ -67,8 +67,10 @@ public class EpisodeInfo : MonoBehaviour {
     }
 
     void PopulateMap(int levelOffset) {
+        var additionalLevels = GetComponentsInChildren<LevelInfo>();
         var step = 1f / _levelCount;
-        for (int i = 0; i < _levelCount; i++) {
+        int i = 0;
+        for (i = 0; i < _levelCount; i++) {
             var level = _diContainer
                         .InstantiatePrefab(_levelPrefab, _pathCreator.path.GetPointAtTime(step * i + step * 0.5f),
                                            Quaternion.identity, _levelHolder).GetComponent<LevelInfo>();
@@ -76,6 +78,12 @@ public class EpisodeInfo : MonoBehaviour {
             level.Init(this, levelOffset + i);
             _levels.Add(level);
         }
+
+        foreach (LevelInfo level in additionalLevels) {
+            level.Init(this,levelOffset + i);
+        }
+        
+        _levels.AddRange(additionalLevels);
     }
 
     void OnDrawGizmos() {

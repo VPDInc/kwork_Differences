@@ -9,6 +9,8 @@ using Zenject;
 
 public class AppleLogin : MonoBehaviour {
     public event Action Initialized;
+    public event Action Logged;
+    
     public bool IsLogged { get; private set; } = false;
     public bool IsInitialized { get; private set; } = false;
 
@@ -67,6 +69,8 @@ public class AppleLogin : MonoBehaviour {
             userInfo.displayName ?? "",
             userInfo.email ?? "", userInfo.userId ?? "", userInfo.idToken ?? ""));
 
+        IsLogged = true;
+        Logged?.Invoke();
         Reward();
     }
 
