@@ -23,6 +23,7 @@ public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] TextMeshProUGUI _versionText = default;
     [SerializeField] string _versionPrefix = "v";
     [SerializeField] GameObject _facebookLoginButton = default;
+    [SerializeField] GameObject _signInButton= default;
 
     [Inject] PlayFabLogin _playFabLogin = default;
     [Inject] PlayFabInfo _playFabInfo = default;
@@ -84,6 +85,10 @@ public class LoadingScreenSystem : MonoBehaviour {
             _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
             yield return null;
         }
+
+        var isAllLogged = _appleLogin.IsLogged && _playFabInfo.IsFacebookLinked;
+        
+        _signInButton.SetActive(!isAllLogged);
         
         _async.allowSceneActivation = true;
         _bar.SetProgress(1);
