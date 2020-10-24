@@ -40,18 +40,8 @@ public class UITournament : MonoBehaviour {
     
     RectTransform _my;
     
-    bool IsMeInsideView => RectTransformUtility.RectangleContainsScreenPoint(_viewport, _my.transform.position);
+    bool IsMeInsideView => RectTransformUtility.RectangleContainsScreenPoint(_viewport, _my?.transform.position ?? Vector3.zero);
 
-    // var position = _scroll.normalizedPosition.y;
-    // var step = (1 / (float) _fullElementsAmount);
-    // var validOffset = step * (ELEMENTS_COUNT_IN_ONE_SCREEN);
-    // // var isPlayerInsideScreen = MyPositionInScrollView <= position && position <= MyPositionInScrollView + validOffset;
-    // var isPlayerInsideScreen = position <= MyPositionInScrollView && position <=  MyPositionInScrollView + validOffset;
-    //
-    // Debug.Log("POs: " + position + " inside " + isPlayerInsideScreen + " mypos " + MyPositionInScrollView + " offset " + validOffset);
-    // return isPlayerInsideScreen;
-    
-    
     float MyPositionInScrollView => 1 - (_myPosition / (float) _fullElementsAmount );
 
     const float UPDATE_TIMER_EVERY_SECONDS = 60;
