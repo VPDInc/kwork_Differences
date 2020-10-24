@@ -159,7 +159,6 @@ MonoBehaviour:
   - Diff_278
   - Diff_5
   - Diff_12
-  - Diff_228
 --- !u!114 &5173940810032223381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1768,6 +1767,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3c59dbabd0a46f180a4aac158b480f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _linkReward: 200
 --- !u!114 &8538806444154552945
 MonoBehaviour:
   m_ObjectHideFlags: 0

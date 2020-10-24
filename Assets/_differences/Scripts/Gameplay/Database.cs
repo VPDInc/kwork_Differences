@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
+using Sirenix.OdinInspector;
+
 using UnityEngine;
 
 using Zenject;
@@ -16,8 +18,11 @@ public class Database : MonoBehaviour {
     
     string _dataPath;
 
-    readonly List<Data> _pool = new List<Data>();
-    readonly List<Data> _openedData = new List<Data>(); 
+    readonly Dictionary<string, Data> _datas = new Dictionary<string, Data>();
+    [ShowInInspector, ReadOnly]
+    readonly List<(string, DateTime)> _loadedData = new List<(string, DateTime)>();
+    [ShowInInspector, ReadOnly]
+    List<string> _ordered => _loadedData.OrderBy(d => d.Item2).Select(d => d.Item1 + " " + d.Item2.ToString()).ToList();
     readonly Dictionary<int, LoadingData> _loadingDatas = new Dictionary<int, LoadingData>();
     
     const string SAVE_DATA_PATH = "data.dat";
@@ -60,21 +65,31 @@ public class Database : MonoBehaviour {
         var jsons = Resources.LoadAll<TextAsset>(JSONS_PATH);
         foreach (var json in jsons) {
             var data = DiffUtils.Parse(json.text);
-            if (completed.Contains(data.Id)) {
-                _pool.Add(data);
+            _datas.Add(data.Id, data);
+            if (completed.TryGetValue(data.Id, out var date)) {
+                _loadedData.Add((data.Id, date));
             } else {
-                _openedData.Add(data);                    
+                _loadedData.Add((data.Id, DateTime.MinValue));
             } 
         }
     }
     
-    HashSet<string> LoadClosedLevels() {
-        var completedLevels = new HashSet<string>();
+    Dictionary<string, DateTime> LoadClosedLevels() {
+        var completedLevels = new Dictionary<string, DateTime>();
         try {
             using (StreamReader r = new StreamReader(_dataPath)) {
                 while (r.Peek() >= 0) {
                     var line = r.ReadLine();
-                    completedLevels.Add(line);
+                    try {
+                        var separated = line.Split('|');
+                        // Debug.Log(separated[0] + " " + separated[1]);
+                        var buffer = Convert.ToInt64(separated[1]);
+                        // Debug.Log(buffer);
+                        completedLevels.Add(separated[0], DateTime.FromBinary(buffer));
+                    } catch(Exception e) {
+                        Debug.LogError($"[{GetType()}] {e.Message}");
+                      // just nothing to do  
+                    }
                 }
             }
         } catch (Exception e) {
@@ -145,47 +160,44 @@ public class Database : MonoBehaviour {
     }
     
     Data[] GetSimplifiedData(int dataAmount, int pointsPerData) {
-        var opened = _openedData.Where(d => _firstIds.Contains(d.Id)).ToArray();
+        var opened = _loadedData.Where(d => _firstIds.Contains(d.Item1)).OrderBy(d => d.Item2).ToArray();
         
         var outData = new List<Data>();
-        // if cant find enough data in opened pool just load completed pool as well 
-        if (opened.Length < dataAmount) {
-            _openedData.AddRange(_pool);
-            ClearSavedData();
-            opened = _openedData.Where(d => _firstIds.Contains(d.Id)).ToArray();
-        }
         
         for (int i = 0; i < dataAmount; i++) {
             // can be still not enough data. Just skip it
             if (i < opened.Length) {
-                var data = opened[i];
+                var data = GetJsonDataById(opened[i].Item1);
+                if (data.Id == String.Empty)
+                    continue;
+                
                 outData.Add(data);
-                _pool.Add(data);
-                _openedData.Remove(data);
             }
         }
-        
+
+        // SaveLevels(outData);
         return outData.ToArray();
+    }
+
+    Data GetJsonDataById(string id) {
+        if (_datas.TryGetValue(id, out var data)) {
+            return data;
+        } else return default;
     }
     
     Data[] GetData(int dataAmount, int pointsPerData) {
-        var opened = _openedData.Where(d => d.PointCount == pointsPerData).ToArray();
-        // if cant find enough data in opened pool just load completed pool as well 
-        if (opened.Length < dataAmount) {
-            _openedData.AddRange(_pool);
-            ClearSavedData();
-            opened = _openedData.Where(d => d.PointCount == pointsPerData).ToArray();
-        }
+        var opened = _loadedData.Where(d => GetJsonDataById(d.Item1).PointCount == pointsPerData).OrderBy(d => d.Item2).ToArray();
 
         var outData = new List<Data>();
 
         for (int i = 0; i < dataAmount; i++) {
             // can be still not enough data. Just skip it
             if (i < opened.Length) {
-                var data = opened[i];
+                var data = GetJsonDataById(opened[i].Item1);
+                if (data.Id == String.Empty)
+                    continue;
+                
                 outData.Add(data);
-                _pool.Add(data);
-                _openedData.Remove(data);
             }
         }
         
@@ -200,11 +212,24 @@ public class Database : MonoBehaviour {
         SaveLevels(data.Select(d => d.Id));
     }
     
+    // TODO: this is kind of shit. Just need to use sql bd
     void SaveLevels(IEnumerable<string> ids) {
+        foreach (var id in ids) {
+            for (int i = 0; i < _loadedData.Count; i++) {
+                var data = _loadedData[i];
+                if (data.Item1.Equals(id)) {
+                    data.Item2 = DateTime.UtcNow;
+                    _loadedData[i] = data;
+                }
+            }
+        }
+        
+        ClearFile();
+        
         try {
             using (StreamWriter w = File.AppendText(_dataPath)) {
-                foreach (var id in ids) {
-                    w.WriteLine(id);
+                foreach (var data in _loadedData) {
+                    w.WriteLine(data.Item1 + "|" + data.Item2.ToBinary());
                 }
             }
         } catch (Exception e) {
@@ -214,8 +239,6 @@ public class Database : MonoBehaviour {
 
     [ContextMenu("Clear")]
     void ClearLevels() {
-        _openedData.Clear();
-            
         if (File.Exists(_dataPath))
             File.Delete(_dataPath);
         
@@ -223,8 +246,7 @@ public class Database : MonoBehaviour {
             using (File.Create(_dataPath)) { }
     }
 
-    void ClearSavedData() {
-        _pool.Clear();
+    void ClearFile() {
         if (File.Exists(_dataPath))
             File.Delete(_dataPath);
         
