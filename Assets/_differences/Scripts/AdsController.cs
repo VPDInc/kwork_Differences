@@ -10,7 +10,6 @@ using Zenject;
 
 public class AdsController : MonoBehaviour {
     [SerializeField] int _adsCoinReward = 50;
-    [Header("PopUp"), SerializeField] string _popupName = "AdsPopup";
     [SerializeField] string _titleText = "CONGRADULATIONS!";
     [SerializeField] string _messageText = "Your reward:";
     [SerializeField] string _coinsRewardPrefix = "<sprite=0> ";
