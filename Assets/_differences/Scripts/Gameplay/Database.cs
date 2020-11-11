@@ -156,12 +156,13 @@ public class Database : MonoBehaviour {
         }
         
         SaveLevels(_loadingDatas[levelNum].Datas);
+
         return _loadingDatas[levelNum].Pictures;
     }
     
     Data[] GetSimplifiedData(int dataAmount, int pointsPerData) {
         var opened = _loadedData.Where(d => _firstIds.Contains(d.Item1)).OrderBy(d => d.Item2).ToArray();
-        
+
         var outData = new List<Data>();
         
         for (int i = 0; i < dataAmount; i++) {
@@ -175,7 +176,7 @@ public class Database : MonoBehaviour {
             }
         }
 
-        // SaveLevels(outData);
+        SetSelectionTimeForLevels(outData.Select(d => d.Id));
         return outData.ToArray();
     }
 
@@ -201,6 +202,7 @@ public class Database : MonoBehaviour {
             }
         }
         
+        SetSelectionTimeForLevels(outData.Select(d => d.Id));
         return outData.ToArray();
     }
 
@@ -234,6 +236,18 @@ public class Database : MonoBehaviour {
             }
         } catch (Exception e) {
             Debug.LogError($"[{GetType()}] {e.Message}");
+        }
+    }
+
+    void SetSelectionTimeForLevels(IEnumerable<string> ids) {
+        foreach (var id in ids) {
+            for (int i = 0; i < _loadedData.Count; i++) {
+                var data = _loadedData[i];
+                if (data.Item1.Equals(id)) {
+                    data.Item2 = DateTime.UtcNow;
+                    _loadedData[i] = data;
+                }
+            }
         }
     }
 
