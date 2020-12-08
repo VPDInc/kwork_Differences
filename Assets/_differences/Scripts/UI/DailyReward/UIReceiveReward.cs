@@ -21,12 +21,19 @@ public class UIReceiveReward : MonoBehaviour {
     [SerializeField] int _coinsFxAmount = 10;
     [SerializeField] float _pauseBetweenSpawns = 0.02f;
 
-    int _rewardAmount;
+    private int _rewardCount;
 
-    public void Show(Reward reward) {
-        _rewardAmount = ((CurrencyReward) reward).Amount;
-        _rewardedAmountText.text = ((CurrencyReward)reward).Amount.ToString();
+    public void Show(Reward reward)
+    {
+        // ДОРАБОТАТЬ
+        _rewardCount = ((CurrencyReward)reward).Count;
+        _rewardedAmountText.text = _rewardCount.ToString();
         _view.Show();
+
+        // УДАЛИТЬ КОММЕНТАРИЙ ПОСЛЕ УСПЕШНОГО ТЕСТА НОВОЙ СИСТЕМЫ
+        //_rewardAmount = ((CurrencyReward) reward).Amount;
+        //_rewardedAmountText.text = ((CurrencyReward)reward).Amount.ToString();
+        //_view.Show();
     }
 
     public void Hide() {

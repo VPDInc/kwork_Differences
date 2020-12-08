@@ -15,83 +15,111 @@ using UnityEngine;
 
 using Zenject;
 
-public class UIFinishLevelView : MonoBehaviour {
-    [Header("UIVisualReferences")] [SerializeField]
-    GameObject[] _victoryObjects = default;
-    [SerializeField] GameObject[] _loseObjects = default;
+public class UIFinishLevelView : MonoBehaviour
+{
+    private const string LEVEL_NAME_PREFIX = "Level ";
+    private const string ROUND_NAME_PREFIX = "Round ";
+    private const string LEVEL_COMPLETED_PREFIX = "Level completed:";
 
-    [Header("References")] [SerializeField]
-    TMP_Text _levelLabel = default;
-    [SerializeField] TMP_Text _coinRewardLabel = default;
-    [SerializeField] TMP_Text _energyRewardLabel = default;
-    [SerializeField] TMP_Text _ratingRewardLabel = default;
-    [SerializeField] Transform _textInfoHolder = default;
-    [SerializeField] PicturePanel _picturePanel = default;
-    [SerializeField] ParticleSystem _particleSystem = default;
+    [Header("UIVisualReferences")]
+    [SerializeField] private GameObject[] _victoryObjects = default;
+    [SerializeField] private GameObject[] _loseObjects = default;
 
-    [Header("Prefabs")] [SerializeField] RoundInfo _roundInfoPrefab = default;
+    [Header("References")]
+    [SerializeField] private TMP_Text _levelLabel = default;
+    [SerializeField] private TMP_Text _coinRewardLabel = default;
+    [SerializeField] private TMP_Text _energyRewardLabel = default;
+    [SerializeField] private TMP_Text _ratingRewardLabel = default;
+    [SerializeField] private Transform _textInfoHolder = default;
+    [SerializeField] private PicturePanel _picturePanel = default;
 
-    [Header("Rect References")] [SerializeField]
-    RectTransform _medalStartTransform = default;
-    [SerializeField] RectTransform _energyStartTransform = default;
-    [SerializeField] RectTransform _coinsStartTransform = default;
-    [SerializeField] RectTransform _medalEndTransform = default;
-    [SerializeField] RectTransform _energyEndTransform = default;
-    [SerializeField] RectTransform _coinsEndTransform = default;
-    [SerializeField] UITrailEffect _medalFlyingPrefab = default;
-    [SerializeField] UITrailEffect _energyFlyingPrefab = default;
-    [SerializeField] UITrailEffect _coinsFlyingPrefab = default;
-    [SerializeField] float _pauseBetweenSpawns = 1f;
-    [SerializeField] float _fxAmount = 5;
+    [SerializeField] private ItemEffect[] _winEffects;
+    [SerializeField] private AudioSource _winAudioEffect;
+
+    [Header("Prefabs")]
+    [SerializeField] private RoundInfo _roundInfoPrefab = default;
+
+    [Header("Rect References")]
+    [SerializeField] private RectTransform _medalStartTransform = default;
+    [SerializeField] private RectTransform _energyStartTransform = default;
+    [SerializeField] private RectTransform _coinsStartTransform = default;
+    [SerializeField] private RectTransform _medalEndTransform = default;
+    [SerializeField] private RectTransform _energyEndTransform = default;
+    [SerializeField] private RectTransform _coinsEndTransform = default;
+    [SerializeField] private UITrailEffect _medalFlyingPrefab = default;
+    [SerializeField] private UITrailEffect _energyFlyingPrefab = default;
+    [SerializeField] private UITrailEffect _coinsFlyingPrefab = default;
+    [SerializeField] private float _pauseBetweenSpawns = 1f;
+    [SerializeField] private float _fxAmount = 5;
 
     [Inject] LevelController _levelController = default;
     [Inject] EnergyController _energyController = default;
 
     UIView _currentView = default;
 
-    const string LEVEL_NAME_PREFIX = "Level ";
-    const string ROUND_NAME_PREFIX = "Round ";
-    const string LEVEL_COMPLETED_PREFIX = "Level completed:";
-
-    void Awake() {
+    void Awake()
+    {
         _currentView = GetComponent<UIView>();
     }
 
-    public void Show(int levelNum, GameplayResult gameplayResult, int coinReward) {
+    public void Show(int levelNum, GameplayResult gameplayResult, int coinReward)
+    {
         SetupVictory(gameplayResult.IsCompleted);
         Show();
         SetLevelName(levelNum);
         SetCoinsAmount(coinReward);
         Setup(gameplayResult);
 
-        if (gameplayResult.IsCompleted) {
+        if (gameplayResult.IsCompleted)
+        {
             SetupFlyingCurrencies(gameplayResult.TotalStarsCollected, _energyController.PlayCost, coinReward);
             StartCoroutine(TryRequestRateUs());
-            _particleSystem.Play();
+            StartCoroutine(PlayEffects(_winEffects, 2, 0.25f));
+            StartCoroutine(PlayAudio());
         }
     }
 
-    void SetupVictory(bool isVictory) {
-        foreach (GameObject victoryObject in _victoryObjects) {
+    private IEnumerator PlayAudio()
+    {
+        yield return new WaitForSeconds(2.25f);
+        _winAudioEffect.Play();
+    }
+
+    private IEnumerator PlayEffects(ItemEffect[] effects, float startTime, float delay)
+    {
+        yield return new WaitForSeconds(startTime);
+
+        for (int i = 0; i < effects.Length; i++)
+        {
+            yield return new WaitForSeconds(delay * i);
+            effects[i].Play();
+        }
+    }
+
+    void SetupVictory(bool isVictory)
+    {
+        foreach (GameObject victoryObject in _victoryObjects)
             victoryObject.SetActive(isVictory);
-        }
 
-        foreach (GameObject loseObject in _loseObjects) {
+        foreach (GameObject loseObject in _loseObjects)
             loseObject.SetActive(!isVictory);
-        }
     }
 
-    IEnumerator TryRequestRateUs() {
+    IEnumerator TryRequestRateUs()
+    {
         yield return new WaitForSeconds(2);
-        if (!StoreReview.IsRatingRequestDisabled()) {
-            if (_levelController.LastLevelNum >= 3) {
+        if (!StoreReview.IsRatingRequestDisabled())
+        {
+            if (_levelController.LastLevelNum >= 3)
+            {
                 if (StoreReview.CanRequestRating())
                     StoreReview.RequestRating();
             }
         }
     }
 
-    void SetupFlyingCurrencies(int medalAmount, int energyAmount, int coinsAmount) {
+    void SetupFlyingCurrencies(int medalAmount, int energyAmount, int coinsAmount)
+    {
         var seq = DOTween.Sequence();
         seq.AppendInterval(3);
         seq.AppendCallback(() => {
@@ -121,23 +149,20 @@ public class UIFinishLevelView : MonoBehaviour {
                            });
     }
 
-    void Show() {
+    void Show() =>
         _currentView.Show();
-    }
 
-    public void Hide() {
+    public void Hide() =>
         _currentView.Hide();
-    }
 
-    void SetLevelName(int levelNum) {
+    void SetLevelName(int levelNum) =>
         _levelLabel.text = LEVEL_NAME_PREFIX + (levelNum + 1);
-    }
 
-    void SetCoinsAmount(int coinsAmount) {
+    void SetCoinsAmount(int coinsAmount) =>
         _coinRewardLabel.text = coinsAmount.ToString();
-    }
 
-    void Setup(GameplayResult gameplayResult) {
+    void Setup(GameplayResult gameplayResult)
+    {
         _textInfoHolder.DestroyAllChildren();
 
         for (int i = 0; i < gameplayResult.PicturesCount; i++) {
@@ -161,5 +186,17 @@ public class UIFinishLevelView : MonoBehaviour {
         _energyRewardLabel.text = energyToEarn.ToString();
 
         _picturePanel.FillByImages(gameplayResult.PictureResults);
+    }
+
+    [System.Serializable]
+    private class ItemEffect
+    {
+        [SerializeField] private GameObject _effect;
+        [SerializeField] private Transform _position;
+
+        public void Play()
+        {
+            Instantiate(_effect, _position, false);
+        }
     }
 }

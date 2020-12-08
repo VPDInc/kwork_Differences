@@ -47,7 +47,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _disableWarnings: 0
-  _sounds: []
+  _sounds:
+  - Id: Unnamed
+    Clips: []
 --- !u!114 &1601329275918530937
 MonoBehaviour:
   m_ObjectHideFlags: 0

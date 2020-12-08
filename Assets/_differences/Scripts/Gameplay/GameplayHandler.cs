@@ -158,6 +158,7 @@ public class GameplayHandler : MonoBehaviour {
     }
 
     IEnumerator WaitAndHideScreen() {
+        _themeController.StopTheme();
         yield return new WaitForSeconds(WAIT_BETWEEN_PICTURES_CHANGING);
         _middleScreen.Hide(() => {
             _themeController.PlayMainTheme();
