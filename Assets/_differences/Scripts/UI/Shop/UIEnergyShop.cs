@@ -1,5 +1,5 @@
 ﻿using Airion.Currency;
-
+using Differences;
 using Doozy.Engine;
 using Doozy.Engine.UI;
 
@@ -34,14 +34,12 @@ public class UIEnergyShop : MonoBehaviour {
     Currency _energyCurrency;    
     Currency _softCurrency;
 
-    const string ENERGY_CURRENCY_ID = "Energy";
-    const string SOFT_CURRENCY_ID = "Soft";
     const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
     const string MAX_ENERGY_POPUP_NAME = "MaxEnergy";
 
     void Start() {
-        _energyCurrency = _currencyManager.GetCurrency(ENERGY_CURRENCY_ID);
-        _softCurrency = _currencyManager.GetCurrency(SOFT_CURRENCY_ID);
+        _energyCurrency = _currencyManager.GetCurrency(CurrencyConstants.ENERGY);
+        _softCurrency = _currencyManager.GetCurrency(CurrencyConstants.SOFT);
         
         SetupOffers();
     }

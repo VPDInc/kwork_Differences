@@ -6,23 +6,26 @@ using TMPro;
 using Airion.DailyRewards;
 using Zenject;
 using Airion.Currency;
+using Differences;
 
 [RequireComponent(typeof(Animator))]
 public class RewardCard : MonoBehaviour
 {
     private const string KEY_ANIMATION_OPEN = "Open";
     private const string KEY_ANIMATION_OPENED = "Opened";
+    public StatusRewardCard Status { get; private set; }
 
     [SerializeField] private ItemAnimationRewared[] m_EffectsRewereds;
+
+    [Header("Animation Config")]
+    [SerializeField] private float _keyAnimationOpenTime = 1.5f;
+    [SerializeField] private float _addRewardDelay = 1.3f;
 
     [Inject] CurrencyManager _currencyManager = default;
 
     private Animator _animator;
-
     private RewardCardData _data;
-    private StatusRewardCard _status;
 
-    public StatusRewardCard Status => _status;
 
     private void Awake()
     {
@@ -32,7 +35,7 @@ public class RewardCard : MonoBehaviour
     public void Initialize(RewardCardData data, StatusRewardCard status)
     {
         _data = data;
-        _status = status;
+        Status = status;
 
         switch (status)
         {
@@ -41,57 +44,50 @@ public class RewardCard : MonoBehaviour
                 break;
 
             case StatusRewardCard.Closed:
-                // Нет реализации
-                break;
-
             case StatusRewardCard.Waiting:
-                // Нет реализации
+                Debug.Log($"Not have realization for {status} init card");
                 break;
         }
     }
 
     public void Open()
     {
-        if (_status != StatusRewardCard.Waiting) return;
+        if (Status != StatusRewardCard.Waiting) return;
 
-        _status = StatusRewardCard.Opened;
+        Status = StatusRewardCard.Opened;
         StartCoroutine(Opening());
     }
 
     private IEnumerator Opening()
     {
         _animator.SetTrigger(KEY_ANIMATION_OPEN);
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(_keyAnimationOpenTime);
 
         foreach (var reward in _data.Rewards)
             PlayEffect(reward.Type);
 
         foreach (var reward in _data.Rewards)
         {
-            if (reward.Type == DailyRewardData.TypeReward.Coin)
-            {
-                yield return new WaitForSeconds(1.3f);
-                AddReward(DailyRewardData.TypeReward.Coin, reward.Count);
-            }
-            else AddReward(DailyRewardData.TypeReward.Target, reward.Count);
+            yield return new WaitForSeconds(_addRewardDelay); // WTF ??????????
+            AddReward(reward.Type, reward.Count);
         }
     }
 
-    private void AddReward(DailyRewardData.TypeReward type, int count)
+    private void AddReward(RewardEnum type, int count)
     {
         switch (type)
         {
-            case DailyRewardData.TypeReward.Coin:
-                _currencyManager.GetCurrency("Soft").Earn(count);
+            case RewardEnum.Soft:
+                _currencyManager.GetCurrency(CurrencyConstants.SOFT).Earn(count);
                 break;
 
-            case DailyRewardData.TypeReward.Target:
-                _currencyManager.GetCurrency("Aim").Earn(count);
+            case RewardEnum.Aim:
+                _currencyManager.GetCurrency(CurrencyConstants.AIM).Earn(count);
                 break;
         }
     }
 
-    private void PlayEffect(DailyRewardData.TypeReward type)
+    private void PlayEffect(RewardEnum type)
     {
         foreach (var effectRewered in m_EffectsRewereds)
         {
@@ -108,14 +104,14 @@ public class RewardCard : MonoBehaviour
     {
         private const float PAUSED_ANINMATION_COINS = 0.1f;
 
-        [SerializeField] private DailyRewardData.TypeReward _type;
+        [SerializeField] private RewardEnum _type;
 
         [SerializeField] [Min(0)] private int _count;
         [SerializeField] private UITrailEffect _effect;
         [SerializeField] private RectTransform _effectStartPosition;
         [SerializeField] private RectTransform _effectFinishPosition;
 
-        public DailyRewardData.TypeReward Type => _type;
+        public RewardEnum Type => _type;
 
         public void Play()
         {

@@ -46,7 +46,7 @@ public class ObsoleteLeaderboard : MonoBehaviour {
     float _lastReload = 0;
 
     void Start() {
-        _rating = _currencyManager.GetCurrency("Rating");
+        _rating = _currencyManager.GetCurrency(Differences.CurrencyConstants.RATING);
         
         Filled += (players) => {
             foreach (var player in players) {

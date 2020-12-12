@@ -20,10 +20,8 @@ public class AdsController : MonoBehaviour {
 
     Currency _currency = default;
 
-    const string CURRENCY_NAME = "Soft";
-    
     void Start() {
-        _currency = _currencyManager.GetCurrency(CURRENCY_NAME);
+        _currency = _currencyManager.GetCurrency(Differences.CurrencyConstants.SOFT);
     }
 
     public void RequestAd() {

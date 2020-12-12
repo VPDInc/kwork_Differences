@@ -32,11 +32,10 @@ public class UIBoosterOfferElement : MonoBehaviour {
     int _amountToBuy;
     int _cost;
 
-    const string COINS_CURRENCY_ID = "Soft";
     const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
 
     void Start() {
-        _coinsCurrency = _currencyManager.GetCurrency(COINS_CURRENCY_ID);
+        _coinsCurrency = _currencyManager.GetCurrency(Differences.CurrencyConstants.SOFT);
     }
 
     public void Setup(Currency currency, string title, Sprite icon, int amount, int cost, Transform fxStartTransform) {

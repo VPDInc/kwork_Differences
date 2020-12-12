@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Airion.Currency;
 using Airion.Extensions;
-
+using Differences;
 using Doozy.Engine;
 
 using Lean.Touch;
@@ -46,8 +46,7 @@ public class LevelController : Singleton<LevelController> {
     
     const string LAST_LEVEL_ID = "last_level";
     const string LAST_EPISODE_ID = "last_episode";
-    const string COIN_CURRENCY_ID = "Soft";
-    const string RATING_CURRENCY_ID = "Rating";
+
     const string OPEN_STORE_EVENT_ID = "OpenEnergyStore";
 
     protected override void Awake() {
@@ -57,8 +56,8 @@ public class LevelController : Singleton<LevelController> {
     }
 
     void Start() {
-        _coinCurrency = _currencyManager.GetCurrency(COIN_CURRENCY_ID);
-        _ratingCurrency = _currencyManager.GetCurrency(RATING_CURRENCY_ID);
+        _coinCurrency = _currencyManager.GetCurrency(CurrencyConstants.SOFT);
+        _ratingCurrency = _currencyManager.GetCurrency(CurrencyConstants.RATING);
         SetupLevels();
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;

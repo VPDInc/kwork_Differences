@@ -24,10 +24,9 @@ public class UIEnergyBarUpdater : MonoBehaviour {
     Currency _currency;
     bool _isInfinity;
 
-    const string CURRENCY_NAME = "Energy";
 
     void Start() {
-        _currency = _currencyManager.GetCurrency(CURRENCY_NAME);
+        _currency = _currencyManager.GetCurrency(Differences.CurrencyConstants.ENERGY);
         _currency.Updated += CurrencyOnUpdated;
 
         _startRectPos = _bar.anchoredPosition;

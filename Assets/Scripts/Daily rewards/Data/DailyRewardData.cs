@@ -1,21 +1,13 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-[CreateAssetMenu(menuName = "Объекты/Ежедневная награда", fileName = "New Daily Reward")]
+[CreateAssetMenu(menuName = "Objects/DailyReward", fileName = "New Daily Reward")]
 public class DailyRewardData : ScriptableObject
 {
-    public enum TypeReward
-    {
-        Coin,
-        Target
-    }
-
-    [SerializeField] private TypeReward _type = TypeReward.Coin;
+    [SerializeField] private RewardEnum _type = RewardEnum.Soft;
     [SerializeField] [Min(1)] private int _count = 1;
     [SerializeField] private Sprite _image;
 
-    public TypeReward Type => _type;
+    public RewardEnum Type => _type;
     public int Count => _count;
     public Sprite Image => _image;
 }

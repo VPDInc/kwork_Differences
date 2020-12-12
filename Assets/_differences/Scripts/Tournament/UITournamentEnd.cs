@@ -4,7 +4,7 @@ using System.Linq;
 
 using Airion.Currency;
 using Airion.Extensions;
-
+using Differences;
 using Doozy.Engine.UI;
 
 using UnityEngine;
@@ -123,23 +123,23 @@ public class UITournamentEnd : MonoBehaviour {
         foreach (RewardInfo rewardInfo in rewardInfos) {
             switch (rewardInfo.RewardType) {
                 case RewardEnum.Aim:
-                    _currencyManager.GetCurrency("Aim").Earn(rewardInfo.Amount);
+                    _currencyManager.GetCurrency(CurrencyConstants.AIM).Earn(rewardInfo.Amount);
                     break;
                 case RewardEnum.Clock:
-                    _currencyManager.GetCurrency("Watch").Earn(rewardInfo.Amount);
+                    _currencyManager.GetCurrency(CurrencyConstants.WATCH).Earn(rewardInfo.Amount);
                     break;
                 case RewardEnum.Compass:
-                    _currencyManager.GetCurrency("Compass").Earn(rewardInfo.Amount);
+                    _currencyManager.GetCurrency(CurrencyConstants.COMPASS).Earn(rewardInfo.Amount);
                     break;
                 case RewardEnum.Zoom:
-                    _currencyManager.GetCurrency("Zoom").Earn(rewardInfo.Amount);
+                    _currencyManager.GetCurrency(CurrencyConstants.ZOOM).Earn(rewardInfo.Amount);
                     break;
-                case RewardEnum.Coin:
-                    _currencyManager.GetCurrency("Soft").Earn(rewardInfo.Amount);
+                case RewardEnum.Soft:
+                    _currencyManager.GetCurrency(CurrencyConstants.SOFT).Earn(rewardInfo.Amount);
                     Analytic.CurrencyEarn(rewardInfo.Amount, "tournament-won", "");
                     break;
                 case RewardEnum.Energy:
-                    _currencyManager.GetCurrency("Energy").Earn(rewardInfo.Amount);
+                    _currencyManager.GetCurrency(CurrencyConstants.ENERGY).Earn(rewardInfo.Amount);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

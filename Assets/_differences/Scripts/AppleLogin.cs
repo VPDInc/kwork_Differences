@@ -75,6 +75,6 @@ public class AppleLogin : MonoBehaviour {
     }
 
     void Reward() {
-        _currencyManager.GetCurrency("Soft").Earn(_linkReward);
+        _currencyManager.GetCurrency(Differences.CurrencyConstants.SOFT).Earn(_linkReward);
     }
 }
