@@ -11,7 +11,7 @@ using UnityEngine.UI;
 using Zenject;
 
 public class UIShareView : MonoBehaviour {
-    [SerializeField] string _shareText = "Try to find differences!";
+    [SerializeField] string _shareText = "Try to find differences! Play now! https://apps.apple.com/ru/app/findscapes/id1530032494.";
     [SerializeField] Camera _camera = default;
 
     [SerializeField] CanvasGroup _horizontalGroup = default;
