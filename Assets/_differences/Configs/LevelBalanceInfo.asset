@@ -16,47 +16,49 @@ MonoBehaviour:
   _associatedWorksheet: Levels
   _repeatAfter: 10
   LevelBalanceInfos:
-  - PictureCount: 2
+  - PictureCount: 1
+    DifferenceCount: 5
+  - PictureCount: 1
     DifferenceCount: 5
   - PictureCount: 2
     DifferenceCount: 5
-  - PictureCount: 3
-    DifferenceCount: 5
-  - PictureCount: 3
-    DifferenceCount: 5
-  - PictureCount: 2
-    DifferenceCount: 5
-  - PictureCount: 2
+  - PictureCount: 1
+    DifferenceCount: 6
+  - PictureCount: 1
     DifferenceCount: 6
   - PictureCount: 2
-    DifferenceCount: 7
-  - PictureCount: 2
-    DifferenceCount: 8
-  - PictureCount: 3
     DifferenceCount: 6
-  - PictureCount: 3
+  - PictureCount: 1
     DifferenceCount: 7
-  - PictureCount: 3
-    DifferenceCount: 8
-  - PictureCount: 2
-    DifferenceCount: 6
-  - PictureCount: 2
+  - PictureCount: 1
     DifferenceCount: 7
-  - PictureCount: 2
+  - PictureCount: 1
     DifferenceCount: 8
-  - PictureCount: 2
-    DifferenceCount: 6
-  - PictureCount: 2
-    DifferenceCount: 7
-  - PictureCount: 2
+  - PictureCount: 1
     DifferenceCount: 8
-  - PictureCount: 2
+  - PictureCount: 1
     DifferenceCount: 9
-  - PictureCount: 3
-    DifferenceCount: 8
-  - PictureCount: 3
+  - PictureCount: 1
     DifferenceCount: 9
+  - PictureCount: 2
+    DifferenceCount: 6
+  - PictureCount: 2
+    DifferenceCount: 6
   - PictureCount: 3
+    DifferenceCount: 5
+  - PictureCount: 2
+    DifferenceCount: 6
+  - PictureCount: 2
+    DifferenceCount: 7
+  - PictureCount: 1
+    DifferenceCount: 8
+  - PictureCount: 1
+    DifferenceCount: 9
+  - PictureCount: 2
+    DifferenceCount: 7
+  - PictureCount: 2
+    DifferenceCount: 8
+  - PictureCount: 1
     DifferenceCount: 10
   - PictureCount: 2
     DifferenceCount: 8
@@ -65,14 +67,12 @@ MonoBehaviour:
   - PictureCount: 2
     DifferenceCount: 10
   - PictureCount: 3
+    DifferenceCount: 5
+  - PictureCount: 3
+    DifferenceCount: 5
+  - PictureCount: 3
     DifferenceCount: 6
   - PictureCount: 3
-    DifferenceCount: 7
+    DifferenceCount: 6
   - PictureCount: 3
-    DifferenceCount: 8
-  - PictureCount: 2
-    DifferenceCount: 7
-  - PictureCount: 2
-    DifferenceCount: 8
-  - PictureCount: 2
     DifferenceCount: 7

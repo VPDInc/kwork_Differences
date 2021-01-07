@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f98709c7ed564b83b746af9313b0b17, type: 3}
   m_Name: Coins 1000
   m_EditorClassIdentifier: 
-  _type: 0
+  _type: 4
   _count: 1000
   _image: {fileID: 0}

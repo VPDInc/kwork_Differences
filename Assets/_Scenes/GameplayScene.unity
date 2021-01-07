@@ -1727,8 +1727,8 @@ RectTransform:
   m_Children:
   - {fileID: 1691613618}
   - {fileID: 830487016}
-  - {fileID: 1233113912}
   - {fileID: 1104996833}
+  - {fileID: 1233113912}
   - {fileID: 1781289513}
   - {fileID: 1790927309}
   m_Father: {fileID: 1526731826}
@@ -5276,7 +5276,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 1
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!222 &614819363
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8813,7 +8812,7 @@ RectTransform:
   - {fileID: 660209354}
   - {fileID: 651687129}
   m_Father: {fileID: 348985583}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -11721,7 +11720,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 1
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!114 &1174855399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11906,7 +11904,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 348985583}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -14283,7 +14281,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 1
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!114 &1246087295
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18304,7 +18301,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 1
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!114 &1566900287
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21998,7 +21994,6 @@ MonoBehaviour:
     PresetName: 
   TargetLabel: 2
   TextLabel: {fileID: 0}
-  TextMeshProLabel: {fileID: 0}
 --- !u!114 &1993856608
 MonoBehaviour:
   m_ObjectHideFlags: 0
