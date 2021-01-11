@@ -62680,7 +62680,9 @@ MonoBehaviour:
   _globalMapContainer: {fileID: 106717388}
   _episodeInfos:
   - {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
-  _episodeLength: 40.98
+  - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
+  - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
+  _episodeLength: 40.96
   _episodeFrontPrespawnCount: 3
   _episodeNumLabel: {fileID: 828452635}
   _startCameraOffset: {x: -6, y: 0}

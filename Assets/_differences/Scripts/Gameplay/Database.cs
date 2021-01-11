@@ -35,7 +35,6 @@ public class Database : MonoBehaviour {
     }
     
     void Awake() {
-        //PlayerPrefs.DeleteAll();
         _dataPath = Path.Combine(Application.persistentDataPath, SAVE_DATA_PATH);
         if (!File.Exists(_dataPath))
             using (File.Create(_dataPath)) { }
@@ -254,6 +253,8 @@ public class Database : MonoBehaviour {
 
     [ContextMenu("Clear")]
     void ClearLevels() {
+        PlayerPrefs.DeleteAll();
+
         if (File.Exists(_dataPath))
             File.Delete(_dataPath);
         

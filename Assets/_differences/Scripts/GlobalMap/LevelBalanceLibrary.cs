@@ -60,7 +60,6 @@ public class LevelBalancedInfoEditor : Editor {
     }
 
     void UpdateStats() {
-        Debug.Log("Tut");
         SpreadsheetManager
             .Read(new GSTU_Search(_levelBalanceLibrary.AssociatedSheet, _levelBalanceLibrary.AssociatedWorksheet),
                   UpdateAllLevels);
@@ -69,8 +68,6 @@ public class LevelBalancedInfoEditor : Editor {
     void UpdateAllLevels(GstuSpreadSheet spreadsheetRef) {
         _levelBalanceLibrary.LevelBalanceInfos.Clear();
         var rows = spreadsheetRef.rows.primaryDictionary;
-
-        Debug.Log(rows.Count);
 
         for (int i = 2; i <= rows.Count; i++) {
             var levelBalanceInfo = new LevelBalanceLibrary.LevelBalanceInfo();
