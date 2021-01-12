@@ -2888,6 +2888,7 @@ MonoBehaviour:
   _titleLabel: {fileID: 12557730}
   _descriptionLabel: {fileID: 12557729}
   _coinLabel: {fileID: 12557728}
+  collectFx: {fileID: 12557736}
 --- !u!114 &12557734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3341,6 +3342,18 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &12557736 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 9196967003312089555, guid: 996b8f0093dbc0045ba3a34398ac1c9b,
+    type: 3}
+  m_PrefabInstance: {fileID: 12557726}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 12557731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5635b7c34d400b4899426e58bf7d0da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &21952844
 GameObject:
   m_ObjectHideFlags: 0
@@ -62680,8 +62693,6 @@ MonoBehaviour:
   _globalMapContainer: {fileID: 106717388}
   _episodeInfos:
   - {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
-  - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
-  - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
   - {fileID: 7620955068103982727, guid: 6b312fca87f228b4585f46bfa8b1c5ee, type: 3}
   _episodeLength: 32.76
   _episodeFrontPrespawnCount: 3
@@ -76367,16 +76378,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: VIew - Daily rewards
-      objectReference: {fileID: 0}
-    - target: {fileID: 1260876294110610280, guid: 02ab2313da6430d408aecb1e02eebb43,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
-        type: 3}
-      propertyPath: _isDebug
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1260876294139511395, guid: 02ab2313da6430d408aecb1e02eebb43,
         type: 3}

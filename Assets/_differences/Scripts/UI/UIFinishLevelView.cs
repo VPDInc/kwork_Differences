@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Linq;
-
+using Airion.Currency;
 using Airion.Extensions;
 
 using DG.Tweening;
-
+using Differences;
 using Doozy.Engine.UI;
 
 using EasyMobile;
@@ -54,11 +54,20 @@ public class UIFinishLevelView : MonoBehaviour
 
     [Inject] LevelController _levelController = default;
     [Inject] EnergyController _energyController = default;
+    [Inject] CurrencyManager _currencyManager = default;
+
+
+    Currency _coinCurrency = default;
+    Currency _ratingCurrency = default;
+
 
     UIView _currentView = default;
 
     void Awake()
     {
+        _coinCurrency = _currencyManager.GetCurrency(CurrencyConstants.SOFT);
+        _ratingCurrency = _currencyManager.GetCurrency(CurrencyConstants.RATING);
+
         _currentView = GetComponent<UIView>();
     }
 
@@ -144,7 +153,8 @@ public class UIFinishLevelView : MonoBehaviour
                                // var pauseBetweenSpawn = _pauseBetweenSpawns / coinsAmount;
                                for (int i = 0; i < _fxAmount; i++) {
                                    var coinFx = Instantiate(_coinsFlyingPrefab, _coinsStartTransform);
-                                   coinFx.Setup(_coinsEndTransform.position, _pauseBetweenSpawns * i);
+      
+                                   coinFx.Setup(_coinsEndTransform.position, _pauseBetweenSpawns * i, delegate { _coinCurrency.Earn(coinsAmount); });
                                }
                            });
     }

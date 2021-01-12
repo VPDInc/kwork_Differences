@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Airion.Currency;
@@ -53,10 +54,13 @@ public class UIBoosterOfferElement : MonoBehaviour {
 
     public void Buy() {
         if (_coinsCurrency.IsEnough(_cost)) {
-            _coinsCurrency.Spend(_cost);
+           
             Analytic.CurrencySpend(_cost, "booster-bought", _currency.name, _levelController.LastLevelNum);
-            _currency.Earn(_amountToBuy);
-            SetupTrailEffect();
+         
+            SetupTrailEffect(delegate {
+                _currency.Earn(_amountToBuy);
+                _coinsCurrency.Spend(_cost);
+            });
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
@@ -66,10 +70,10 @@ public class UIBoosterOfferElement : MonoBehaviour {
         _backIcon.sprite = back;
     }
     
-    void SetupTrailEffect() {
+    void SetupTrailEffect(Action action) {
         for (int i = 0; i < _coinFxAmount; i++) {
             var coinFx = Instantiate(_uiTrailEffectPrefab, _fxStartTransform);
-            coinFx.Setup(transform.position, _pauseBetweenSpawns * i);
+            coinFx.Setup(transform.position, _pauseBetweenSpawns * i, action);
         }
     }
 }

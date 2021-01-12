@@ -1955,7 +1955,7 @@ MonoBehaviour:
   - _card: {fileID: 1260876293848805193}
     _data: {fileID: 11400000, guid: e67d5c8535e164d90b47fa49536a149f, type: 2}
   _window: {fileID: 1260876294110610285}
-  _isDebug: 1
+  _isDebug: 0
   _debugDay: 7
 --- !u!1 &1260876294117098617
 GameObject:

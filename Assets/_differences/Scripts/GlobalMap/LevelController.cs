@@ -25,13 +25,10 @@ public class LevelController : Singleton<LevelController> {
     [Inject] UILevelStartView _levelStartView = default;
     [Inject] UIFinishLevelView _uiFinishLevelView = default;
     [Inject] GameplayController _gameplay = default;
-    [Inject] CurrencyManager _currencyManager = default;
     [Inject] EnergyController _energyController = default;
     [Inject] Tournament _tournament = default;
     [Inject] Database _database = default;
 
-    Currency _coinCurrency = default;
-    Currency _ratingCurrency = default;
     
     int _lastLevelNum = 0;
     int _lastEpisodeNum = 0;
@@ -56,8 +53,6 @@ public class LevelController : Singleton<LevelController> {
     }
 
     void Start() {
-        _coinCurrency = _currencyManager.GetCurrency(CurrencyConstants.SOFT);
-        _ratingCurrency = _currencyManager.GetCurrency(CurrencyConstants.RATING);
         SetupLevels();
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;
@@ -103,7 +98,6 @@ public class LevelController : Singleton<LevelController> {
     
     void OnCompleted(GameplayResult gameplayResult) {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
-        _coinCurrency.Earn(coinsToEarn);
         Analytic.CurrencyEarn(coinsToEarn, "level-completed", LastLevelNum.ToString());
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
         if (gameplayResult.IsCompleted) {
