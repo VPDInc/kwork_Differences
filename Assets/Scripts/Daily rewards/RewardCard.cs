@@ -7,6 +7,7 @@ using Airion.DailyRewards;
 using Zenject;
 using Airion.Currency;
 using Differences;
+using System;
 
 [RequireComponent(typeof(Animator))]
 public class RewardCard : MonoBehaviour
@@ -64,12 +65,9 @@ public class RewardCard : MonoBehaviour
         yield return new WaitForSeconds(_keyAnimationOpenTime);
 
         foreach (var reward in _data.Rewards)
-            PlayEffect(reward.Type);
-
-        foreach (var reward in _data.Rewards)
         {
-            yield return new WaitForSeconds(_addRewardDelay); // WTF ??????????
-            AddReward(reward.Type, reward.Count);
+            yield return new WaitForSeconds(_addRewardDelay);
+            PlayEffect(reward);
         }
     }
 
@@ -87,13 +85,15 @@ public class RewardCard : MonoBehaviour
         }
     }
 
-    private void PlayEffect(RewardEnum type)
+    private void PlayEffect(DailyRewardData data)
     {
         foreach (var effectRewered in m_EffectsRewereds)
         {
-            if (effectRewered.Type == type)
+            if (effectRewered.Type == data.Type)
             {
-                effectRewered.Play();
+                effectRewered.Play(delegate {
+                    AddReward(data.Type, data.Count);
+                });
                 break;
             }
         }
@@ -113,12 +113,12 @@ public class RewardCard : MonoBehaviour
 
         public RewardEnum Type => _type;
 
-        public void Play()
+        public void Play(Action onSuccses)
         {
             for (int i = 0; i < _count; i++)
             {
                 var coinFx = Instantiate(_effect, _effectStartPosition);
-                coinFx.Setup(_effectFinishPosition.position, PAUSED_ANINMATION_COINS * i);
+                coinFx.Setup(_effectFinishPosition.position, PAUSED_ANINMATION_COINS * i, onSuccses);
             }
         }
     }

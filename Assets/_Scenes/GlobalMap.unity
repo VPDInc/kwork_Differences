@@ -62682,10 +62682,11 @@ MonoBehaviour:
   - {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
   - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
   - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
-  _episodeLength: 40.96
+  - {fileID: 7620955068103982727, guid: 6b312fca87f228b4585f46bfa8b1c5ee, type: 3}
+  _episodeLength: 32.76
   _episodeFrontPrespawnCount: 3
   _episodeNumLabel: {fileID: 828452635}
-  _startCameraOffset: {x: -6, y: 0}
+  _startCameraOffset: {x: -2, y: 0}
 --- !u!114 &1835200745
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -65811,6 +65812,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1881758216}
   - component: {fileID: 1881758215}
+  - component: {fileID: 1881758217}
   m_Layer: 0
   m_Name: SceneContext
   m_TagString: Untagged
@@ -65831,7 +65833,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
-  _monoInstallers: []
+  _monoInstallers:
+  - {fileID: 1881758217}
   _installerPrefabs: []
   _autoRun: 1
   OnPreInstall:
@@ -65863,6 +65866,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1881758217
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1881758214}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51e179e416a12e548b140a2264983e0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &1890357378 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6174886434683170413, guid: 796090f54d363c345b7e5333e1537704,

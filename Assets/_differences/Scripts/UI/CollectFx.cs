@@ -1,7 +1,10 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
-public class CollectFx : MonoBehaviour {
-    
+public class CollectFx : MonoBehaviour 
+{
+    public Action OnSuccess;
+
     [SerializeField] UITrailEffect _uiTrailEffectPrefab = default;
     [SerializeField] RectTransform _fxStart = default;
     [SerializeField] RectTransform _fxTarget = default;
@@ -11,7 +14,7 @@ public class CollectFx : MonoBehaviour {
     public void SetupTrailEffect() {
         for (int i = 0; i < _fxAmount; i++) {
             var fx = Instantiate(_uiTrailEffectPrefab, _fxStart);
-            fx.Setup(_fxTarget.position, _pauseBetweenSpawns * i);
+            fx.Setup(_fxTarget.position, _pauseBetweenSpawns * i, OnSuccess);
         }
     }
 }
