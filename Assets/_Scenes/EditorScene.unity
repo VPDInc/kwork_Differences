@@ -165,7 +165,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55538eb9cf46d49de8d3cbafb4753215, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _folderName: Diff_1
   _currentOrientation: 1
 --- !u!1 &358721221
 GameObject:

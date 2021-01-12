@@ -147,12 +147,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectsRewereds:
-  - _type: 0
+  - _type: 4
     _count: 3
     _effect: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
       type: 3}
     _effectStartPosition: {fileID: 1260876293988532650}
     _effectFinishPosition: {fileID: 1260876294441728428}
+  _keyAnimationOpenTime: 1.5
+  _addRewardDelay: 1.3
 --- !u!1 &1260876293664664287
 GameObject:
   m_ObjectHideFlags: 0
@@ -600,18 +602,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectsRewereds:
-  - _type: 0
+  - _type: 4
     _count: 3
     _effect: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
       type: 3}
     _effectStartPosition: {fileID: 1260876294151807176}
     _effectFinishPosition: {fileID: 1260876294441728428}
-  - _type: 1
+  - _type: 0
     _count: 2
     _effect: {fileID: 2482736315055544054, guid: f1b439d8dfa4042dbaf52a3b4a0c81dd,
       type: 3}
     _effectStartPosition: {fileID: 1260876293671169247}
     _effectFinishPosition: {fileID: 1260876293926607386}
+  _keyAnimationOpenTime: 1.5
+  _addRewardDelay: 1.3
 --- !u!1 &1260876293926607381
 GameObject:
   m_ObjectHideFlags: 0
@@ -969,12 +973,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectsRewereds:
-  - _type: 0
+  - _type: 4
     _count: 3
     _effect: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
       type: 3}
     _effectStartPosition: {fileID: 1260876294193404719}
     _effectFinishPosition: {fileID: 1260876294441728428}
+  _keyAnimationOpenTime: 1.5
+  _addRewardDelay: 1.3
 --- !u!1 &1260876294070947912
 GameObject:
   m_ObjectHideFlags: 0
@@ -1086,12 +1092,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectsRewereds:
-  - _type: 0
+  - _type: 4
     _count: 3
     _effect: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
       type: 3}
     _effectStartPosition: {fileID: 1260876294883878090}
     _effectFinishPosition: {fileID: 1260876294441728428}
+  _keyAnimationOpenTime: 1.5
+  _addRewardDelay: 1.3
 --- !u!1 &1260876294084587897
 GameObject:
   m_ObjectHideFlags: 0
@@ -1203,12 +1211,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectsRewereds:
-  - _type: 0
+  - _type: 4
     _count: 3
     _effect: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
       type: 3}
     _effectStartPosition: {fileID: 1260876295358364068}
     _effectFinishPosition: {fileID: 1260876294441728428}
+  _keyAnimationOpenTime: 1.5
+  _addRewardDelay: 1.3
 --- !u!1 &1260876294108301524
 GameObject:
   m_ObjectHideFlags: 0
@@ -17770,12 +17780,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectsRewereds:
-  - _type: 1
+  - _type: 0
     _count: 2
     _effect: {fileID: 2482736315055544054, guid: f1b439d8dfa4042dbaf52a3b4a0c81dd,
       type: 3}
     _effectStartPosition: {fileID: 1260876295642254220}
     _effectFinishPosition: {fileID: 1260876293926607386}
+  _keyAnimationOpenTime: 1.5
+  _addRewardDelay: 1.3
 --- !u!1 &1260876294546106976
 GameObject:
   m_ObjectHideFlags: 0
@@ -22924,12 +22936,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_EffectsRewereds:
-  - _type: 1
+  - _type: 0
     _count: 1
     _effect: {fileID: 2482736315055544054, guid: f1b439d8dfa4042dbaf52a3b4a0c81dd,
       type: 3}
     _effectStartPosition: {fileID: 1260876294108301525}
     _effectFinishPosition: {fileID: 1260876293926607386}
+  _keyAnimationOpenTime: 1.5
+  _addRewardDelay: 1.3
 --- !u!1 &1260876294860071573
 GameObject:
   m_ObjectHideFlags: 0

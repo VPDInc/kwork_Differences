@@ -253,6 +253,8 @@ public class Database : MonoBehaviour {
 
     [ContextMenu("Clear")]
     void ClearLevels() {
+        PlayerPrefs.DeleteAll();
+
         if (File.Exists(_dataPath))
             File.Delete(_dataPath);
         

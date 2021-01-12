@@ -62305,7 +62305,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.0004272461, y: 0}
+  m_AnchoredPosition: {x: 0.0005493164, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1825060487
@@ -62680,6 +62680,8 @@ MonoBehaviour:
   _globalMapContainer: {fileID: 106717388}
   _episodeInfos:
   - {fileID: 1886897256768957558, guid: d7f671c2977dab44e9e6ea6efd081492, type: 3}
+  - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
+  - {fileID: 1886897256768957558, guid: 6c0e34f386121426784d5962e4b3ed62, type: 3}
   - {fileID: 7620955068103982727, guid: 6b312fca87f228b4585f46bfa8b1c5ee, type: 3}
   _episodeLength: 32.76
   _episodeFrontPrespawnCount: 3
@@ -76374,7 +76376,7 @@ PrefabInstance:
     - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
         type: 3}
       propertyPath: _isDebug
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1260876294139511395, guid: 02ab2313da6430d408aecb1e02eebb43,
         type: 3}
