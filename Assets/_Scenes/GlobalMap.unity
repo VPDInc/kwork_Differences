@@ -34056,6 +34056,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0ff4e73012bf946ad139b0d8ddb940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectFx: {fileID: 0}
+  enableFx: 0
 --- !u!114 &669164218
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -36052,6 +36054,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0ff4e73012bf946ad139b0d8ddb940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectFx: {fileID: 0}
+  enableFx: 0
 --- !u!114 &812946591
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43213,6 +43217,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0ff4e73012bf946ad139b0d8ddb940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectFx: {fileID: 0}
+  enableFx: 0
 --- !u!114 &1082639923
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46402,6 +46408,7 @@ GameObject:
   - component: {fileID: 1295528212}
   - component: {fileID: 1295528211}
   - component: {fileID: 1295528210}
+  - component: {fileID: 1295528215}
   m_Layer: 0
   m_Name: LoginAppleButton
   m_TagString: Untagged
@@ -46443,6 +46450,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb14069e104dd46e9a547148d6d66fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectFx: {fileID: 1295528215}
+  enableFx: 1
 --- !u!114 &1295528211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -46547,6 +46556,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1295528208}
   m_CullTransparentMesh: 0
+--- !u!114 &1295528215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295528208}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5635b7c34d400b4899426e58bf7d0da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiTrailEffectPrefab: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
+    type: 3}
+  _fxStart: {fileID: 1295528209}
+  _fxTarget: {fileID: 1486848662}
+  _pauseBetweenSpawns: 0.1
+  _fxAmount: 3
 --- !u!1 &1297633798
 GameObject:
   m_ObjectHideFlags: 0
@@ -54370,6 +54397,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb14069e104dd46e9a547148d6d66fc2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectFx: {fileID: 0}
+  enableFx: 0
 --- !u!114 &1470133151
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57292,6 +57321,7 @@ GameObject:
   - component: {fileID: 1623625193}
   - component: {fileID: 1623625192}
   - component: {fileID: 1623625191}
+  - component: {fileID: 1623625196}
   m_Layer: 0
   m_Name: LoginFacebookButton
   m_TagString: Untagged
@@ -57346,6 +57376,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cc0ff4e73012bf946ad139b0d8ddb940, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collectFx: {fileID: 1623625196}
+  enableFx: 1
 --- !u!114 &1623625193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -57437,6 +57469,24 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623625189}
   m_CullTransparentMesh: 0
+--- !u!114 &1623625196
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623625189}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c5635b7c34d400b4899426e58bf7d0da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _uiTrailEffectPrefab: {fileID: 2482736315055544054, guid: e5526c91367e74f41bea804e7abbcc4d,
+    type: 3}
+  _fxStart: {fileID: 1623625190}
+  _fxTarget: {fileID: 1486848662}
+  _pauseBetweenSpawns: 0.1
+  _fxAmount: 3
 --- !u!1 &1627690246
 GameObject:
   m_ObjectHideFlags: 0
