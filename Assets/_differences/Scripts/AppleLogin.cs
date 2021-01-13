@@ -71,10 +71,9 @@ public class AppleLogin : MonoBehaviour {
 
         IsLogged = true;
         Logged?.Invoke();
-        Reward();
     }
 
-    void Reward() {
+    public void SetReward() {
         _currencyManager.GetCurrency(Differences.CurrencyConstants.SOFT).Earn(_linkReward);
     }
 }

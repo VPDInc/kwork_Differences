@@ -128,8 +128,6 @@ public class PlayFabFacebook : MonoBehaviour {
         if (!_wasLinked) {
             _wasLinked = true;
             PrefsExtensions.SetBool(WAS_LINKED_ID, _wasLinked);
-            _currency.Earn(_facebookLinkReward);
-            Analytic.CurrencyEarn(_facebookLinkReward, "facebook-linked", "");
         }
 
         FacebookLinked?.Invoke();
@@ -184,6 +182,12 @@ public class PlayFabFacebook : MonoBehaviour {
             Debug.LogError(message);
         else
             Debug.Log(message);
+    }
+
+    public void SetReward()
+    {
+        _currency.Earn(_facebookLinkReward);
+        Analytic.CurrencyEarn(_facebookLinkReward, "facebook-linked", "");
     }
 
     public void OnGUI() {

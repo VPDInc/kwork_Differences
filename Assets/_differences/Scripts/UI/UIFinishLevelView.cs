@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using Airion.Currency;
 using Airion.Extensions;
@@ -60,6 +61,8 @@ public class UIFinishLevelView : MonoBehaviour
     Currency _coinCurrency = default;
     Currency _ratingCurrency = default;
 
+    bool isErnReward = false;
+
 
     UIView _currentView = default;
 
@@ -73,6 +76,8 @@ public class UIFinishLevelView : MonoBehaviour
 
     public void Show(int levelNum, GameplayResult gameplayResult, int coinReward)
     {
+        isErnReward = false;
+
         SetupVictory(gameplayResult.IsCompleted);
         Show();
         SetLevelName(levelNum);
@@ -133,31 +138,54 @@ public class UIFinishLevelView : MonoBehaviour
         seq.AppendInterval(3);
         seq.AppendCallback(() => {
                                // var pauseBetweenSpawn = _pauseBetweenSpawns / medalAmount;
-                               for (int i = 0; i < _fxAmount; i++) {
-                                   var medalFx = Instantiate(_medalFlyingPrefab, _medalStartTransform);
-                                   medalFx.Setup(_medalEndTransform.position, _pauseBetweenSpawns * i);
-                               }
-                           });
+            SetupTrailEffect(_medalFlyingPrefab, _medalStartTransform, _medalEndTransform);
+
+        });
 
         // seq.AppendInterval(_pauseBetweenSpawns);
         seq.AppendCallback(() => {
-                               // var pauseBetweenSpawn = _pauseBetweenSpawns / energyAmount;
-                               for (int i = 0; i < _fxAmount; i++) {
-                                   var energyFx = Instantiate(_energyFlyingPrefab, _energyStartTransform);
-                                   energyFx.Setup(_energyEndTransform.position, _pauseBetweenSpawns * i);
-                               }
-                           });
+            // var pauseBetweenSpawn = _pauseBetweenSpawns / energyAmount;
+
+            SetupTrailEffect(_energyFlyingPrefab, _energyStartTransform, _energyEndTransform);
+
+        });
 
         // seq.AppendInterval(_pauseBetweenSpawns);
         seq.AppendCallback(() => {
-                               // var pauseBetweenSpawn = _pauseBetweenSpawns / coinsAmount;
-                               for (int i = 0; i < _fxAmount; i++) {
-                                   var coinFx = Instantiate(_coinsFlyingPrefab, _coinsStartTransform);
-      
-                                   coinFx.Setup(_coinsEndTransform.position, _pauseBetweenSpawns * i, delegate { _coinCurrency.Earn(coinsAmount); });
-                               }
-                           });
+            // var pauseBetweenSpawn = _pauseBetweenSpawns / coinsAmount;
+
+            SetupTrailEffect(_coinsFlyingPrefab, _coinsStartTransform, _coinsEndTransform, delegate { 
+                //TODO 13.01.2021 REFACTORING
+                if(!isErnReward)
+                {
+                    _coinCurrency.Earn(coinsAmount);
+                    isErnReward = true;
+                }
+            });
+
+        });
     }
+
+    //TODO 13.01.2021 REFACTORING!
+    float countfx = 0;
+    void SetupTrailEffect(UITrailEffect uITrailEffect,Transform startTransform, RectTransform targetTransform, Action onSuccess = null)
+    {
+        for (int i = 0; i < _fxAmount; i++)
+        {
+            var coinFx = Instantiate(uITrailEffect, startTransform);
+            coinFx.Setup(targetTransform.position, _pauseBetweenSpawns * i, delegate {
+
+                ++countfx;
+
+                if (_fxAmount == countfx)
+                {
+                    countfx = 0;
+                    onSuccess?.Invoke();
+                }
+            });
+        }
+    }
+
 
     void Show() =>
         _currentView.Show();

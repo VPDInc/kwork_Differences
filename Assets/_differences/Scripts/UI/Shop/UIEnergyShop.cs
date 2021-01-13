@@ -49,10 +49,10 @@ public class UIEnergyShop : MonoBehaviour {
             ShowMaxEnergyPopup();
             return;
         }
-        
+
         if (_softCurrency.IsEnough(_costEnergyPack1)) {
+            _softCurrency.Spend(_costEnergyPack1);
             SetupTrailEffect(_offerElementPack1.transform, _fxTarget, delegate {
-                _softCurrency.Spend(_costEnergyPack1);
                 _energyCurrency.Earn(_energyAmountPack1);
             });
             Analytic.CurrencySpend(_costEnergyPack1, "energy-bought", "energy-pack-1", _levelController.LastLevelNum);
@@ -66,10 +66,10 @@ public class UIEnergyShop : MonoBehaviour {
             ShowMaxEnergyPopup();
             return;
         }
-        
+
         if (_softCurrency.IsEnough(_costEnergyPack2)) {
+            _softCurrency.Spend(_costEnergyPack2);
             SetupTrailEffect(_offerElementPack2.transform, _fxTarget, delegate {
-                _softCurrency.Spend(_costEnergyPack2);
                 _energyCurrency.Earn(_energyAmountPack2);
             });
             Analytic.CurrencySpend(_costEnergyPack2, "energy-bought", "energy-pack-2", _levelController.LastLevelNum);
@@ -84,10 +84,10 @@ public class UIEnergyShop : MonoBehaviour {
             return;
         }
         
+
         if (_softCurrency.IsEnough(_costInfinityEnergy)) {
-        
+            _softCurrency.Spend(_costInfinityEnergy);
             SetupTrailEffect(_offerElementPack3.transform, _fxTarget, delegate {
-                _softCurrency.Spend(_costInfinityEnergy);
                 _energyController.AddInfinityTime();
             });
 
@@ -96,11 +96,22 @@ public class UIEnergyShop : MonoBehaviour {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
     }
-    
+
+    //TODO 13.01.2021 REFACTORING!
+    float countfx = 0;
     void SetupTrailEffect(Transform startTransform, RectTransform targetTransform, Action onSucsses) {
         for (int i = 0; i < _fxAmount; i++) {
             var fx = Instantiate(_uiTrailEffectPrefab, startTransform);
-            fx.Setup(targetTransform.position, _pauseBetweenSpawns * i, onSucsses);
+            fx.Setup(targetTransform.position, _pauseBetweenSpawns * i, delegate
+            {
+                ++countfx;
+
+                if (_fxAmount == countfx)
+                {
+                    countfx = 0;
+                    onSucsses?.Invoke();
+                }
+            });
         }
     }
 

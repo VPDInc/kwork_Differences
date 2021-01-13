@@ -53,10 +53,22 @@ public class UICoinShopView : MonoBehaviour {
         SetupOffers();
     }
 
+    //TODO 13.01.2021 REFACTORING!
+    float countfx = 0;
     void SetupTrailEffect(Transform startTransform, RectTransform targetTransform, Action onSuccess) {
+       
         for (int i = 0; i < _fxAmount; i++) {
             var coinFx = Instantiate(_uiTrailEffectPrefab, startTransform);
-            coinFx.Setup(targetTransform.position, _pauseBetweenSpawns * i, onSuccess);
+            coinFx.Setup(targetTransform.position, _pauseBetweenSpawns * i, delegate {
+                
+                ++countfx; 
+
+                if (_fxAmount == countfx)
+                {
+                    countfx = 0;
+                    onSuccess?.Invoke();
+                }
+            });
         }
     }
 

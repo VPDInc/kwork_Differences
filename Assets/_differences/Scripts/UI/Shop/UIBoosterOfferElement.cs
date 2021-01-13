@@ -56,10 +56,9 @@ public class UIBoosterOfferElement : MonoBehaviour {
         if (_coinsCurrency.IsEnough(_cost)) {
            
             Analytic.CurrencySpend(_cost, "booster-bought", _currency.name, _levelController.LastLevelNum);
-         
+            _coinsCurrency.Spend(_cost);
             SetupTrailEffect(delegate {
                 _currency.Earn(_amountToBuy);
-                _coinsCurrency.Spend(_cost);
             });
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
@@ -69,11 +68,21 @@ public class UIBoosterOfferElement : MonoBehaviour {
     public void SetBackSprite(Sprite back) {
         _backIcon.sprite = back;
     }
-    
-    void SetupTrailEffect(Action action) {
+
+    //TODO 13.01.2021 REFACTORING!
+    float countfx = 0;
+    private void SetupTrailEffect(Action action) {
         for (int i = 0; i < _coinFxAmount; i++) {
             var coinFx = Instantiate(_uiTrailEffectPrefab, _fxStartTransform);
-            coinFx.Setup(transform.position, _pauseBetweenSpawns * i, action);
+            coinFx.Setup(transform.position, _pauseBetweenSpawns * i, delegate {
+                ++countfx;
+
+                if (_coinFxAmount == countfx)
+                {
+                    countfx = 0;
+                    action?.Invoke();
+                }
+            });
         }
     }
 }
