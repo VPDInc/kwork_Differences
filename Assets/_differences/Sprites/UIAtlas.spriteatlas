@@ -68,7 +68,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: e6d3f26f71791204fb92327980b6e6c4, type: 3}
     - {fileID: 102900000, guid: 25619b6fa6d56cf48a1b54d8ae11366c, type: 3}
     - {fileID: 102900000, guid: 05ae9efb2d029ed439e51843a47d1c33, type: 3}
-    totalSpriteSurfaceArea: 42140305
+    totalSpriteSurfaceArea: 42097897
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -248,7 +248,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 439db77d6b9538f45b46d5ac31bd8ce5, type: 3}
   - {fileID: 21300000, guid: 1a4e7f9d317f7f34280286c28ec68409, type: 3}
   - {fileID: 21300000, guid: 2b9faaadf8a8e2946a776821532f873e, type: 3}
-  - {fileID: 21300000, guid: 522475fd9ad1ec341a362c11af832c3f, type: 3}
   - {fileID: 21300000, guid: 0b91c80e79be8fc45a0c8fbe960810ac, type: 3}
   - {fileID: 21300000, guid: 8345661e119f6054f8a810b6c6a18402, type: 3}
   - {fileID: 21300000, guid: 3dc8682e90a8c4a36bfe273773364549, type: 3}
@@ -270,7 +269,6 @@ SpriteAtlas:
   - {fileID: 21300000, guid: e6d3f26f71791204fb92327980b6e6c4, type: 3}
   - {fileID: 21300000, guid: b911576fdf7385a4d8e2f83f4f6a10ca, type: 3}
   - {fileID: 21300000, guid: f625127f15188f54d9cca0d6436f91b2, type: 3}
-  - {fileID: 21300000, guid: 07bb727f64ac41a4990fccc3534f76a5, type: 3}
   - {fileID: 21300000, guid: 0a3fc47f99bd2d14380de49e6d16763c, type: 3}
   - {fileID: 21300000, guid: c9fbb48ffa0bb8943920791022dda432, type: 3}
   - {fileID: 21300000, guid: 89d27b9f701caba4c8992c89c169d308, type: 3}
@@ -456,7 +454,6 @@ SpriteAtlas:
   - magnifier
   - popcorn
   - 26
-  - bun1
   - 4
   - horizontal_substrate
   - curtain2
@@ -478,7 +475,6 @@ SpriteAtlas:
   - TempMap
   - 1
   - 8
-  - bun2
   - back
   - book
   - horizontal_picture
