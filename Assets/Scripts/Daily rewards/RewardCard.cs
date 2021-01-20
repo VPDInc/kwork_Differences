@@ -113,12 +113,22 @@ public class RewardCard : MonoBehaviour
 
         public RewardEnum Type => _type;
 
+        //TODO 13.01.2021 REFACTORING!
+        float countfx = 0;
         public void Play(Action onSuccses)
         {
             for (int i = 0; i < _count; i++)
             {
                 var coinFx = Instantiate(_effect, _effectStartPosition);
-                coinFx.Setup(_effectFinishPosition.position, PAUSED_ANINMATION_COINS * i, onSuccses);
+                coinFx.Setup(_effectFinishPosition.position, PAUSED_ANINMATION_COINS * i, delegate {
+                    ++countfx;
+
+                    if (_count == countfx)
+                    {
+                        countfx = 0;
+                        onSuccses?.Invoke();
+                    };
+                });
             }
         }
     }

@@ -13,7 +13,8 @@ using UnityEngine.UI;
 
 using Zenject;
 
-public class UITournament : MonoBehaviour {
+public class UITournament : MonoBehaviour
+{
     [SerializeField] Image _winnerAvatar1 = default;
     [SerializeField] Image _winnerAvatar2 = default;
     [SerializeField] Image _winnerAvatar3 = default;
@@ -27,209 +28,269 @@ public class UITournament : MonoBehaviour {
     [SerializeField] UIView _helpView = default;
     [SerializeField] RectTransform _viewport = default;
     [SerializeField] RectTransform _arrow = default;
-    
+
     [Inject] Tournament _tournament = default;
     [Inject] DiContainer _container = default;
     [Inject] UITournamentEnd _endTournament = default;
     [Inject] AvatarsPool _avatarPool = default;
-    
+    [Inject] PlayerInfoController _infoController = default;
+
+
     UIView _view;
     float _lastUpdateTimestamp = 0;
     int _myPosition = 0;
     int _fullElementsAmount = 0;
-    
+
     RectTransform _my;
-    
+
+    private LeaderboardElement isMe;
+    private LeaderboardPlayer player;
+
     bool IsMeInsideView => RectTransformUtility.RectangleContainsScreenPoint(_viewport, _my?.transform.position ?? Vector3.zero);
 
-    float MyPositionInScrollView => 1 - (_myPosition / (float) _fullElementsAmount );
+    float MyPositionInScrollView => 1 - (_myPosition / (float)_fullElementsAmount);
 
     const float UPDATE_TIMER_EVERY_SECONDS = 60;
     const float ELEMENTS_COUNT_IN_ONE_SCREEN = 7;
-    
-    readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string,LeaderboardElement>();
-    
-    void Awake() {
+
+    readonly Dictionary<string, LeaderboardElement> _leaderboardElements = new Dictionary<string, LeaderboardElement>();
+
+    void Awake()
+    {
         _view = GetComponent<UIView>();
         _loadingView.Show();
     }
 
-    void Start() {
+    void Start()
+    {
         _tournament.CurrentFilled += OnTournamentCurrentFilled;
         _tournament.PrevFilled += OnLastWinnersFilled;
     }
 
-    void OnDestroy() {
+    void OnDestroy()
+    {
         _tournament.CurrentFilled -= OnTournamentCurrentFilled;
         _tournament.PrevFilled -= OnLastWinnersFilled;
     }
-    
-    void Update() {
-        if (Time.time - _lastUpdateTimestamp >= UPDATE_TIMER_EVERY_SECONDS) {
+
+    void Update()
+    {
+        if (Time.time - _lastUpdateTimestamp >= UPDATE_TIMER_EVERY_SECONDS)
+        {
             UpdateTimer();
         }
 
-        if (Input.GetMouseButtonDown(0)) {
-            if (_helpView.IsVisible && !_helpView.IsShowing) {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (_helpView.IsVisible && !_helpView.IsShowing)
+            {
                 _helpView.Hide();
             }
         }
     }
 
-    void OnTournamentCurrentFilled(LeaderboardPlayer[] players) {
+    void OnTournamentCurrentFilled(LeaderboardPlayer[] players)
+    {
         Fill(players);
     }
 
-    void Fill(LeaderboardPlayer[] players, bool friendsOnly = false) {
+    void Fill(LeaderboardPlayer[] players, bool friendsOnly = false)
+    {
         UpdateTimer();
-        
+
         _leaderboardElements.Clear();
         _content.DestroyAllChildren();
         _fullElementsAmount = 0;
         _myPosition = 0;
-        
+
         var orderedPlayers = players.OrderByDescending(player => player.Score).ToArray();
         var placeInLeaderboard = 0;
         var placeInGlobal = 0;
-        
+
         if (orderedPlayers.Length > 0)
             CreateElement(orderedPlayers[0], placeInLeaderboard, placeInGlobal);
 
-        if (orderedPlayers.Length > 1) {
-            for (int i = 1; i < orderedPlayers.Length; i++) {
+        if (orderedPlayers.Length > 1)
+        {
+            for (int i = 1; i < orderedPlayers.Length; i++)
+            {
                 var player = orderedPlayers[i];
-                if (_leaderboardElements.ContainsKey(player.Id)) {
+                if (_leaderboardElements.ContainsKey(player.Id))
+                {
                     Debug.LogError($"[{GetType()}] already contains element with id {player.Id}", _leaderboardElements[player.Id]);
-                } else {
-                    if (orderedPlayers[i - 1].Score != player.Score) {
+                }
+                else
+                {
+                    if (orderedPlayers[i - 1].Score != player.Score)
+                    {
                         placeInGlobal++;
                         placeInLeaderboard++;
-                    } 
-                    
+                    }
+
                     CreateElement(player, placeInLeaderboard, placeInGlobal);
                 }
 
-                if (player.IsMe) {
+                if (player.IsMe)
+                {
                     _myPosition = placeInLeaderboard;
                 }
-                
+
             }
         }
-        
+
         _loadingView.Hide();
         SelectMy();
         SetIcons();
-        
+
         _toLeadersButton.SetActive(IsMeInsideView);
         _toMyButton.SetActive(!IsMeInsideView);
     }
 
-    void CreateElement(LeaderboardPlayer player, int placeInLeaderboard, int placeInGlobal) {
+    void CreateElement(LeaderboardPlayer player, int placeInLeaderboard, int placeInGlobal)
+    {
         var element = Instantiate(_leaderboardElement, _content);
+
         _container.InjectGameObject(element.gameObject);
         _fullElementsAmount++;
         element.Fill(placeInLeaderboard, placeInGlobal, player);
         _leaderboardElements.Add(player.Id, element);
+
         if (player.IsMe)
+        {
+            isMe = element;
             _my = element.GetComponent<RectTransform>();
+        }
     }
 
-    void UpdateTimer() {
+    void UpdateTimer()
+    {
         var delta = (_tournament.NextReset - DateTime.Now);
         var toStr = delta;
-        if (delta < TimeSpan.Zero) {
+        if (delta < TimeSpan.Zero)
+        {
             toStr = TimeSpan.Zero;
             _tournament.TryReloadTimed();
         }
-        
+
         _tournamentDuration.text = toStr.ToString(@"d\d\ hh\h\ mm\m");
         _lastUpdateTimestamp = Time.time;
     }
 
-    public void OnShowClick() {
+    public void OnShowClick()
+    {
         _view.Show();
+
+        isMe.SetIcon(_infoController.PlayerIcon);
     }
-    
-    public void OnExitClick() {
+
+    public void OnExitClick()
+    {
         _view.Hide();
     }
 
-    public void OnPositionButtonClick() {
-        if (IsMeInsideView) {
+    public void OnPositionButtonClick()
+    {
+        if (IsMeInsideView)
+        {
             _scroll.verticalNormalizedPosition = 1;
-        } else {
-           SelectMy();
+        }
+        else
+        {
+            SelectMy();
         }
     }
 
-    public void OnOpenTournamentEndClick() {
+    public void OnOpenTournamentEndClick()
+    {
         _endTournament.Show();
     }
 
-    void SelectMy() {
-        var step = (1 / (float) _fullElementsAmount);
+    void SelectMy()
+    {
+        var step = (1 / (float)_fullElementsAmount);
         _scroll.verticalNormalizedPosition = Mathf.Clamp01(MyPositionInScrollView + (step * ELEMENTS_COUNT_IN_ONE_SCREEN));
     }
 
-    public void OnScrollChanged(Vector2 scroll) {
+    public void OnScrollChanged(Vector2 scroll)
+    {
         _toLeadersButton.SetActive(IsMeInsideView);
         _toMyButton.SetActive(!IsMeInsideView);
-        if (!IsMeInsideView) {
-            if (MyPositionInScrollView < _scroll.normalizedPosition.y) {
-                _arrow.transform.rotation = Quaternion.Euler(0,0,180);
-            } else {
-                _arrow.transform.rotation = Quaternion.Euler(0,0,0);
+        if (!IsMeInsideView)
+        {
+            if (MyPositionInScrollView < _scroll.normalizedPosition.y)
+            {
+                _arrow.transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
+            else
+            {
+                _arrow.transform.rotation = Quaternion.Euler(0, 0, 0);
             }
         }
     }
 
-    public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly) {
+    public void OnFriendsOnlyToggleSwitch(bool isFriendsOnly)
+    {
         Filter(isFriendsOnly);
     }
 
-    void Filter(bool isFriendsOnly) {
+    void Filter(bool isFriendsOnly)
+    {
         var elements = _leaderboardElements.Values;
         var ordered = elements.OrderByDescending(e => e.Player.Score).ToArray();
 
-        for (int i = 0; i < ordered.Length; i++) {
+        for (int i = 0; i < ordered.Length; i++)
+        {
             var element = ordered[i];
             var isFriend = (element.Player.IsFriend || element.Player.IsMe);
-            if (isFriend && isFriendsOnly || !isFriendsOnly) {
+            if (isFriend && isFriendsOnly || !isFriendsOnly)
+            {
                 element.gameObject.SetActive(true);
-            } else {
+            }
+            else
+            {
                 element.gameObject.SetActive(false);
             }
         }
     }
-    
-    void OnLastWinnersFilled(LeaderboardPlayer[] winners) {
+
+    void OnLastWinnersFilled(LeaderboardPlayer[] winners)
+    {
         var ordered = winners.OrderByDescending(p => p.Score).ToArray();
-        for (int i = 0; i < ordered.Length; i++) {
+        for (int i = 0; i < ordered.Length; i++)
+        {
             if (i >= ordered.Length)
                 return;
             var winner = ordered[i];
-            if (i == 0) {
-                _avatarPool.SetAvatarAsync(winner, (sprite) => {
+            if (i == 0)
+            {
+                _avatarPool.SetAvatarAsync(winner, (sprite) =>
+                {
                     _winnerAvatar1.sprite = sprite;
                 });
             }
-            
-            if (i == 1) {      
-                _avatarPool.SetAvatarAsync(winner, (sprite) => {
+
+            if (i == 1)
+            {
+                _avatarPool.SetAvatarAsync(winner, (sprite) =>
+                {
                     _winnerAvatar2.sprite = sprite;
                 });
             }
-            
-            if (i == 2) {
-                _avatarPool.SetAvatarAsync(winner, (sprite) => {
+
+            if (i == 2)
+            {
+                _avatarPool.SetAvatarAsync(winner, (sprite) =>
+                {
                     _winnerAvatar3.sprite = sprite;
                 });
             }
         }
     }
 
-    void SetIcons() {
-        foreach (var pair in _leaderboardElements) {
+    void SetIcons()
+    {
+        foreach (var pair in _leaderboardElements)
+        {
             var element = pair.Value;
             _avatarPool.SetAvatarAsync(element.Player, element.SetIcon);
         }
