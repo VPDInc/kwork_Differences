@@ -9,6 +9,11 @@
             this._bot = new Bot();
         }
 
+        public void SetCountDifferences(int count)
+        {
+            _bot.CountDifferences = count;
+        }
+
         public Bot GetBot()
         {
             Bot result = this._bot;
