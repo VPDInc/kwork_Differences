@@ -172,7 +172,7 @@ PlayerSettings:
     iPhone: com.medianagames.findscapes
   buildNumber:
     iPhone: 15
-  AndroidBundleVersionCode: 6
+  AndroidBundleVersionCode: 7
   AndroidMinSdkVersion: 19
   AndroidTargetSdkVersion: 28
   AndroidPreferredInstallLocation: 1
