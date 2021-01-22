@@ -6,6 +6,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
+using LevelImage;
 
 public class Database : MonoBehaviour
 {
@@ -41,7 +42,7 @@ public class Database : MonoBehaviour
     {
         foreach (var image in _images)
         {
-            if (image.Complexity == ComplexityLevel.Normal) _normalImage.Add(image);
+            if (image.Complexity == DifficultyLevel.Normal) _normalImage.Add(image);
             else _easyImage.Add(image);
         }
 
@@ -79,7 +80,7 @@ public class Database : MonoBehaviour
                 }
                 catch (Exception ex)
                 {
-                    Debug.LogError($"[{GetType()}] {ex.Message}");
+                    throw ex;
                 }
             }
         }
@@ -105,8 +106,8 @@ public class Database : MonoBehaviour
 
     public void Load(int levelNum)
     {
-        var complexity = levelNum > _superEasyLevels ? ComplexityLevel.Normal :
-            ComplexityLevel.SuperEasy;
+        var complexity = levelNum > _superEasyLevels ? DifficultyLevel.Normal :
+            DifficultyLevel.SuperEasy;
 
         var balance = _library.GetLevelBalanceInfo(levelNum);
         var datas = GetData(complexity, balance.PictureCount, balance.DifferenceCount);
@@ -181,17 +182,18 @@ public class Database : MonoBehaviour
         return _loadingDatas[levelNum].Pictures;
     }
 
-    private Data[] GetData(ComplexityLevel complexity, int countImage, int countDifferences)
+    private Data[] GetData(DifficultyLevel complexity, int countImage, int countDifferences)
     {
         var loadedData = _loadedData.Where(d => GetJsonDataById(d.NameLevel).PointCount == countDifferences);
-        var levelImageData = complexity == ComplexityLevel.Normal ? _normalImage : _easyImage;
+        var levelImageData = complexity == DifficultyLevel.Normal ? _normalImage : _easyImage;
         var imagesList = new List<DataLevel>();
 
         foreach (var image in levelImageData)
         {
             foreach (var itemData in loadedData)
             {
-                if (itemData.NameLevel == "Diff_" + image.NumberImage)
+                var number = $"Diff_{image.NumberImage}";
+                if (string.Equals(itemData.NameLevel, number))
                 {
                     imagesList.Add(itemData);
                     break;
@@ -233,7 +235,7 @@ public class Database : MonoBehaviour
                 minOpen++;
                 if (maxOpen < minOpen)
                 {
-                    Debug.LogError("Необходимых картинок не найденно");
+                    Debug.LogError("The required images were not found");
                     break;
                 }
             }
@@ -247,7 +249,7 @@ public class Database : MonoBehaviour
             if (i < takenImages.Count)
             {
                 var data = GetJsonDataById(takenImages[i].NameLevel);
-                if (data.Id == String.Empty) continue;
+                if (string.IsNullOrEmpty(data.Id)) continue;
 
                 outData.Add(data);
             }
