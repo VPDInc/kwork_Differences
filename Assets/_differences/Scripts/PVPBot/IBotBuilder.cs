@@ -2,6 +2,6 @@
 {
     public interface IBotBuilder
     {
-        public void SetCountDifferences(int count);
+        void SetCountDifferences(int count);
     }
 }
