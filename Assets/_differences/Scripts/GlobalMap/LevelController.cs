@@ -28,7 +28,6 @@ public class LevelController : Singleton<LevelController> {
     [Inject] EnergyController _energyController = default;
     [Inject] Tournament _tournament = default;
     [Inject] Database _database = default;
-
     
     int _lastLevelNum = 0;
     int _lastEpisodeNum = 0;
@@ -60,7 +59,6 @@ public class LevelController : Singleton<LevelController> {
         _allLevels[Mathf.Max(_lastLevelNum, 0)].SetAvatar(true);
 
         _database.Load(_lastLevelNum);
-        _database.Load(_lastLevelNum + 1);
     }
 
     void OnDestroy() {
@@ -75,7 +73,8 @@ public class LevelController : Singleton<LevelController> {
         return Instance.LastLevelNum;
     }
 
-    void CompleteLevel(int num) {
+    void CompleteLevel(int num)
+    {
         _allLevels[_lastLevelNum].SetAvatar(false);
         if(num >= _lastLevelNum)
             _lastLevelNum = num + 1;
@@ -84,16 +83,18 @@ public class LevelController : Singleton<LevelController> {
         _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
 
-        if (_lastEpisodeNum < level.EpisodeInfo.EpisodeNum) {
+        if (_lastEpisodeNum < level.EpisodeInfo.EpisodeNum)
+        {
             _lastEpisodeNum = level.EpisodeInfo.EpisodeNum;
             PlayerPrefs.SetInt(LAST_EPISODE_ID, _lastEpisodeNum);
         }
-        
         
         _allLevels[_lastLevelNum].SetAvatar(true);
 
         if(num + 1 < _allLevels.Count)
             _allLevels[num+1].UnlockLevel(false);
+
+        _database.Load(_lastLevelNum);
     }
     
     void OnCompleted(GameplayResult gameplayResult) {
@@ -103,8 +104,6 @@ public class LevelController : Singleton<LevelController> {
         if (gameplayResult.IsCompleted) {
             var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
             _tournament.AddScore(ratingToEarn);
-            // Cause current level num + 1 already loaded and we just need to load level after that
-            _database.Load(_lastLevelNum + 2);
             CompleteLevel(_lastLevelNum);
             Analytic.LogComplete(_lastLevelNum, Time.time - _startLevelTimestamp, Try);
             Try = 0;

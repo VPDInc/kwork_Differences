@@ -125,8 +125,6 @@ public class DailyRewardsSystem : MonoBehaviour
 
         public bool CheckStatus(StatusRewardCard status)
         {
-            Debug.Log("Tut3 " + _card.Status);
-            Debug.Log("Tut4 " + status);
             if (_card.Status == status) return true;
             else return false;
         }
