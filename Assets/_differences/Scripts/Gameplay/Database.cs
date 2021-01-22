@@ -6,7 +6,7 @@ using System.Linq;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using Zenject;
-using LevelImage;
+using Difference.Levels;
 
 public class Database : MonoBehaviour
 {
@@ -80,7 +80,7 @@ public class Database : MonoBehaviour
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+                    throw new Exception($"[{GetType()}] {ex.Message}");
                 }
             }
         }

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace LevelImage
+namespace Difference.Levels
 {
     public enum DifficultyLevel
     {
