@@ -28,7 +28,6 @@ public class LevelController : Singleton<LevelController> {
     [Inject] EnergyController _energyController = default;
     [Inject] Tournament _tournament = default;
     [Inject] Database _database = default;
-
     
     int _lastLevelNum = 0;
     int _lastEpisodeNum = 0;
@@ -60,7 +59,6 @@ public class LevelController : Singleton<LevelController> {
         _allLevels[Mathf.Max(_lastLevelNum, 0)].SetAvatar(true);
 
         _database.Load(_lastLevelNum);
-        //_database.Load(_lastLevelNum + 1);
     }
 
     void OnDestroy() {
@@ -106,8 +104,6 @@ public class LevelController : Singleton<LevelController> {
         if (gameplayResult.IsCompleted) {
             var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
             _tournament.AddScore(ratingToEarn);
-            // Cause current level num + 1 already loaded and we just need to load level after that
-            //_database.Load(_lastLevelNum + 2);
             CompleteLevel(_lastLevelNum);
             Analytic.LogComplete(_lastLevelNum, Time.time - _startLevelTimestamp, Try);
             Try = 0;

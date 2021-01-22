@@ -55,7 +55,7 @@ SpriteAtlas:
     variantMultiplier: 1
     packables:
     - {fileID: 102900000, guid: 4b5c532f480da4954a1d703331c3846f, type: 3}
-    totalSpriteSurfaceArea: 269417486
+    totalSpriteSurfaceArea: 273032432
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -208,6 +208,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: ee36ec775d2434d25825ba04cc0b16ac, type: 3}
   - {fileID: 21300000, guid: b367f2876d926a1488722530fd1d92e2, type: 3}
   - {fileID: 21300000, guid: a7c00b87c7c2743189986ccdfda25c1c, type: 3}
+  - {fileID: 21300000, guid: aea7c0976cc3a42a6b5bdce71904db93, type: 3}
   - {fileID: 21300000, guid: fe251597307c89244af9b2899dbb9045, type: 3}
   - {fileID: 21300000, guid: 546e48973e288de43a0c0fa08145ad47, type: 3}
   - {fileID: 21300000, guid: 4ea764a7db1f38e4fb9dff7341c963d7, type: 3}
@@ -229,6 +230,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 2f4eb4687e79b404582fa5cd40604988, type: 3}
   - {fileID: 21300000, guid: d776098893a371741b224d1e49a13908, type: 3}
   - {fileID: 21300000, guid: ef53e988bcb8d4fd0a591b472e8304d2, type: 3}
+  - {fileID: 21300000, guid: f91d52c81f60b49288ab29994f3c5abc, type: 3}
   - {fileID: 21300000, guid: a16127c8cdd33ac448db8b6ec5650e22, type: 3}
   - {fileID: 21300000, guid: 5a1726d82255265469e91a1e910ecc1c, type: 3}
   - {fileID: 21300000, guid: 3e8229d845e56a2479373916b352c772, type: 3}
@@ -322,6 +324,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 132ba91df0e807a4ab06697d98fddfcb, type: 3}
   - {fileID: 21300000, guid: cb9e103d36c5d644faca5d5bb3f87a64, type: 3}
   - {fileID: 21300000, guid: ecda5b3d75fb6b74cac1a1467eb31dfc, type: 3}
+  - {fileID: 21300000, guid: 0b084a4d4475845a08f218f7f61b6981, type: 3}
   - {fileID: 21300000, guid: c3589f5d5a8c0e2469ec7ad8b8e52c51, type: 3}
   - {fileID: 21300000, guid: 307fc46d60248c64b89d400c623176bd, type: 3}
   - {fileID: 21300000, guid: a2484a6d5e2634ae59a77e051f328b13, type: 3}
@@ -525,6 +528,7 @@ SpriteAtlas:
   - Diff_454_2
   - Diff_405_1
   - Diff_451_1
+  - Diff_457_3
   - Diff_288_1
   - Diff_263_1
   - Diff_128_1
@@ -546,6 +550,7 @@ SpriteAtlas:
   - Diff_295_1
   - Diff_269_2
   - Diff_34_2
+  - Diff_457_1
   - Diff_330_1
   - Diff_267_1
   - Diff_150_2
@@ -639,6 +644,7 @@ SpriteAtlas:
   - Diff_353_1
   - Diff_227_2
   - Diff_83_1
+  - Diff_457_2
   - Diff_263_2
   - Diff_82_2
   - Diff_27_1

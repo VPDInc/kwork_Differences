@@ -17,9 +17,9 @@ public class Database : MonoBehaviour
     }
 
     private const string JSONS_PATH = "Jsons";
-    private const string SAVE_DATA_PATH = "data.txt";
+    private const string SAVE_DATA_PATH = "data.dat";
 
-    [SerializeField] private int _firstLevels = 5;
+    [SerializeField] private int _superEasyLevels = 5;
     [SerializeField] private LevelImageData[] _images;
 
     [Inject] private LevelBalanceLibrary _library = default;
@@ -56,9 +56,6 @@ public class Database : MonoBehaviour
     {
         var jsons = Resources.LoadAll<TextAsset>(JSONS_PATH);
 
-        int count1 = 0;
-        int count2 = 0;
-
         using (StreamReader reader = new StreamReader(_dataPath))
         {
             while (true)
@@ -66,31 +63,25 @@ public class Database : MonoBehaviour
                 var line = reader.ReadLine();
                 if (line == null) break;
 
-                count1++;
-                count2++;
-
                 try
                 {
-                    Debug.Log(line);
-
                     var separated = line.Split('|');
 
                     var nameImage = separated[0];
                     var time = Convert.ToInt64(separated[1]);
-                    var countWin = Convert.ToInt32(separated[2]);
+
+                    var countWin = 0;
+                    if (separated.Length >= 3) countWin = Convert.ToInt32(separated[2]);
+                    else if (time > 0) countWin = 1;
 
                     var levelData = new DataLevel(nameImage, DateTime.FromBinary(time), countWin);
                     _loadedData.Add(levelData);
                 }
                 catch (Exception ex)
                 {
-                    count2--;
                     Debug.LogError($"[{GetType()}] {ex.Message}");
                 }
             }
-
-            Debug.Log(count1);
-            Debug.Log(count2);
         }
 
         foreach (var json in jsons)
@@ -114,30 +105,14 @@ public class Database : MonoBehaviour
 
     public void Load(int levelNum)
     {
-        Data[] datas = null;
-        var balanceInfo = _library.GetLevelBalanceInfo(levelNum);
+        var complexity = levelNum > _superEasyLevels ? ComplexityLevel.Normal :
+            ComplexityLevel.SuperEasy;
 
-        if (levelNum <= _firstLevels)
-        {
-            datas = GetData(ComplexityLevel.SuperEasy, balanceInfo.PictureCount, balanceInfo.DifferenceCount);
-            //datas = GetSimplifiedData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
-        }
-        else
-        {
-            datas = GetData(ComplexityLevel.Normal, balanceInfo.PictureCount, balanceInfo.DifferenceCount);
-            //datas = GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
-        }
+        var balance = _library.GetLevelBalanceInfo(levelNum);
+        var datas = GetData(complexity, balance.PictureCount, balance.DifferenceCount);
 
         StartLoading(levelNum, datas);
     }
-
-    //public void IncrementWin(int levelNumber)
-    //{
-    //if (!_loadingDatas.ContainsKey(levelNumber))
-    //Debug.LogError($"[{GetType()}] Load data '{levelNumber}' first!");
-
-    //SaveLevels(_loadingDatas[levelNumber].Datas);
-    //}
 
     private void StartLoading(int num, Data[] datas)
     {
@@ -203,7 +178,6 @@ public class Database : MonoBehaviour
         }
 
         SaveLevels(_loadingDatas[levelNum].Datas);
-
         return _loadingDatas[levelNum].Pictures;
     }
 
@@ -225,15 +199,15 @@ public class Database : MonoBehaviour
             }
         }
 
-        var minWin = int.MaxValue;
-        var maxWin = int.MinValue;
+        var minOpen = int.MaxValue;
+        var maxOpen = int.MinValue;
         foreach (var image in imagesList)
         {
-            if (minWin > image.CountWin)
-                minWin = image.CountWin;
+            if (minOpen > image.CountOpen)
+                minOpen = image.CountOpen;
 
-            if (maxWin < image.CountWin)
-                maxWin = image.CountWin;
+            if (maxOpen < image.CountOpen)
+                maxOpen = image.CountOpen;
         }
 
         var countTakenImages = 0;
@@ -245,9 +219,8 @@ public class Database : MonoBehaviour
         {
             foreach (var image in images)
             {
-                if (image.CountWin == minWin)
+                if (image.CountOpen == minOpen)
                 {
-                    Debug.Log(image.NameLevel + " " + image.CountWin + " " + minWin + " " + image.Time);
                     countTakenImages++;
                     takenImages.Add(image);
 
@@ -257,8 +230,8 @@ public class Database : MonoBehaviour
 
             if (countTakenImages != countImage)
             {
-                minWin++;
-                if (maxWin < minWin)
+                minOpen++;
+                if (maxOpen < minOpen)
                 {
                     Debug.LogError("Необходимых картинок не найденно");
                     break;
@@ -297,61 +270,10 @@ public class Database : MonoBehaviour
         }
     }
 
-    //private Data[] GetSimplifiedData(int dataAmount, int pointsPerData)
-    //{
-    //    var easyImage = new List<string>();
-    //    foreach (var image in _easyImage)
-    //        easyImage.Add("Diff_" + image.NumberImage);
-
-    //    var opened = _loadedData.Where(d => easyImage.Contains(d.NameLevel)).OrderBy(d => d.Time).ToArray();
-    //    var outData = new List<Data>();
-
-    //    for (int i = 0; i < dataAmount; i++)
-    //    {
-    //        // Can be still not enough data. Just skip it
-    //        if (i < opened.Length)
-    //        {
-    //            var data = GetJsonDataById(opened[i].NameLevel);
-    //            if (data.Id == String.Empty) continue;
-
-    //            outData.Add(data);
-    //        }
-    //    }
-
-    //    SetSelectionTimeForLevels(outData.Select(d => d.Id));
-    //    return outData.ToArray();
-    //}
-
     private Data GetJsonDataById(string id)
     {
         if (_datas.TryGetValue(id, out var data)) return data;
         else return default;
-    }
-
-    //private Data[] GetData(int dataAmount, int pointsPerData)
-    //{
-    //    var opened = _loadedData.Where(d => GetJsonDataById(d.NameLevel).PointCount == pointsPerData).OrderBy(d => d.Time).ToArray();
-
-    //    var outData = new List<Data>();
-
-    //    for (int i = 0; i < dataAmount; i++) {
-    //        // can be still not enough data. Just skip it
-    //        if (i < opened.Length) {
-    //            var data = GetJsonDataById(opened[i].NameLevel);
-    //            if (data.Id == String.Empty)
-    //                continue;
-
-    //            outData.Add(data);
-    //        }
-    //    }
-
-    //    SetSelectionTimeForLevels(outData.Select(d => d.Id));
-    //    return outData.ToArray();
-    //}
-
-    private void SaveLevel(Data data)
-    {
-        SaveLevels(new[] { data.Id });
     }
 
     private void SaveLevels(IEnumerable<Data> data)
@@ -369,7 +291,7 @@ public class Database : MonoBehaviour
                 var data = _loadedData[i];
                 if (data.NameLevel.Equals(id))
                 {
-                    data.CountWin++;
+                    data.CountOpen++;
                     data.Time = DateTime.UtcNow;
                     _loadedData[i] = data;
                 }
@@ -382,30 +304,11 @@ public class Database : MonoBehaviour
         {
             using (StreamWriter w = File.AppendText(_dataPath))
                 foreach (var data in _loadedData)
-                {
-                    w.WriteLine(data.NameLevel + "|" + data.Time.ToBinary() + "|" + data.CountWin);
-                }
+                    w.WriteLine(data.NameLevel + "|" + data.Time.ToBinary() + "|" + data.CountOpen);
         }
         catch (Exception e)
         {
             Debug.LogError($"[{GetType()}] {e.Message}");
-        }
-    }
-
-    private void SetSelectionTimeForLevels(IEnumerable<string> ids)
-    {
-        foreach (var id in ids)
-        {
-            for (int i = 0; i < _loadedData.Count; i++)
-            {
-                var data = _loadedData[i];
-
-                if (data.NameLevel.Equals(id))
-                {
-                    data.Time = DateTime.UtcNow;
-                    _loadedData[i] = data;
-                }
-            }
         }
     }
 
@@ -456,7 +359,7 @@ public class Database : MonoBehaviour
     {
         private string _nameLevel;
         private DateTime _time;
-        private int _countWin;
+        private int _countOpen;
 
         public string NameLevel => _nameLevel;
 
@@ -466,22 +369,21 @@ public class Database : MonoBehaviour
             set => _time = value;
         }
 
-        public int CountWin
+        public int CountOpen
         {
-            get => _countWin;
+            get => _countOpen;
             set
             {
-                if (value > _countWin)
-                    _countWin = value;
+                if (value > _countOpen)
+                    _countOpen = value;
             }
         }
 
-        public DataLevel(string nameLevel, DateTime time, int countWin)
+        public DataLevel(string nameLevel, DateTime time, int countOpen)
         {
             _nameLevel = nameLevel;
             _time = time;
-            _countWin = countWin;
+            _countOpen = countOpen;
         }
     }
 }
-
