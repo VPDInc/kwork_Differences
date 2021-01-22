@@ -76429,6 +76429,48 @@ PrefabInstance:
       propertyPath: m_Name
       value: VIew - Daily rewards
       objectReference: {fileID: 0}
+    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
+        type: 3}
+      propertyPath: _cards.Array.data[0]._data
+      value: 
+      objectReference: {fileID: 11400000, guid: 5bffc9c39314d4e0c8b302cab742ddb4,
+        type: 2}
+    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
+        type: 3}
+      propertyPath: _cards.Array.data[1]._data
+      value: 
+      objectReference: {fileID: 11400000, guid: a409b4c3ada684f9cac9e8e353528f57,
+        type: 2}
+    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
+        type: 3}
+      propertyPath: _cards.Array.data[2]._data
+      value: 
+      objectReference: {fileID: 11400000, guid: 7d6bfe03c0239437eb6d8d962e26411c,
+        type: 2}
+    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
+        type: 3}
+      propertyPath: _cards.Array.data[3]._data
+      value: 
+      objectReference: {fileID: 11400000, guid: 4b71a2eef7f5e4fdfa4d43bbeb013e54,
+        type: 2}
+    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
+        type: 3}
+      propertyPath: _cards.Array.data[4]._data
+      value: 
+      objectReference: {fileID: 11400000, guid: a9b743e7ceaea4017ac7f2932b8c6308,
+        type: 2}
+    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
+        type: 3}
+      propertyPath: _cards.Array.data[5]._data
+      value: 
+      objectReference: {fileID: 11400000, guid: 0295c618d003849c0be7de044c70fece,
+        type: 2}
+    - target: {fileID: 1260876294110610281, guid: 02ab2313da6430d408aecb1e02eebb43,
+        type: 3}
+      propertyPath: _cards.Array.data[6]._data
+      value: 
+      objectReference: {fileID: 11400000, guid: b88e507b57f504b70808d61edbd292b6,
+        type: 2}
     - target: {fileID: 1260876294139511395, guid: 02ab2313da6430d408aecb1e02eebb43,
         type: 3}
       propertyPath: m_AnchorMin.y
