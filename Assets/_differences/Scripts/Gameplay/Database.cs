@@ -3,122 +3,148 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using _differences.Scripts.Extension;
 using Sirenix.OdinInspector;
+
 using UnityEngine;
+
 using Zenject;
-using Difference.Levels;
 
 public class Database : MonoBehaviour
 {
-    public enum LoadingStatus
-    {
-        NotStarted,
-        InProgress,
-        Success
-    }
-
-    private const string JSONS_PATH = "Jsons";
     private const string SAVE_DATA_PATH = "data.dat";
+    private const string JSONS_PATH = "Jsons";
 
-    [SerializeField] private int _superEasyLevels = 5;
-    [SerializeField] private LevelImageData[] _images;
+    [SerializeField] private int _firstLevels = 5;
+    [SerializeField] private string[] _firstIds = default;
 
-    [Inject] private LevelBalanceLibrary _library = default;
-
-    private readonly List<DataLevel> _loadedData = new List<DataLevel>();
+    readonly private Dictionary<string, Data> _datas = new Dictionary<string, Data>();
 
     [ShowInInspector, ReadOnly]
-    private readonly Dictionary<int, LoadingData> _loadingDatas = new Dictionary<int, LoadingData>();
-    private readonly Dictionary<string, Data> _datas = new Dictionary<string, Data>();
+    readonly private List<(string, DateTime)> _loadedData = new List<(string, DateTime)>();
+    
+    [ShowInInspector, ReadOnly]
+    [Inject] private LevelBalanceLibrary _library = default;
+
+    private List<string> _ordered => _loadedData.OrderBy(d => d.Item2).Select(d => d.Item1 + " " + d.Item2.ToString()).ToList();
+    readonly private Dictionary<int, LoadingData> _loadingDatas = new Dictionary<int, LoadingData>();
 
     private string _dataPath;
 
-    [ShowInInspector, ReadOnly]
-    private List<LevelImageData> _easyImage = new List<LevelImageData>();
-    [ShowInInspector, ReadOnly]
-    private List<LevelImageData> _normalImage = new List<LevelImageData>();
-
+    //TODO 24.01.2021 NEED CREATE JSON SAVE
     private void Awake()
     {
-        foreach (var image in _images)
-        {
-            if (image.Complexity == DifficultyLevel.Normal) _normalImage.Add(image);
-            else _easyImage.Add(image);
-        }
-
         _dataPath = Path.Combine(Application.persistentDataPath, SAVE_DATA_PATH);
+
         if (!File.Exists(_dataPath))
             using (File.Create(_dataPath)) { }
 
         LoadAllData();
     }
 
-    private void LoadAllData()
+    #region GamePlay
+    public Data[] GetData(int levelNum)
     {
-        var jsons = Resources.LoadAll<TextAsset>(JSONS_PATH);
-
-        using (StreamReader reader = new StreamReader(_dataPath))
+        if (!_loadingDatas.ContainsKey(levelNum))
         {
-            while (true)
-            {
-                var line = reader.ReadLine();
-                if (line == null) break;
-
-                try
-                {
-                    var separated = line.Split('|');
-
-                    var nameImage = separated[0];
-                    var time = Convert.ToInt64(separated[1]);
-
-                    var countWin = 0;
-                    if (separated.Length >= 3) countWin = Convert.ToInt32(separated[2]);
-                    else if (time > 0) countWin = 1;
-
-                    var levelData = new DataLevel(nameImage, DateTime.FromBinary(time), countWin);
-                    _loadedData.Add(levelData);
-                }
-                catch (Exception ex)
-                {
-                    throw new Exception($"[{GetType()}] {ex.Message}");
-                }
-            }
+            Debug.LogError($"[{GetType()}] Load data '{levelNum}' first!");
+            return null;
         }
 
+        return _loadingDatas[levelNum].Datas;
+    }
+
+    public (Sprite, Sprite)[] GetPictures(int levelNum)
+    {
+        if (!_loadingDatas.ContainsKey(levelNum))
+        {
+            Debug.LogError($"[{GetType()}] Load data '{levelNum}' first!");
+            return null;
+        }
+
+        SaveLevels(_loadingDatas[levelNum].Datas);
+
+        return _loadingDatas[levelNum].Pictures;
+    }
+
+    public LoadingStatus GetLoadingStatus(int levelNum)
+    {
+        if (!_loadingDatas.ContainsKey(levelNum))
+            return LoadingStatus.NotStarted;
+
+        return _loadingDatas[levelNum].Status;
+    }
+
+    #endregion
+
+    #region Load
+
+    public void Load(int levelNum)
+    {
+        var balanceInfo = _library.GetLevelBalanceInfo(levelNum);
+
+        StartLoading(levelNum, GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount, levelNum));
+    }
+
+    private void LoadAllData()
+    {
+        var completed = LoadClosedLevels();
+        var jsons = Resources.LoadAll<TextAsset>(JSONS_PATH);
         foreach (var json in jsons)
         {
             var data = DiffUtils.Parse(json.text);
             _datas.Add(data.Id, data);
-
-            bool isEmpty = true;
-            foreach (var item in _loadedData)
+            if (completed.TryGetValue(data.Id, out var date))
             {
-                if (item.NameLevel == data.Id)
-                {
-                    isEmpty = false;
-                    break;
-                }
+                _loadedData.Add((data.Id, date));
             }
-
-            if (isEmpty) _loadedData.Add(new DataLevel(data.Id, DateTime.MinValue, 0));
+            else
+            {
+                _loadedData.Add((data.Id, DateTime.MinValue));
+            }
         }
     }
 
-    public void Load(int levelNum)
+    private Dictionary<string, DateTime> LoadClosedLevels()
     {
-        var complexity = levelNum > _superEasyLevels ? DifficultyLevel.Normal :
-            DifficultyLevel.SuperEasy;
+        var completedLevels = new Dictionary<string, DateTime>();
+        try
+        {
+            using (StreamReader r = new StreamReader(_dataPath))
+            {
+                while (r.Peek() >= 0)
+                {
+                    var line = r.ReadLine();
+                    try
+                    {
+                        var separated = line.Split('|');
+                        // Debug.Log(separated[0] + " " + separated[1]);
+                        var buffer = Convert.ToInt64(separated[1]);
+                        // Debug.Log(buffer);
+                        completedLevels.Add(separated[0], DateTime.FromBinary(buffer));
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.LogError($"[{GetType()}] {e.Message}");
+                        // just nothing to do  
+                    }
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            Debug.LogError($"[{GetType()}] {e.Message}");
+        }
 
-        var balance = _library.GetLevelBalanceInfo(levelNum);
-        var datas = GetData(complexity, balance.PictureCount, balance.DifferenceCount);
-
-        StartLoading(levelNum, datas);
+        return completedLevels;
     }
 
     private void StartLoading(int num, Data[] datas)
     {
         if (!_loadingDatas.ContainsKey(num))
+        {
             _loadingDatas.Add(num, default);
+        }
 
         StartCoroutine(Loading(num, datas));
     }
@@ -151,132 +177,97 @@ public class Database : MonoBehaviour
         _loadingDatas[num] = loadingData;
     }
 
-    public LoadingStatus GetLoadingStatus(int levelNum)
+    private struct Levels
     {
-        if (!_loadingDatas.ContainsKey(levelNum))
-            return LoadingStatus.NotStarted;
-
-        return _loadingDatas[levelNum].Status;
+        public string Id;
+        public DateTime TimeToOpen;
     }
 
-    public Data[] GetData(int levelNum)
+    private Data[] GetData(int dataAmount, int pointsPerData, int levelNum)
     {
-        if (!_loadingDatas.ContainsKey(levelNum))
-        {
-            Debug.LogError($"[{GetType()}] Load data '{levelNum}' first!");
-            return null;
-        }
-
-        return _loadingDatas[levelNum].Datas;
-    }
-
-    public (Sprite, Sprite)[] GetPictures(int levelNum)
-    {
-        if (!_loadingDatas.ContainsKey(levelNum))
-        {
-            Debug.LogError($"[{GetType()}] Load data '{levelNum}' first!");
-            return null;
-        }
-
-        SaveLevels(_loadingDatas[levelNum].Datas);
-        return _loadingDatas[levelNum].Pictures;
-    }
-
-    private Data[] GetData(DifficultyLevel complexity, int countImage, int countDifferences)
-    {
-        var loadedData = _loadedData.Where(d => GetJsonDataById(d.NameLevel).PointCount == countDifferences);
-        var levelImageData = complexity == DifficultyLevel.Normal ? _normalImage : _easyImage;
-        var imagesList = new List<DataLevel>();
-
-        foreach (var image in levelImageData)
-        {
-            foreach (var itemData in loadedData)
-            {
-                var number = $"Diff_{image.NumberImage}";
-                if (string.Equals(itemData.NameLevel, number))
-                {
-                    imagesList.Add(itemData);
-                    break;
-                }
-            }
-        }
-
-        var minOpen = int.MaxValue;
-        var maxOpen = int.MinValue;
-        foreach (var image in imagesList)
-        {
-            if (minOpen > image.CountOpen)
-                minOpen = image.CountOpen;
-
-            if (maxOpen < image.CountOpen)
-                maxOpen = image.CountOpen;
-        }
-
-        var countTakenImages = 0;
-        var takenImages = new List<DataLevel>();
-        var images = imagesList.ToArray();
-        ShuffleArray(images);
-
-        while (countTakenImages != countImage)
-        {
-            foreach (var image in images)
-            {
-                if (image.CountOpen == minOpen)
-                {
-                    countTakenImages++;
-                    takenImages.Add(image);
-
-                    if (countTakenImages == countImage) break;
-                }
-            }
-
-            if (countTakenImages != countImage)
-            {
-                minOpen++;
-                if (maxOpen < minOpen)
-                {
-                    Debug.LogError("The required images were not found");
-                    break;
-                }
-            }
-        }
-
         var outData = new List<Data>();
+        var levels = new List<Levels>();
 
-        for (int i = 0; i < countImage; i++)
+        if (levelNum <= _firstLevels)
         {
-            // Can be still not enough data. Just skip it
-            if (i < takenImages.Count)
+            var openedSymply = _loadedData.Where(d => _firstIds.Contains(d.Item1)).
+                Where(x=> GetJsonDataById(x.Item1).PointCount == pointsPerData).ToArray();
+
+            ShuffleList(levels, openedSymply);
+        }
+        else
+        {
+            var opened = _loadedData.Where(d => GetJsonDataById(d.Item1).PointCount == pointsPerData).ToArray();
+
+            ShuffleList(levels, opened);
+        }
+
+        levels.Sort((x, y) => x.TimeToOpen.CompareTo(y.TimeToOpen));
+            
+        for (int i = 0; i < dataAmount; i++)
+        {
+            if (i < levels.Count)
             {
-                var data = GetJsonDataById(takenImages[i].NameLevel);
-                if (string.IsNullOrEmpty(data.Id)) continue;
+                var data = GetJsonDataById(levels[i].Id);
+                if (data.Id == String.Empty)
+                    continue;
 
                 outData.Add(data);
             }
         }
 
         return outData.ToArray();
-    }
 
-    private void ShuffleArray<T>(T[] array)
-    {
-        System.Random random = new System.Random();
-
-        for (int i = array.Length - 1; i >= 1; i--)
+        void ShuffleList(List<Levels> level, (string, DateTime)[] opened)
         {
-            int j = random.Next(i + 1);
+            for (int i = 0; i < opened.Length; i++)
+                level.Add(new Levels { Id = opened[i].Item1, TimeToOpen = opened[i].Item2 });
 
-            var temp = array[j];
-            array[j] = array[i];
-            array[i] = temp;
+            level.Shuffle();
         }
     }
 
     private Data GetJsonDataById(string id)
     {
-        if (_datas.TryGetValue(id, out var data)) return data;
+        if (_datas.TryGetValue(id, out var data))
+        {
+            return data;
+        }
         else return default;
     }
+
+    private struct LoadingData
+    {
+        public Data[] Datas;
+        public (Sprite, Sprite)[] Pictures;
+        public LoadingStatus Status;
+    }
+
+    public enum LoadingStatus
+    {
+        NotStarted,
+        InProgress,
+        Success
+    }
+
+#if UNITY_EDITOR
+    public bool LoadSpecificJson(int i)
+    {
+        var path = UnityEditor.EditorUtility.OpenFilePanel("Load file", "Assets/Resources/Jsons", "json");
+        if (!File.Exists(path))
+        {
+            return false;
+        }
+        var jsonString = File.ReadAllText(path);
+        var data = DiffUtils.Parse(jsonString);
+        StartLoading(i, new[] { data });
+        return true;
+    }
+#endif
+
+    #endregion
+
+    #region Save
 
     private void SaveLevels(IEnumerable<Data> data)
     {
@@ -291,10 +282,9 @@ public class Database : MonoBehaviour
             for (int i = 0; i < _loadedData.Count; i++)
             {
                 var data = _loadedData[i];
-                if (data.NameLevel.Equals(id))
+                if (data.Item1.Equals(id))
                 {
-                    data.CountOpen++;
-                    data.Time = DateTime.UtcNow;
+                    data.Item2 += new TimeSpan(0,1,0);
                     _loadedData[i] = data;
                 }
             }
@@ -305,15 +295,21 @@ public class Database : MonoBehaviour
         try
         {
             using (StreamWriter w = File.AppendText(_dataPath))
+            {
                 foreach (var data in _loadedData)
-                    w.WriteLine(data.NameLevel + "|" + data.Time.ToBinary() + "|" + data.CountOpen);
+                {
+                    w.WriteLine(data.Item1 + "|" + data.Item2.ToBinary());
+                }
+            }
         }
         catch (Exception e)
         {
             Debug.LogError($"[{GetType()}] {e.Message}");
         }
     }
+    #endregion
 
+    #region Clear
     [ContextMenu("Clear")]
     private void ClearLevels()
     {
@@ -335,57 +331,6 @@ public class Database : MonoBehaviour
             using (File.Create(_dataPath)) { }
     }
 
-#if UNITY_EDITOR
-    public bool LoadSpecificJson(int i)
-    {
-        var path = UnityEditor.EditorUtility.OpenFilePanel("Load file", "Assets/Resources/Jsons", "json");
-        if (!File.Exists(path))
-        {
-            return false;
-        }
-        var jsonString = File.ReadAllText(path);
-        var data = DiffUtils.Parse(jsonString);
-        StartLoading(i, new[] { data });
-        return true;
-    }
-#endif
+    #endregion
 
-    private struct LoadingData
-    {
-        public Data[] Datas;
-        public (Sprite, Sprite)[] Pictures;
-        public LoadingStatus Status;
-    }
-
-    private struct DataLevel
-    {
-        private string _nameLevel;
-        private DateTime _time;
-        private int _countOpen;
-
-        public string NameLevel => _nameLevel;
-
-        public DateTime Time
-        {
-            get => _time;
-            set => _time = value;
-        }
-
-        public int CountOpen
-        {
-            get => _countOpen;
-            set
-            {
-                if (value > _countOpen)
-                    _countOpen = value;
-            }
-        }
-
-        public DataLevel(string nameLevel, DateTime time, int countOpen)
-        {
-            _nameLevel = nameLevel;
-            _time = time;
-            _countOpen = countOpen;
-        }
-    }
 }

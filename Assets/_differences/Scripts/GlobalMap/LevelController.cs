@@ -12,7 +12,8 @@ using UnityEngine;
 
 using Zenject;
 
-public class LevelController : Singleton<LevelController> {
+public class LevelController : Singleton<LevelController>
+{
     public int LastLevelNum => _lastLevelNum;
     public int LastEpisodeNum => _lastEpisodeNum;
     public int CompleteRatingReward => _completeRatingReward;
@@ -28,45 +29,50 @@ public class LevelController : Singleton<LevelController> {
     [Inject] EnergyController _energyController = default;
     [Inject] Tournament _tournament = default;
     [Inject] Database _database = default;
-    
+
     int _lastLevelNum = 0;
     int _lastEpisodeNum = 0;
     List<LevelInfo> _allLevels = new List<LevelInfo>();
     LevelInfo _currentLevel;
     float _startLevelTimestamp;
 
-    int Try {
+    int Try
+    {
         get => PlayerPrefs.GetInt("try", 0);
         set => PlayerPrefs.SetInt("try", value);
     }
-    
+
     const string LAST_LEVEL_ID = "last_level";
     const string LAST_EPISODE_ID = "last_episode";
 
     const string OPEN_STORE_EVENT_ID = "OpenEnergyStore";
 
-    protected override void Awake() {
+    protected override void Awake()
+    {
         base.Awake();
         _lastEpisodeNum = PlayerPrefs.GetInt(LAST_EPISODE_ID, 0);
         LoadLastLevel();
     }
 
-    void Start() {
+    void Start()
+    {
         SetupLevels();
         _gameplay.Completed += OnCompleted;
         _gameplay.Initialized += OnGameplayInit;
-        _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count-1)].transform.position, true);
+        _leanDragCamera.MoveTo(_allLevels[Mathf.Clamp(_lastLevelNum, 0, _allLevels.Count - 1)].transform.position, true);
         _allLevels[Mathf.Max(_lastLevelNum, 0)].SetAvatar(true);
 
         _database.Load(_lastLevelNum);
     }
 
-    void OnDestroy() {
+    void OnDestroy()
+    {
         _gameplay.Completed -= OnCompleted;
         _gameplay.Initialized -= OnGameplayInit;
     }
-    
-    public static int GetLastLevelNum() {
+
+    public static int GetLastLevelNum()
+    {
         if (Instance == null)
             return 0;
 
@@ -76,9 +82,9 @@ public class LevelController : Singleton<LevelController> {
     void CompleteLevel(int num)
     {
         _allLevels[_lastLevelNum].SetAvatar(false);
-        if(num >= _lastLevelNum)
+        if (num >= _lastLevelNum)
             _lastLevelNum = num + 1;
-        var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count-1)];
+        var level = _allLevels[Mathf.Clamp(num, 0, _allLevels.Count - 1)];
         level.CompleteLevel();
         _leanDragCamera.MoveTo(level.transform.position, false);
         SaveLastLevel();
@@ -88,49 +94,60 @@ public class LevelController : Singleton<LevelController> {
             _lastEpisodeNum = level.EpisodeInfo.EpisodeNum;
             PlayerPrefs.SetInt(LAST_EPISODE_ID, _lastEpisodeNum);
         }
-        
+
         _allLevels[_lastLevelNum].SetAvatar(true);
 
-        if(num + 1 < _allLevels.Count)
-            _allLevels[num+1].UnlockLevel(false);
+        if (num + 1 < _allLevels.Count)
+            _allLevels[num + 1].UnlockLevel(false);
 
         _database.Load(_lastLevelNum);
     }
-    
-    void OnCompleted(GameplayResult gameplayResult) {
+
+    void OnCompleted(GameplayResult gameplayResult)
+    {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
         Analytic.CurrencyEarn(coinsToEarn, "level-completed", LastLevelNum.ToString());
         _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
-        if (gameplayResult.IsCompleted) {
+        if (gameplayResult.IsCompleted)
+        {
             var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
             _tournament.AddScore(ratingToEarn);
             CompleteLevel(_lastLevelNum);
             Analytic.LogComplete(_lastLevelNum, Time.time - _startLevelTimestamp, Try);
             Try = 0;
-        } else {
+        }
+        else
+        {
             Analytic.LogFail(_lastLevelNum);
             // Reload current level with others pictures
-            _database.Load(_lastLevelNum);            
+            _database.Load(_lastLevelNum);
         }
     }
 
-    public void AddLevelToList(IEnumerable<LevelInfo> levelInfos) {
+    public void AddLevelToList(IEnumerable<LevelInfo> levelInfos)
+    {
         _allLevels.AddRange(levelInfos);
     }
 
-    public void OpenLastPlayView() {
-        if (_energyController.IsCanPlay) {
+    public void OpenLastPlayView()
+    {
+        if (_energyController.IsCanPlay)
+        {
             OpenPlayView(_lastLevelNum);
-        } else {
+        }
+        else
+        {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
     }
 
-    void OpenPlayView(int levelNum) {
+    void OpenPlayView(int levelNum)
+    {
         _gameplay.Load(levelNum);
     }
 
-    void PlayLevel(int levelNum) {
+    void PlayLevel(int levelNum)
+    {
         _energyController.SpendPlayCost();
         _currentLevel = _allLevels[Mathf.Clamp(levelNum, 0, _allLevels.Count - 1)];
         _gameplay.Begin();
@@ -138,9 +155,11 @@ public class LevelController : Singleton<LevelController> {
         Try++;
         _startLevelTimestamp = Time.time;
     }
-    
-    void SetupLevels() {
-        foreach (LevelInfo levelInfo in _allLevels) {
+
+    void SetupLevels()
+    {
+        foreach (LevelInfo levelInfo in _allLevels)
+        {
             var levelNum = levelInfo.LevelNum;
             var isCompleted = _lastLevelNum > 0 && levelNum < LastLevelNum;
             var isUnlocked = levelNum <= LastLevelNum;
@@ -148,26 +167,30 @@ public class LevelController : Singleton<LevelController> {
         }
     }
 
-    void SaveLastLevel() {
+    void SaveLastLevel()
+    {
         PlayerPrefs.SetInt(LAST_LEVEL_ID, _lastLevelNum);
     }
 
-    void LoadLastLevel() {
+    void LoadLastLevel()
+    {
         _lastLevelNum = PlayerPrefs.GetInt(LAST_LEVEL_ID, 0);
     }
-    
-    void OnGameplayInit(int levelNum, Data[] data) {
+
+    void OnGameplayInit(int levelNum, Data[] data)
+    {
         _levelStartView.SetLevelName(levelNum);
-        
+
         _levelStartView.SetPicturesCount(data.Length);
         _levelStartView.SetDifferencesCount(data[0].Points.Length);
 
-        _levelStartView.StartTimer(()=>PlayLevel(levelNum));
+        _levelStartView.StartTimer(() => PlayLevel(levelNum));
         _levelStartView.Show();
     }
 
     [ContextMenu("Complete")]
-    void DebugComplete() {
+    void DebugComplete()
+    {
         CompleteLevel(_lastLevelNum);
     }
 }
