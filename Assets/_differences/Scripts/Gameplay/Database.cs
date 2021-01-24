@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-
+using _differences.Scripts.Extension;
 using Sirenix.OdinInspector;
 
 using UnityEngine;
@@ -19,10 +19,11 @@ public class Database : MonoBehaviour
     [SerializeField] private string[] _firstIds = default;
 
     readonly private Dictionary<string, Data> _datas = new Dictionary<string, Data>();
+
     [ShowInInspector, ReadOnly]
     readonly private List<(string, DateTime)> _loadedData = new List<(string, DateTime)>();
+    
     [ShowInInspector, ReadOnly]
-
     [Inject] private LevelBalanceLibrary _library = default;
 
     private List<string> _ordered => _loadedData.OrderBy(d => d.Item2).Select(d => d.Item1 + " " + d.Item2.ToString()).ToList();
@@ -30,6 +31,7 @@ public class Database : MonoBehaviour
 
     private string _dataPath;
 
+    //TODO 24.01.2021 NEED CREATE JSON SAVE
     private void Awake()
     {
         _dataPath = Path.Combine(Application.persistentDataPath, SAVE_DATA_PATH);
@@ -80,40 +82,8 @@ public class Database : MonoBehaviour
     public void Load(int levelNum)
     {
         var balanceInfo = _library.GetLevelBalanceInfo(levelNum);
-        Data[] datas;
-        if (levelNum <= _firstLevels)
-        {
-            datas = GetSimplifiedData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
-        }
-        else
-        {
-            datas = GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount);
-        }
 
-        StartLoading(levelNum, datas);
-    }
-
-    private Data[] GetSimplifiedData(int dataAmount, int pointsPerData)
-    {
-        var opened = _loadedData.Where(d => _firstIds.Contains(d.Item1)).OrderBy(d => d.Item2).ToArray();
-
-        var outData = new List<Data>();
-
-        for (int i = 0; i < dataAmount; i++)
-        {
-            // can be still not enough data. Just skip it
-            if (i < opened.Length)
-            {
-                var data = GetJsonDataById(opened[i].Item1);
-                if (data.Id == String.Empty)
-                    continue;
-
-                outData.Add(data);
-            }
-        }
-
-        SetSelectionTimeForLevels(outData.Select(d => d.Id));
-        return outData.ToArray();
+        StartLoading(levelNum, GetData(balanceInfo.PictureCount, balanceInfo.DifferenceCount, levelNum));
     }
 
     private void LoadAllData()
@@ -169,7 +139,6 @@ public class Database : MonoBehaviour
         return completedLevels;
     }
 
-
     private void StartLoading(int num, Data[] datas)
     {
         if (!_loadingDatas.ContainsKey(num))
@@ -208,19 +177,38 @@ public class Database : MonoBehaviour
         _loadingDatas[num] = loadingData;
     }
 
-
-    private Data[] GetData(int dataAmount, int pointsPerData)
+    private struct Levels
     {
-        var opened = _loadedData.Where(d => GetJsonDataById(d.Item1).PointCount == pointsPerData).OrderBy(d => d.Item2).ToArray();
+        public string Id;
+        public DateTime TimeToOpen;
+    }
 
+    private Data[] GetData(int dataAmount, int pointsPerData, int levelNum)
+    {
         var outData = new List<Data>();
+        var levels = new List<Levels>();
 
+        if (levelNum <= _firstLevels)
+        {
+            var openedSymply = _loadedData.Where(d => _firstIds.Contains(d.Item1)).
+                Where(x=> GetJsonDataById(x.Item1).PointCount == pointsPerData).ToArray();
+
+            ShuffleList(levels, openedSymply);
+        }
+        else
+        {
+            var opened = _loadedData.Where(d => GetJsonDataById(d.Item1).PointCount == pointsPerData).ToArray();
+
+            ShuffleList(levels, opened);
+        }
+
+        levels.Sort((x, y) => x.TimeToOpen.CompareTo(y.TimeToOpen));
+            
         for (int i = 0; i < dataAmount; i++)
         {
-            // can be still not enough data. Just skip it
-            if (i < opened.Length)
+            if (i < levels.Count)
             {
-                var data = GetJsonDataById(opened[i].Item1);
+                var data = GetJsonDataById(levels[i].Id);
                 if (data.Id == String.Empty)
                     continue;
 
@@ -228,23 +216,14 @@ public class Database : MonoBehaviour
             }
         }
 
-        SetSelectionTimeForLevels(outData.Select(d => d.Id));
         return outData.ToArray();
-    }
 
-    private void SetSelectionTimeForLevels(IEnumerable<string> ids)
-    {
-        foreach (var id in ids)
+        void ShuffleList(List<Levels> level, (string, DateTime)[] opened)
         {
-            for (int i = 0; i < _loadedData.Count; i++)
-            {
-                var data = _loadedData[i];
-                if (data.Item1.Equals(id))
-                {
-                    data.Item2 = DateTime.UtcNow;
-                    _loadedData[i] = data;
-                }
-            }
+            for (int i = 0; i < opened.Length; i++)
+                level.Add(new Levels { Id = opened[i].Item1, TimeToOpen = opened[i].Item2 });
+
+            level.Shuffle();
         }
     }
 
@@ -256,7 +235,6 @@ public class Database : MonoBehaviour
         }
         else return default;
     }
-
 
     private struct LoadingData
     {
@@ -290,10 +268,6 @@ public class Database : MonoBehaviour
     #endregion
 
     #region Save
-    private void SaveLevel(Data data)
-    {
-        SaveLevels(new[] { data.Id });
-    }
 
     private void SaveLevels(IEnumerable<Data> data)
     {
@@ -310,7 +284,7 @@ public class Database : MonoBehaviour
                 var data = _loadedData[i];
                 if (data.Item1.Equals(id))
                 {
-                    data.Item2 = DateTime.UtcNow;
+                    data.Item2 += new TimeSpan(0,1,0);
                     _loadedData[i] = data;
                 }
             }
@@ -358,4 +332,5 @@ public class Database : MonoBehaviour
     }
 
     #endregion
+
 }
