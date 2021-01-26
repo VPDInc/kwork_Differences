@@ -8,7 +8,7 @@ namespace _differences.Scripts.Editor
     {
         private const string SAVE_DATA_PATH = "data.dat";
 
-        [MenuItem("Window/Differences/RemoveSaveData")]
+        [MenuItem("Differences/RemoveSaveData")]
         public static void RemoveSevedData()
         {
             var _dataPath = Path.Combine(Application.persistentDataPath, SAVE_DATA_PATH);

@@ -1,0 +1,12 @@
+{
+  "DefaultServerIndex": 0,
+  "Servers": [
+    {
+      "Version": "0.4.708",
+      "ServerID": "ED8A0",
+      "BundlesURL": "Amazon AWS url bundles",
+      "StatisticEnable": false,
+      "Service": false
+    }
+  ]
+}
