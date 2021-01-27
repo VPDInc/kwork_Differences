@@ -35,16 +35,17 @@ namespace _differences.Scripts.PVPBot
         private void BuildBot(Action allreadyBuild)
         {
             currentActiveBot = botController.GetBot();
-            currentActiveBot.CountDifferences = countDifferences;
+            currentActiveBot.SetDifferencesCount(countDifferences);
+            currentActiveBot.SetDifficulty(BotDifficulty.Normal);
             currentActiveBot.SuccessFindDifference += CurrentActiveBotSuccessFindDifference;
-            currentActiveBot.AllFindDiffrences += CurrentActiveBotAllFindDiffrences;
+            currentActiveBot.AllFindDiffrences += CurrentActiveBot_AllFindDiffrences;
 
             allreadyBuild?.Invoke();
         }
 
-        private void CurrentActiveBotAllFindDiffrences()
+        private void CurrentActiveBot_AllFindDiffrences(Bot obj)
         {
-            //end game point for bot
+
         }
 
         private void CurrentActiveBotSuccessFindDifference(DifferencesData obj)

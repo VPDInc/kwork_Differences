@@ -18,5 +18,17 @@ namespace _differences.Scripts.Extension
                 list[n] = value;
             }
         }
+
+        public static int GetNormalDistributedValue(int minValue, int maxValue, float diffuctultyPercent = 100, int cyclesCount = 15)
+        {
+            System.Random r = new System.Random();
+            int result = 0;
+            for (int i = 0; i <= cyclesCount; i++)
+            {
+                result += r.Next(18, 30);
+            }
+            result /= cyclesCount;
+            return result;
+        }
     }
 }
