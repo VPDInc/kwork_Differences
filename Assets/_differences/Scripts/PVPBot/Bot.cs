@@ -7,24 +7,28 @@ namespace _differences.Scripts.PVPBot
 {
     public class Bot
     {
+        #region CONST
         private const int TIMER_TICK = 1000;
 
-        private const int MIN_TIME_FIND = 1;
-        private const int MAX_TIME_FIND = 2;
+        private const int MIN_TIME_FIND = 20;
+        private const int MAX_TIME_FIND = 30;
 
         private const string LOG_START = "Bot started";
         private const string LOG_FIND = "FindDifference";
+        #endregion
 
         public event Action<DifferencesData> SuccessFindDifference;
         public event Action<Bot> AllFindDiffrences;
-        public int CountDifferences;
+
+        public int CountDifferences { get; private set; }
+        public BotDifficulty BotDifficulty { get; private set; }
 
         private string nameBot => "Name " + this.GetHashCode();
 
         private Timer _timer;
         private TimeSpan _differenceFindTime;
         private bool[] differencesArray;
-        private int StepFindAmount => new Random().Next(MIN_TIME_FIND, MAX_TIME_FIND);
+        private int StepFindAmount => Extension.Extensions.GetNormalDistributedValue(MIN_TIME_FIND,MAX_TIME_FIND);
 
         public void Start()
         {
@@ -35,6 +39,26 @@ namespace _differences.Scripts.PVPBot
             _timer = new Timer(TIMER_TICK);
             _timer.Elapsed += _timer_Elapsed;
             _timer.Start();
+        }
+
+        public void Stop()
+        {
+            Console.WriteLine("Bot end " + nameBot);
+
+            _timer.Stop();
+            _timer.Dispose();
+
+            AllFindDiffrences?.Invoke(this);
+        }
+
+        public void SetDifferencesCount(int value)
+        {
+            CountDifferences = value;
+        }
+
+        public void SetDifficulty(BotDifficulty value)
+        {
+            BotDifficulty = value;
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -82,16 +106,6 @@ namespace _differences.Scripts.PVPBot
 
             SuccessFindDifference?.Invoke(data);
         }
-
-        public void Stop()
-        {
-            Console.WriteLine("Bot end " + nameBot);
-
-            _timer.Stop();
-            _timer.Dispose();
-
-            AllFindDiffrences?.Invoke(this);
-        }
     }
 
     public class DifferencesData
@@ -99,4 +113,7 @@ namespace _differences.Scripts.PVPBot
         public int CurrentID;
         public bool[] DifferencesArray;
     }
+
+  
+
 }
