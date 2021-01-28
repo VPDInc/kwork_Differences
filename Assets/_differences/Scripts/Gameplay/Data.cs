@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _differences.Scripts.PVPBot;
+using System;
 
 using UnityEngine;
 
@@ -10,6 +11,7 @@ public struct Data {
     public Orientation Orientation;
     public string Id;
     public Storage Storage;
+    public BotDifficulty BotDifficulty; 
     public int PointCount => Points?.Length ?? 0;
 }
 

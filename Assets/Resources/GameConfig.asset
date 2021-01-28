@@ -12,3 +12,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8b3435c6a508ae45adbe5bb83be3407, type: 3}
   m_Name: GameConfig
   m_EditorClassIdentifier: 
+  gameConfig:
+    BotConfig:
+      MinTimeFindInitialDifference: 0
+      MaxTimeFindInitialDifference: 0
+      MinTimeFindNextDifference: 0
+      MaxTimeFindNextDifference: 0
+      BotDifficulties:
+      - DifficultyValue: SuperEasy
+        PercentValue: 140
+      - DifficultyValue: Easy
+        PercentValue: 120
+      - DifficultyValue: Normal
+        PercentValue: 100
+      - DifficultyValue: Hard
+        PercentValue: 80
+      - DifficultyValue: SuperHard
+        PercentValue: 60
