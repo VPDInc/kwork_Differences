@@ -6,7 +6,8 @@ using Airion.Extensions;
 
 using UnityEngine;
 
-namespace Airion.DailyRewards {
+namespace Airion.DailyRewards
+{
    public class DailyRewardsSystem : MonoBehaviour {
       /// <summary>
       /// Fired when system has been initialized.

@@ -1,9 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using TMPro;
-using Airion.DailyRewards;
 using Zenject;
 using Airion.Currency;
 using Differences;
@@ -14,19 +10,20 @@ public class RewardCard : MonoBehaviour
 {
     private const string KEY_ANIMATION_OPEN = "Open";
     private const string KEY_ANIMATION_OPENED = "Opened";
-    public StatusRewardCard Status { get; private set; }
 
     [SerializeField] private ItemAnimationRewared[] m_EffectsRewereds;
 
     [Header("Animation Config")]
-    [SerializeField] private float _keyAnimationOpenTime = 1.5f;
-    [SerializeField] private float _addRewardDelay = 1.3f;
+    [SerializeField] [Min(0)] private float _keyAnimationOpenTime = 1.5f;
+    [SerializeField] [Min(0)] private float _addRewardDelay = 1.3f;
 
-    [Inject] CurrencyManager _currencyManager = default;
+    [Inject] private CurrencyManager _currencyManager = default;
 
     private Animator _animator;
     private RewardCardData _data;
+    private int _countGottenRewards;
 
+    public StatusRewardCard Status { get; private set; }
 
     private void Awake()
     {
@@ -37,6 +34,7 @@ public class RewardCard : MonoBehaviour
     {
         _data = data;
         Status = status;
+        _countGottenRewards = 0;
 
         switch (status)
         {
@@ -63,15 +61,9 @@ public class RewardCard : MonoBehaviour
     {
         _animator.SetTrigger(KEY_ANIMATION_OPEN);
         yield return new WaitForSeconds(_keyAnimationOpenTime);
-
-        foreach (var reward in _data.Rewards)
-        {
-            yield return new WaitForSeconds(_addRewardDelay);
-            PlayEffect(reward);
-        }
     }
 
-    private void AddReward(RewardEnum type, int count)
+    private void AddReward(RewardEnum type, int count, Action onSuccses)
     {
         switch (type)
         {
@@ -83,23 +75,29 @@ public class RewardCard : MonoBehaviour
                 _currencyManager.GetCurrency(CurrencyConstants.AIM).Earn(count);
                 break;
         }
+
+        _countGottenRewards++;
+        if (_countGottenRewards == m_EffectsRewereds.Length) onSuccses?.Invoke();
     }
 
-    private void PlayEffect(DailyRewardData data)
+    public void GetReward(Action onSuccses)
     {
-        foreach (var effectRewered in m_EffectsRewereds)
+        foreach (var reward in _data.Rewards)
         {
-            if (effectRewered.Type == data.Type)
+            foreach (var effectRewered in m_EffectsRewereds)
             {
-                effectRewered.Play(delegate {
-                    AddReward(data.Type, data.Count);
-                });
-                break;
+                if (effectRewered.Type == reward.Type)
+                {
+                    effectRewered.Play(delegate {
+                        AddReward(reward.Type, reward.Count, onSuccses);
+                    });
+                    break;
+                }
             }
         }
     }
 
-    [System.Serializable]
+    [Serializable]
     private class ItemAnimationRewared
     {
         private const float PAUSED_ANINMATION_COINS = 0.1f;
