@@ -19,6 +19,7 @@ public class DailyRewardsSystem : MonoBehaviour
     [SerializeField] private int _debugDay = 1;
 
     private int _currentDay = 1;
+    private ItemCard _currentCard;
     private DateTime _lastOpenTimestamp;
     private bool _isOpenedToday = false;
 
@@ -47,17 +48,12 @@ public class DailyRewardsSystem : MonoBehaviour
                 card.Initialize(_currentDay);
 
             _window.Show();
+            OpenCard();
         }
     }
 
-    public void OpenCard()
+    private void OpenCard()
     {
-        if (_isOpenedToday)
-        {
-            _window.Hide();
-            return;
-        }
-
         _isOpenedToday = true;
         _lastOpenTimestamp = DateTime.Today;
 
@@ -65,6 +61,7 @@ public class DailyRewardsSystem : MonoBehaviour
         {
             if (card.CheckStatus(StatusRewardCard.Waiting))
             {
+                _currentCard = card;
                 card.Open();
                 Save();
                 return;
@@ -72,7 +69,18 @@ public class DailyRewardsSystem : MonoBehaviour
         }
     }
 
-    #region Сохранение
+    public void GetReward()
+    {
+        if (_currentCard == null) return;
+
+        _currentCard.GetReward(delegate {
+            _window.Hide();
+        });
+
+        _currentCard = null;
+    }
+
+    #region Saving
     private void Save()
     {
         PrefsExtensions.SetDateTime(LAST_TIME_PREFS, _lastOpenTimestamp);
@@ -104,7 +112,7 @@ public class DailyRewardsSystem : MonoBehaviour
     }
     #endregion
 
-    #region Отладка
+    #region Debug
     [ContextMenu(nameof(DebugClear))]
     void DebugClear()
     {
@@ -131,6 +139,9 @@ public class DailyRewardsSystem : MonoBehaviour
 
         public void Open() =>
             _card.Open();
+
+        public void GetReward(Action onSuccses) =>
+            _card.GetReward(onSuccses);
 
         public void Initialize(int day)
         {
