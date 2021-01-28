@@ -11,7 +11,10 @@ public struct Data {
     public Orientation Orientation;
     public string Id;
     public Storage Storage;
-    public BotDifficulty BotDifficulty; 
+    public BotDifficulty MinBotDifficulty;
+    public BotDifficulty MaxBotDifficulty;
+    public int FindDifferenceSeconds;
+    public int TotalSecondsOnRound;
     public int PointCount => Points?.Length ?? 0;
 }
 
