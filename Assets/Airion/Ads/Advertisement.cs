@@ -128,7 +128,6 @@ public class Advertisement : Singleton<Advertisement> {
     }
     
     const float LOW_VOLUME = -80;
-    const float MAX_VOLUME = 0;
     [SerializeField] AudioMixer _mainMixer = default;
 
 
@@ -164,10 +163,10 @@ public class Advertisement : Singleton<Advertisement> {
             });
             failCallback?.Invoke();
         }, ()=> {
-            _mainMixer.SetFloat("MasterVolume", MAX_VOLUME);
+
             completionCallback?.Invoke();
         }, () => {
-            _mainMixer.SetFloat("MasterVolume", LOW_VOLUME);
+            ChangeVolume(LOW_VOLUME);
 
             Analytic.Send("video_ads_started", new Dictionary<string, object>() {
                 {"ad_type", "rewarded"},
@@ -194,6 +193,8 @@ public class Advertisement : Singleton<Advertisement> {
             {"connection", Application.internetReachability != NetworkReachability.NotReachable}
         });
     }
+
+    public void ChangeVolume(float value) => _mainMixer.SetFloat("MasterVolume", value);
 
     void OnAdapterInitialized() {
         var ad = GetAdv(_currentAdvType);
