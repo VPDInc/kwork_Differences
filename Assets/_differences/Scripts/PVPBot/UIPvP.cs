@@ -7,7 +7,7 @@ namespace _differences.Scripts.PVPBot
 {
     public class UIPvP : MonoBehaviour
     {
-        [Inject] private BotController botController = default;
+        [Inject] private BotFactory botFactory = default;
         [Inject] private Tournament _tournament = default;
         [Inject] private AvatarsPool _avatarPool = default;
         [Inject] private PlayerInfoController _infoController = default;
@@ -34,7 +34,7 @@ namespace _differences.Scripts.PVPBot
 
         private void BuildBot(Action allreadyBuild)
         {
-            currentActiveBot = botController.GetBot();
+            currentActiveBot = botFactory.GetBot();
             currentActiveBot.SetDifferencesCount(countDifferences);
             currentActiveBot.SetDifficulty(BotDifficulty.Normal);
             currentActiveBot.SuccessFindDifference += CurrentActiveBotSuccessFindDifference;

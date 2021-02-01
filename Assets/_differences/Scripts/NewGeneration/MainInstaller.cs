@@ -16,7 +16,7 @@ namespace _differences.Scripts.NewGeneration
         {
             Container.Bind<ICurrencyService>().To<CurrencyService>().AsSingle();
             Container.Bind<IServerAPIClient>().To<PlayFabServerAPIClient>().AsSingle();
-            Container.Bind<PVPBot.BotController>().AsSingle();
+            Container.Bind<PVPBot.BotFactory>().AsSingle();
         }
     }
 }
