@@ -1,4 +1,5 @@
-﻿using System;
+﻿using _differences.Scripts.Configs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
@@ -29,6 +30,11 @@ namespace _differences.Scripts.PVPBot
         private TimeSpan _differenceFindTime;
         private bool[] differencesArray;
         private int StepFindAmount => Extension.Extensions.GetNormalDistributedValue(MIN_TIME_FIND,MAX_TIME_FIND);
+
+        public void SetConfig(BotConfig config)
+        {
+
+        }
 
         public void Start()
         {
