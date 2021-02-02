@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using _differences.Scripts.PVPBot;
 using GoogleSheetsToUnity;
 
 using UnityEngine;
@@ -25,6 +25,12 @@ public class LevelBalanceLibrary : ScriptableObject {
     public struct LevelBalanceInfo {
         public int PictureCount;
         public int DifferenceCount;
+        public int CountPlayers;
+        public BotDifficulty MinDifficulty;
+        public BotDifficulty MaxDifficulty;
+        public int FindDifferenceSeconds;
+        public int CountRounds => CountPlayers - 1;
+        public int TotalSecondsOnRound => (DifferenceCount * FindDifferenceSeconds) * CountRounds;
     }
 
     [Header("Level Library")] [SerializeField]
