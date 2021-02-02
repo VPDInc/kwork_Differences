@@ -106,12 +106,11 @@ public class LevelController : Singleton<LevelController>
     void OnCompleted(GameplayResult gameplayResult)
     {
         var coinsToEarn = gameplayResult.IsCompleted ? _completeCoinReward : 0;
+        var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
         Analytic.CurrencyEarn(coinsToEarn, "level-completed", LastLevelNum.ToString());
-        _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn);
+        _uiFinishLevelView.Show(_lastLevelNum, gameplayResult, coinsToEarn, ratingToEarn);
         if (gameplayResult.IsCompleted)
         {
-            var ratingToEarn = gameplayResult.TotalStarsCollected + _completeRatingReward;
-            _tournament.AddScore(ratingToEarn);
             CompleteLevel(_lastLevelNum);
             Analytic.LogComplete(_lastLevelNum, Time.time - _startLevelTimestamp, Try);
             Try = 0;
