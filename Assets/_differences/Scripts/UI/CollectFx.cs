@@ -12,8 +12,10 @@ public class CollectFx : MonoBehaviour
     
     
     //TODO 13.01.2021 REFACTORING!
-    float countfx = 0;
-    public void SetupTrailEffect(Action onSuccess = null) {
+    public void SetupTrailEffect(Action onSuccess = null) 
+    {
+        var countfx = 0;
+
         for (int i = 0; i < _fxAmount; i++) {
             var fx = Instantiate(_uiTrailEffectPrefab, _fxStart);
             fx.Setup(_fxTarget.position, _pauseBetweenSpawns * i, delegate
