@@ -53,9 +53,10 @@ public class UIFinishLevelView : MonoBehaviour
     [SerializeField] private float _pauseBetweenSpawns = 1f;
     [SerializeField] private float _fxAmount = 5;
 
-    [Inject] LevelController _levelController = default;
-    [Inject] EnergyController _energyController = default;
-    [Inject] CurrencyManager _currencyManager = default;
+    [Inject] private LevelController _levelController = default;
+    [Inject] private EnergyController _energyController = default;
+    [Inject] private CurrencyManager _currencyManager = default;
+    [Inject] private Tournament _tournament = default;
 
 
     Currency _coinCurrency = default;
@@ -74,7 +75,7 @@ public class UIFinishLevelView : MonoBehaviour
         _currentView = GetComponent<UIView>();
     }
 
-    public void Show(int levelNum, GameplayResult gameplayResult, int coinReward)
+    public void Show(int levelNum, GameplayResult gameplayResult, int coinReward, int medalAmount)
     {
         isErnReward = false;
 
@@ -86,7 +87,7 @@ public class UIFinishLevelView : MonoBehaviour
 
         if (gameplayResult.IsCompleted)
         {
-            SetupFlyingCurrencies(gameplayResult.TotalStarsCollected, _energyController.PlayCost, coinReward);
+            SetupFlyingCurrencies(medalAmount, _energyController.PlayCost, coinReward);
             StartCoroutine(TryRequestRateUs());
             StartCoroutine(PlayEffects(_winEffects, 2, 0.25f));
             StartCoroutine(PlayAudio());
@@ -137,9 +138,11 @@ public class UIFinishLevelView : MonoBehaviour
         var seq = DOTween.Sequence();
         seq.AppendInterval(3);
         seq.AppendCallback(() => {
-                               // var pauseBetweenSpawn = _pauseBetweenSpawns / medalAmount;
-            SetupTrailEffect(_medalFlyingPrefab, _medalStartTransform, _medalEndTransform);
-
+            // var pauseBetweenSpawn = _pauseBetweenSpawns / medalAmount;
+            SetupTrailEffect(_medalFlyingPrefab, _medalStartTransform, _medalEndTransform, delegate
+            {
+                _tournament.AddScore(medalAmount);
+            });
         });
 
         // seq.AppendInterval(_pauseBetweenSpawns);
@@ -167,9 +170,9 @@ public class UIFinishLevelView : MonoBehaviour
     }
 
     //TODO 13.01.2021 REFACTORING!
-    float countfx = 0;
     void SetupTrailEffect(UITrailEffect uITrailEffect,Transform startTransform, RectTransform targetTransform, Action onSuccess = null)
     {
+        int countfx = 0;
         for (int i = 0; i < _fxAmount; i++)
         {
             var coinFx = Instantiate(uITrailEffect, startTransform);
