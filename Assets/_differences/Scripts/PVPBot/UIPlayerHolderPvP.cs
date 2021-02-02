@@ -4,22 +4,22 @@ using Zenject;
 
 namespace _differences.Scripts.PVPBot
 {
-    public class UIPlayerHolderPvP : MonoBehaviour
+    public class UiPlayerHolderPvP : MonoBehaviour
     {
-        [Inject] private BotFactory botFactory = default;
+        [Inject] private readonly BotFactory botFactory = default;
 
-        public void Setup(Action allreadyBuild)
+        public void Setup(Action alreadyBuild)
         {
             var currentActiveBot = botFactory.GetBot();
             currentActiveBot.CountDifferences = 5; //????? countDifferences;
             currentActiveBot.BotDifficulty = BotDifficulty.Easy;
             currentActiveBot.SuccessFindDifference += CurrentActiveBotSuccessFindDifference;
-            currentActiveBot.AllFindDiffrences += CurrentActiveBot_AllFindDiffrences;
+            currentActiveBot.AllFindDifferences += CurrentActiveBotAllFindDifferences;
 
-            allreadyBuild?.Invoke();
+            alreadyBuild?.Invoke();
         }
 
-        private void CurrentActiveBot_AllFindDiffrences(Bot obj)
+        private void CurrentActiveBotAllFindDifferences(Bot obj)
         {
 
         }

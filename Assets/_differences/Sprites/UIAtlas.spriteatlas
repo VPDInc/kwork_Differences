@@ -68,7 +68,7 @@ SpriteAtlas:
     - {fileID: 2800000, guid: e6d3f26f71791204fb92327980b6e6c4, type: 3}
     - {fileID: 102900000, guid: 25619b6fa6d56cf48a1b54d8ae11366c, type: 3}
     - {fileID: 102900000, guid: 05ae9efb2d029ed439e51843a47d1c33, type: 3}
-    totalSpriteSurfaceArea: 46107350
+    totalSpriteSurfaceArea: 49138390
     bindAsDefault: 1
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
@@ -142,6 +142,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 7eeb5825be16b8e439a4aefff0f42435, type: 3}
   - {fileID: 21300000, guid: 639df44518d8b2c439b8f8e90a238c7c, type: 3}
   - {fileID: 21300000, guid: 128f36557d5beb04b9a72d274f96cd2d, type: 3}
+  - {fileID: 21300000, guid: 80514365a31540b4ab9e69a75d837923, type: 3}
   - {fileID: 21300000, guid: c7772a659d2f6e34a81df1554ba7d0de, type: 3}
   - {fileID: 21300000, guid: c92f8c65a15ef7249a158ae625dce370, type: 3}
   - {fileID: 21300000, guid: cf0595850e2f8ad4db1674224fd40ce9, type: 3}
@@ -360,6 +361,7 @@ SpriteAtlas:
   - energy
   - 2
   - compass
+  - frame
   - vertical_picture
   - 27
   - rays
