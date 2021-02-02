@@ -6,6 +6,7 @@ using Airion.Extensions;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 
+//TODO ASSETS/_differences 01.02.2021
 public class Loader {
     public (Sprite, Sprite) Result { get; private set; }
 

@@ -8,7 +8,6 @@ using PlayFab.PfEditor;
 
 namespace _differences.Scripts.Editor
 {
-
     [CustomEditor(typeof(Configs.GameConfigWrapper))]
     public class GameConfigWrapperInspector : UnityEditor.Editor
     {
@@ -55,6 +54,7 @@ namespace _differences.Scripts.Editor
                 }
             }
         }
+
         public override void OnInspectorGUI()
         {
             if (GUILayout.Button($"Load...") == true)
@@ -101,16 +101,18 @@ namespace _differences.Scripts.Editor
             EditorGUILayout.PropertyField(gameConfig);
             serializedObject.ApplyModifiedProperties();
         }
+
         private void SaveToFile(string filePath)
         {
             File.WriteAllText(filePath, (target as Configs.GameConfigWrapper).GetGameConfigAsJson(true));
         }
+
         private void UploadToPlayFab()
         {
             string body = (target as Configs.GameConfigWrapper).GetGameConfigAsJson(false);
 
-            Upload(playFabUploadTarget.titleId, playFabUploadTarget.devKey, body, 
-                ()=>  { Debug.Log("<color=green>Success!</color>"); },
+            Upload(playFabUploadTarget.titleId, playFabUploadTarget.devKey, body,
+                () => { Debug.Log("<color=green>Success!</color>"); },
                 ex => { Debug.LogError(ex); });
         }
 
