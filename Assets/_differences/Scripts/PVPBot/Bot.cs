@@ -21,8 +21,9 @@ namespace _differences.Scripts.PVPBot
         public event Action<DifferencesData> SuccessFindDifference;
         public event Action<Bot> AllFindDiffrences;
 
-        public int CountDifferences { get; private set; }
-        public BotDifficulty BotDifficulty { get; private set; }
+        public int CountDifferences;
+        public BotDifficulty BotDifficulty;
+        public bool BotReady;
 
         private string nameBot => "Name " + this.GetHashCode();
 
@@ -30,11 +31,6 @@ namespace _differences.Scripts.PVPBot
         private TimeSpan _differenceFindTime;
         private bool[] differencesArray;
         private int StepFindAmount => Extension.Extensions.GetNormalDistributedValue(MIN_TIME_FIND,MAX_TIME_FIND);
-
-        public void SetConfig(BotConfig config)
-        {
-
-        }
 
         public void Start()
         {
@@ -55,16 +51,6 @@ namespace _differences.Scripts.PVPBot
             _timer.Dispose();
 
             AllFindDiffrences?.Invoke(this);
-        }
-
-        public void SetDifferencesCount(int value)
-        {
-            CountDifferences = value;
-        }
-
-        public void SetDifficulty(BotDifficulty value)
-        {
-            BotDifficulty = value;
         }
 
         private void _timer_Elapsed(object sender, ElapsedEventArgs e)
@@ -114,12 +100,9 @@ namespace _differences.Scripts.PVPBot
         }
     }
 
-    public class DifferencesData
+    public struct DifferencesData
     {
         public int CurrentID;
         public bool[] DifferencesArray;
     }
-
-  
-
 }

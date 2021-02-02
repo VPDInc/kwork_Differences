@@ -8,6 +8,7 @@ namespace _differences.Scripts.Configs
     public struct GameConfig
     {
         public BotConfig BotConfig;
+        public int Version;
     }
 
     [Serializable]

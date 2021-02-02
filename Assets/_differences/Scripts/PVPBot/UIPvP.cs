@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace _differences.Scripts.PVPBot
@@ -12,45 +12,28 @@ namespace _differences.Scripts.PVPBot
         [Inject] private AvatarsPool _avatarPool = default;
         [Inject] private PlayerInfoController _infoController = default;
 
-        private Bot currentActiveBot = default;
+        [SerializeField] private List<UIPlayerHolderPvP> uIPlayers = new List<UIPlayerHolderPvP>();
+
+        [SerializeField] private UIPlayerHolderPvP uiPlayer;
+        [SerializeField] private Transform uiPlayerTransform;
 
         private int countDifferences = 5;
 
-        public void BuildPvpMatch(Action allreadyBuild)
+        public void BuildPvpMatch(Data data)
         {
             FindOpponents();
-            BuildBot(allreadyBuild);
         }
 
         public void StartPvpMatch()
         {
-            currentActiveBot.Start();
+            botFactory.StartGame();
         }
 
         private void FindOpponents()
         {
-
-        }
-
-        private void BuildBot(Action allreadyBuild)
-        {
-            currentActiveBot = botFactory.GetBot();
-            currentActiveBot.SetDifferencesCount(countDifferences);
-            currentActiveBot.SetDifficulty(BotDifficulty.Normal);
-            currentActiveBot.SuccessFindDifference += CurrentActiveBotSuccessFindDifference;
-            currentActiveBot.AllFindDiffrences += CurrentActiveBot_AllFindDiffrences;
-
-            allreadyBuild?.Invoke();
-        }
-
-        private void CurrentActiveBot_AllFindDiffrences(Bot obj)
-        {
-
-        }
-
-        private void CurrentActiveBotSuccessFindDifference(DifferencesData obj)
-        {
-
+            var ui = Instantiate(uiPlayer, uiPlayerTransform);
+            ui.Setup(delegate { });
+            uIPlayers.Add(ui);
         }
     }
 }
