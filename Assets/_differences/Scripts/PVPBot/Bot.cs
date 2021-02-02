@@ -1,14 +1,17 @@
-﻿using _differences.Scripts.Configs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Timers;
+using _differences.Scripts.Extension;
+using _differences.Scripts.PVPBot.Other;
+using ModestTree;
 
 namespace _differences.Scripts.PVPBot
 {
     public class Bot
     {
         #region CONST
+
         private const int TIMER_TICK = 1000;
 
         private const int MIN_TIME_FIND = 20;
@@ -16,93 +19,86 @@ namespace _differences.Scripts.PVPBot
 
         private const string LOG_START = "Bot started";
         private const string LOG_FIND = "FindDifference";
+
         #endregion
 
-        public event Action<DifferencesData> SuccessFindDifference;
-        public event Action<Bot> AllFindDiffrences;
+        private readonly TimeSpan delaySpan = new TimeSpan(0, 0, 1);
 
         public int CountDifferences;
         public BotDifficulty BotDifficulty;
         public bool BotReady;
 
-        private string nameBot => "Name " + this.GetHashCode();
+        internal string NameBot => $"bot{GetHashCode()}";
 
-        private Timer _timer;
-        private TimeSpan _differenceFindTime;
+        private Timer timer;
         private bool[] differencesArray;
-        private int StepFindAmount => Extension.Extensions.GetNormalDistributedValue(MIN_TIME_FIND,MAX_TIME_FIND);
+        private TimeSpan differenceFindTime;
+
+        private int StepFindAmount => Extensions.GetNormalDistributedValue(MIN_TIME_FIND, MAX_TIME_FIND);
+
+        public event Action<DifferencesData> SuccessFindDifference;
+        public event Action<Bot> AllFindDifferences;
 
         public void Start()
         {
-            Console.WriteLine(LOG_START);
+            Logger.Log(LOG_START);
+
             RefreshTimeStep();
             differencesArray = new bool[CountDifferences];
 
-            _timer = new Timer(TIMER_TICK);
-            _timer.Elapsed += _timer_Elapsed;
-            _timer.Start();
+            timer = new Timer(TIMER_TICK);
+            timer.Elapsed += TimerElapsed;
+            timer.Start();
         }
 
         public void Stop()
         {
-            Console.WriteLine("Bot end " + nameBot);
+            Logger.Log($"Bot: {NameBot}, was stopped");
 
-            _timer.Stop();
-            _timer.Dispose();
+            timer.Stop();
+            timer.Dispose();
 
-            AllFindDiffrences?.Invoke(this);
+            AllFindDifferences?.Invoke(this);
         }
 
-        private void _timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void TimerElapsed(object sender, ElapsedEventArgs e)
         {
-            _differenceFindTime -= new TimeSpan(0, 0, 1);
+            differenceFindTime = differenceFindTime.Seconds > 0 ? -delaySpan : TimeSpan.Zero;
 
-            if (_differenceFindTime.Seconds == 0 && differencesArray.Any(x => x == false))
+            if (differenceFindTime.Seconds == 0 && differencesArray.Any(x => x == false))
                 FindDifference();
 
-            if (differencesArray.All(x => x == true))
+            if (differencesArray.All(x => x))
                 Stop();
+        }
+
+        private void FindDifference()
+        {
+            Logger.Log($"{LOG_FIND} {NameBot}");
+
+            var filterDifferences = differencesArray.Where(x => x == false).ToArray();
+            var indexOfFindDifference = filterDifferences.IndexOf(filterDifferences[new Random().Next(filterDifferences.Length)]);
+            
+            differencesArray[indexOfFindDifference] = true;
+
+            RefreshTimeStep();
+
+            SuccessFindDifference?.Invoke(new DifferencesData
+            {
+                CurrentId = indexOfFindDifference,
+                DifferencesArray = differencesArray
+            });
         }
 
         private void RefreshTimeStep()
         {
-            _differenceFindTime += new TimeSpan(0, 0, StepFindAmount);
-        }
-
-        //need small refactoring for var. 
-        private void FindDifference()
-        {
-            Console.WriteLine(LOG_FIND + " " + nameBot);
-
-            var id = -1;
-
-            var tempArray = new List<int>();
-            for (int i = 0; i < differencesArray.Length; i++)
-            {
-                if (differencesArray[i] == false)
-                    tempArray.Add(i);
-            }
-
-            var randomNumber = tempArray[new Random().Next(tempArray.Count)];
-
-            differencesArray[randomNumber] = true;
-            id = randomNumber;
-
-            var data = new DifferencesData
-            {
-                CurrentID = id,
-                DifferencesArray = differencesArray
-            };
-
-            RefreshTimeStep();
-
-            SuccessFindDifference?.Invoke(data);
+            differenceFindTime += new TimeSpan(0, 0, StepFindAmount);
         }
     }
 
     public struct DifferencesData
     {
-        public int CurrentID;
+        public int CurrentId;
         public bool[] DifferencesArray;
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Zenject;
 
@@ -7,17 +6,17 @@ namespace _differences.Scripts.PVPBot
 {
     public class UIPvP : MonoBehaviour
     {
-        [Inject] private BotFactory botFactory = default;
-        [Inject] private Tournament _tournament = default;
-        [Inject] private AvatarsPool _avatarPool = default;
-        [Inject] private PlayerInfoController _infoController = default;
-
-        [SerializeField] private List<UIPlayerHolderPvP> uIPlayers = new List<UIPlayerHolderPvP>();
-
-        [SerializeField] private UIPlayerHolderPvP uiPlayer;
-        [SerializeField] private Transform uiPlayerTransform;
+        [Inject] private readonly BotFactory botFactory = default;
+        [Inject] private PlayerInfoController infoController = default;
+        [Inject] private AvatarsPool avatarPool = default;
+        [Inject] private Tournament tournament = default;
 
         private int countDifferences = 5;
+
+        [SerializeField] private UiPlayerHolderPvP uiPlayer;
+
+        [SerializeField] private List<UiPlayerHolderPvP> uIPlayers = new List<UiPlayerHolderPvP>();
+        [SerializeField] private Transform uiPlayerTransform;
 
         public void BuildPvpMatch(Data data)
         {
@@ -26,7 +25,7 @@ namespace _differences.Scripts.PVPBot
 
         public void StartPvpMatch()
         {
-            botFactory.StartGame();
+            botFactory.InitializationBots();
         }
 
         private void FindOpponents()

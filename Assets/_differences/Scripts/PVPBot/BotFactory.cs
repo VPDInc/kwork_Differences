@@ -1,31 +1,33 @@
-﻿using _differences.Scripts.Configs;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 
 namespace _differences.Scripts.PVPBot
 {
-    public class BotFactory
+    internal sealed class BotFactory
     {
-        private List<Bot> botPull = new List<Bot>();
+        private const string LOG_INIT_BOTS = "Initializate bots: {0} count";
 
-        public void StartGame()
+        private readonly List<Bot> botPull = new List<Bot>();
+
+        internal void InitializationBots()
         {
-            for (int i = 0; i < botPull.Count; i++)
-            {
-                if(botPull[i].BotReady)
-                    botPull[i].Start();
-            }
+            Debug.Log(string.Format(LOG_INIT_BOTS, botPull.Count));
+
+            foreach (var b in botPull.Where(b => b.BotReady))
+                b.Start();
         }
 
-        public Bot GetBot()
+        internal Bot GetBot()
         {
-            Bot bot = new Bot();
+            var bot = new Bot();
 
             botPull.Add(bot);
 
             return bot;
         }
 
-        public void StopBot(Bot bot)
+        internal void StopBot(Bot bot)
         {
             bot.Stop();
             botPull.Remove(bot);
