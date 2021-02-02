@@ -1,34 +1,38 @@
-﻿using Airion.Currency;
-
-using Doozy.Engine.UI;
-
-using TMPro;
-
-using UnityEngine;
-
+﻿using UnityEngine;
 using Zenject;
 
-public class AdsController : MonoBehaviour {
+public class AdsController : MonoBehaviour
+{
+    private const float MAX_VOLUME = 0;
 
-    const float MAX_VOLUME = 0;
+    [Inject] private readonly AdsPopup _adsPopup = default;
+    [Inject] private readonly Advertisement _advertisement = default;
 
-    [SerializeField] int _adsCoinReward = 50;
-    [SerializeField] string _titleText = "CONGRADULATIONS!";
-    [SerializeField] string _messageText = "Your reward:";
-    [SerializeField] string _coinsRewardPrefix = "<sprite=0> ";
+    [SerializeField] private int _adsCoinReward = 50;
+    [SerializeField] private string _coinsRewardPrefix = "<sprite=0> ";
+    [SerializeField] private string _messageText = "Your reward:";
+    [SerializeField] private string _titleText = "CONGRATULATIONS!";
 
-    [Inject] Advertisement _advertisement = default;
-    [Inject] AdsPopup _adsPopup = default;
-
-    public void RequestAd() {
-
-        _advertisement.ShowRewardedVideo(successCallback:ReceiveReward);
+    public void RequestAd()
+    {
+        _advertisement.ShowRewardedVideo(ReceiveReward, FailReward, CompletionReward);
     }
 
-    void ReceiveReward() {
+    private void ReceiveReward()
+    {
         _advertisement.ChangeVolume(MAX_VOLUME);
 
-        _adsPopup.Open(_titleText, _messageText, _adsCoinReward,  _coinsRewardPrefix + _adsCoinReward);
-        Analytic.CurrencyEarn(_adsCoinReward, "ads-watched", "");
+        _adsPopup.Open(_titleText, _messageText, _adsCoinReward, _coinsRewardPrefix + _adsCoinReward);
+        Analytic.CurrencyEarn(_adsCoinReward, "ads-watched", string.Empty);
+    }
+
+    private void FailReward()
+    {
+        _advertisement.ChangeVolume(MAX_VOLUME);
+    }
+
+    private void CompletionReward()
+    {
+        _advertisement.ChangeVolume(MAX_VOLUME);
     }
 }

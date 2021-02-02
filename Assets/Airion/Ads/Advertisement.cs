@@ -127,7 +127,7 @@ public class Advertisement : Singleton<Advertisement> {
         });
     }
     
-    const float LOW_VOLUME = -80;
+    const float LOW_VOLUME = -100;
     [SerializeField] AudioMixer _mainMixer = default;
 
 
