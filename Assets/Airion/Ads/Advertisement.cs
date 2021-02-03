@@ -131,13 +131,14 @@ public class Advertisement : Singleton<Advertisement> {
     [SerializeField] AudioMixer _mainMixer = default;
 
 
-    public void ShowRewardedVideo(Action successCallback = null, Action failCallback = null, Action completionCallback = null, string inGamePlacement = "") {
-        if (IsEditor) {
+    public void ShowRewardedVideo(Action successCallback = null, Action failCallback = null, Action completionCallback = null, Action closedCallback = null, string inGamePlacement = "") {
+        if (IsEditor)
+        {
             successCallback?.Invoke();
             completionCallback?.Invoke();
             return;
         }
-        
+
         if (_isAdsDisabled) {
             successCallback?.Invoke();
             completionCallback?.Invoke();
@@ -174,7 +175,11 @@ public class Advertisement : Singleton<Advertisement> {
                 {"result", "start"},
                 {"connection", Application.internetReachability != NetworkReachability.NotReachable}
             });
-        })) {
+        }, () =>
+        {
+            closedCallback?.Invoke();
+        }))
+        {
             Analytic.Send("video_ads_available", new Dictionary<string, object>() {
                 {"ad_type", "rewarded"},
                 {"placement", inGamePlacement},
