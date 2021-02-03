@@ -107,8 +107,6 @@ public class LoadingScreenSystem : MonoBehaviour {
 
     public void ProcessToGame()
     {
-        FindObjectOfType<DailyRewardsSystem>().Initialize();
-        //_dailyRewardData.Initialize();
         DisableLoadingScreen();
     }
 }
