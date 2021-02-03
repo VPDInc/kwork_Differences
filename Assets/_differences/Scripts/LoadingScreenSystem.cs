@@ -15,6 +15,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 using Zenject;
+using Differences.DailyRewards;
 
 public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] UIView _loadingScreen = default;
@@ -104,7 +105,10 @@ public class LoadingScreenSystem : MonoBehaviour {
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(1));
     }
 
-    public void ProcessToGame() {
+    public void ProcessToGame()
+    {
+        FindObjectOfType<DailyRewardsSystem>().Initialize();
+        //_dailyRewardData.Initialize();
         DisableLoadingScreen();
     }
 }
