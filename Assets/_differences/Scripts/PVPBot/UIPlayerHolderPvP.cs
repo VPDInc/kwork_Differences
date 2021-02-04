@@ -1,32 +1,24 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using Zenject;
+using UnityEngine.UI;
 
-namespace _differences.Scripts.PVPBot
+public class UiPlayerHolderPvP : MonoBehaviour
 {
-    public class UiPlayerHolderPvP : MonoBehaviour
+    [SerializeField] private Image playerAvatar;
+    [SerializeField] private TMP_Text countMedalText;
+
+
+    private void Start()
     {
-        [Inject] private readonly BotFactory botFactory = default;
+        
+    }
 
-        public void Setup(Action alreadyBuild)
-        {
-            var currentActiveBot = botFactory.GetBot();
-            currentActiveBot.CountDifferences = 5; //????? countDifferences;
-            currentActiveBot.BotDifficulty = BotDifficulty.Easy;
-            currentActiveBot.SuccessFindDifference += CurrentActiveBotSuccessFindDifference;
-            currentActiveBot.AllFindDifferences += CurrentActiveBotAllFindDifferences;
 
-            alreadyBuild?.Invoke();
-        }
+    internal void Setup(Action p)
+    {
 
-        private void CurrentActiveBotAllFindDifferences(Bot obj)
-        {
-
-        }
-
-        private void CurrentActiveBotSuccessFindDifference(DifferencesData obj)
-        {
-
-        }
     }
 }
