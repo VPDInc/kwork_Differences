@@ -21,178 +21,538 @@ MonoBehaviour:
     CountPlayers: 2
     MinDifficulty: 0
     MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 5
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    FindDifferenceSeconds: 60
   - PictureCount: 2
     DifferenceCount: 5
-    CountPlayers: 0
+    CountPlayers: 2
     MinDifficulty: 0
     MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    FindDifferenceSeconds: 60
   - PictureCount: 1
-    DifferenceCount: 6
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 6
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 2
-    DifferenceCount: 6
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 7
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 7
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 8
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 8
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 9
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 9
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 2
-    DifferenceCount: 6
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 2
-    DifferenceCount: 6
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 3
     DifferenceCount: 5
-    CountPlayers: 0
+    CountPlayers: 3
     MinDifficulty: 0
     MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
   - PictureCount: 2
     DifferenceCount: 6
-    CountPlayers: 0
+    CountPlayers: 2
     MinDifficulty: 0
     MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
   - PictureCount: 2
     DifferenceCount: 7
-    CountPlayers: 0
+    CountPlayers: 2
     MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
     DifferenceCount: 8
-    CountPlayers: 0
+    CountPlayers: 2
     MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
     DifferenceCount: 9
-    CountPlayers: 0
+    CountPlayers: 2
     MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
   - PictureCount: 2
     DifferenceCount: 7
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
   - PictureCount: 2
     DifferenceCount: 8
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 1
-    DifferenceCount: 10
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 2
-    DifferenceCount: 8
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
   - PictureCount: 2
     DifferenceCount: 9
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
   - PictureCount: 2
     DifferenceCount: 10
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 3
-    DifferenceCount: 5
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 3
-    DifferenceCount: 5
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 3
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
     DifferenceCount: 6
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 3
+    CountPlayers: 4
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
     DifferenceCount: 6
-    CountPlayers: 0
-    MinDifficulty: 0
-    MaxDifficulty: 0
-    FindDifferenceSeconds: 0
-  - PictureCount: 3
+    CountPlayers: 4
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
     DifferenceCount: 7
-    CountPlayers: 0
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 5
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 8
+    CountPlayers: 2
     MinDifficulty: 0
     MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
     FindDifferenceSeconds: 0
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 4
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 2
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 3
+    DifferenceCount: 10
+    CountPlayers: 4
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 5
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 5
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 5
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 8
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 8
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 5
+    CountPlayers: 4
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 4
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 5
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 8
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 4
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 2
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 3
+    DifferenceCount: 10
+    CountPlayers: 4
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 5
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 5
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 5
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 1
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 0
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 8
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 0
+    MaxDifficulty: 1
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 8
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 3
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 5
+    CountPlayers: 4
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 4
+    MinDifficulty: 1
+    MaxDifficulty: 2
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 3
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 5
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 6
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 8
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 2
+    MaxDifficulty: 3
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 7
+    CountPlayers: 4
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 0
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 2
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 9
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 2
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 2
+    DifferenceCount: 10
+    CountPlayers: 3
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
+  - PictureCount: 3
+    DifferenceCount: 10
+    CountPlayers: 4
+    MinDifficulty: 3
+    MaxDifficulty: 4
+    FindDifferenceSeconds: 60
