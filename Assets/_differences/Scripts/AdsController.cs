@@ -15,7 +15,7 @@ public class AdsController : MonoBehaviour
 
     public void RequestAd()
     {
-        _advertisement.ShowRewardedVideo(ReceiveReward, FailReward, CompletionReward);
+        _advertisement.ShowRewardedVideo(ReceiveReward, FailReward, closedCallback:OnCloseReward);
     }
 
     private void ReceiveReward()
@@ -31,7 +31,7 @@ public class AdsController : MonoBehaviour
         _advertisement.ChangeVolume(MAX_VOLUME);
     }
 
-    private void CompletionReward()
+    private void OnCloseReward()
     {
         _advertisement.ChangeVolume(MAX_VOLUME);
     }
