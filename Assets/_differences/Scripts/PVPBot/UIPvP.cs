@@ -31,7 +31,7 @@ namespace _differences.Scripts.PVPBot
         private void FindOpponents()
         {
             var ui = Instantiate(uiPlayer, uiPlayerTransform);
-            ui.Setup(delegate { });
+            //ui.Setup(delegate { });
             uIPlayers.Add(ui);
         }
     }

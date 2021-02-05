@@ -8,11 +8,6 @@ namespace Differences
         [SerializeField] private GameObject pullObject;
         [SerializeField] private Transform targetInstantiate;
 
-        public void Test()
-        {
-            StartPull<UICheckMark>();
-        }
-
         /// <summary>
         /// StartPull system method
         /// </summary>
