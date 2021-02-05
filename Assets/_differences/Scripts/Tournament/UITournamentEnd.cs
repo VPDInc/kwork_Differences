@@ -125,9 +125,6 @@ public class UITournamentEnd : MonoBehaviour {
                 case RewardEnum.Aim:
                     _currencyManager.GetCurrency(CurrencyConstants.AIM).Earn(rewardInfo.Amount);
                     break;
-                case RewardEnum.Clock:
-                    _currencyManager.GetCurrency(CurrencyConstants.WATCH).Earn(rewardInfo.Amount);
-                    break;
                 case RewardEnum.Compass:
                     _currencyManager.GetCurrency(CurrencyConstants.COMPASS).Earn(rewardInfo.Amount);
                     break;

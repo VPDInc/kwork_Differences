@@ -15,7 +15,6 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 using Zenject;
-using Differences.DailyRewards;
 
 public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] UIView _loadingScreen = default;
