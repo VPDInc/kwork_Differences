@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Airion.Currency;
@@ -32,11 +33,10 @@ public class UIBoosterOfferElement : MonoBehaviour {
     int _amountToBuy;
     int _cost;
 
-    const string COINS_CURRENCY_ID = "Soft";
     const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
 
     void Start() {
-        _coinsCurrency = _currencyManager.GetCurrency(COINS_CURRENCY_ID);
+        _coinsCurrency = _currencyManager.GetCurrency(Differences.CurrencyConstants.SOFT);
     }
 
     public void Setup(Currency currency, string title, Sprite icon, int amount, int cost, Transform fxStartTransform) {
@@ -54,10 +54,12 @@ public class UIBoosterOfferElement : MonoBehaviour {
 
     public void Buy() {
         if (_coinsCurrency.IsEnough(_cost)) {
-            _coinsCurrency.Spend(_cost);
+           
             Analytic.CurrencySpend(_cost, "booster-bought", _currency.name, _levelController.LastLevelNum);
-            _currency.Earn(_amountToBuy);
-            SetupTrailEffect();
+            _coinsCurrency.Spend(_cost);
+            SetupTrailEffect(delegate {
+                _currency.Earn(_amountToBuy);
+            });
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
@@ -66,11 +68,21 @@ public class UIBoosterOfferElement : MonoBehaviour {
     public void SetBackSprite(Sprite back) {
         _backIcon.sprite = back;
     }
-    
-    void SetupTrailEffect() {
+
+    //TODO 13.01.2021 REFACTORING!
+    float countfx = 0;
+    private void SetupTrailEffect(Action action) {
         for (int i = 0; i < _coinFxAmount; i++) {
             var coinFx = Instantiate(_uiTrailEffectPrefab, _fxStartTransform);
-            coinFx.Setup(transform.position, _pauseBetweenSpawns * i);
+            coinFx.Setup(transform.position, _pauseBetweenSpawns * i, delegate {
+                ++countfx;
+
+                if (_coinFxAmount == countfx)
+                {
+                    countfx = 0;
+                    action?.Invoke();
+                }
+            });
         }
     }
 }

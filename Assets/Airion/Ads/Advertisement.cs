@@ -127,18 +127,18 @@ public class Advertisement : Singleton<Advertisement> {
         });
     }
     
-    const float LOW_VOLUME = -80;
-    const float MAX_VOLUME = 0;
+    const float LOW_VOLUME = -100;
     [SerializeField] AudioMixer _mainMixer = default;
 
 
-    public void ShowRewardedVideo(Action successCallback = null, Action failCallback = null, Action completionCallback = null, string inGamePlacement = "") {
-        if (IsEditor) {
+    public void ShowRewardedVideo(Action successCallback = null, Action failCallback = null, Action completionCallback = null, Action closedCallback = null, string inGamePlacement = "") {
+        if (IsEditor)
+        {
             successCallback?.Invoke();
             completionCallback?.Invoke();
             return;
         }
-        
+
         if (_isAdsDisabled) {
             successCallback?.Invoke();
             completionCallback?.Invoke();
@@ -164,10 +164,10 @@ public class Advertisement : Singleton<Advertisement> {
             });
             failCallback?.Invoke();
         }, ()=> {
-            _mainMixer.SetFloat("MasterVolume", MAX_VOLUME);
+
             completionCallback?.Invoke();
         }, () => {
-            _mainMixer.SetFloat("MasterVolume", LOW_VOLUME);
+            ChangeVolume(LOW_VOLUME);
 
             Analytic.Send("video_ads_started", new Dictionary<string, object>() {
                 {"ad_type", "rewarded"},
@@ -175,7 +175,11 @@ public class Advertisement : Singleton<Advertisement> {
                 {"result", "start"},
                 {"connection", Application.internetReachability != NetworkReachability.NotReachable}
             });
-        })) {
+        }, () =>
+        {
+            closedCallback?.Invoke();
+        }))
+        {
             Analytic.Send("video_ads_available", new Dictionary<string, object>() {
                 {"ad_type", "rewarded"},
                 {"placement", inGamePlacement},
@@ -194,6 +198,8 @@ public class Advertisement : Singleton<Advertisement> {
             {"connection", Application.internetReachability != NetworkReachability.NotReachable}
         });
     }
+
+    public void ChangeVolume(float value) => _mainMixer.SetFloat("MasterVolume", value);
 
     void OnAdapterInitialized() {
         var ad = GetAdv(_currentAdvType);

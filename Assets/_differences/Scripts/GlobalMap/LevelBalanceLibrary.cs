@@ -68,6 +68,7 @@ public class LevelBalancedInfoEditor : Editor {
     void UpdateAllLevels(GstuSpreadSheet spreadsheetRef) {
         _levelBalanceLibrary.LevelBalanceInfos.Clear();
         var rows = spreadsheetRef.rows.primaryDictionary;
+
         for (int i = 2; i <= rows.Count; i++) {
             var levelBalanceInfo = new LevelBalanceLibrary.LevelBalanceInfo();
             foreach (GSTU_Cell cell in rows[i]) {

@@ -47,8 +47,10 @@ public class PlayerInfoController : MonoBehaviour {
         _playFabInfo.AccountInfoRecieved += OnAccountInfoRecieved;
     }
 
-    void OnAccountInfoRecieved(GetAccountInfoResult obj) {
-        if (_playFabFacebook.IsFacebookLogged) {
+    void OnAccountInfoRecieved(GetAccountInfoResult obj)
+    {
+        if (_playFabFacebook.IsFacebookLogged)
+        {
             RequestFacebookAvatar();
             RequestFacebookName();
         }
@@ -126,39 +128,50 @@ public class PlayerInfoController : MonoBehaviour {
 
     public Sprite[] ProfileIcons => _profileIcons;
 
-    void RequestFacebookAvatar() {
+    void RequestFacebookAvatar()
+    {
         if (_isFacebookIconAvailable) return;
         Debug.Log("Avatar requested");
         FB.API("me/picture?type=square&height=200&width=200", HttpMethod.GET, GetPicture);
     }
 
-    void GetPicture(IGraphResult result) {
-        if (result.Error == null) {
+    void GetPicture(IGraphResult result)
+    {
+        if (result.Error == null)
+        {
             _facebookIcon = Sprite.Create(result.Texture, new Rect(0, 0, 200, 200), new Vector2());
             _isFacebookIconAvailable = true;
             InfoUpdated?.Invoke();
-        } else {
+        }
+        else
+        {
             Debug.LogError(result.Error);
         }
     }
 
-    void RequestFacebookName() {
+    void RequestFacebookName()
+    {
         if (_isFacebookNameAvailable) return;
         Debug.Log("Name requested");
         FB.API("me?fields=first_name", HttpMethod.GET, GetFacebookName);
     }
 
-    void GetFacebookName(IGraphResult result) {
-        if (result.Error == null) {
+    void GetFacebookName(IGraphResult result)
+    {
+        if (result.Error == null)
+        {
             IDictionary dict = Facebook.MiniJSON.Json.Deserialize(result.RawResult) as IDictionary;
             _facebookName = dict["first_name"].ToString();
-            if (_facebookName.Length > 15) {
+            if (_facebookName.Length > 15)
+            {
                 _facebookName = _facebookName.Substring(0, 15);
             }
             _isFacebookNameAvailable = true;
             InfoUpdated?.Invoke();
             SaveName();
-        } else {
+        }
+        else
+        {
             Debug.LogError(result.Error);
         }
     }

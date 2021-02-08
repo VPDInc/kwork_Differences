@@ -5,7 +5,7 @@ using Airion.Extensions;
 
 using DG.Tweening;
 
-using Facebook.Unity;
+//using Facebook.Unity;
 
 using PlayFab;
 using PlayFab.ClientModels;
@@ -55,7 +55,7 @@ public class LeaderboardElement : MonoBehaviour {
         _displayName.text = player.DisplayName;
         _score.text = player.Score.ToString();
         Player = player;
-        
+
         if (player.Score > 0)
             _rewardInfos = _tournamentRewards.GetRewardByPlace(placeInGlobal);
         

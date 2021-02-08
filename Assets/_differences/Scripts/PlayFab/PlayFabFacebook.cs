@@ -57,23 +57,26 @@ public class PlayFabFacebook : MonoBehaviour {
         _wasLinked = PrefsExtensions.GetBool(WAS_LINKED_ID, false);
     }
 
-    public void LoginFacebook() {
+    public void LoginFacebook()
+    {
         GameEventMessage.SendEvent(CONNECTION_ATTEMPT_EVENT_NAME);
         SetMessage("Logging into Facebook...");
 
         // We invoke basic login procedure and pass in the callback to process the result
-        FB.LogInWithReadPermissions(new List<string>() {"public_profile", "email", "user_friends"}, OnFacebookLoggedIn);
+        FB.LogInWithReadPermissions(new List<string>() { "public_profile", "email", "user_friends" }, OnFacebookLoggedIn);
     }
 
-    public void LinkFacebook() {
-        if (!FB.IsLoggedIn) {
+    public void LinkFacebook()
+    {
+        if (!FB.IsLoggedIn)
+        {
             LoginFacebook();
             return;
         }
 
         SetMessage("Link Facebook to PlayFab account");
         var linkRequest = new LinkFacebookAccountRequest
-                          {AccessToken = AccessToken.CurrentAccessToken.TokenString, ForceLink = true};
+        { AccessToken = AccessToken.CurrentAccessToken.TokenString, ForceLink = true };
 
         PlayFabClientAPI.LinkFacebookAccount(linkRequest, OnFacebookLinkComplete, OnFacebookLinkError);
     }
@@ -92,7 +95,8 @@ public class PlayFabFacebook : MonoBehaviour {
         FacebookError?.Invoke();
     }
 
-    void OnFacebookUnlinkComplete(UnlinkFacebookAccountResult obj) {
+    void OnFacebookUnlinkComplete(UnlinkFacebookAccountResult obj)
+    {
         SetMessage("Unlinked Facebook from PlayFab account");
         FB.LogOut();
         FacebookUnlinked?.Invoke();
@@ -102,7 +106,8 @@ public class PlayFabFacebook : MonoBehaviour {
         InitFB();
     }
 
-    void InitFB() {
+    void InitFB()
+    {
         if (FB.IsInitialized) return;
 
         SetMessage("Initializing Facebook..."); // logs the given message and displays it on the screen using OnGUI method
@@ -123,8 +128,6 @@ public class PlayFabFacebook : MonoBehaviour {
         if (!_wasLinked) {
             _wasLinked = true;
             PrefsExtensions.SetBool(WAS_LINKED_ID, _wasLinked);
-            _currency.Earn(_facebookLinkReward);
-            Analytic.CurrencyEarn(_facebookLinkReward, "facebook-linked", "");
         }
 
         FacebookLinked?.Invoke();
@@ -135,9 +138,11 @@ public class PlayFabFacebook : MonoBehaviour {
         FacebookReady?.Invoke();
     }
 
-    void OnFacebookLoggedIn(ILoginResult result) {
+    void OnFacebookLoggedIn(ILoginResult result)
+    {
         // If result has no errors, it means we have authenticated in Facebook successfully
-        if (result == null || string.IsNullOrEmpty(result.Error)) {
+        if (result == null || string.IsNullOrEmpty(result.Error))
+        {
             SetMessage("Facebook Auth Complete! Access Token: " + AccessToken.CurrentAccessToken.TokenString +
                        "\nLogging into PlayFab...");
 
@@ -149,7 +154,9 @@ public class PlayFabFacebook : MonoBehaviour {
             // PlayFabClientAPI
             //     .LoginWithFacebook(new LoginWithFacebookRequest {CreateAccount = true, AccessToken = AccessToken.CurrentAccessToken.TokenString},
             //                        OnPlayFabFacebookAuthComplete, OnPlayFabFacebookAuthFailed);
-        } else {
+        }
+        else
+        {
             // If Facebook authentication failed, we stop the cycle with the message
             SetMessage("Facebook Auth Failed: " + result.Error + "\n" + result.RawResult, true);
             FacebookError?.Invoke();
@@ -175,6 +182,12 @@ public class PlayFabFacebook : MonoBehaviour {
             Debug.LogError(message);
         else
             Debug.Log(message);
+    }
+
+    public void SetReward()
+    {
+        _currency.Earn(_facebookLinkReward);
+        Analytic.CurrencyEarn(_facebookLinkReward, "facebook-linked", "");
     }
 
     public void OnGUI() {

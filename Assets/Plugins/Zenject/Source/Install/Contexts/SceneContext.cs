@@ -287,6 +287,7 @@ namespace Zenject
                 PreResolve();
             }
 
+
             if (OnPreResolve != null)
             {
                 OnPreResolve.Invoke();

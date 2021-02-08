@@ -1,8 +1,8 @@
 ﻿using Airion.Currency;
-
+using Differences;
 using Doozy.Engine;
 using Doozy.Engine.UI;
-
+using System;
 using UnityEngine;
 
 using Zenject;
@@ -34,14 +34,12 @@ public class UIEnergyShop : MonoBehaviour {
     Currency _energyCurrency;    
     Currency _softCurrency;
 
-    const string ENERGY_CURRENCY_ID = "Energy";
-    const string SOFT_CURRENCY_ID = "Soft";
     const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
     const string MAX_ENERGY_POPUP_NAME = "MaxEnergy";
 
     void Start() {
-        _energyCurrency = _currencyManager.GetCurrency(ENERGY_CURRENCY_ID);
-        _softCurrency = _currencyManager.GetCurrency(SOFT_CURRENCY_ID);
+        _energyCurrency = _currencyManager.GetCurrency(CurrencyConstants.ENERGY);
+        _softCurrency = _currencyManager.GetCurrency(CurrencyConstants.SOFT);
         
         SetupOffers();
     }
@@ -51,11 +49,12 @@ public class UIEnergyShop : MonoBehaviour {
             ShowMaxEnergyPopup();
             return;
         }
-        
+
         if (_softCurrency.IsEnough(_costEnergyPack1)) {
             _softCurrency.Spend(_costEnergyPack1);
-            _energyCurrency.Earn(_energyAmountPack1);
-            SetupTrailEffect(_offerElementPack1.transform, _fxTarget);
+            SetupTrailEffect(_offerElementPack1.transform, _fxTarget, delegate {
+                _energyCurrency.Earn(_energyAmountPack1);
+            });
             Analytic.CurrencySpend(_costEnergyPack1, "energy-bought", "energy-pack-1", _levelController.LastLevelNum);
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
@@ -67,11 +66,12 @@ public class UIEnergyShop : MonoBehaviour {
             ShowMaxEnergyPopup();
             return;
         }
-        
+
         if (_softCurrency.IsEnough(_costEnergyPack2)) {
             _softCurrency.Spend(_costEnergyPack2);
-            _energyCurrency.Earn(_energyAmountPack2);
-            SetupTrailEffect(_offerElementPack2.transform, _fxTarget);
+            SetupTrailEffect(_offerElementPack2.transform, _fxTarget, delegate {
+                _energyCurrency.Earn(_energyAmountPack2);
+            });
             Analytic.CurrencySpend(_costEnergyPack2, "energy-bought", "energy-pack-2", _levelController.LastLevelNum);
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
@@ -84,20 +84,34 @@ public class UIEnergyShop : MonoBehaviour {
             return;
         }
         
+
         if (_softCurrency.IsEnough(_costInfinityEnergy)) {
             _softCurrency.Spend(_costInfinityEnergy);
-            _energyController.AddInfinityTime();
-            SetupTrailEffect(_offerElementPack3.transform, _fxTarget);
+            SetupTrailEffect(_offerElementPack3.transform, _fxTarget, delegate {
+                _energyController.AddInfinityTime();
+            });
+
             Analytic.CurrencySpend(_costEnergyPack2, "energy-bought", "unlimited-pack", _levelController.LastLevelNum);
         } else {
             GameEventMessage.SendEvent(OPEN_STORE_EVENT_ID);
         }
     }
-    
-    void SetupTrailEffect(Transform startTransform, RectTransform targetTransform) {
+
+    //TODO 13.01.2021 REFACTORING!
+    float countfx = 0;
+    void SetupTrailEffect(Transform startTransform, RectTransform targetTransform, Action onSucsses) {
         for (int i = 0; i < _fxAmount; i++) {
             var fx = Instantiate(_uiTrailEffectPrefab, startTransform);
-            fx.Setup(targetTransform.position, _pauseBetweenSpawns * i);
+            fx.Setup(targetTransform.position, _pauseBetweenSpawns * i, delegate
+            {
+                ++countfx;
+
+                if (_fxAmount == countfx)
+                {
+                    countfx = 0;
+                    onSucsses?.Invoke();
+                }
+            });
         }
     }
 

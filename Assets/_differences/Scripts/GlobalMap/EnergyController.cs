@@ -27,13 +27,13 @@ public class EnergyController : MonoBehaviour {
     DateTime _nextRefillTimestamp = default;
     DateTime _infinityEnergyStartTimestamp = default;
 
-    const string ENERGY_CURRENCY_ID = "Energy";
+
     const string LAST_ENERGY_REFILL_TIMESTAMP_ID = "energy_refill_timestamp";
     const string INFINITY_ENERGY_START_TIMESTAMP_ID = "infinity_energy_start_timestamp";
     const int MAX_ENERGY = 30;
 
     void Start() {
-        _energyCurrency = _currencyManager.GetCurrency(ENERGY_CURRENCY_ID);
+        _energyCurrency = _currencyManager.GetCurrency(Differences.CurrencyConstants.ENERGY);
         _gameplayController.Completed += OnCompleted;
         HandlePassedTime();
         LoadInfinityTimestamp();

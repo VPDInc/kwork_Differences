@@ -1,24 +1,27 @@
 ﻿using System;
 
-namespace Airion.DailyRewards {
-    public struct DayInfo {
+namespace Airion.DailyRewards
+{
+    public struct DayInfo
+    {
         public int DayNum;
         public DayStatus Status;
         public AdditionalDaySetting Additional;
         public Reward Reward;
         
-        public override string ToString() {
-            return $"Day: {DayNum} Status: {Status} Additional: {Additional}";
-        }
+        public override string ToString() =>
+            $"Day: {DayNum} Status: {Status} Additional: {Additional}";
     }
 
-    public enum DayStatus {
+    public enum DayStatus
+    {
         Opened,
         NotOpened
     }
 
     [Flags]
-    public enum AdditionalDaySetting {
+    public enum AdditionalDaySetting
+    {
         None = 0,
         Today = 1,
         Tomorrow = 2

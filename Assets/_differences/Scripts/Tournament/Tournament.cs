@@ -49,7 +49,7 @@ public class Tournament : MonoBehaviour {
     }
 
     void Start() {
-        _rating = _currencyManager.GetCurrency("Rating");
+        _rating = _currencyManager.GetCurrency(Differences.CurrencyConstants.RATING);
         
         CurrentFilled += (players) => {
             Log("Сurrent ================");

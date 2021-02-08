@@ -36,7 +36,7 @@ public class UITimeIsUp : MonoBehaviour {
     const string OPEN_STORE_EVENT_ID = "OpenCoinStore";
 
     void Start() {
-        _soft = _currencyManager.GetCurrency("Soft");
+        _soft = _currencyManager.GetCurrency(Differences.CurrencyConstants.SOFT);
         _view = GetComponent<UIView>();
     }
 

@@ -70,7 +70,7 @@ public class UIMiddleScreen : MonoBehaviour {
             return;
         }
 
-        _audioManager.PlayOnce("curtains");
+        //_audioManager.PlayOnce("curtains");
 
         _leftCurtain.DOMoveX(leftMovePos, DURATION);
         _rightCurtain.DOMoveX(rightMovePos, DURATION);

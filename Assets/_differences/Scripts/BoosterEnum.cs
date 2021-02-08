@@ -3,6 +3,6 @@
     Clock,
     Compass,
     Zoom,
-    Coin,
+    Soft,
     Energy
 }

@@ -6,7 +6,7 @@ using Doozy.Engine;
 using Doozy.Engine.Progress;
 using Doozy.Engine.UI;
 
-using Facebook.Unity;
+//using Facebook.Unity;
 
 using PlayFab.ClientModels;
 
@@ -15,6 +15,7 @@ using TMPro;
 using UnityEngine.SceneManagement;
 
 using Zenject;
+using Differences.DailyRewards;
 
 public class LoadingScreenSystem : MonoBehaviour {
     [SerializeField] UIView _loadingScreen = default;
@@ -53,10 +54,12 @@ public class LoadingScreenSystem : MonoBehaviour {
         _bar.SetProgress(0);
     }
 
-    void OnAccountInfoRecieved(GetAccountInfoResult obj) {
-        _facebookLoginButton.SetActive(!_playFabInfo.IsFacebookLinked);
-        if(_playFabInfo.IsFacebookLinked && !FB.IsLoggedIn)
-            _playFabFacebook.LoginFacebook();
+    void OnAccountInfoRecieved(GetAccountInfoResult obj)
+    {
+        Debug.LogWarning("Facebook here");
+        //_facebookLoginButton.SetActive(!_playFabInfo.IsFacebookLinked);
+        //if(_playFabInfo.IsFacebookLinked && !FB.IsLoggedIn)
+        //    _playFabFacebook.LoginFacebook();
     }
 
     void OnDestroy() {
@@ -79,12 +82,13 @@ public class LoadingScreenSystem : MonoBehaviour {
             yield return null;
         }
 
-        bool IsReady() => _playFabLogin.IsLogged && _playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated && (_appleLogin.IsInitialized || Application.isEditor);
+        Debug.LogWarning("Facebook here");
+        //bool IsReady() => _playFabLogin.IsLogged && _playFabFacebook.IsFacebookReady && _playFabInfo.IsAccountInfoUpdated && (_appleLogin.IsInitialized || Application.isEditor);
 
-        while (!IsReady()) {
-            _bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
-            yield return null;
-        }
+        //while (!IsReady()) {
+            //_bar.SetProgress(Mathf.Lerp(_bar.Progress, 1, Time.deltaTime));
+            //yield return null;
+        //}
 
         var isAllLogged = _appleLogin.IsLogged && _playFabInfo.IsFacebookLinked;
         
@@ -101,7 +105,8 @@ public class LoadingScreenSystem : MonoBehaviour {
         SceneManager.SetActiveScene(SceneManager.GetSceneByBuildIndex(1));
     }
 
-    public void ProcessToGame() {
+    public void ProcessToGame()
+    {
         DisableLoadingScreen();
     }
 }

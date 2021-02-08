@@ -31,6 +31,7 @@ public class AdmobAdAdapter : AdAdapter {
     Action _successRewarded;
     Action _failRewarded;
     Action _completeRewarded;
+    private Action _onClosedReward;
     
     Action<bool> _successInterstitial;
     Action _failInterstitial;
@@ -97,7 +98,7 @@ public class AdmobAdAdapter : AdAdapter {
     void HandleRewardedAdClosed(object sender, EventArgs e) {
         Log("Handled close reward");
         _rewardedAd = CreateAndLoad();
-        _completeRewarded?.Invoke();
+        _onClosedReward?.Invoke();
     }
 
     void HandleUserEarnedReward(object sender, Reward e) {
@@ -153,11 +154,12 @@ public class AdmobAdAdapter : AdAdapter {
     
     public override bool ShowRewardedVideo(Action successCallback = null, Action failCallback = null,
         Action completionCallback = null,
-        Action videoStartedCallback = null, string segment = null) {
+        Action videoStartedCallback = null, Action onClosedReward = null, string segment = null) {
         _successRewarded = successCallback;
         _failRewarded = failCallback;
         _completeRewarded = completionCallback;
         _videoStartedCallback = videoStartedCallback;
+        _onClosedReward = onClosedReward;
         
         if (_rewardedAd.IsLoaded()) {
             _rewardedAd.Show();
@@ -206,6 +208,5 @@ public class AdmobAdAdapter : AdAdapter {
     void Err(string message) {
         Debug.LogError($"[{GetType()}] {message}");
     }
-    
     #endregion // Helpers
 }

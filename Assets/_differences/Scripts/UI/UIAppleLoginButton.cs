@@ -5,7 +5,10 @@ using UnityEngine;
 using Zenject;
 
 public class UIAppleLoginButton : MonoBehaviour {
+
     [Inject] AppleLogin _appleLogin = default;
+    [SerializeField] private CollectFx collectFx = default;
+    [SerializeField] private bool enableFx = false;
 
     void Start() {
         if (Application.platform == RuntimePlatform.Android) {
@@ -14,9 +17,22 @@ public class UIAppleLoginButton : MonoBehaviour {
         }
 
         _appleLogin.Initialized += OnInitialized;
+        _appleLogin.Logged += OnLogged;
         
         if (_appleLogin.IsInitialized) {
             Setup();
+        }
+    }
+
+    private void OnLogged()
+    {
+        if(enableFx)
+        {
+            collectFx.SetupTrailEffect(delegate { _appleLogin.SetReward(); } );
+        }
+        else
+        {
+            _appleLogin.SetReward();
         }
     }
 
