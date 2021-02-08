@@ -1,6 +1,5 @@
 ﻿using System;
 
-using Airion.DailyRewards;
 using Airion.Extensions;
 
 using Doozy.Engine.UI;

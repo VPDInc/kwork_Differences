@@ -2484,7 +2484,7 @@ PrefabInstance:
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
       propertyPath: _currenciesObjects.Array.size
-      value: 7
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
@@ -2508,7 +2508,7 @@ PrefabInstance:
         type: 3}
       propertyPath: _currenciesObjects.Array.data[5]
       value: 
-      objectReference: {fileID: 11400000, guid: 8302c4c97d89a4a16aee42c34a371274,
+      objectReference: {fileID: 11400000, guid: 1206ac1a7a71b49d8b44923a945c88ae,
         type: 2}
     - target: {fileID: 6581655950414812771, guid: f458c560cda8e414d8dd05981c88bfaf,
         type: 3}
