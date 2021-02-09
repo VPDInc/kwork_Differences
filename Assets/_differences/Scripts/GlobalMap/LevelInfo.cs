@@ -1,73 +1,77 @@
-﻿using System;
-
-using TMPro;
-
+﻿using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
 using Zenject;
 
-public class LevelInfo : MonoBehaviour {
-    public int LevelNum => _levelNum;
+public class LevelInfo : MonoBehaviour
+{
+    public int LevelNumber => _levelNumber;
     public EpisodeInfo EpisodeInfo => _episodeInfo;
 
     public int Estimation => _estimation;
 
-    [SerializeField] GameObject _completedCupSprite = default;
-    [SerializeField] GameObject _lockedCupSprite = default;
-    [SerializeField] GameObject _avatar = default;
+    [SerializeField] private GameObject _completedCupSprite = default;
+    [SerializeField] private GameObject _lockedCupSprite = default;
+    [SerializeField] private GameObject _avatar = default;
     
-    [SerializeField] TMP_Text _levelNumLabel = default;
-    [SerializeField] GameObject _activeBGSprite = default;
-    [SerializeField] GameObject _completedBGSprite = default;
-    [SerializeField] GameObject _lockedBGSprite = default;
+    [SerializeField] private TMP_Text _levelNumLabel = default;
+    [SerializeField] private GameObject _activeBGSprite = default;
+    [SerializeField] private GameObject _completedBGSprite = default;
+    [SerializeField] private GameObject _lockedBGSprite = default;
 
-    [SerializeField] Canvas _avatarCanvas = default;
+    [SerializeField] private Canvas _avatarCanvas = default;
 
-    [Inject] UIProfileView _uiProfileView = default;
-    [Inject] Camera _camera = default;
+    [Inject] private UIProfileView _uiProfileView = default;
+    [Inject] private Camera _camera = default;
+    [Inject] private LevelController _levelController;
 
-    EpisodeInfo _episodeInfo;
-    int _levelNum = 0;
-    int _estimation = 0;
-    bool _isCompleted = false;
-    bool _isUnlocked = false;
-    EventSystem _eventSystem = default;
+    private EpisodeInfo _episodeInfo;
+    private int _levelNumber = 0;
+    private int _estimation = 0;
+    private bool _isCompleted = false;
+    private bool _isClick = false;
 
-    void Awake() {
-        _eventSystem = EventSystem.current;
-        
+    private void Awake()
+    {        
         _activeBGSprite.SetActive(false);
         _completedBGSprite.SetActive(false);
         _lockedBGSprite.SetActive(true);
         _avatar.SetActive(false);
     }
 
-    public void Init(EpisodeInfo episodeInfo, int levelNum) {
+    private void OnMouseUp()
+    {
+        if (_isCompleted && _isClick)
+            _levelController.OpenPlayView(_levelNumber);
+    }
+
+    private void OnMouseDown() =>
+        _isClick = true;
+
+    private void OnMouseExit() =>
+        _isClick = false;
+
+    public void Init(EpisodeInfo episodeInfo, int levelNumber)
+    {
         _avatarCanvas.worldCamera = _camera;
         _episodeInfo = episodeInfo;
         
-        _levelNum = levelNum;
-        _levelNumLabel.text = (levelNum + 1).ToString();
+        _levelNumber = levelNumber;
+        _levelNumLabel.text = (levelNumber + 1).ToString();
     }
 
-    public void Setup(bool isUnlocked, bool isCompleted) {
+    public void Setup(bool isUnlocked, bool isCompleted)
+    {
         _isCompleted = isCompleted;
-        _isUnlocked = isUnlocked;
 
-        if(isUnlocked)
-            UnlockLevel(true);
+        if(isUnlocked) UnlockLevel(true);
         
-        if (_isCompleted) {
-            CompleteLevel();
-        } else {
-            LockVfx(true);
-        }
+        if (_isCompleted) CompleteLevel();
+        else Lock();
     }
 
-    public void UnlockLevel(bool isInstant) {
-        _isUnlocked = true;
-        
+    public void UnlockLevel(bool isInstant)
+    {
         _activeBGSprite.SetActive(true);
         _completedBGSprite.SetActive(false);
         _lockedBGSprite.SetActive(false);
@@ -76,28 +80,33 @@ public class LevelInfo : MonoBehaviour {
             _episodeInfo.UnlockEpisode(isInstant);
     }
 
-    public void CompleteLevel() {
+    public void CompleteLevel()
+    {
         _isCompleted = true;
         _activeBGSprite.SetActive(false);
         _completedBGSprite.SetActive(true);
         _lockedBGSprite.SetActive(false);
-        UnlockVfx(false);
+        Unlock();
     }
 
-    public void OnProfileClick() {
+    public void OnProfileClick()
+    {
         _uiProfileView.Show(false);
     }
 
-    public void SetAvatar(bool toggle) {
+    public void SetAvatar(bool toggle)
+    {
         _avatar.SetActive(toggle);
     }
     
-    void UnlockVfx(bool isInstant) {
+    private void Unlock()
+    {
         _completedCupSprite.SetActive(true);
         _lockedCupSprite.SetActive(false);
     }
 
-    void LockVfx(bool isInstant) {
+    private void Lock()
+    {
         _completedCupSprite.SetActive(false);
         _lockedCupSprite.SetActive(true);
     }

@@ -2692,7 +2692,7 @@ PrefabInstance:
     - target: {fileID: 6285726332449912307, guid: 996b8f0093dbc0045ba3a34398ac1c9b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 11
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6285726332449912307, guid: 996b8f0093dbc0045ba3a34398ac1c9b,
         type: 3}
@@ -19181,7 +19181,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 1032146223}
-        m_MethodName: OpenLastPlayView
+        m_MethodName: RestartLevel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -26981,8 +26981,8 @@ RectTransform:
   - {fileID: 1302979807048824253}
   - {fileID: 1370822138870375994}
   - {fileID: 1302979806953342700}
-  - {fileID: 1855625262}
   - {fileID: 7463072341961593889}
+  - {fileID: 1855625262}
   - {fileID: 12557727}
   m_Father: {fileID: 0}
   m_RootOrder: 7
@@ -97487,7 +97487,7 @@ RectTransform:
   - {fileID: 151235286}
   - {fileID: 1050826828}
   m_Father: {fileID: 595494073}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}

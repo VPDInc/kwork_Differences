@@ -747,7 +747,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3950717559516824764}
   - component: {fileID: 9214194669215386860}
-  - component: {fileID: 4413295246147460187}
+  - component: {fileID: 7327141312460874009}
   m_Layer: 8
   m_Name: LevelInfo
   m_TagString: Untagged
@@ -793,22 +793,32 @@ MonoBehaviour:
   _completedBGSprite: {fileID: 798007262803890081}
   _lockedBGSprite: {fileID: 546099077936687237}
   _avatarCanvas: {fileID: 6080112902216924486}
---- !u!58 &4413295246147460187
-CircleCollider2D:
+--- !u!61 &7327141312460874009
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5930530091552526990}
-  m_Enabled: 0
+  m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 1}
+  m_Offset: {x: 0.000000029802322, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
   serializedVersion: 2
-  m_Radius: 1
+  m_Size: {x: 1.2701178, y: 1}
+  m_EdgeRadius: 0
 --- !u!1 &6235553532139155780
 GameObject:
   m_ObjectHideFlags: 0
