@@ -16,7 +16,7 @@ MonoBehaviour:
   _associatedWorksheet: Levels
   _repeatAfter: 10
   LevelBalanceInfos:
-  - PictureCount: 1
+  - PictureCount: 3
     DifferenceCount: 5
   - PictureCount: 1
     DifferenceCount: 5
